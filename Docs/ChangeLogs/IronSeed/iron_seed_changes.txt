@@ -1,0 +1,19 @@
+The purpose of this document is to outline the changes made since the anvil release, "Iron seed" was mostly focused on cleaning up post refractor
+and then small additions.:
+
+------------------------------------------------------------------------------------------------
+
+We've successfully cleaned up scripts that had stop working since the refractor. These scripts were all UI related.
+
+------------------------------------------------------------------------------------------------
+
+Forced movements if they are blocked no longer stop functioning, they now correctly will execute when unblocked and update internal
+location correctly.
+
+------------------------------------------------------------------------------------------------
+
+When game is in menu, actors and animated tiles will not be updating anymore effectively pausing gameplay.
+
+------------------------------------------------------------------------------------------------
+
+

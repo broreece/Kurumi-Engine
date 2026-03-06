@@ -1,0 +1,41 @@
+Below is a list of coding standards practiced in this engine:
+
+C# version note:
+I produced the engine in C# 10.0 (.NET 8), there is not much changes to be added if the versioning was updated.
+
+Cases:
+- Functions, constructors and class names all use pascal case (Example: PascalCase).
+- Variables use camel case (Example: camelCase).
+
+Namespaces and using:
+- Namespaces are stated before using statement, this is a personal choice and whilst Microsoft recommends the reverse:
+    https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+    this is for the most part a personal choice, always use the fully qualified name when using "using" inside the namespace.
+- External libraries are included underneath all internal namespaces.
+
+Comparison operators:
+- Use "&&" and "||" instead of single "&" and "|" when we use 'and' or 'or' operators following conventions:
+    https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+
+Brackets with new lines:
+- Use Allman standards, start functions, classes, loops with a '{' on the same line.
+- The only exception is when initalizing lists with fixed values we start with '{' on a new line, E.G:
+    menuOptions = new List<MenuOption>
+    {
+        new("Items", MenuCommand.Items),
+        new("Equipment", MenuCommand.Equipment),
+        new("Skills", MenuCommand.Skills),
+        new("Save", MenuCommand.Save),
+        new("Load", MenuCommand.Load),
+        new("Quit", MenuCommand.Quit)
+    };
+
+Strings:
+- For any strings that use variables we utilize string interpolation to make strings:
+    https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated
+
+XML doc comments:
+- When commenting classes and functions XML style doc comments are used:
+    https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags
+- Params, exceptions, return value are all included in these comments to allow easy reading of what each function does and
+    possible outcomes.

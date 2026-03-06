@@ -1,0 +1,18 @@
+This folder existsto outline the save files and how the save manager operates.
+
+Save files:
+character_abilities.json: A file that contains which characters have which base abilities.
+character_elements.json: A file that contains each character and their elemental resistances (default is 100, works as a percent).
+character_equipment_types.json: A file that contains all characters and the equipment types they have.
+character_equipped.json: A file that contains all characters and their current equipment.
+character_hp_mp.json: A file containing all characters and their current/max HP and MP.
+character_skills_abilities: A file containing characters and which skills they have, and if they have a skill which abilities on that skill.
+character_stats.json: A file containing all characters and all their stats.
+character_statuses.json: A file containing all characters and their resitances to statuses (default is 100, works as a percent).
+enemy_formations.json: This file contains all enemy formations, "enemy_formation_info.txt" contains more information but it is saveable.
+flags.json: Contains all game flags.
+info.json: Contains misc data about the game state such as if the party is visible, the map, location and direction facing.
+inventory.json: Contains the parties inventory.
+
+Save manager:
+The save manager class manages the saving and loading of objects. We use threading here to make saving faster as each save file can be indepedently executed.

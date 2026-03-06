@@ -1,0 +1,31 @@
+# - Ignore binary files and visual studio code files.
+bin/
+.vscode
+obj
+
+# - Ignore tracking file
+.VSCodeCounter
+
+# - Ignore assets
+Assets/Art/AnimatedTileSpriteSheets/*
+Assets/Art/AnimationSpriteSheets/*
+Assets/Art/BattleBackgroundArt/*
+Assets/Art/CharacterBattleSpriteSheets/*
+Assets/Art/CharacterFieldSpriteSheets/*
+Assets/Art/CharacterMenuSpriteSheets/*
+Assets/Art/EnemyBattleSprites/*
+Assets/Art/MapBackgroundArt/*
+Assets/Art/TileSpriteSheets/*
+Assets/Art/Windows/ChoiceSelectionArt/*
+Assets/Art/Windows/WindowArt/*
+Assets/Fonts/*
+Assets/Licenses/*
+Assets/Maps/*
+Assets/Registry/*
+Database/Schema/*
+
+# - Ignore save files.
+Save/save_data/*
+
+# - Ignore personal dev journel documents.
+PersonalDocs/

@@ -1,0 +1,108 @@
+The purpose of this document is to outline the changes made since the Birth release, Update Anvil was a huge refractoring of the entire codebase with
+many changes to the engines performance and structure. Below is a detailed list of the changes:
+
+------------------------------------------------------------------------------------------------
+
+The purpose of the refractor was to reduce the code in the map scene. The previous map scene implementation was 1192, now it's less then 500.
+We accomplished this by creating "States" as a way of handling interactions, now scenes are used exclusively for SFML output no longer any logic.
+We also split battle into the same format as Map, aka Game Object -> State -> Scene.
+
+------------------------------------------------------------------------------------------------
+
+Folder structure has been drastically changed, previously we had Engine, Events, Libraries, Files and Scenes. Engine included Core, Database and 
+all gameplay classes. the main unchanged folder was Events. We changed Engine to not include game objects, all game objects are stored in 
+"Game" now, the Engine folder now contains input, asset and map manager, gamecontext, scene controller, systems and the game window. This
+is substantial considering previously the scenes were doing all the heavy work of input management, systems and passing the render window
+instead of a custom window directly.
+
+Also in terms of the folder structure each folder ends in files, there are never instances of files and subfolders sitting together. Namespaces 
+have been made more clear without needed an engine name prefix.
+
+------------------------------------------------------------------------------------------------
+
+We removed core, it was no longer neccesary, it's responsibilities previously were handling some config objects, serilization of some savable
+data, saving, filenames and a lot of misc tasks, we have now made specialised systems to handle each task instead of using a core.
+
+------------------------------------------------------------------------------------------------
+
+Similar to the core removal we also completely removed old uses of static classes. Previously all scenes, database, party and core was static.
+Now this is no longer the case. This will improve testability and plainly display for the programmer to see exactly what each class requires.
+The only static classes are config loaders, the config runtime objects however are non static and can be specified as requirements by other
+classes.
+
+------------------------------------------------------------------------------------------------
+
+Assets used to be loaded by just storing names of all files in a folder, into an array. This could cause many issues namely if a file was removed
+during runtime or a new file added the ordering would break. Also if a non image file was added for example it would cause runtime errors.
+Now we use an asset manager .json file to store the names of any files in use. This way the only issue we could encounter is a missing asset.
+
+------------------------------------------------------------------------------------------------
+
+We renamed "Event" to "Script" and "MapEvent" to "Actor", this makes a huge amount of sense, previously Event could be confusing because it's
+a fundamental idea of events and event subscribers in C#, we can avoid this potential confusion by renaming them to script as the execution
+of these systems runs like a script, line by line. MapEvent to actor also makes sense. MapEvent and the previous "Event" had names that made it
+seem like they were more linked then they actually were. However now we can understand that maybe not all actors have scripts etc.
+
+------------------------------------------------------------------------------------------------
+
+We now used indexed getters when returning arrayed objects. An example of the old code would have been like:
+string fileName = ...GetTileSheetFileNames()[tileSheetId];
+
+but now we just pass the int to the function and return the object instead of the whole array.
+
+------------------------------------------------------------------------------------------------
+
+Some minor adjustments:
+- Abstract class constructors have been turned to protected from public as per coding standards.
+- We created a bootstrap program file instead of a basic main.cs file. This bootstrap creates all neccesary objects before game context.
+- Any personal documents have been hidden in a git ignored file.
+- We started using interfaces, notably in scenes where game object access should be limited.
+- Instead of storing game objects in core we now have custom registry folders to store all the game object data.
+- Removed the few instances of magic numbers being passed into constructors or functions.
+
+------------------------------------------------------------------------------------------------
+
+Config has been removed from various scenes and core, instead we utilize static config loaders, config runtime objects and a yaml subfolder
+to store and contain all config files in one location.
+
+------------------------------------------------------------------------------------------------
+
+We used to have to load all maps before getting an individual map however this has been changed to now using a map manager to load maps.
+Maps also used to have to be stored all together in a .json file, this could have caused issues when reading such a huge file, now each map
+has it's own file.
+
+------------------------------------------------------------------------------------------------
+
+We revamped how the script steps work, we used to have to cast each step using inherited interfaces from an empty interface, this is now much
+simplier and we have a new object called "ScriptContext" which contains the objects neccesary for the type of script.
+
+Also script conditionals are no longer held objects but instead a type of "ScriptStep" reducing unnecesary code.
+
+------------------------------------------------------------------------------------------------
+
+The UI system has been completely revamped. It used to all revolve around a "Window" main class then UI elements like "TextWindowWithNameBox"
+would be a type of window that held another "TextWindow" object. Now we use components, like "Window", "PageText", "LineText", "ChoiceBox" then
+we build these components together in a UI state, each one rendered in the game loop. This makes building new UI states incredibly easy rather
+then having to adjust all previous code. This is a system I am very proud of.
+
+------------------------------------------------------------------------------------------------
+
+We revamped how the controls worked. Previously it was just handled by the scenes, each case had to be accounted for. Now we have a much better
+system where we have an input map base abstract class, each input mapping for each scene and UI has their own input mapping. The game window has
+a linked input mapping that can be assigned to be equal to the scene/ui. This allows for multiple layers of inputting and easier to see 
+each case rather then having many booleans to control the state and nested conditionals.
+
+------------------------------------------------------------------------------------------------
+
+Another system change I am very proud of is the actor controller revamped system. Actors now have a stack of controllers, the first one is made
+on construction however in force move actor script steps we add a new controller that is the forced movement on top of the actors controllers.
+This is a huge change from the previously questionable system of just hard coding forced movements and having an empty waiting loop.
+
+------------------------------------------------------------------------------------------------
+
+Changed format of documentation, we now have change logs for each major update going forward, templates for large data such as scripts and enemy
+formations, info files and WIP (Work in progress) files seperately stored.
+
+------------------------------------------------------------------------------------------------
+
+Scaling of sprites used to be incorrect, we have now fixed this.

@@ -1,0 +1,247 @@
+Next milestone:
+Iron Seed
+Focus areas:
+Clean up post refractor.
+
+Post refractor clean up:
+Fix scripts.
+Priority: High
+
+Currently script steps that used to load new windows don't work:
+    - Ensure correct variables are passed now to the script steps.
+    - Use these variables to construct the modals.
+    - Add the modals to stack.
+    - Create a new modal for window with text and namebox.
+We need to carefully consider how the choicebox script steps will work:
+    - Previously it used to freeze the code untill a choice was made but now the game is constantly updating even if a UI state exists.
+    - We might need an internal loop just for the choice box state.
+
+
+Fix blocked force movement:
+Priority: High
+
+Pass a navigation grid to the pathed actors so they can determine if a move is possible or not.
+    - This is important for forced move actors who currently always mark internally if they moved.
+Actors have some strangeway to get move, perhaps we can implement a universal way to check if a move works before calling execute move.
+    - Execute move is called in varying places depending on the behaviour of actor. We need to carefully consider cleaning this up.
+
+
+Fix game pauses:
+Priority: High
+
+Pause game when in menu:
+    - Introduce a boolean to indicate if the game is paused. If the game is paused we shouldn't be updating the game state.
+    - Ensure clocks are reset in the active scene when unpaused before updating.
+
+Minor clean up tasks:
+Priority: Low
+
+Main menu changes.
+    - The main menu party stat info is one really large big page, we shouldn't bother passing around the max lines per page.
+Changes to stats:
+    - Ensure GetStat in the playable character overriden function checks for equipment and status modifiers.
+    - Currently we hardcode agility index in some "GetStat(2)" calls, we should update this maybe store the agility index in config instead.
+Fill in any todos:
+    - Make sure if it's not possible yet, add a note explaining when to add in roadmap and remove the todo comment and replace it with the build name in roadmap.
+
+
+!Post refractor clean up end!
+
+
+Introduce unit testing:
+Priority: Extremely Low
+
+Research how to create C# unit testing.
+Create new folder for unit tests.
+Make test cases for the following:
+    - Test applying statuses:
+        - Add a status.
+        - Apply a status that removes other statuses.
+        - Apply multiple statuses.
+    - Test save/load:
+        - Ensure status can be loaded onto playable characters.
+        - Ensure any stat changes made to playable characters save.
+        - Ensure equipment is saved.
+        - Ensure inventory is saved.
+        - Ensure information remains the same.
+    - Damage formula:
+        - Use some hard coded values to ensure that damage is being calculated correctly.
+
+
+Hard coded battle scene changes:
+Priority: Extremely Low
+
+Currently some choices in the battle scene are hard coded "Run Away"/"Items" perhaps these should be moved into a yaml to check if they are enabled,
+disabled, what the text says.
+
+
+Add custom stun status and status changes:
+Priority: Extremely Low
+
+Add a stun status: (Extremely Low Priority)
+    - Create status in database.
+    - Ensure that when checking if enemy/party commits action they are able to move by checking all their statuses and confirming they can move.
+    - Add battle scene event step to inflict statuses to a specified enemy only (Used for body parts).
+Add a new "Hidden" boolean to statuses: (Extremely Low Priority)
+    - Add new field in table of database.
+    - Add new field into class of status.cs.
+    - When loading statuses in database.cs add new field.
+
+
+Battle scene changes:
+Priority: Low
+
+Implement defeat bool function: (Low Priority).
+    - Check if the enemy formation has a "OnLoseEvent", if so execute the event.
+    - If not we'll add a TODO to create a game over scene.
+Implement victory bool function: (Low Priority)
+    - If all enemies are dead return to previous scene.
+    - If the event had a "OnWinEvent" execute it after returning to the scene.
+    - Make sure we always check defeat before victory.
+
+
+AI and enemy formation map data implementation:
+Priority: Mid-High
+
+Implement a max limit on the smart tracking events:
+    - For normal smart tracking events perhaps no limit is fine, hard code a value like 0 to reference infinite range.
+    - If the distance is greater then the limit throw the error to not move.
+Load enemy formations on new maps in map scene or in the map class: (High Priority)
+    - When loading a map into map scene loop through enemy formations file and place enemy formations in the map by creating them.
+Create clocks for each enemy formation on a map: (High Priority)
+    - Each enemy formation we create and place on the map create 2 clocks to control movement and determine when they give up chasing the party.
+Implement the AI switching when found and check against the timer when to turn off the found flag: (High Priority)
+    - When we check each map event also check each enemy formation on the map in the "onFound" trigger, if found set found flag to true. 
+    - In the movement function we check each enemy formation, if the found flag is set to true we use it's other AI to determine movement.
+    - Each frame the party is in the on found events range we reset the chase clock, if the chase clock reaches the limit we turn found to false.
+Implement when battle formations die they can be found dead on map and appear under the player: (Mid Priority)
+    - If party is victorous in battle set the enemy formations "dead" flag to true.
+    - On the map scene when loading sprites for enemy formations check if dead use unique sprite.
+    - When checking if a tile is passable check if the tile is passable, if all events are passable and then if there is an enemy formation on the
+    tile they are dead.
+    - **NOTE** There might be issues with the drawing order, we'll need to Implement one task from the world elements tasks to ensure this works.
+Implement saving enemy formations: (Mid Priority)
+    - In core create a new save function where we write the enemy formation data back into the yaml format.
+
+Iron Seed 1.5 (Build name undecided)!!!
+
+
+Handle all Exceptions:
+Priority: Medium
+
+Any instances of exceptions being thrown we should catch them and use our engine logic to handle.
+Catch exceptions if actor lines do not include a "," at the end of the string. It's become annoying to miss them out.
+
+
+Map scene event changes:
+Priority: High
+
+Allow varying sizes of event sprites: (High Priority)
+    - Create a table "events" which contain art id, width and height.
+    - Load these as a class in core, "EventInfo".
+    - Create a folder for these event art, move existing event art into this folder.
+    - Then we will need to edit all instances where we call "EventArtId" to reference these "EventInfo" in core. **NOTE** This task might have various
+    places needing changes
+    - When we create event sprites, create it from event info, width and height.
+Implement below and above player event sprites seperately to draw in different orders: (High Priority)
+    - We already have a variable in events to indicate if they are under the player.
+    - When we are looping to draw events we should instead create two lists of event sprites, ones under the player and ones above the player.
+    - In the render loop we should draw tiles, then events ubove the player, then the party, then the events above the player.
+Allow character map sprites to be larger then tiles and display above current tile: (High Priority)
+    - Edit the current height/width in the art .yaml file.
+    - When rendering current sprites width and height we should subtract it by the difference between the character height/width from the tile height/width.
+    - This change will also apply to event sprites.
+
+
+Item pool implementation:
+Priority: Mid
+
+Load item pools in core: (Mid Priority)
+    - We already have a database table representing item pools, We need to create an item pool 2d list of ints.
+    - The 1st index is the item pool id, the second index is the item ids in the list.
+    - Create a map scene event step that adds a random item from an item pool to the inventory, display a text window displaying the name
+    of the item as well.
+
+
+Global world elements:
+Priority: High
+
+Implement a global timer: (High Priority)
+    - We need a global timer that is stored in core and starts running only on map scenes.
+    - This global timer needs to be accesible by map scene events.
+    - This global timer should be saved in the info.json.
+Implement a hunger and sleep meter: (High Priority)
+    - These meters should start at 100 then slowly reduce.
+    - Add some food items in the item database, have the effect be "ReduceHunger".
+    - Create a reduce hunger map scene event step.
+    - Create a "Sleep" Map scene event step that moves time forward and reduces the parties sleep meter by the time slept.
+
+
+Menus additions: 
+Priority: Medium, blocks some battle scene additions
+
+Create scrolling choice box menus: (Mid Priority)
+    - This is a custom menu that will be the same same as the battle scene info window + selection window widths.
+    - This will act similarly to the inventory windows item selector, it'll have two columns and allows side and up and down movements.
+    - This will be used in both skill sub menus and inventory menus in the battle scene.
+
+
+Status/health and MP art implementations: 
+Priority: Low
+
+Create art representing a health bar and mp bar to draw in battle and menu: (Low Priority)
+    - The art should have both a filled and empty portions, like a green/red half of health bar.
+Add a new check in status art to allow hidden statuses (Missing limbs): (Low Priority)
+    - Update status database for new field.
+    - Update status class for new field.
+    - Render this status art in battle scene and the main menu scene.
+    - When drawing status art check art if it is a hidden status or not.
+
+
+Battle sprite character additions: 
+Priority: Low
+
+Edit the existing character battle sprite to add additional frames: (Low Priority)
+    - Make battle sprites animated for party members.
+    - Make another battle sprite for party members who are ready to attack.
+    - Make a sprite for party members who are guarding.
+    - Make variations of each depending on what limbs the characters have.
+    - Make a sprite for each dead party member.
+
+
+Title screen implementation: 
+Priority: Low
+
+Create a title screen: (Low Priority)
+    - Use a choice box for the following: New Game, Load, Options, Quit.
+    - If choice is new game simply load a new game via core.
+    - If choice is load game open the file selector menu.
+    - If choice is quit force close window.
+    - Currently options do not need to be implemented.
+
+
+Battle scene enhancements :
+Priority: Low
+
+Implement additional attack options: (Low Priority)
+    - Implement party wide attacks.
+    - Implement enemy group wide attacks.
+    - Implement random enemy hit attacks.
+
+
+Potential Threading actor AIs:
+Priority: Low
+
+We should look into pontentially threading the actor AI's in map states. Might be able to improve performance especially if there are many actors.
+
+Additional post finish enhancements:
+Priority: Extremely Low
+Currently we pass game context to events when activating, once we know all requirements for events we can use an interface something like:
+    - EventActivationInterface, use only functions events need to restrict data.
+- Some weird nonsense with casting lists up to parent classes. This occurs when saving statuses... We just need the ID,
+    we can at the cost of performance cast it as an IIDAccessorbut perhaps it's not worth the hassle.
+
+
+Pre launch tasks: 
+Priority: Extremely low, just some loose ideas that are not neccesary, or reformating
+- Maybe we can change the logic of events range of vision, make some events have a circular range etc.

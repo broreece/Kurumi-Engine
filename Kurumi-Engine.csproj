@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Project Configuration -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+
+    <RootNamespace>KurumiEngine</RootNamespace>
+
+    <!-- Language Features -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Build Settings -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Deterministic>true</Deterministic>
+
+    <!-- Assembly generation handled manually in project -->
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+  </PropertyGroup>
+
+  <!-- NuGet Dependencies -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="6.0.5" />
+    <PackageReference Include="SFML.Net" Version="2.5.0" />
+    <PackageReference Include="YamlDotNet" Version="13.7.0" />
+  </ItemGroup>
+
+  <!-- Runtime Content Files -->
+  <ItemGroup>
+    <None Include="Assets\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Config\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Database\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Save\**\*.*" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

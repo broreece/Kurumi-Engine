@@ -1,0 +1,78 @@
+This document exists to outline the folder structure of the engine. All folders will end in files (either .png, .json, .yaml, .cs) or sub folders,
+there will never be a mix of sub folders and files, in some occasions there might be multiple typesof files within a sub folder however this is
+kept to minimum usage.
+
+Assets:
+The assets folder contains universal external files including art, music and the custom map files alongside a folder for third party
+licenses and a registry folder containing .json files to indicate all asset names and file locations.
+
+Bootstrap:
+The boot strap folder contains the inital program file that executes the program and starts running the engine.
+
+Config:
+Config folder has three sub folders, loaders contain static config managers that can load the config file and create instances of runtime
+config objects. Runtime contains the runtime object containers of the config. Finally the yaml sub folder contains all the yaml config
+files.
+
+Database:
+The database folder contains the .db file in the Schema sub folder, this .db file contains all the universal static elements of the game.
+The core folder contains the database manager object, the database manager object loads data from the .db file. Finally the exceptions folder
+contain any exceptions that can occur from loading the SQL data.
+
+Docs:
+Docs contain documentation of the engine. The change logs folder contains any detailed information of changes that occured in each version
+of the engine. They also contain the git diff files for each major release. The engine standards sub folder contains any rules of the engine
+that I have tried to maintain (Such as coding standards). The info sub folder contains information about the more comnplex aspects of the engine.
+Templates includes template for complex data such as scripts, enemy formations or actors. WIP contains our road map and any documentation for
+complex work in progress.
+
+Engine:
+Engine contains key aspects of the game that handle combining the backend and front end. It contains an asset manager, an input mapping system,
+a map manager, the game window, game context, scene controller and complex systems. Engine is a very large folder that acts as the controller
+of the game combining front and backend.
+
+Game:
+The game folder contains classes that hold data of any game objects. These include Battle, Entities, Items, Map and Party.
+Core in the "Game" folder contains reused abstract classes that are inherited by multiple game elements. Entities contains sub folders for
+enemies, playable characters, skills and statuses (Anything else that affects entities should be placed here). Item subfolder also contains
+the equipment object.
+The map sub folder is a large class containing not just the core map class but tiles, tile objects, path finding systems, actors and actor controllers.
+
+Registry:
+Registry is a folder that contains sub folders for all the game objects. The registry holds all instances of the games objects.
+
+Save:
+The save folder has folders related to save data, the serialization folder contains classes used to seralize and deseralize json data into data we can
+transform into game objects.
+The Core folder contains the save manager the object that allows the engine to save and load dynamic data from the save files.
+Finally the "save_data" folder contains sub folders for all the saves in the game, the json save files in the save files are covered in detail in
+the save_system.info.txt file.
+
+Scenes:
+Scenes contain the scenes of the game that have unique display and control settings that are not determined by UI objects. Base exists to provide base
+functionality for the scenes, Battle and map provide the scene objects for the battle and map state.
+
+Sripts:
+Scripts are logic pieces that execute performing specific steps one by one, a detailed explanation of scripts can be found in script_info.txt and templates
+can be found in script_templates.txt. Scripts have a base folder to provide base functionality to scripts and script steps. The conditional folder contains
+information relating to conditional script steps. Battle, map and universal script steps group scripts based on where they can be performed. Each
+grouping has a seperate sub folder to contain the script steps (Excluding universal script steps which are all steps).
+
+States:
+States are the backend logic of scenes, they contain the logic involved in button presses, and any functions executing. We have a folder for the base
+functionality of states, and a folder for the battle and map state.
+
+UI:
+UI is a large folder containing all UI components, states, the input controllers. Core contains core functionality that the UI adds, Component contains sub
+folders, one sub folder is "Components" which contains all the individual UI components, "Interfaces" which contains interfaces the components use and finally
+the core functionality of the components.
+The "Input" subfolder contains the input controllers, tied to the engines input mappings.
+The "States" subfolder contains all states that utilize the UI components, and tied input controllers.
+
+Utils:
+Utils contains utility classes or functions that can execute in various places such as exceptions or formulas.
+
+
+Hidden folders:
+I also keep a "PersonalDocs" folder that includes things not relevant to the engine production E.G Story ideas, Dreams, WIP Art and the temporary
+convertor script from Tiled to our format.

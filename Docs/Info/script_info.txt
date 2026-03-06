@@ -1,0 +1,50 @@
+This document exists to explain how scripts work and the ordering of the integer values in the map.json file and the enemy formation files.
+
+Firstly all scripts end with script steps (AKA ChangeMap, ChoiceBox a string that explains the script step), most have integers
+that determine information about the script step. This information can be found in the individual script step files.
+
+Before the script step there will be some numbers that give information about the script on the map itself:
+
+-------------------------------------------
+
+The first number explains the "behaviour" of the actor. These behaviours are outlined in the Behaviour.cs file. Common ones are:
+0 - A stationary actor that does not turn, this is commonly used for invisble scripts for changing maps or merchants.
+1 - An actor that is stationary but does turn, this is used for stationary NPCs. Beyond 1 is behaviours that affect movement.
+
+The second number is the art id, scripts pull from the character tile sheets. It's preferable to keep 0 as transparent so it can be used
+for actors without art.
+
+The third number is movement speed, this is useless for stationary actors. But for non stationary actors it determines how often 
+they move.
+
+The fourth number is tracking range used for actors activate when finding the player.
+
+The fifth number is the default facing direction of the actor.
+
+The sixth number is if the actor is visible, if set to 0 the actor will not be displayed.
+
+The seventh number is if the actor is below the party, aka if the actor is rendered under the party on the map.
+
+The eigth number is if the actor is passable, aka if the party can walk over the actor.
+
+The ninth number is if the script activates on touch, this means that the party needs to move into the actor.
+
+The tenth number is if the script activates automatically, this is executed when the map is loaded.
+
+The eleventh number is if the script activates on action, the party needs to directly interact with it.
+
+The twelth number is if the script activates when the actor finds the party, aka if the party directly enters it's tracking range.
+
+-------------------------------------------
+
+Numbers layed out and explained.
+
+Behaviour  Art  Speed  Range  Direction  Visible  Below  Passable  Touch  Auto  Action  Found  Step            ... Steps details
+"1,        1,   0,     0,     2,         1,       0,     0,        0,     0,    1,      0,     BasicTextWindow ... Steps details
+
+-------------------------------------------
+
+Enemy formations also contain multiple types of scripts that occur on the map, this is mostly covered in the enemy_formation_reference.txt
+file.
+
+-------------------------------------------

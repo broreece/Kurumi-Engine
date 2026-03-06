@@ -1,0 +1,3 @@
+max_tiles_wide: 17
+max_tiles_high: 13
+random_actor_move_variance: 20

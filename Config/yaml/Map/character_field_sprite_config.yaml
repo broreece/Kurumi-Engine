@@ -1,0 +1,4 @@
+character_width: 16
+character_height: 16
+walk_animation_frames: 2
+walk_animation_speed: 200

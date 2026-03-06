@@ -1,0 +1,5 @@
+A basic change map script: "0,0,0,0,0,0,1,1,1,0,0,0,ChangeMap,MAPID,X,Y,"
+A stationary actor that talks: "1,ART,0,0,DIRECTION,1,0,0,0,0,1,0,BasicTextWindow,ART,FONT,X,Y,MESSAGE,"
+Change a game's flag: "ChangeFlag,FLAGID,FLAGSTATE" append this to an existing script.
+Check a game flag: "CheckFlag,FLAGID,FLAGSTATE,NEXTIFFALSE" prefix this before a conditional branch.
+A basic actor that follows the player: "AI,ARTID,SPEED,RANGE,DIRECTION,1,0,0,0,0,0,0"
