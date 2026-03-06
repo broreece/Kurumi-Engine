@@ -35,42 +35,26 @@ public sealed class TrackedActorController : ActorController {
         // Check behaviour and find the move to make.
         switch (behaviour) {
             case Behaviour.DumbTracking:
-                bool changed = false;
                 // Generate move.
                 int xDiff = Math.Abs(xLocation - positionProvider.GetXLocation());
                 int yDiff = Math.Abs(yLocation - positionProvider.GetYLocation());
                 // If x distance is greater then y distance.
                 if (xDiff > yDiff) {
                     direction = xLocation > positionProvider.GetXLocation() ? 3 : 1;
-                    changed = true;
                 }
                 // If y distance is greater then x distance.
                 else if (yDiff > xDiff) {
                     direction = yLocation > positionProvider.GetYLocation() ? 0 : 2;
-                    changed = true;
                 }
                 // If y and x distance is same but there is a possible movement.
                 else if (xDiff == yDiff && xDiff > 0) {
                     direction = xLocation > positionProvider.GetXLocation() ? 3 : 1;
-                    changed = true;
-                }
-                int xChange = GetXChange(direction);
-                int yChange = GetYChange(direction);
-                if (changed && !(xLocation + xChange == positionProvider.GetXLocation() && yLocation + yChange == positionProvider.GetYLocation())
-                    && navigationGrid.IsNavigable(xLocation + xChange, yLocation + yChange)) {
-                    ExecuteMove(xLocation + xChange, yLocation + yChange);
                 }
                 break;
 
             default:
                 direction = AStarSearch.LoadFastestPath(xLocation, yLocation, positionProvider.GetXLocation(), positionProvider.GetYLocation(),
                     navigationGrid);
-                // We shouldn't execute move if the actor is right beside the party.
-                xChange = GetXChange(direction);
-                yChange = GetYChange(direction);
-                if (!(xLocation + xChange == positionProvider.GetXLocation() && yLocation + yChange == positionProvider.GetYLocation())) {
-                    ExecuteMove(xLocation + xChange, yLocation + yChange);
-                }
                 break;
         }
 

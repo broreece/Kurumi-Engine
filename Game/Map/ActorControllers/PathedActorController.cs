@@ -44,12 +44,6 @@ public sealed class PathedActorController : ActorController {
         // Get next move.
         int nextStep = actorPath[followPathIndex];
 
-        // TODO: Some scary things might happen here if the actor is blocked, the internal x/y location will update but no
-        // movements happen. We need to fix this, maybe pass a navigation grid to pathed actors.
-        int xChange = GetXChange(nextStep);
-        int yChange = GetYChange(nextStep);
-        ExecuteMove(xLocation + xChange, yLocation + yChange);
-
         duration = 0;
         return nextStep;
     }

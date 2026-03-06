@@ -92,50 +92,6 @@ public abstract class ActorController {
         return false;
     }
 
-    /// <summary>
-    /// Function used to get if the actor y changes.
-    /// </summary>
-    /// <param name="direction">The direction the actor is moving.</param>
-    /// <returns>The change in y location.</returns>
-    protected int GetYChange(int direction) {
-        int yChanged = 0;
-        switch (direction) {
-            case 0:
-                yChanged = -1;
-                break;
-
-            case 2: 
-                yChanged = 1;
-                break;
-
-            default:
-                break;
-        } 
-        return yChanged;
-    }
-
-    /// <summary>
-    /// Function used to get if the actor x changes.
-    /// </summary>
-    /// <param name="direction">The direction the actor is moving.</param>
-    /// <returns>The change in x location.</returns>
-    protected int GetXChange(int direction) {
-        int xChanged = 0;
-        switch (direction) {
-            case 1:
-                xChanged = 1;
-                break;
-
-            case 3:
-                xChanged = -1;
-                break;
-
-            default:
-                break;
-        } 
-        return xChanged;
-    }
-
     protected int duration;
     protected int interval;
     protected int xLocation, yLocation;

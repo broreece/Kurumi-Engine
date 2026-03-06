@@ -17,15 +17,6 @@ We need to carefully consider how the choicebox script steps will work:
     - We might need an internal loop just for the choice box state.
 
 
-Fix blocked force movement:
-Priority: High
-
-Pass a navigation grid to the pathed actors so they can determine if a move is possible or not.
-    - This is important for forced move actors who currently always mark internally if they moved.
-Actors have some strangeway to get move, perhaps we can implement a universal way to check if a move works before calling execute move.
-    - Execute move is called in varying places depending on the behaviour of actor. We need to carefully consider cleaning this up.
-
-
 Fix game pauses:
 Priority: High
 

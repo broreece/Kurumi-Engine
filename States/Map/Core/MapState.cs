@@ -80,11 +80,13 @@ public sealed class MapState : StateBase, IMapInputController {
                 int move = currentHandler.GetMove();
                 if (move != -1) {
                     // TODO: Maybe we can create/use a custom data type for both ints.
-                    int[] newLocation = MoveActor(GetActorAtIndex(currentHandler.GetXLocation(), currentHandler.GetYLocation()), move, 
+                    bool couldMove = MoveActor(GetActorAtLocation(currentHandler.GetXLocation(), currentHandler.GetYLocation()), move, 
                         keepDirection: false);
+                    if (couldMove) {
+                        currentHandler.ExecuteMove(currentHandler.GetXLocation(), currentHandler.GetYLocation());
+                    }
                     if (currentHandler.GetBehaviour() == Behaviour.RandomMovement) {
                         currentHandler.SetInterval(mapSceneView.GenerateRandomInterval(currentHandler.GetInterval()));
-                        currentHandler.ExecuteMove(newLocation[0], newLocation[1]);
                     }
                 }
             }
@@ -211,7 +213,9 @@ public sealed class MapState : StateBase, IMapInputController {
     /// <param name="actorIndex">The index of the actor (Uses the list of all actors).</param>
     /// <param name="direction">The direction that the actor will move in.</param>
     /// <param name="keepDirection">If the actor's direction is maintained.</param>
-    public int[] MoveActor(int actorIndex, int direction, bool keepDirection) {
+    /// 
+    public bool MoveActor(int actorIndex, int direction, bool keepDirection) {
+        bool couldMove = false;
         List<IActorHandler> actorsList = map.GetListActors();
         actorsList[actorIndex].SetDirection((Direction) direction);
         int xLocation = actorsList[actorIndex].GetXLocation();
@@ -231,6 +235,7 @@ public sealed class MapState : StateBase, IMapInputController {
                 mapSceneView.ResetActorWalkAnimationClock(actorIndex);
                 map.SetActorAt(xLocation, yLocation, null);
                 map.SetActorAt(xLocation + rightMovement, yLocation + downMovement, actorsList[actorIndex]);
+                couldMove = true;
             }
             else if (xLocation + rightMovement == party.GetXLocation()
                 && yLocation + downMovement == party.GetYLocation()
@@ -241,7 +246,7 @@ public sealed class MapState : StateBase, IMapInputController {
         if (actorsList[actorIndex].ActivatesOnFind() && InRangeActor(actorsList[actorIndex])) {
            ActivateScript(new MapScript(actorsList[actorIndex].GetScript()));
         }
-        return [xLocation + rightMovement, yLocation + downMovement];
+        return couldMove;
     }
 
     /// <summary>
@@ -320,8 +325,9 @@ public sealed class MapState : StateBase, IMapInputController {
     /// </summary>
     /// <param name="xLocation">The x location being checked.</param>
     /// <param name="yLocation">The y location being checked.</param>
+    /// <returns>The actor index of a specific location.</returns>
     /// <exception cref="ActorMissingException">Error thrown if no actor is found at the index specified.</exception>
-    public int GetActorAtIndex(int xLocation, int yLocation) {
+    public int GetActorAtLocation(int xLocation, int yLocation) {
         int index = 0;
         foreach (IActorHandler actor in map.GetListActors()) {
             if (actor.GetXLocation() == xLocation && actor.GetYLocation() == yLocation) {
@@ -332,6 +338,12 @@ public sealed class MapState : StateBase, IMapInputController {
         throw new ActorMissingException();
     }
 
+    /// <summary>
+    /// Function used to start a forced movement.
+    /// </summary>
+    /// <param name="isActor">If the target is an actor or the party.</param>
+    /// <param name="keepsDirection">If the map entity keeps it's direction.</param>
+    /// <param name="duration">The duration of the movement.</param>
     private void StartForcedMovement(bool isActor, bool keepsDirection, int duration) {
         // Freeze input and start timer.
         gameContext.FreezeInput();
