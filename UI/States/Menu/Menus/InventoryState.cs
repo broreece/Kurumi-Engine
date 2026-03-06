@@ -162,6 +162,7 @@ public class InventoryState : UIState, IInventoryInputController {
 
     public void Escape() {
         gameUIContext.PopUIStack();
+        gameUIContext.Resume();
         Close();
     }
 

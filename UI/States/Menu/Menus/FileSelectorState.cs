@@ -216,6 +216,15 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
     }
 
     /// <summary>
+    /// The escape function.
+    /// </summary>
+    public void Escape() {
+        gameUIContext.PopUIStack();
+        gameUIContext.OpenMainMenu();
+        Close();
+    }
+
+    /// <summary>
     /// Function used to close the file selector state.
     /// </summary>
     protected override void Close() {

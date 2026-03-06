@@ -22,6 +22,11 @@ public interface IGameUIContext {
     /// Function add the main menu to the UI stack.
     /// </summary>
     public void OpenMainMenu();
+
+    /// <summary>
+    /// Function used to resume the game.
+    /// </summary>
+    public void Resume();
     
     /// <summary>
     /// Getter for the party instance's party members.

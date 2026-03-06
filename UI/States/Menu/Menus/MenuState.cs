@@ -202,7 +202,6 @@ public class MenuState : UIState, IMenuInputController {
     /// The cancel function.
     /// </summary>
     public void Cancel() {
-        gameUIContext.PopUIStack();
         Close();
     }
 
@@ -210,7 +209,6 @@ public class MenuState : UIState, IMenuInputController {
     /// The escape function.
     /// </summary>
     public void Escape() {
-        gameUIContext.PopUIStack();
         Close();
     }
 
@@ -219,6 +217,8 @@ public class MenuState : UIState, IMenuInputController {
     /// </summary>
     protected override void Close() {
         // TODO: Implement closing animation, lock controls etc whatever is needed here.
+        gameUIContext.PopUIStack();
+        gameUIContext.Resume();
         closed = true;
     }
 

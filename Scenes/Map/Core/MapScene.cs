@@ -290,6 +290,18 @@ public sealed class MapScene : SceneBase, IMapSceneView {
     }
 
     /// <summary>
+    /// Function used to reset a scenes clocks if the game is paused.
+    /// </summary>
+    public override void ResetClocks() {
+        foreach (Clock actorControllerClock in actorControllerClocks) {
+            actorControllerClock.Restart();
+        }
+        animationClock.Restart();
+        partyWalkAnimationClock.Restart();
+        scrollingCameraClock.Restart();
+    }
+
+    /// <summary>
     /// Function used to center the camera and rest any timers associated with movement.
     /// </summary>
     /// <param name="x">The x location being moved to.</param>
@@ -346,15 +358,6 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         int randomRange = (int) ((actorMoveVariance / 100) * (float) movementSpeed);
         Random rand = new();
         return rand.Next(movementSpeed - randomRange, movementSpeed + randomRange + 1);
-    }
-
-    /// <summary>
-    /// Helper function that is used to reset all clocks to prevent additional frames being rendered when scene is paused.
-    /// </summary>
-    private void ResetClocks() {
-        foreach (Clock actorControllerClock in actorControllerClocks) {
-            actorControllerClock.Restart();
-        }
     }
 
     /// <summary>

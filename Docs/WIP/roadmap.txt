@@ -17,13 +17,6 @@ We need to carefully consider how the choicebox script steps will work:
     - We might need an internal loop just for the choice box state.
 
 
-Fix game pauses:
-Priority: High
-
-Pause game when in menu:
-    - Introduce a boolean to indicate if the game is paused. If the game is paused we shouldn't be updating the game state.
-    - Ensure clocks are reset in the active scene when unpaused before updating.
-
 Minor clean up tasks:
 Priority: Low
 

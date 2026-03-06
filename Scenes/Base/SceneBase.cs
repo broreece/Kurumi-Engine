@@ -35,6 +35,11 @@ public abstract class SceneBase {
     }
 
     /// <summary>
+    /// Function used to reset the clocks of a scene (Used primarily in map scenes).
+    /// </summary>
+    public virtual void ResetClocks() {}
+
+    /// <summary>
     /// Function that updates sprites on a scene.
     /// </summary>
     public abstract void Update();

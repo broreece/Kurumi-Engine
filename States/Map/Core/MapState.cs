@@ -79,7 +79,6 @@ public sealed class MapState : StateBase, IMapInputController {
             if (currentHandler.CanMove()) {
                 int move = currentHandler.GetMove();
                 if (move != -1) {
-                    // TODO: Maybe we can create/use a custom data type for both ints.
                     bool couldMove = MoveActor(GetActorAtLocation(currentHandler.GetXLocation(), currentHandler.GetYLocation()), move, 
                         keepDirection: false);
                     if (couldMove) {
@@ -127,6 +126,7 @@ public sealed class MapState : StateBase, IMapInputController {
     /// </summary>
     public void Escape() {
         gameContext.OpenMainMenu();
+        gameContext.Pause();
     }
 
     /// <summary>

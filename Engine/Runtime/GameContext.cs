@@ -177,9 +177,14 @@ public sealed class GameContext : IGameUIContext {
         // TODO: Yets consider moving this to another file or create a variable for if the game is open.
         while (gameWindow.IsOpen()) {
             gameWindow.Clear();
-            currentState?.Update();
-            currentScene?.Update();
-            currentScene?.Draw();
+            if (!paused) {
+                currentState?.Update();
+                currentScene?.Update();
+                currentScene?.Draw();
+            }
+            else {
+                currentScene?.ResetClocks();
+            }
             foreach (UIState uiState in uiStates) {
                 IUIComponent[] components = [.. uiState.GetComponents()];
                 for (int componentIndex = components.Length - 1; componentIndex >= 0; componentIndex --) {
@@ -238,6 +243,28 @@ public sealed class GameContext : IGameUIContext {
     /// </summary>
     public void FreezeInput() {
         gameWindow.FreezeInput();
+    }
+
+    /// <summary>
+    /// Function used to pause the game.
+    /// </summary>
+    public void Pause() {
+        paused = true;
+    }
+
+    /// <summary>
+    /// Function used to resume the game.
+    /// </summary>
+    public void Resume() {
+        paused = false;
+    }
+
+    /// <summary>
+    /// Function used to check if the game is paused.
+    /// </summary>
+    /// <returns>If the game is paused.</returns>
+    public bool IsPaused() {
+        return paused;
     }
 
     /// <summary>
@@ -571,4 +598,5 @@ public sealed class GameContext : IGameUIContext {
 
     // Additional stored information.
     private string mapName;
+    private bool paused;
 }
