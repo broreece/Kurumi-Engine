@@ -1,4 +1,6 @@
 global_message_default_window_id: 0
+global_message_default_font_id: 0
+global_message_default_font_size: 25
 global_message_default_width: 100
 global_message_default_height: 30
 global_message_default_x: 0

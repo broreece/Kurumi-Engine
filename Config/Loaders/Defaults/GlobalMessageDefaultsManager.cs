@@ -20,11 +20,14 @@ public static class GlobalMessageDefaultsManager {
 
         // Store defaults variables.
         int globalMessageWindowId = defaults["global_message_default_window_id"];
+        int globalMessageFontId = defaults["global_message_default_font_id"];
+        int globalMessageFontSize = defaults["global_message_default_font_size"];
         int globalMessageWidth = defaults["global_message_default_width"];
         int globalMessageHeight = defaults["global_message_default_height"];;
         int globalMessageX = defaults["global_message_default_x"];
         int globalMessageY = defaults["global_message_default_y"];
 
-        return new GlobalMessageDefaults(globalMessageWindowId, globalMessageWidth, globalMessageHeight, globalMessageX, globalMessageY);
+        return new GlobalMessageDefaults(globalMessageWindowId, globalMessageFontId, globalMessageFontSize, globalMessageWidth, 
+            globalMessageHeight, globalMessageX, globalMessageY);
     }
 }

@@ -25,17 +25,9 @@ public class MapScript : Script {
                     break;
 
                 case "BasicTextWindow":
-                    int windowArtId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int fontId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int xPosition = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int yPosition = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     string text = scriptText[..scriptText.IndexOf(',')];
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    AddStep(new BasicTextWindow(windowArtId, fontId, xPosition, yPosition, text));
+                    AddStep(new BasicTextWindow(text));
                     break;
 
                 case "ChangeFlag":
@@ -172,6 +164,15 @@ public class MapScript : Script {
     /// <returns>The current script step.</returns>
     public ScriptStep ? GetSceneScriptStep() {
         return scriptStep;
+    }
+
+    /// <summary>
+    /// Setter for the map scene scripts current script step.
+    /// Used when continuing a map script after a pause.
+    /// </summary>
+    /// <param name="scriptStep">The new current script stpe.</param>
+    public void SetSceneScriptStep(ScriptStep scriptStep) {
+        this.scriptStep = scriptStep;
     }
 
     private ScriptStep ? scriptStep;

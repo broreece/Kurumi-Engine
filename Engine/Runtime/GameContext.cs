@@ -2,6 +2,7 @@ namespace Engine.Runtime;
 
 using Assets;
 using Config.Runtime.Battle;
+using Config.Runtime.Defaults;
 using Config.Runtime.Game;
 using Config.Runtime.Map;
 using Config.Runtime.Menus;
@@ -61,12 +62,15 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="mainMenuConfig">The main menu config object.</param>
     /// <param name="tileSheetConfig">The tile sheet config object.</param>
     /// <param name="windowConfig">The window config object.</param>
+    /// <param name="textWindowDefaults">The text window defaults object.</param>
+    /// <param name="globalMessageDefaults">The global message defaults object.</param>
     public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, MapManager mapManager,
         AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
         BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, CharacterFieldSpriteConfig characterFieldSpriteConfig, 
         FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, InventoryConfig inventoryConfig,
         MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, MainMenuConfig mainMenuConfig, 
-        TileSheetConfig tileSheetConfig, WindowConfig windowConfig) {
+        TileSheetConfig tileSheetConfig, WindowConfig windowConfig, TextWindowDefaults textWindowDefaults, 
+        GlobalMessageDefaults globalMessageDefaults) {
         // Store config objects.
         this.animatedTileSheetConfig = animatedTileSheetConfig;
         this.battleBackgroundSpriteConfig = battleBackgroundSpriteConfig;
@@ -81,6 +85,8 @@ public sealed class GameContext : IGameUIContext {
         this.mainMenuConfig = mainMenuConfig;
         this.tileSheetConfig = tileSheetConfig;
         this.windowConfig = windowConfig;
+        this.globalMessageDefaults = globalMessageDefaults;
+        this.textWindowDefaults = textWindowDefaults;
 
         // Database data.
         abilityRegistry = new AbilityRegistry(databaseManager.LoadAbilities());
@@ -300,6 +306,24 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
+    /// Function used to load a specific window file art name.
+    /// </summary>
+    /// <param name="windowArtId">The window art ID.</param>
+    /// <returns>The window art file name of a specific ID.</returns>
+    public string GetWindowArtFileName(int windowArtId) {
+        return assetManager.GetWindowArtFileName(windowArtId);
+    }
+
+    /// <summary>
+    /// Function used to load a specific font file name.
+    /// </summary>
+    /// <param name="fontId">The font ID.</param>
+    /// <returns>The font file name of a specific ID.</returns>
+    public string GetFontFileName(int fontId) {
+        return assetManager.GetFontFileName(fontId);
+    }
+
+    /// <summary>
     /// Getter for the playable characters data.
     /// </summary>
     /// <returns>The array of the game's playable characters.</returns>
@@ -353,6 +377,22 @@ public sealed class GameContext : IGameUIContext {
     /// <returns>The window config object.</returns>
     public WindowConfig GetWindowConfig() {
         return windowConfig;
+    }
+
+    /// <summary>
+    /// Getter for the global message defaults object.
+    /// </summary>
+    /// <returns>The global message defaults.</returns>
+    public GlobalMessageDefaults GetGlobalMessageDefaults() {
+        return globalMessageDefaults;
+    }
+
+    /// <summary>
+    /// Getter for the text window defaults object.
+    /// </summary>
+    /// <returns>The text window defaults.</returns>
+    public TextWindowDefaults GetTextWindowDefaults() {
+        return textWindowDefaults;
     }
 
     /// <summary>
@@ -553,6 +593,10 @@ public sealed class GameContext : IGameUIContext {
     private readonly MainMenuConfig mainMenuConfig;
     private readonly TileSheetConfig tileSheetConfig;
     private readonly WindowConfig windowConfig;
+
+    // Defaults objects.
+    private readonly GlobalMessageDefaults globalMessageDefaults;
+    private readonly TextWindowDefaults textWindowDefaults;
 
     // Data registry objects.
     // Data that will not change.

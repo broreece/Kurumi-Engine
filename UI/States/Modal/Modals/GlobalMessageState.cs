@@ -7,7 +7,7 @@ using SFML.System;
 /// <summary>
 /// The global message state class, global messages display text without locking controls.
 /// </summary>
-public class GlobalMessageState : WindowedState {
+public sealed class GlobalMessageState : WindowedState {
     /// <summary>
     /// Constructor for the global message state.
     /// </summary>

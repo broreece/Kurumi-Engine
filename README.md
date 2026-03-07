@@ -87,3 +87,76 @@ script:
       then:
         - StartCombat:
             enemy: "Guard"
+
+```
+The above yaml is just an example, the real data is formatted in strings currently outline in the documentation.
+
+---
+
+## Project Structure
+
+The engine is organized into modular systems to keep gameplay logic, config, rendering, and scripting cleanly separated.
+
+```
+Kurumi-Engine
+│
+├── Assets
+│
+|── Bootstrap
+|
+├── Config
+│
+├── Database
+│
+|── Docs
+|
+├── Engine
+│ ├── Input
+│ ├── Rendering
+│ ├── Runtime
+│ ├── Systems
+│
+|── Game
+|
+|── Registry
+|
+├── Save
+|
+|── Scenes
+|
+|── Scripts
+|
+|── States
+|
+|── UI
+|
+|── Utils
+```
+---
+
+## Tech Stack
+
+| Technology | Purpose |
+|-----------|--------|
+| **C# (.NET 8)** | Core engine development |
+| **SFML.NET** | Rendering, window management, and input handling |
+| **SQLite** | Structured game data storage |
+| **YAML / JSON** | Configuration files and save data |
+| **Git** | Version control and development workflow |
+
+---
+
+## Project Goals
+
+Kurumi Engine aims to provide a clean, modular foundation for building narrative-driven RPGs.  
+The project focuses on long-term maintainability, deterministic gameplay systems, and a data-driven design philosophy.
+
+Core goals include:
+
+- Build a **modular RPG engine architecture** with clear system boundaries
+- Support **script-driven gameplay events** and deterministic step execution
+- Maintain **clean and readable gameplay logic** without excessive engine abstraction
+- Provide a flexible foundation for **AI actors, dialogue systems, and scripted events**
+- Develop a codebase that prioritizes **maintainability, extensibility, and clarity**
+
+---

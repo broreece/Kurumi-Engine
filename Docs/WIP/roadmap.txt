@@ -7,14 +7,25 @@ Post refractor clean up:
 Fix scripts.
 Priority: High
 
-Currently script steps that used to load new windows don't work:
-    - Ensure correct variables are passed now to the script steps.
-    - Use these variables to construct the modals.
-    - Add the modals to stack.
-    - Create a new modal for window with text and namebox.
-We need to carefully consider how the choicebox script steps will work:
-    - Previously it used to freeze the code untill a choice was made but now the game is constantly updating even if a UI state exists.
-    - We might need an internal loop just for the choice box state.
+Pause script during UI execution:
+Priority: High
+
+Implement a pause feature in script context:
+    - When opening any UI element (Excluding global message) set a new boolean to true.
+    - This boolean should sit in script step and should be called "Paused", create a getter for if the script step is paused.
+    - In the map script activate loop check if the script step is paused, if so stop executing.
+    - Add a map script to map script context constructor, store the map script as well.
+    - When constructing these UI elements pass the current script step and the map script.
+    - When closing the UI state pass the UI state back to a new function called "Continue", we need the UI state in case of choice boxes.
+    - During closing the UI resume the script step, set the map script current script step to the script step then call the activate function.
+    - Since we need to pass the game context perhaps we can remove the need for the UIGameContext interface here.
+
+
+Implement a WindowWithTextAndNamebox UI State:
+Priority: Medium (Depending on game design might not be neccesary)
+
+Create a new UI State Modal:
+    - This is almost identical to Dialogue state but includes an additional window, perhaps we can inherit from Dialgoue state.
 
 
 Minor clean up tasks:
@@ -26,10 +37,15 @@ Changes to stats:
     - Ensure GetStat in the playable character overriden function checks for equipment and status modifiers.
     - Currently we hardcode agility index in some "GetStat(2)" calls, we should update this maybe store the agility index in config instead.
 Fill in any todos:
-    - Make sure if it's not possible yet, add a note explaining when to add in roadmap and remove the todo comment and replace it with the build name in roadmap.
+    - Any TODOs for custom exceptions, interfaces have been fullfilled.
+    - Any TODOs that can not be implemented yet we should replace the comment with a tag linking it to a task in the roadmap.
 
 
-!Post refractor clean up end!
+Handle all Exceptions:
+Priority: Medium
+
+Any instances of exceptions being thrown we should catch them and use our engine logic to handle.
+Catch exceptions if actor lines do not include a "," at the end of the string. It's become annoying to miss them out.
 
 
 Introduce unit testing:
@@ -57,6 +73,9 @@ Priority: Extremely Low
 
 Currently some choices in the battle scene are hard coded "Run Away"/"Items" perhaps these should be moved into a yaml to check if they are enabled,
 disabled, what the text says.
+
+
+Iron Seed build release point. At this point any clean up tasks post our refractor have finished and we can move on to new features.
 
 
 Add custom stun status and status changes:
@@ -106,15 +125,6 @@ Implement when battle formations die they can be found dead on map and appear un
     - **NOTE** There might be issues with the drawing order, we'll need to Implement one task from the world elements tasks to ensure this works.
 Implement saving enemy formations: (Mid Priority)
     - In core create a new save function where we write the enemy formation data back into the yaml format.
-
-Iron Seed 1.5 (Build name undecided)!!!
-
-
-Handle all Exceptions:
-Priority: Medium
-
-Any instances of exceptions being thrown we should catch them and use our engine logic to handle.
-Catch exceptions if actor lines do not include a "," at the end of the string. It's become annoying to miss them out.
 
 
 Map scene event changes:

@@ -1,6 +1,9 @@
 namespace Scripts.UniversalScriptSteps;
 
+using Config.Runtime.Defaults;
 using Scripts.Base;
+using UI.States.Modal.Modals;
+using Utils.Strings;
 
 /// <summary>
 /// The basic text window script step.
@@ -9,16 +12,8 @@ public sealed class BasicTextWindow : ScriptStep {
     /// <summary>
     /// Constructor for the basic text window script step.
     /// </summary>
-    /// <param name="artId">The art ID of the window.</param>
-    /// <param name="fontId">The font ID of the window's text.</param>
-    /// <param name="xPosition">The x position of the window.</param>
-    /// <param name="yPosition">The y position of the window.</param> 
     /// <param name="text">The text that is displayed.</param>
-    public BasicTextWindow(int windowArtId, int fontId, int xPosition, int yPosition, string text) {
-        this.windowArtId = windowArtId;
-        this.fontId = fontId;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
+    public BasicTextWindow(string text) {
         this.text = text;
     }
 
@@ -27,41 +22,20 @@ public sealed class BasicTextWindow : ScriptStep {
     /// </summary>
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
-        //DialogueState dialogueState = new(xPosition, yPosition, width, height, windowFileName, windowConfig,
-        //    gameWindow, xPosition, yPosition, fontSize, fontFileName, text);
-        // TODO: Push this state onto stack.
-    }
+        // Load default text window values.
+        TextWindowDefaults textWindowDefaults = scriptContext.GetTextWindowDefaults();
+        int xPosition = textWindowDefaults.GetTextWindowX();
+        int yPosition = textWindowDefaults.GetTextWindowY();
+        int windowId = textWindowDefaults.GetTextWindowArtId();
+        int fontId = textWindowDefaults.GetTextWindowFontId();
+        string windowFileName = scriptContext.GetWindowArtFileName(windowId);
+        string fontFileName = scriptContext.GetFontFileName(fontId);
 
-    /// <summary>
-    /// Getter for the windows art id.
-    /// </summary>
-    /// <returns>Returns the window art ID of the basic text window script.</returns>
-    public int GetWindowArtId() {
-        return windowArtId;
-    }
-    
-    /// <summary>
-    /// Getter for the font id.
-    /// </summary>
-    /// <returns>Returns the font ID of the basic text window script.</returns>
-    public int GetFontId() {
-        return fontId;
-    }
-
-    /// <summary>
-    /// Getter for the windows x position.
-    /// </summary>
-    /// <returns>Returns the windows x position.</returns>
-    public int GetWindowXPosition() {
-        return xPosition;
-    }
-
-    /// <summary>
-    /// Getter for the windows y position.
-    /// </summary>
-    /// <returns>Returns the windows y position.</returns>
-    public int GetWindowYPosition() {
-        return yPosition;
+        // Create the new dialogue UI state.
+        scriptContext.AddUIState(new DialogueState(xPosition, yPosition, textWindowDefaults.GetTextWindowWidth(), 
+            textWindowDefaults.GetTextWindowHeight(), windowFileName, scriptContext.GetWindowConfig(),
+            scriptContext.GetGameWindow(), xPosition, yPosition,  textWindowDefaults.GetTextWindowFontSize(), fontFileName, 
+            PageGenerator.TurnTextIntoPages(text, scriptContext.GetMaxLinesPerPage())));
     }
 
     /// <summary>
@@ -72,6 +46,5 @@ public sealed class BasicTextWindow : ScriptStep {
         return text;
     }
 
-    private readonly int windowArtId, fontId, xPosition, yPosition;
     private readonly string text;
 }

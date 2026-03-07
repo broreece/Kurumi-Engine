@@ -1,6 +1,9 @@
 namespace Scripts.UniversalScriptSteps;
 
+using Config.Runtime.Defaults;
 using Scripts.Base;
+using UI.States.Modal.Modals;
+using Utils.Strings;
 
 /// <summary>
 /// The add status to party script step.
@@ -21,8 +24,20 @@ public sealed class DisplayGlobalMessage : ScriptStep {
     /// </summary>
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
-        //GlobalMessageWindow.LoadNewMessage(lines, timeLimit);
-        // TODO: implement and push onto stack.
+        // Load default global message values.
+        GlobalMessageDefaults globalMessageDefaults = scriptContext.GetGlobalMessageDefaults();
+        int xLocation = globalMessageDefaults.GetGlobalMessageX();
+        int yLocation = globalMessageDefaults.GetGlobalMessageY();
+        int windowId = globalMessageDefaults.GetGlobalMessageWindowId();
+        int fontId = globalMessageDefaults.GetGlobalMessageFontId();
+        string windowFileName = scriptContext.GetWindowArtFileName(windowId);
+        string fontFileName = scriptContext.GetFontFileName(fontId);
+
+        // Create the new global message UI state.
+        scriptContext.AddUIState(new GlobalMessageState(xLocation, yLocation, globalMessageDefaults.GetGlobalMessageWidth(), 
+            globalMessageDefaults.GetGlobalMessageHeight(), timeLimit, windowFileName, scriptContext.GetWindowConfig(), 
+            scriptContext.GetGameWindow(), xLocation, yLocation, globalMessageDefaults.GetGlobalMessageFontSize(), fontFileName, 
+            PageGenerator.TurnTextIntoPages(message, scriptContext.GetMaxLinesPerPage())));
     }
 
     /// <summary>

@@ -67,11 +67,10 @@ public static class Program {
 
         // Window Config.
         WindowConfig windowConfig = WindowConfigManager.Load("Windows\\windows_config.yaml");
-        FontConfig fontConfig = FontConfigManager.Load("Windows\\font_config.yaml");
 
         // Create game context with neccesary arguments.
         GameContext gameContext = new(database, saveManager, assetManager, mapManager, animatedTileSheetConfig, battleBackgroundSpriteConfig, 
             battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, gameWindowConfig, inventoryConfig, 
-            mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, tileSheetConfig, windowConfig);
+            mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, tileSheetConfig, windowConfig, textWindowDefaults, globalMessageDefaults);
     }
 }

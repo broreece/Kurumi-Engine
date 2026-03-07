@@ -1,5 +1,5 @@
 The purpose of this document is to outline the changes made since the anvil release, "Iron seed" was mostly focused on cleaning up post refractor
-and then small additions.:
+and then small additions if any.:
 
 ------------------------------------------------------------------------------------------------
 
@@ -16,4 +16,4 @@ When game is in menu, actors and animated tiles will not be updating anymore eff
 
 ------------------------------------------------------------------------------------------------
 
-
+Scripts can now "pause" and wait untill a specified continue point to occur. This is mostly used in the choice box UI state.
