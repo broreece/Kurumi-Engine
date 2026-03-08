@@ -9,6 +9,7 @@ public abstract class ScriptStep {
     /// </summary>
     protected ScriptStep() {
         next = null;
+        paused = false;
     }
 
     /// <summary>
@@ -16,6 +17,21 @@ public abstract class ScriptStep {
     /// </summary>
     /// <param name="scriptContext">The context which is required by the script step to activate.</param>
     public abstract void Activate(ScriptContext scriptContext);
+
+    /// <summary>
+    /// Function that pauses the script execution.
+    /// </summary>
+    public void Pause() {
+        paused = true;
+    }
+
+    /// <summary>
+    /// Getter for if the script step is paused.
+    /// </summary>
+    /// <returns>If the script step is paused.</returns>
+    public bool IsPaused() {
+        return paused;
+    }
 
     /// <summary>
     /// Getter for the next script step.
@@ -35,4 +51,5 @@ public abstract class ScriptStep {
     }
 
     protected ScriptStep ? next;
+    private bool paused;
 }

@@ -19,11 +19,15 @@ public static class ChoiceBoxDefaultsManager {
         var defaults = deserializer.Deserialize<Dictionary<string, int>>(yamlData);
 
         // Store defaults variables.
+        int windowId = defaults["choice_box_window_id"];
+        int selectionArtId = defaults["choice_box_selection_id"];
+        int fontId = defaults["choice_box_font_id"];
+        int fontSize = defaults["choice_box_font_size"];
         int choiceBoxWidth = defaults["choice_box_default_width"];
-        int choiceBoxHeight = defaults["choice_box_default_height"];;
+        int choiceBoxHeight = defaults["choice_box_default_height"];
         int choiceBoxX = defaults["choice_box_default_x"];
         int choiceBoxY = defaults["choice_box_default_y"];
 
-        return new ChoiceBoxDefaults(choiceBoxWidth, choiceBoxHeight, choiceBoxX, choiceBoxY);
+        return new ChoiceBoxDefaults(windowId, selectionArtId, fontId, fontSize, choiceBoxWidth, choiceBoxHeight, choiceBoxX, choiceBoxY);
     }
 }

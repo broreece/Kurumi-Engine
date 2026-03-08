@@ -170,7 +170,7 @@ public class InventoryState : UIState, IInventoryInputController {
     /// Function used to close the inventory state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation, lock controls etc whatever is needed here.
+        // TODO: Implement closing animation.
         closed = true;
     }
 

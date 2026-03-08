@@ -1,6 +1,7 @@
 namespace UI.States.Modal.Modals;
 
 using Engine.Input.Scenes;
+using Scripts.Base;
 using UI.Input;
 using UI.Interfaces;
 using UI.States.Modal.Core;
@@ -24,10 +25,16 @@ public class DialogueState : WindowedState, IDialogueInputController {
     /// <param name="fontSize">The font size.</param>
     /// <param name="fontFileName">The font file name.</param>
     /// <param name="text">The 2D array containing each page of text.</param>
+    /// <param name="currentStep">The current step being executed.</param>
+    /// <param name="scriptContext">The context of a script being executed.</param>
     public DialogueState(int windowXPosition, int windowYPosition, int width, int height, string windowFileName, IWindowFileAccessor windowFileAccessor,
         IGameWindowDimensionsAccessor gameWindowDimensionsAccessor, int textXPosition, int textYPosition, float fontSize, 
-        string fontFileName, string[,] text) : base(windowXPosition, windowYPosition, width, height, windowFileName, 
+        string fontFileName, string[,] text, ScriptStep currentStep, SceneScriptContext scriptContext) : base(windowXPosition, windowYPosition, width, height, windowFileName, 
         windowFileAccessor, gameWindowDimensionsAccessor, textXPosition, textYPosition, fontSize, fontFileName, text) {
+        // Assign script context.
+        this.currentStep = currentStep;
+        this.scriptContext = scriptContext;
+
         // Assign input map.
         inputMap = new DialogueInputMap(this);
     }
@@ -49,7 +56,13 @@ public class DialogueState : WindowedState, IDialogueInputController {
     /// Function used to close the dialogue state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation, lock controls etc whatever is needed here.
+        // TODO: Implement closing animation.
+        scriptContext.PopUIState();
+        scriptContext.Resume();
+        scriptContext.ContinueScript(currentStep);
         closed = true;
     }
+
+    private readonly ScriptStep currentStep;
+    private readonly SceneScriptContext scriptContext;
 }

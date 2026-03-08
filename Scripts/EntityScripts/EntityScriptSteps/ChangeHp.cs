@@ -38,7 +38,7 @@ public sealed class ChangeHp : ScriptStep {
                 newHp = 1;
             }
             else if (canKo && (target.GetCurrentHp() - result) <= 0) {
-                // TODO: Change this to usea single function call on entity script context.
+                // TODO: Change this to use a single function call on entity script context.
                 target.AddStatus(entityScriptContext.GetGameContext().GetStatusRegistry().GetStatus(0));
                 newHp = 0;
             }

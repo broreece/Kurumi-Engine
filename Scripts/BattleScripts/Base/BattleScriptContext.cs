@@ -12,7 +12,22 @@ public sealed class BattleScriptContext : SceneScriptContext {
     /// Constructor for the battle script context class.
     /// </summary>
     /// <param name="gameContext">The game's context object.</param>
-    public BattleScriptContext(GameContext gameContext) : base(gameContext) {}
+    /// <param name="battleScript">The battle script that owns the context.</param>
+    public BattleScriptContext(GameContext gameContext, BattleScript battleScript) : base(gameContext, battleScript) {}
+
+    /// <summary>
+    /// Function used to continue a script following from a previous script step.
+    /// </summary>
+    /// <param name="previousStep">The last executed scene step.</param>
+    public override void ContinueScript(ScriptStep previousStep) {
+        ScriptStep? nextStep = previousStep.GetNextStep();
+        BattleScript battleScript = (BattleScript) script;
+        if (nextStep != null) {
+            battleScript.SetHead(nextStep);
+            battleScript.Activate(gameContext);
+        }
+        // TODO: We can consider throwing a custom exception here just so we know the script is finished.
+    }
 
     /// <summary>
     /// Function used to kill an enemy within the battle.

@@ -59,21 +59,12 @@ public class MapScript : Script {
                     break;
 
                 case "ChoiceBox":
-                    int choiceBoxArtId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int choiceBoxfontId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int choixeBoxXPosition = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int choiceBoxYPosition = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     string fullChoices = scriptText[..scriptText.IndexOf(',')];
                     string[] choices = fullChoices.Split('-');
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     int choiceBoxNextIfFalse = int.Parse(scriptText[..scriptText.IndexOf(',')]);
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    AddStep(new ChoiceBox(choiceBoxArtId, choiceBoxfontId, choixeBoxXPosition,
-                        choiceBoxYPosition, choices, choiceBoxNextIfFalse));
+                    AddStep(new ChoiceBox(choices, choiceBoxNextIfFalse));
                     break;
 
                 case "DisplayGlobalMessage":
@@ -107,7 +98,7 @@ public class MapScript : Script {
                 case "ForceMoveParty":
                     bool partyKeepDirection = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    List<int> partyPath = new();
+                    List<int> partyPath = [];
                     // Check if value is int, if so keep looping.
                     while (scriptText.Contains(',') && int.TryParse(scriptText[..scriptText.IndexOf(',')], out int nextStep)) {
                         partyPath.Add(nextStep);
@@ -150,10 +141,12 @@ public class MapScript : Script {
     /// </summary>
     /// <param name="gameContext">The context of the game used by script steps.</param>
     public void Activate(GameContext gameContext) {
-        MapScriptContext scriptContext = new(gameContext);
-        while (scriptStep != null) {
+        MapScriptContext scriptContext = new(gameContext, this);
+        while (scriptStep != null && !scriptStep.IsPaused()) {
             scriptStep.Activate(scriptContext);
-            scriptStep = scriptStep.GetNextStep();
+            if (!scriptStep.IsPaused()) {
+                scriptStep = scriptStep.GetNextStep();
+            }
         }
         scriptStep = head;
     }
@@ -168,12 +161,11 @@ public class MapScript : Script {
 
     /// <summary>
     /// Setter for the map scene scripts current script step.
-    /// Used when continuing a map script after a pause.
     /// </summary>
-    /// <param name="scriptStep">The new current script stpe.</param>
-    public void SetSceneScriptStep(ScriptStep scriptStep) {
+    /// <param name="scriptStep">The currently executing script step.</param>
+    public void SetScriptStep(ScriptStep? scriptStep) {
         this.scriptStep = scriptStep;
-    }
+    } 
 
     private ScriptStep ? scriptStep;
 }

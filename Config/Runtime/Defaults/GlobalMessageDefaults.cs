@@ -18,6 +18,8 @@ public sealed class GlobalMessageDefaults {
         int globalMessageHeight, int globalMessageX, 
         int globalMessageY) {
         this.globalMessageWindowId = globalMessageWindowId;
+        this.globalMessageFontId = globalMessageFontId;
+        this.globalMessageFontSize = globalMessageFontSize;
         this.globalMessageWidth = globalMessageWidth;
         this.globalMessageHeight = globalMessageHeight;
         this.globalMessageX = globalMessageX;

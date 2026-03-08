@@ -4,7 +4,6 @@ using Engine.Runtime;
 using Scripts.Base;
 using Scripts.BattleScripts.BattleScriptSteps;
 using Scripts.UniversalScriptSteps;
-using Utils.Strings;
 
 /// <summary>
 /// The Battle scene script class, a type of script that can activate on the battle scene.
@@ -38,21 +37,12 @@ public class BattleScript : Script {
                     break;
 
                 case "ChoiceBox":
-                    int choiceBoxArtId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int choiceBoxfontId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int choixeBoxXPosition = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int choiceBoxYPosition = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     string fullChoices = scriptText[..scriptText.IndexOf(',')];
                     string[] choices = fullChoices.Split('-');
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     int choiceBoxNextIfFalse = int.Parse(scriptText[..scriptText.IndexOf(',')]);
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    AddStep(new ChoiceBox(choiceBoxArtId, choiceBoxfontId, choixeBoxXPosition,
-                        choiceBoxYPosition, choices, choiceBoxNextIfFalse));
+                    AddStep(new ChoiceBox(choices, choiceBoxNextIfFalse));
                     break;
 
                 case "DisplayGlobalMessage":

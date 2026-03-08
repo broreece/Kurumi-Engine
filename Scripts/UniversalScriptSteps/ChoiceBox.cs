@@ -1,7 +1,9 @@
 namespace Scripts.UniversalScriptSteps;
 
+using Config.Runtime.Defaults;
 using Scripts.Base;
 using Scripts.Conditional;
+using UI.States.Modal.Modals;
 
 /// <summary>
 /// The choice box script step.
@@ -10,17 +12,9 @@ public sealed class ChoiceBox : ConditionalScript {
     /// <summary>
     /// Constructor for the choice box script step.
     /// </summary>
-    /// <param name="artId">The art ID of the window.</param>
-    /// <param name="fontId">The font ID of the window's text.</param>
-    /// <param name="xPosition">The x position of the window.</param>
-    /// <param name="yPosition">The y position of the window.</param> 
     /// <param name="choices">The choices that are displayed.</param>
     /// <param name="nextIfFalse">The index of the next script step if negative choice is made.</param>
-    public ChoiceBox(int windowArtId, int fontId, int xPosition, int yPosition, string[] choices, int nextIfFalse) : base(nextIfFalse) {
-        this.windowArtId = windowArtId;
-        this.fontId = fontId;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
+    public ChoiceBox(string[] choices, int nextIfFalse) : base(nextIfFalse) {
         this.choices = choices;
     }
     
@@ -29,47 +23,32 @@ public sealed class ChoiceBox : ConditionalScript {
     /// </summary>
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
-        //SetConditionMet(false);
-        //ChoiceState choiceState = new(xPosition, yPosition, windowWidth, windowHeight, fontSize, fontFileName, windowFileName,
-        //    windowConfig, gameWindow, xPosition, yPosition, windowWidth, choiceBoxHeight, spacing, choiceBoxFileName, choices);
-        // TODO: Push this state onto stack.
-        // TODO: We need to reconsider the way this will work... The old system froze the game untill a choice was made.
-        // Maybe we can just loop draw and update only this choice state.
-        //if (choiceState.GetCurrentChoice() == 0) {
-        //    SetConditionMet(true);
-        //}
-    }
+        // Load default text window values.
+        SceneScriptContext sceneScriptContext = (SceneScriptContext) scriptContext;
+        ChoiceBoxDefaults choiceBoxDefaults = sceneScriptContext.GetChoiceBoxDefaults();
+        int xPosition = choiceBoxDefaults.GetChoiceBoxX();
+        int yPosition = choiceBoxDefaults.GetChoiceBoxY();
+        int windowWidth = choiceBoxDefaults.GetChoiceBoxWidth();
+        int windowHeight = choiceBoxDefaults.GetChoiceBoxHeight();
+        int choiceBoxHeight = windowHeight / choices.Length;
+        int windowId = choiceBoxDefaults.GetWindowId();
+        int selectionId = choiceBoxDefaults.GetSelectionArtId();
+        int fontId = choiceBoxDefaults.GetFontId();
+        int fontSize = choiceBoxDefaults.GetFontSize();
+        // TODO: Temporary spacing value.
+        int spacing = fontSize;
+        string windowFileName = sceneScriptContext.GetWindowArtFileName(windowId);
+        string fontFileName = sceneScriptContext.GetFontFileName(fontId);
+        string choiceBoxFileName = sceneScriptContext.GetSelectionBoxFileName(selectionId);
 
-    /// <summary>
-    /// Getter for the window art id.
-    /// </summary>
-    /// <returns>Returns the window art ID of the choice box.</returns>
-    public int GetWindowArtId() {
-        return windowArtId;
-    }
 
-    /// <summary>
-    /// Getter for the font id.
-    /// </summary>
-    /// <returns>Returns the font ID of the choice box.</returns>
-    public int GetFontId() {
-        return fontId;
-    }
+        // Pause the script step to be continued after the dialogue state closes.
+        Pause();
 
-    /// <summary>
-    /// Getter for the windows x position.
-    /// </summary>
-    /// <returns>Returns the windows x position.</returns>
-    public int GetWindowXPosition() {
-        return xPosition;
-    }
-
-    /// <summary>
-    /// Getter for the windows y position.
-    /// </summary>
-    /// <returns>Returns the windows y position.</returns>
-    public int GetWindowYPosition() {
-        return yPosition;
+        // Create the new choice box UI state.
+        sceneScriptContext.AddUIState(new ChoiceState(xPosition, yPosition, windowWidth, windowHeight, fontSize, fontFileName, windowFileName,
+            sceneScriptContext.GetWindowConfig(), sceneScriptContext.GetGameWindow(), xPosition, yPosition, windowWidth, choiceBoxHeight, spacing, 
+            choiceBoxFileName, choices, this, sceneScriptContext));
     }
 
     /// <summary>
@@ -80,6 +59,5 @@ public sealed class ChoiceBox : ConditionalScript {
         return choices;
     }
 
-    private readonly int windowArtId, fontId, xPosition, yPosition;
     private readonly string[] choices;
 }

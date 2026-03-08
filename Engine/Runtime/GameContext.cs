@@ -62,15 +62,16 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="mainMenuConfig">The main menu config object.</param>
     /// <param name="tileSheetConfig">The tile sheet config object.</param>
     /// <param name="windowConfig">The window config object.</param>
-    /// <param name="textWindowDefaults">The text window defaults object.</param>
+    /// <param name="choiceBoxDefaults">The choice box defaults object.</param>
     /// <param name="globalMessageDefaults">The global message defaults object.</param>
+    /// <param name="textWindowDefaults">The text window defaults object.</param>
     public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, MapManager mapManager,
         AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
         BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, CharacterFieldSpriteConfig characterFieldSpriteConfig, 
         FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, InventoryConfig inventoryConfig,
         MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, MainMenuConfig mainMenuConfig, 
-        TileSheetConfig tileSheetConfig, WindowConfig windowConfig, TextWindowDefaults textWindowDefaults, 
-        GlobalMessageDefaults globalMessageDefaults) {
+        TileSheetConfig tileSheetConfig, WindowConfig windowConfig, ChoiceBoxDefaults choiceBoxDefaults, 
+        GlobalMessageDefaults globalMessageDefaults, TextWindowDefaults textWindowDefaults) {
         // Store config objects.
         this.animatedTileSheetConfig = animatedTileSheetConfig;
         this.battleBackgroundSpriteConfig = battleBackgroundSpriteConfig;
@@ -85,6 +86,7 @@ public sealed class GameContext : IGameUIContext {
         this.mainMenuConfig = mainMenuConfig;
         this.tileSheetConfig = tileSheetConfig;
         this.windowConfig = windowConfig;
+        this.choiceBoxDefaults = choiceBoxDefaults;
         this.globalMessageDefaults = globalMessageDefaults;
         this.textWindowDefaults = textWindowDefaults;
 
@@ -183,6 +185,7 @@ public sealed class GameContext : IGameUIContext {
         // TODO: Yets consider moving this to another file or create a variable for if the game is open.
         while (gameWindow.IsOpen()) {
             gameWindow.Clear();
+            // Update all timers if not paused, otherwise reset all timers untill unpaused.
             if (!paused) {
                 currentState?.Update();
                 currentScene?.Update();
@@ -191,6 +194,14 @@ public sealed class GameContext : IGameUIContext {
             else {
                 currentScene?.ResetClocks();
             }
+            // Check if the top UI state needs to be closed (Global message case).
+            if (uiStates.Count > 0) {
+                uiStates.Peek().Update(paused);
+                if (uiStates.Peek().IsClosed()) {
+                    uiStates.Pop();
+                }
+            }
+            // Render all components of the UI.
             foreach (UIState uiState in uiStates) {
                 IUIComponent[] components = [.. uiState.GetComponents()];
                 for (int componentIndex = components.Length - 1; componentIndex >= 0; componentIndex --) {
@@ -306,21 +317,30 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
-    /// Function used to load a specific window file art name.
-    /// </summary>
-    /// <param name="windowArtId">The window art ID.</param>
-    /// <returns>The window art file name of a specific ID.</returns>
-    public string GetWindowArtFileName(int windowArtId) {
-        return assetManager.GetWindowArtFileName(windowArtId);
-    }
-
-    /// <summary>
     /// Function used to load a specific font file name.
     /// </summary>
     /// <param name="fontId">The font ID.</param>
     /// <returns>The font file name of a specific ID.</returns>
     public string GetFontFileName(int fontId) {
         return assetManager.GetFontFileName(fontId);
+    }
+
+    /// <summary>
+    /// Function used to load a specific selection box file name.
+    /// </summary>
+    /// <param name="selectionId">The selection box ID.</param>
+    /// <returns>The selection box file name of a specific ID.</returns>
+    public string GetSelectionBoxFileName(int selectionId) {
+        return assetManager.GetChoiceSelectionFileName(selectionId);
+    }
+
+    /// <summary>
+    /// Function used to load a specific window file art name.
+    /// </summary>
+    /// <param name="windowArtId">The window art ID.</param>
+    /// <returns>The window art file name of a specific ID.</returns>
+    public string GetWindowArtFileName(int windowArtId) {
+        return assetManager.GetWindowArtFileName(windowArtId);
     }
 
     /// <summary>
@@ -377,6 +397,14 @@ public sealed class GameContext : IGameUIContext {
     /// <returns>The window config object.</returns>
     public WindowConfig GetWindowConfig() {
         return windowConfig;
+    }
+
+    /// <summary>
+    /// Function used to load the choice box defaults object.
+    /// </summary>
+    /// <returns>The choice box defaults object.</returns>
+    public ChoiceBoxDefaults GetChoiceBoxDefaults() {
+        return choiceBoxDefaults;
     }
 
     /// <summary>
@@ -595,6 +623,7 @@ public sealed class GameContext : IGameUIContext {
     private readonly WindowConfig windowConfig;
 
     // Defaults objects.
+    private readonly ChoiceBoxDefaults choiceBoxDefaults;
     private readonly GlobalMessageDefaults globalMessageDefaults;
     private readonly TextWindowDefaults textWindowDefaults;
 

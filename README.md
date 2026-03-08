@@ -9,20 +9,20 @@ The engine is designed for building **narrative-heavy RPGs** with scripted event
 
 ## Development Status
 
-Iron Seed  
+Crucible 
 Active Development
 
 Recent work focused on a large **core refactor** to improve engine architecture and maintainability.
 
 Current cleanup tasks include:
 - Fixing UI script steps (dialogue / choice boxes)
-- Improving forced movement actor logic (some issues where if blocked forced movements do not function as intended)
-- Implementing proper game pause behavior when menus are active
+- Pausing script execution during forced movement of actors
+- All 'TODO's marked with a linked task in the roadmap
+- Exceptions are all unique and handled in code
 
 Next milestone:
 - Introduction of unit testing
 - Expanding battle state scope
-- Improving visibility and functionality of statuses
 
 ---
 

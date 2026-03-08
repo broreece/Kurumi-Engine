@@ -1,6 +1,8 @@
 namespace UI.States.Modal.Modals;
 
 using Engine.Input.Scenes;
+using Scripts.Base;
+using Scripts.Conditional;
 using UI.Component.Components;
 using UI.Core;
 using UI.Input;
@@ -29,10 +31,16 @@ public class ChoiceState : UIState, IChoiceInputController {
     /// <param name="spacing">The spacing of the choice box.</param>
     /// <param name="choiceBoxFileName">The choice box file name.</param>
     /// <param name="choices">The array containing all the possible choices.</param>
+    /// <param name="currentStep">The current step being executed.</param>
+    /// <param name="scriptContext">The context of a script being executed.</param>
     public ChoiceState(int windowXPosition, int windowYPosition, int windowWidth, int windowHeight, int fontSize, string fontFileName, 
         string windowFileName, IWindowFileAccessors fileAccessors, IGameWindowDimensionsAccessor gameWindowDimensionsAccessor, 
         int choiceBoxXPosition, int choiceBoxYPosition, int choiceBoxWidth, int choiceBoxHeight, int spacing, string choiceBoxFileName, 
-        string[] choices) {
+        string[] choices, ConditionalScript currentStep, SceneScriptContext scriptContext) {
+        // Assign script context.
+        this.currentStep = currentStep;
+        this.scriptContext = scriptContext;
+
         // Input map.
         inputMap = new ChoiceInputMap(this);
 
@@ -48,14 +56,14 @@ public class ChoiceState : UIState, IChoiceInputController {
         // Line text.
         int lineIndex = 0;
         foreach (string choice in choices) {
-            components.Push(new ListTextComponent(choiceBoxXPosition, choiceBoxXPosition + (lineIndex * spacing), fontSize, 
+            components.Push(new ListTextComponent(choiceBoxXPosition, choiceBoxYPosition + (lineIndex * spacing), fontSize, 
                 fontFileName, choice));
             lineIndex ++;
         }
     }
 
     public void Select() {
-        // TODO: Implement here.
+        Close();
     }
 
     /// <summary>
@@ -84,9 +92,15 @@ public class ChoiceState : UIState, IChoiceInputController {
     /// Function used to close the choice state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation, lock controls etc whatever is needed here.
+        // TODO: Implement closing animation.
+        currentStep.SetConditionMet(GetCurrentChoice() == 1);
+        scriptContext.PopUIState();
+        scriptContext.Resume();
+        scriptContext.ContinueScript(currentStep);
         closed = true;
     }
 
     private readonly ChoiceBoxComponent choiceBoxComponent;
+    private readonly ConditionalScript currentStep;
+    private readonly SceneScriptContext scriptContext;
 }

@@ -228,7 +228,7 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
     /// Function used to close the file selector state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation, lock controls etc whatever is needed here.
+        // TODO: Implement closing animation.
         closed = true;
     }
 

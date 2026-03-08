@@ -25,19 +25,20 @@ public sealed class DisplayGlobalMessage : ScriptStep {
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
         // Load default global message values.
-        GlobalMessageDefaults globalMessageDefaults = scriptContext.GetGlobalMessageDefaults();
+        SceneScriptContext sceneScriptContext = (SceneScriptContext) scriptContext;
+        GlobalMessageDefaults globalMessageDefaults = sceneScriptContext.GetGlobalMessageDefaults();
         int xLocation = globalMessageDefaults.GetGlobalMessageX();
         int yLocation = globalMessageDefaults.GetGlobalMessageY();
         int windowId = globalMessageDefaults.GetGlobalMessageWindowId();
         int fontId = globalMessageDefaults.GetGlobalMessageFontId();
-        string windowFileName = scriptContext.GetWindowArtFileName(windowId);
-        string fontFileName = scriptContext.GetFontFileName(fontId);
+        string windowFileName = sceneScriptContext.GetWindowArtFileName(windowId);
+        string fontFileName = sceneScriptContext.GetFontFileName(fontId);
 
         // Create the new global message UI state.
-        scriptContext.AddUIState(new GlobalMessageState(xLocation, yLocation, globalMessageDefaults.GetGlobalMessageWidth(), 
-            globalMessageDefaults.GetGlobalMessageHeight(), timeLimit, windowFileName, scriptContext.GetWindowConfig(), 
-            scriptContext.GetGameWindow(), xLocation, yLocation, globalMessageDefaults.GetGlobalMessageFontSize(), fontFileName, 
-            PageGenerator.TurnTextIntoPages(message, scriptContext.GetMaxLinesPerPage())));
+        sceneScriptContext.AddUIState(new GlobalMessageState(xLocation, yLocation, globalMessageDefaults.GetGlobalMessageWidth(), 
+            globalMessageDefaults.GetGlobalMessageHeight(), timeLimit, windowFileName, sceneScriptContext.GetWindowConfig(), 
+            sceneScriptContext.GetGameWindow(), xLocation, yLocation, globalMessageDefaults.GetGlobalMessageFontSize(), fontFileName, 
+            PageGenerator.TurnTextIntoPages(message, sceneScriptContext.GetMaxLinesPerPage())));
     }
 
     /// <summary>

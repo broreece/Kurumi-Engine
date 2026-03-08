@@ -21,7 +21,7 @@ public abstract class ConditionalScript : ScriptStep {
     /// <summary>
     /// Getter for the next script step.
     /// </summary>
-    /// <returns>next script step in the script.</returns>
+    /// <returns>Next script step in the script.</returns>
     /// <exception cref="ConditionalException">Error thrown if a scriptConditional value was not created.</exception>
     public override ScriptStep ? GetNextStep() {
         int nextStep = nextIfFalse;

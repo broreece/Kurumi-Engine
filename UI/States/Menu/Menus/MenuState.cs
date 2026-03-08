@@ -216,7 +216,7 @@ public class MenuState : UIState, IMenuInputController {
     /// Function used to close the menu state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation, lock controls etc whatever is needed here.
+        // TODO: Implement closing animation.
         gameUIContext.PopUIStack();
         gameUIContext.Resume();
         closed = true;

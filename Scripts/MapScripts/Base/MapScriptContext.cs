@@ -12,7 +12,26 @@ public sealed class MapScriptContext : SceneScriptContext {
     /// Constructor for the map script context class.
     /// </summary>
     /// <param name="gameContext">The game's context object.</param>
-    public MapScriptContext(GameContext gameContext) : base(gameContext) {}
+    /// <param name="mapScript">The map script that owns the context.</param>
+    public MapScriptContext(GameContext gameContext, MapScript mapScript) : base(gameContext, mapScript) {}
+
+    /// <summary>
+    /// Function used to continue a script following from a previous script step.
+    /// </summary>
+    /// <param name="previousStep">The last executed scene step.</param>
+    public override void ContinueScript(ScriptStep previousStep) {
+        ScriptStep? nextStep = previousStep.GetNextStep();
+        MapScript mapScript = (MapScript) script;
+        if (nextStep != null) {
+            mapScript.SetScriptStep(nextStep);
+            mapScript.Activate(gameContext);
+        }
+        else {
+            // Reset the map script current step if it's finished.
+            mapScript.SetScriptStep(mapScript.GetHead());
+            // TODO: We can consider throwing a custom exception here just so we know the script is finished.
+        }
+    }
 
     /// <summary>
     /// Force move party function that forces the party to move on the map scene.

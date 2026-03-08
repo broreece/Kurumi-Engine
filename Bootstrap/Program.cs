@@ -44,6 +44,7 @@ public static class Program {
 
         // Defaults.
         ChoiceBoxDefaults choiceBoxDefaults = ChoiceBoxDefaultsManager.Load("Defaults\\choice_box_defaults.yaml");
+
         GlobalMessageDefaults globalMessageDefaults = GlobalMessageDefaultsManager.Load("Defaults\\global_message_defaults.yaml");
         NameBoxDefaults nameBoxDefaults = NameBoxDefaultsManager.Load("Defaults\\name_box_defaults.yaml");
         TextWindowDefaults textWindowDefaults = TextWindowDefaultsManager.Load("Defaults\\text_window_defaults.yaml");
@@ -71,6 +72,6 @@ public static class Program {
         // Create game context with neccesary arguments.
         GameContext gameContext = new(database, saveManager, assetManager, mapManager, animatedTileSheetConfig, battleBackgroundSpriteConfig, 
             battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, gameWindowConfig, inventoryConfig, 
-            mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, tileSheetConfig, windowConfig, textWindowDefaults, globalMessageDefaults);
+            mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, tileSheetConfig, windowConfig, choiceBoxDefaults, globalMessageDefaults, textWindowDefaults);
     }
 }

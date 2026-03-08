@@ -23,19 +23,23 @@ public sealed class BasicTextWindow : ScriptStep {
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
         // Load default text window values.
-        TextWindowDefaults textWindowDefaults = scriptContext.GetTextWindowDefaults();
+        SceneScriptContext sceneScriptContext = (SceneScriptContext) scriptContext;
+        TextWindowDefaults textWindowDefaults = sceneScriptContext.GetTextWindowDefaults();
         int xPosition = textWindowDefaults.GetTextWindowX();
         int yPosition = textWindowDefaults.GetTextWindowY();
         int windowId = textWindowDefaults.GetTextWindowArtId();
         int fontId = textWindowDefaults.GetTextWindowFontId();
-        string windowFileName = scriptContext.GetWindowArtFileName(windowId);
-        string fontFileName = scriptContext.GetFontFileName(fontId);
+        string windowFileName = sceneScriptContext.GetWindowArtFileName(windowId);
+        string fontFileName = sceneScriptContext.GetFontFileName(fontId);
+
+        // Pause the script step to be continued after the dialogue state closes.
+        Pause();
 
         // Create the new dialogue UI state.
-        scriptContext.AddUIState(new DialogueState(xPosition, yPosition, textWindowDefaults.GetTextWindowWidth(), 
-            textWindowDefaults.GetTextWindowHeight(), windowFileName, scriptContext.GetWindowConfig(),
-            scriptContext.GetGameWindow(), xPosition, yPosition,  textWindowDefaults.GetTextWindowFontSize(), fontFileName, 
-            PageGenerator.TurnTextIntoPages(text, scriptContext.GetMaxLinesPerPage())));
+        sceneScriptContext.AddUIState(new DialogueState(xPosition, yPosition, textWindowDefaults.GetTextWindowWidth(), 
+            textWindowDefaults.GetTextWindowHeight(), windowFileName, sceneScriptContext.GetWindowConfig(),
+            sceneScriptContext.GetGameWindow(), xPosition, yPosition,  textWindowDefaults.GetTextWindowFontSize(), fontFileName, 
+            PageGenerator.TurnTextIntoPages(text, sceneScriptContext.GetMaxLinesPerPage()), this, sceneScriptContext));
     }
 
     /// <summary>
