@@ -7,28 +7,28 @@ public sealed class BattleBackgroundSpriteConfig {
     /// <summary>
     /// The constructor function for the battle background sprite config.
     /// </summary>
-    /// <param name="battleBackgroundWidth">The battle background width config.</param>
-    /// <param name="battleBackgroundHeight">The battle background height config.</param>
-    public BattleBackgroundSpriteConfig(int battleBackgroundWidth, int battleBackgroundHeight) {
-        this.battleBackgroundWidth = battleBackgroundWidth;
-        this.battleBackgroundHeight = battleBackgroundHeight;
+    /// <param name="width">The battle background width config.</param>
+    /// <param name="height">The battle background height config.</param>
+    public BattleBackgroundSpriteConfig(int width, int height) {
+        this.width = width;
+        this.height = height;
     }
 
     /// <summary>
     /// Getter for the battle background width config.
     /// </summary>
     /// <returns>The battle background width config.</returns>
-    public int GetBattleBackgroundWidth() {
-        return battleBackgroundWidth;
+    public int GetWidth() {
+        return width;
     }
 
     /// <summary>
     /// Getter for the battle background height config.
     /// </summary>
     /// <returns>The battle background height config.</returns>
-    public int GetBattleBackgroundHeight() {
-        return battleBackgroundHeight;
+    public int GetHeight() {
+        return height;
     }
 
-    private readonly int battleBackgroundWidth, battleBackgroundHeight;
+    private readonly int width, height;
 }

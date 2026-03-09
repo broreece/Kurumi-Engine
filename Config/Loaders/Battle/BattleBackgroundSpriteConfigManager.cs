@@ -20,9 +20,9 @@ public static class BattleBackgroundSpriteConfigManager {
         var config = deserializer.Deserialize<Dictionary<string, int>>(yamlData);
 
         // Store config variables.
-        int battleBackgroundWidth = config["battle_background_width"];
-        int battleBackgroundHeight = config["battle_background_height"];
+        int width = config["width"];
+        int height = config["height"];
 
-        return new BattleBackgroundSpriteConfig(battleBackgroundWidth, battleBackgroundHeight);
+        return new BattleBackgroundSpriteConfig(width, height);
     }
 }

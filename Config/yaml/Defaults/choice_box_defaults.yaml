@@ -1,8 +1,8 @@
-choice_box_window_id: 1
-choice_box_selection_id: 0
-choice_box_font_id: 0
-choice_box_font_size: 25
-choice_box_default_width: 10
-choice_box_default_height: 15
-choice_box_default_x: 800
-choice_box_default_y: 400
+window_id: 1
+selection_id: 0
+font_id: 0
+font_size: 25
+choice_box_width: 10
+choice_box_height: 15
+choice_box_x: 800
+choice_box_y: 400

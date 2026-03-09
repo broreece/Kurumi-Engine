@@ -7,23 +7,21 @@ public sealed class GlobalMessageDefaults {
     /// <summary>
     /// Constructor for the global message defaults class.
     /// </summary>
-    /// <param name="globalMessageWindowId">The default global message window ID.</param>
-    /// <param name="globalMessageFontId">The default global message font ID.</param>
-    /// <param name="globalMessageFontSize">The default global message font size.</param>
-    /// <param name="globalMessageWidth">The default global message width.</param>
-    /// <param name="globalMessageHeight">The default global message height.</param>
-    /// <param name="globalMessageX">The default global message X location.</param>
-    /// <param name="globalMessageY">The default global message Y location.</param>
-    public GlobalMessageDefaults(int globalMessageWindowId, int globalMessageFontId, int globalMessageFontSize, int globalMessageWidth, 
-        int globalMessageHeight, int globalMessageX, 
-        int globalMessageY) {
-        this.globalMessageWindowId = globalMessageWindowId;
-        this.globalMessageFontId = globalMessageFontId;
-        this.globalMessageFontSize = globalMessageFontSize;
-        this.globalMessageWidth = globalMessageWidth;
-        this.globalMessageHeight = globalMessageHeight;
-        this.globalMessageX = globalMessageX;
-        this.globalMessageY = globalMessageY;
+    /// <param name="windowId">The default global message window ID.</param>
+    /// <param name="fontId">The default global message font ID.</param>
+    /// <param name="fontSize">The default global message font size.</param>
+    /// <param name="width">The default global message width.</param>
+    /// <param name="height">The default global message height.</param>
+    /// <param name="windowX">The default global message X location.</param>
+    /// <param name="windowY">The default global message Y location.</param>
+    public GlobalMessageDefaults(int windowId, int fontId, int fontSize, int width, int height, int windowX, int windowY) {
+        this.windowId = windowId;
+        this.fontId = fontId;
+        this.fontSize = fontSize;
+        this.width = width;
+        this.height = height;
+        this.windowX = windowX;
+        this.windowY = windowY;
     }
 
     /// <summary>
@@ -31,7 +29,7 @@ public sealed class GlobalMessageDefaults {
     /// </summary>
     /// <returns>The global message window ID default value.</returns>
     public int GetGlobalMessageWindowId() {
-        return globalMessageWindowId;
+        return windowId;
     }
 
     /// <summary>
@@ -39,7 +37,7 @@ public sealed class GlobalMessageDefaults {
     /// </summary>
     /// <returns>The global message font ID default value.</returns>
     public int GetGlobalMessageFontId() {
-        return globalMessageFontId;
+        return fontId;
     }
 
     /// <summary>
@@ -47,7 +45,7 @@ public sealed class GlobalMessageDefaults {
     /// </summary>
     /// <returns>The global message font size default value.</returns>
     public int GetGlobalMessageFontSize() {
-        return globalMessageFontSize;
+        return fontSize;
     }
 
     /// <summary>
@@ -55,7 +53,7 @@ public sealed class GlobalMessageDefaults {
     /// </summary>
     /// <returns>The global message width default value.</returns>
     public int GetGlobalMessageWidth() {
-        return globalMessageWidth;
+        return width;
     }
 
     /// <summary>
@@ -63,7 +61,7 @@ public sealed class GlobalMessageDefaults {
     /// </summary>
     /// <returns>The global message height default value.</returns>
     public int GetGlobalMessageHeight() {
-        return globalMessageHeight;
+        return height;
     }
 
     /// <summary>
@@ -71,7 +69,7 @@ public sealed class GlobalMessageDefaults {
     /// </summary>
     /// <returns>The global message X default value.</returns>
     public int GetGlobalMessageX() {
-        return globalMessageX;
+        return windowX;
     }
 
     /// <summary>
@@ -79,9 +77,8 @@ public sealed class GlobalMessageDefaults {
     /// </summary>
     /// <returns>The global message Y default value.</returns>
     public int GetGlobalMessageY() {
-        return globalMessageY;
+        return windowY;
     }
 
-    private readonly int globalMessageWindowId, globalMessageFontId, globalMessageFontSize, globalMessageWidth, 
-        globalMessageHeight, globalMessageX, globalMessageY;
+    private readonly int windowId, fontId, fontSize, width, height, windowX, windowY;
 }

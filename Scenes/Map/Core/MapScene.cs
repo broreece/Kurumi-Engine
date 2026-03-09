@@ -60,8 +60,8 @@ public sealed class MapScene : SceneBase, IMapSceneView {
 
         // Calculate scale for full size art.
         Vector2f fullScreen = new(window.GetWidth(), window.GetHeight());
-        mapBackgroundScale = new(fullScreen.X / mapBackgroundSpriteConfig.GetMapBackgroundWidth(), 
-            fullScreen.Y / mapBackgroundSpriteConfig.GetMapBackgroundHeight());
+        mapBackgroundScale = new(fullScreen.X / mapBackgroundSpriteConfig.GetWidth(), 
+            fullScreen.Y / mapBackgroundSpriteConfig.GetHeight());
 
         // Load tile sheet texture.
         tileSheetTexture = new Texture(assetManager.GetTileSheetFileName(mapView.GetTileSheetId()));

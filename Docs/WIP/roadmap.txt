@@ -3,24 +3,6 @@ Crucible
 Focus areas:
 Clean up post refractor.
 
-Post refractor clean up:
-Fix scripts.
-Priority: High
-
-
-Rename "ConditionalScript" to "ConditionalScriptStep" it makes no sense currently as it's just a step.
-Priority: Low
-
-- Ensure all references are also changed to conditional scripts.
-
-
-Normalize config variable and function names.
-Priority Extremely Low
-
-Currently some config such the choice box defaults use variables names like "ChoiceBoxWidth" this can just be width:
-    - Ensure any instances of these config calling these functions are updated as well.
-    - Update yaml as well to make it simplier.
-
 
 Implement a WindowWithTextAndNamebox UI State:
 Priority: Medium (Depending on game design might not be neccesary)

@@ -20,9 +20,9 @@ public static class MapBackgroundSpriteConfigManager {
         var config = deserializer.Deserialize<Dictionary<string, int>>(yamlData);
 
         // Store config variables.
-        int mapBackgroundWidth = config["map_background_width"];
-        int mapBackgroundHeight = config["map_background_height"];
+        int width = config["width"];
+        int height = config["height"];
 
-        return new MapBackgroundSpriteConfig(mapBackgroundWidth, mapBackgroundHeight);
+        return new MapBackgroundSpriteConfig(width, height);
     }
 }

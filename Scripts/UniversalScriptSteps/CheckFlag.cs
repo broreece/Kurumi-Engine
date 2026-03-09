@@ -6,7 +6,7 @@ using Scripts.Conditional;
 /// <summary>
 /// The basic check flag script step.
 /// </summary>
-public sealed class CheckFlag : ConditionalScript {
+public sealed class CheckFlag : ConditionalScriptStep {
     /// <summary>
     /// The constructor for the check flag script step.
     /// </summary>

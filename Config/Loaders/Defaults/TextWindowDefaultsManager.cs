@@ -19,15 +19,14 @@ public static class TextWindowDefaultsManager {
         var defaults = deserializer.Deserialize<Dictionary<string, int>>(yamlData);
 
         // Store defaults variables.
-        int textWindowArtId = defaults["window_default_art_id"];
-        int textWindowFontId = defaults["window_default_font_id"];
-        int textWindowFontSize = defaults["window_default_font_size"];
-        int textWindowWidth = defaults["window_default_width"];
-        int textWindowHeight = defaults["window_default_height"];;
-        int textWindowX = defaults["window_default_x"];
-        int textWindowY = defaults["window_default_y"];
+        int windowId = defaults["window_id"];
+        int fontId = defaults["font_id"];
+        int fontSize = defaults["font_size"];
+        int windowWidth = defaults["window_width"];
+        int windowHeight = defaults["window_height"];;
+        int windowX = defaults["window_x"];
+        int windowY = defaults["window_y"];
 
-        return new TextWindowDefaults(textWindowArtId, textWindowFontId, textWindowFontSize, textWindowWidth, textWindowHeight, 
-            textWindowX, textWindowY);
+        return new TextWindowDefaults(windowId, fontId, fontSize, windowWidth, windowHeight, windowX, windowY);
     }
 }

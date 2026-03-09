@@ -7,12 +7,12 @@ using Scripts.Base;
 /// If nextIsFalse is set to 0 it equates to the script ending if the condition is not met.
 /// Otherwise next is false skips indexes aka if set to 2 it'd skip the first step in front of it.
 /// </summary>
-public abstract class ConditionalScript : ScriptStep {
+public abstract class ConditionalScriptStep : ScriptStep {
     /// <summary>
     /// Constructor for the script conditional.
     /// </summary>
     /// <param name="nextIfFalse">The next index of the script step to be executed if condition isn't met.</param>
-    protected ConditionalScript(int nextIfFalse) {
+    protected ConditionalScriptStep(int nextIfFalse) {
         conditionMet = false;
         storedNextIfFalse = null;
         this.nextIfFalse = nextIfFalse;

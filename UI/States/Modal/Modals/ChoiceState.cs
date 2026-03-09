@@ -36,7 +36,7 @@ public class ChoiceState : UIState, IChoiceInputController {
     public ChoiceState(int windowXPosition, int windowYPosition, int windowWidth, int windowHeight, int fontSize, string fontFileName, 
         string windowFileName, IWindowFileAccessors fileAccessors, IGameWindowDimensionsAccessor gameWindowDimensionsAccessor, 
         int choiceBoxXPosition, int choiceBoxYPosition, int choiceBoxWidth, int choiceBoxHeight, int spacing, string choiceBoxFileName, 
-        string[] choices, ConditionalScript currentStep, SceneScriptContext scriptContext) {
+        string[] choices, ConditionalScriptStep currentStep, SceneScriptContext scriptContext) {
         // Assign script context.
         this.currentStep = currentStep;
         this.scriptContext = scriptContext;
@@ -101,6 +101,6 @@ public class ChoiceState : UIState, IChoiceInputController {
     }
 
     private readonly ChoiceBoxComponent choiceBoxComponent;
-    private readonly ConditionalScript currentStep;
+    private readonly ConditionalScriptStep currentStep;
     private readonly SceneScriptContext scriptContext;
 }

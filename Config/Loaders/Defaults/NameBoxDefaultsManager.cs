@@ -19,10 +19,10 @@ public static class NameBoxDefaultsManager {
         var defaults = deserializer.Deserialize<Dictionary<string, int>>(yamlData);
 
         // Store defaults variables.
-        int nameBoxWidth = defaults["name_box_default_width"];
-        int nameBoxHeight = defaults["name_box_default_height"];;
-        int nameBoxX = defaults["name_box_default_x"];
-        int nameBoxY = defaults["name_box_default_y"];
+        int nameBoxWidth = defaults["name_box_width"];
+        int nameBoxHeight = defaults["name_box_height"];;
+        int nameBoxX = defaults["name_box_x"];
+        int nameBoxY = defaults["name_box_y"];
 
         return new NameBoxDefaults(nameBoxWidth, nameBoxHeight, nameBoxX, nameBoxY);
     }

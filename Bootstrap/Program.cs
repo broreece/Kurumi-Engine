@@ -52,7 +52,6 @@ public static class Program {
         // Game config.
         GameConfig gameConfig = GameConfigManager.Load("Game\\game_config.yaml");
         GameWindowConfig gameWindowConfig = GameWindowConfigManager.Load("Game\\game_window_config.yaml");
-        GlobalMessageConfig globalMessageConfig = GlobalMessageConfigManager.Load("Game\\global_message_config.yaml");
 
         // Map config.
         AnimatedTileSheetConfig animatedTileSheetConfig = AnimatedTileSheetConfigManager.Load("Map\\animated_tilesheet_config.yaml");

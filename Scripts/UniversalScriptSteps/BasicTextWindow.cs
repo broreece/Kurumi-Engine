@@ -25,10 +25,10 @@ public sealed class BasicTextWindow : ScriptStep {
         // Load default text window values.
         SceneScriptContext sceneScriptContext = (SceneScriptContext) scriptContext;
         TextWindowDefaults textWindowDefaults = sceneScriptContext.GetTextWindowDefaults();
-        int xPosition = textWindowDefaults.GetTextWindowX();
-        int yPosition = textWindowDefaults.GetTextWindowY();
-        int windowId = textWindowDefaults.GetTextWindowArtId();
-        int fontId = textWindowDefaults.GetTextWindowFontId();
+        int xPosition = textWindowDefaults.GetWindowX();
+        int yPosition = textWindowDefaults.GetWindowY();
+        int windowId = textWindowDefaults.GetWindowId();
+        int fontId = textWindowDefaults.GetFontId();
         string windowFileName = sceneScriptContext.GetWindowArtFileName(windowId);
         string fontFileName = sceneScriptContext.GetFontFileName(fontId);
 
@@ -36,9 +36,9 @@ public sealed class BasicTextWindow : ScriptStep {
         Pause();
 
         // Create the new dialogue UI state.
-        sceneScriptContext.AddUIState(new DialogueState(xPosition, yPosition, textWindowDefaults.GetTextWindowWidth(), 
-            textWindowDefaults.GetTextWindowHeight(), windowFileName, sceneScriptContext.GetWindowConfig(),
-            sceneScriptContext.GetGameWindow(), xPosition, yPosition,  textWindowDefaults.GetTextWindowFontSize(), fontFileName, 
+        sceneScriptContext.AddUIState(new DialogueState(xPosition, yPosition, textWindowDefaults.GetWindowWidth(), 
+            textWindowDefaults.GetWindowHeight(), windowFileName, sceneScriptContext.GetWindowConfig(),
+            sceneScriptContext.GetGameWindow(), xPosition, yPosition,  textWindowDefaults.GetFontSize(), fontFileName, 
             PageGenerator.TurnTextIntoPages(text, sceneScriptContext.GetMaxLinesPerPage()), this, sceneScriptContext));
     }
 

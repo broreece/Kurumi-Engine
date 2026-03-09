@@ -19,15 +19,14 @@ public static class GlobalMessageDefaultsManager {
         var defaults = deserializer.Deserialize<Dictionary<string, int>>(yamlData);
 
         // Store defaults variables.
-        int globalMessageWindowId = defaults["global_message_default_window_id"];
-        int globalMessageFontId = defaults["global_message_default_font_id"];
-        int globalMessageFontSize = defaults["global_message_default_font_size"];
-        int globalMessageWidth = defaults["global_message_default_width"];
-        int globalMessageHeight = defaults["global_message_default_height"];;
-        int globalMessageX = defaults["global_message_default_x"];
-        int globalMessageY = defaults["global_message_default_y"];
+        int windowId = defaults["window_id"];
+        int fontId = defaults["font_id"];
+        int fontSize = defaults["font_size"];
+        int windowWidth = defaults["width"];
+        int windowHeight = defaults["height"];;
+        int windowX = defaults["window_x"];
+        int windowY = defaults["window_y"];
 
-        return new GlobalMessageDefaults(globalMessageWindowId, globalMessageFontId, globalMessageFontSize, globalMessageWidth, 
-            globalMessageHeight, globalMessageX, globalMessageY);
+        return new GlobalMessageDefaults(windowId, fontId, fontSize, windowWidth, windowHeight, windowX, windowY);
     }
 }

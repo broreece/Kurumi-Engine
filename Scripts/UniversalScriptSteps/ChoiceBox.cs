@@ -8,7 +8,7 @@ using UI.States.Modal.Modals;
 /// <summary>
 /// The choice box script step.
 /// </summary>
-public sealed class ChoiceBox : ConditionalScript {
+public sealed class ChoiceBox : ConditionalScriptStep {
     /// <summary>
     /// Constructor for the choice box script step.
     /// </summary>

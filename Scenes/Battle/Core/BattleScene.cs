@@ -55,8 +55,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
         
         // Calculate scale for full size art.
         Vector2f fullScreen = new(window.GetWidth(), window.GetHeight());
-        battleBackgroundScale = new(fullScreen.X / battleBackgroundSpriteConfig.GetBattleBackgroundWidth(), 
-            fullScreen.Y / battleBackgroundSpriteConfig.GetBattleBackgroundHeight());
+        battleBackgroundScale = new(fullScreen.X / battleBackgroundSpriteConfig.GetWidth(), fullScreen.Y / battleBackgroundSpriteConfig.GetHeight());
 
         // Calculate scale for other sprites.
         float widthScale = window.GetWidthScale();
