@@ -23,10 +23,7 @@ Similar actions needed for UI execution:
 Minor clean up tasks:
 Priority: Low
 
-Main menu changes.
-    - The main menu party stat info is one really large big page, we shouldn't bother passing around the max lines per page.
 Changes to stats:
-    - Ensure GetStat in the playable character overriden function checks for equipment and status modifiers.
     - Currently we hardcode agility index in some "GetStat(2)" calls, we should update this maybe store the agility index in config instead.
 Fill in any todos:
     - Any TODOs for custom exceptions, interfaces have been fullfilled.

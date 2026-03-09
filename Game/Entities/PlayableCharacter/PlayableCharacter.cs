@@ -47,6 +47,21 @@ public sealed class PlayableCharacter : Entity, ISaveableCharacter, ICharacterSk
     }
 
     /// <summary>
+    /// Getter for a specific entity stat.
+    /// </summary>
+    /// <param name="index">The index of the stat in the stats array.</param>
+    /// <returns>The specified stat in the stats array.</returns>
+    public override int GetStat(int index) {
+        int sumStat = base.GetStat(index);
+        foreach (Equipment? individualEquipment in equipment) {
+            if (individualEquipment != null) {
+                sumStat += individualEquipment.GetStat(index);
+            }
+        }
+        return sumStat;
+    }
+
+    /// <summary>
     /// Function that returns the base abilities + added abilities - sealed abilities.
     /// </summary>
     /// <returns>The base list of abilities the character has.</returns>
@@ -181,7 +196,7 @@ public sealed class PlayableCharacter : Entity, ISaveableCharacter, ICharacterSk
     /// </summary>
     /// <returns>A list of the characters skills names.</returns>
     public List<string> GetSkillNames() {
-        List<string> names = new();
+        List<string> names = [];
         foreach (Skill skill in skills) {
             names.Add(skill.GetName());
         }
@@ -193,7 +208,7 @@ public sealed class PlayableCharacter : Entity, ISaveableCharacter, ICharacterSk
     /// </summary>
     /// <returns>A list of the characters base abilities names.</returns>
     public List<string> GetBaseAbilityNames() {
-        List<string> names = new();
+        List<string> names = [];
         foreach (Ability ability in baseAbilities) {
             names.Add(ability.GetName());
         }
@@ -214,7 +229,7 @@ public sealed class PlayableCharacter : Entity, ISaveableCharacter, ICharacterSk
                 finalAbilities.RemoveAll(removedAbility => currentEquipment.GetSealedAbilities().Contains(removedAbility));
             }
         }
-        return finalAbilities.OrderByDescending(currentAbility => currentAbility.GetId()).ToList();
+        return [.. finalAbilities.OrderByDescending(currentAbility => currentAbility.GetId())];
     }
 
     private readonly int id;

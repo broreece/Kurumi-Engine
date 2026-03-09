@@ -58,6 +58,24 @@ public abstract class EntityElement {
     }
 
     /// <summary>
+    /// Function used to return a specific stat modifier at a provided index.
+    /// </summary>
+    /// <param name="index">The index of the desired stat.</param>
+    /// <returns>The stat at the desired index.</returns>
+    public int GetStat(int index) {
+        return stats[index];
+    }
+
+    /// <summary>
+    /// Function used to return a specific element modifier at a provided index.
+    /// </summary>
+    /// <param name="index">The index of the desired element.</param>
+    /// <returns>The element at the desired index.</returns>
+    public int GetElement(int index) {
+        return elements[index];
+    }
+
+    /// <summary>
     /// Getter for the entity element's stats.
     /// </summary>
     /// <returns>The stats of the element.</returns>

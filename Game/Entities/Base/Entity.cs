@@ -108,8 +108,11 @@ public abstract class Entity : PresentationData {
     /// <param name="index">The index of the stat in the stats array.</param>
     /// <returns>The specified stat in the stats array.</returns>
     public virtual int GetStat(int index) {
-        // TODO: We should let playable characters overide this function, use character equipment as well... In future add status changers too.
-        return stats[index];
+        int sumStats = stats[index];
+        foreach (Status status in statuses) {
+            sumStats = (sumStats / 100) * status.GetStat(index);
+        }
+        return sumStats;
     }
 
     /// <summary>
