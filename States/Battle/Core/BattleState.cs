@@ -40,9 +40,11 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         currentTargetIndex = characterSprites;
     }
 
-    public override void Update()
-    {
-        throw new NotImplementedException();
+    /// <summary>
+    /// Overriden update function for the battle state.
+    /// </summary>
+    public override void Update() {
+        // TODO: This might not neccesarily have to be empty.
     }
 
     /// <summary>
@@ -59,9 +61,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         if (inEnemySelector) {
             isSpriteSelected = new bool[characterSprites + battle.GetEnemiesLength()];
             inEnemySelector = false;
-            // TODO: Right now we are using hard coded agility index... Change this to maybe an enum or stored config.
             actions.Add(new Action(currentCharacterIndex, currentTargetIndex, 
-                party.GetPartyMember(currentCharacterIndex).GetStat(2),
+                party.GetPartyMember(currentCharacterIndex).GetStat(gameContext.GetAgilityStatIndex()),
                 "UseAbility," + currentChoice.ToString() + ",", enemy: false));
             battleSceneView.SetCurrentChoice(0);
             // Check if it's enemies turn now.
@@ -227,7 +228,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                 int frequency = enemyScript.Frequency;
                 // If the script's frequency is reached.
                 if (currentTurn == startTurn || (currentTurn > startTurn && (currentTurn + 1) % frequency == 0)) {
-                    int speed = battle.GetEnemyAgility(enemyFormationData.Id);
+                    int speed = battle.GetEnemyStat(enemyFormationData.Id, gameContext.GetAgilityStatIndex());
                     int target = enemyScript.Target;
                     actions.Add(new Action(characterId, target, speed, enemyScript.Script, true));
                 }

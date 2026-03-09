@@ -23,7 +23,8 @@ public static class GameConfigManager {
         int maxPartySize = config["max_party_size"];
         int maxEnemyFormationSize = config["max_enemy_formation_size"];
         int saveFiles = config["save_files"];
+        int agilityStatIndex = config["agility_stat_index"];
 
-        return new GameConfig(maxPartySize, maxEnemyFormationSize, saveFiles);
+        return new GameConfig(maxPartySize, maxEnemyFormationSize, saveFiles, agilityStatIndex);
     }
 }

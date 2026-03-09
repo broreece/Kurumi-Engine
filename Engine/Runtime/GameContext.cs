@@ -301,6 +301,14 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
+    /// Getter for the index of the agility stat.
+    /// </summary>
+    /// <returns>The index of the agility stat.</returns>
+    public int GetAgilityStatIndex() {
+        return gameConfig.GetAgilityStatIndex();
+    }
+
+    /// <summary>
     /// Getter for the max lines in the window config.
     /// </summary>
     /// <returns>The max lines per page.</returns>

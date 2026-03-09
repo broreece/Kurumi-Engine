@@ -61,13 +61,13 @@ public class Battle {
     }
 
     /// <summary>
-    /// Function that returns a single enemies agility value.
+    /// Function that returns a single enemies stat value.
     /// </summary>
-    /// <param name="index">The index of the specified enemy</param>
-    /// <returns>The enemies agility.</returns>
-    public int GetEnemyAgility(int index) {
-        // TODO: Right now we are using hard coded agility index... Change this to maybe an enum or stored config.
-        return enemies[index].GetStat(2);
+    /// <param name="enemyIndex">The index of the specified enemy.</param>
+    /// <param name="statIndex">The index of the specified stat.</param>
+    /// <returns>The enemies stat at a specified location.</returns>
+    public int GetEnemyStat(int enemyIndex, int statIndex) {
+        return enemies[enemyIndex].GetStat(statIndex);
     }
 
     /// <summary>

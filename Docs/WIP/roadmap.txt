@@ -4,6 +4,12 @@ Focus areas:
 Clean up post refractor.
 
 
+Test battle state/scene
+Priority: High
+
+I noticed we have not yet tested battle state/scene. Can we test this.
+
+
 Implement a WindowWithTextAndNamebox UI State:
 Priority: Medium (Depending on game design might not be neccesary)
 
@@ -20,12 +26,10 @@ Similar actions needed for UI execution:
     - If multiple force move perhaps we should store the script contexts and script steps in some type of dictionary or lists with indexes.
 
 
-Minor clean up tasks:
+TODO clean up:
 Priority: Low
 
-Changes to stats:
-    - Currently we hardcode agility index in some "GetStat(2)" calls, we should update this maybe store the agility index in config instead.
-Fill in any todos:
+Fill in any TODOs:
     - Any TODOs for custom exceptions, interfaces have been fullfilled.
     - Any TODOs that can not be implemented yet we should replace the comment with a tag linking it to a task in the roadmap.
 
