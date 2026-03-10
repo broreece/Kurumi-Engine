@@ -104,7 +104,7 @@ public sealed class GameContext : IGameUIContext {
         tileObjectRegistry = new TileObjectRegistry(databaseManager.LoadTileObjects());
 
         // Save data.
-        // TODO: This line will crash when loading because we don't save enemy formations yet.
+        // TODO: (AS-01) This line will crash when loading because we don't save enemy formations yet.
         enemyFormationRegistry = new EnemyFormationRegistry(saveManager.LoadEnemyFormations());
         playableCharacterRegistry = new PlayableCharacterRegistry(databaseManager, skillRegistry, abilityRegistry, 
             equipmentRegistry, equipmentSlotNameRegistry, saveManager);
@@ -182,7 +182,6 @@ public sealed class GameContext : IGameUIContext {
     /// Game loop function.
     /// </summary>
     public void GameLoop() {
-        // TODO: Yets consider moving this to another file or create a variable for if the game is open.
         while (gameWindow.IsOpen()) {
             gameWindow.Clear();
             // Update all timers if not paused, otherwise reset all timers untill unpaused.
@@ -233,7 +232,7 @@ public sealed class GameContext : IGameUIContext {
             currentInputMap = uiStates.Peek().GetInputMap();
         }
         if (currentInputMap == null) {
-            // TODO: Custom exception here.
+            // TODO: (HE-01) Custom exception here.
             throw new Exception();
         }
         gameWindow.SetInputMap(currentInputMap);

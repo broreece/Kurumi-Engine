@@ -53,7 +53,7 @@ public sealed class SaveManager {
         Task nonCharacterTask = SaveAllExceptCharactersAsync(partyInfoAccessor, gameVariables, options, saveDirectory, mapName);
         Task characterTask = SaveCharactersAsync(playableCharacters, saveDirectory);
         await Task.WhenAll(nonCharacterTask, characterTask);
-        // TODO: Implement save enemy formations.
+        // TODO: (AS-01) Implement save enemy formations.
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public sealed class SaveManager {
                 sprites[partyIndex] = spriteIds[partyData.PartyMembers[partyIndex]];
             }
         } catch (FileNotFoundException) {
-            // TODO: Throw custom exception here.
+            // TODO: (HE-01) Throw custom exception here.
         }
         return sprites;
     }
@@ -453,7 +453,7 @@ public sealed class SaveManager {
     /// <param name="mapName">The current map name.</param>
     private Task SaveInfo(IPartyLocationAccessor partyLocationAccessor, IIDAccessor[] partyMembers, 
         JsonSerializerOptions options, string saveDirectory, string mapName) {
-        List<int> exportPartyMembers = new();
+        List<int> exportPartyMembers = [];
         foreach (IIDAccessor character in partyMembers) {
             if (character != null) {
                 exportPartyMembers.Add(character.GetId() - 1);

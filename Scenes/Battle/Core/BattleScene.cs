@@ -88,7 +88,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
         choiceBoxWindow = new WindowComponent(choiceBoxWindowX, choiceBoxWindowY, choiceBoxWindowWidth, choiceBoxWindowHeight,
             windowFileName, windowConfig, window);
         choiceBoxChoices = [];
-        // TODO: Maybe we should change the 0 to get the first healthy party member.
+        // TODO: (BSE-03) We should change the 0 to get the first healthy party member.
         UpdateChoiceBoxChoices(partyAccessor, 0);
         choiceBox = new ChoiceBoxComponent(choiceBoxWindowX, choiceBoxWindowY, choiceBoxWindowWidth, choiceBoxWindowHeight, 
             fontSize, choiceBoxFileName, choiceBoxChoices.Count, windowConfig, window);
@@ -160,7 +160,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
 
         // Throw exception if battle targeting view is null here.
         if (battleTargetingView == null) {
-            // TODO: Custom exception here.
+            // TODO: (HE-01) Custom exception here.
             throw new Exception();
         }
 
@@ -241,7 +241,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
             color = Color.Green;
         }
         Font font = new(assetManager.GetFontFileName(fontId));
-        // TODO: Magic number 32, change this into config please.
+        // TODO: (BSE-03) Magic number 32, change this into config please.
         damageText = new Text(hpChange.ToString(), font)
         {
             CharacterSize = 32,
@@ -315,7 +315,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
             // Skills.
             options.AddRange(character.GetSkillNames());
             // Additional options.
-            // TODO: Maybe improve this hard coded options.
+            // TODO: (BSE-01) Move hard coded options into external file.
             string[] hardCodedOptions = ["Items", "Run away"];
             options.AddRange(hardCodedOptions);
             
@@ -328,7 +328,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
             }
         }
         else {
-            // TODO: Custom exception here.
+            // TODO: (HE-01) Custom exception here.
             throw new Exception();
         }
     }

@@ -23,7 +23,7 @@ public sealed class AssetManager : ISaveAssetAccessor {
         characterBattleSpriteSheetFileNames = data["CharacterBattleSpriteSheets"].Values.ToArray();
         characterFieldSheetFileNames = data["CharacterFieldSpriteSheets"].Values.ToArray();
         enemyBattleSpriteFileNames = data["EnemyBattleSprites"].Values.ToArray();
-        // TODO: Create actor field sheet file names.
+        // TODO: (MSAC-01) Create actor field sheet file names.
         //actorFieldSheetFileNames = data["ActorFieldSpriteSheets"].Values.ToArray();
         fontFileNames = data["Fonts"].Values.ToArray();
         mapBackgroundFileNames = data["MapBackgroundArt"].Values.ToArray();
@@ -77,7 +77,7 @@ public sealed class AssetManager : ISaveAssetAccessor {
         return enemyBattleSpriteFileNames[index];
     }
 
-    // TODO: Re-add the getter for actor file sheet names.
+    // TODO: (MSAC-01) Re-add the getter for actor file sheet names.
 
     /// <summary>
     /// Getter for a specified font file name.
@@ -124,7 +124,7 @@ public sealed class AssetManager : ISaveAssetAccessor {
         return choiceSelectionFileNames[index];
     }
 
-    // TODO: Add actorFieldSheetFileNames.
+    // TODO: (MSAC-01) Add actorFieldSheetFileNames.
     private readonly string[] battleBackgroundFileNames, characterBattleSpriteSheetFileNames, characterFieldSheetFileNames,
         enemyBattleSpriteFileNames, fontFileNames, mapBackgroundFileNames, tileSheetFileNames, animatedTileSheetFileNames,
         windowArtFileNames, choiceSelectionFileNames;

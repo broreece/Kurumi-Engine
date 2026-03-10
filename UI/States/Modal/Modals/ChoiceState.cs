@@ -92,7 +92,7 @@ public class ChoiceState : UIState, IChoiceInputController {
     /// Function used to close the choice state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation.
+        // TODO: (UICA-01) Implement closing animation.
         currentStep.SetConditionMet(GetCurrentChoice() == 1);
         scriptContext.PopUIState();
         scriptContext.Resume();

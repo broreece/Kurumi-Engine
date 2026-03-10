@@ -35,7 +35,7 @@ public sealed class ChoiceBox : ConditionalScriptStep {
         int selectionId = choiceBoxDefaults.GetSelectionArtId();
         int fontId = choiceBoxDefaults.GetFontId();
         int fontSize = choiceBoxDefaults.GetFontSize();
-        // TODO: Temporary spacing value.
+        // TODO: (CBPI-01) Temporary spacing value.
         int spacing = fontSize;
         string windowFileName = sceneScriptContext.GetWindowArtFileName(windowId);
         string fontFileName = sceneScriptContext.GetFontFileName(fontId);

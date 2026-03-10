@@ -56,7 +56,7 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
         this.saveFiles = saveFiles;
         this.maxPartySize = maxPartySize;
         this.mapName = mapName;
-        // TODO: I think we should interface the playable characters, we just need the sprite IDs and the saveable character interface.
+        // TODO: (MIC-01) I think we should interface the playable characters, we just need the sprite IDs and the saveable character interface.
         this.playableCharacters = playableCharacters;
         fileOffset = 0;
 
@@ -150,7 +150,7 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
         components.Push(fileChoiceBox);
 
         // Save file text.
-        // TODO: Implement here.
+        // TODO: (MIC-01) Implement here.
 
         // Sprites component.
         spritesComponent = new SpritesComponent();
@@ -164,13 +164,13 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
     public void Select() {
         int choice = fileChoiceBox.GetChoice();
 
-        // TODO: Open a warning choice box somewhere on screen that says "Are you sure you want to overwrite this save file?"
+        // TODO: (MIC-01) Open a warning choice box somewhere on screen that says "Are you sure you want to overwrite this save file?"
         saveManager.SetActiveSlot(choice + 1);
         if (saving) {
             saveManager.Save(partyInfoAccessor, playableCharacters, gameVariables, mapName);
         }
         else {
-            // TODO: Implement load here.
+            // TODO: (MIC-01) Implement load here.
         }
 
         Close();
@@ -228,7 +228,7 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
     /// Function used to close the file selector state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation.
+        // TODO: (UICA-01) Implement closing animation.
         closed = true;
     }
 

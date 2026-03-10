@@ -27,7 +27,7 @@ public static class Program {
         DatabaseManager database = new();
 
         // Create save manager using save file passed.
-        // TODO: Change this to any file neccesary.
+        // TODO: (TS-01): Implement main menu screen to decide save index.
         SaveManager saveManager = new(0);
 
         // Load managers using static file paths.

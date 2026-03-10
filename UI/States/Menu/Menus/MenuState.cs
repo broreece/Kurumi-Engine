@@ -109,8 +109,8 @@ public class MenuState : UIState, IMenuInputController {
         // Create info window.
         components.Push(new WindowComponent(infoWindowX, infoWindowY, infoWindowWidth, infoWindowHeight, windowArtFileName, windowConfig,
             gameWindowScaleAccessor));
-        // TODO: Load the map name here.
-        // TODO: Display day and time here.
+        // TODO: (MIC-01) Load the map name here.
+        // TODO: (MIC-01) Display day and time here.
 
         // Create party window.
         components.Push(new WindowComponent(partyWindowX, partyWindowY, partyWindowWidth, partyWindowHeight, windowArtFileName, windowConfig,
@@ -122,7 +122,7 @@ public class MenuState : UIState, IMenuInputController {
         int characterIndex = 0;
         foreach (ICharacterStatsAccessor characterStat in characterStats) {
             if (characterStat != null) {
-                // TODO: Change these line... We should use a special party window text x and y, then have a special spacing for the
+                // TODO: (MIC-01) Change these line... We should use a special party window text x and y, then have a special spacing for the
                 // size of each character box.
                 components.Push(new ListTextComponent(partyWindowX, partyWindowY + (characterIndex * fontSize), 
                     fontSize, fontFileName, characterStat.GetName()));
@@ -132,7 +132,7 @@ public class MenuState : UIState, IMenuInputController {
                     fontSize, fontFileName, $"MP: {characterStat.GetCurrentMp()} / {characterStat.GetMaxMp()}"));
             }
             characterIndex ++;
-            // TODO: Format this so HP / MP are a bar and display statuses too.
+            // TODO: (MIC-01) Format this so HP / MP are a bar and display statuses too.
         }
 
         // Create choice box here.
@@ -154,11 +154,11 @@ public class MenuState : UIState, IMenuInputController {
                 break;
 
             case MenuCommand.Equipment:
-                // TODO: Open equipment.
+                // TODO: (MIC-01) Open equipment.
                 break;
 
             case MenuCommand.Skills:
-                // TODO: Open skills.
+                // TODO: (MIC-01) Open skills.
                 break;
 
             case MenuCommand.Save:
@@ -174,7 +174,7 @@ public class MenuState : UIState, IMenuInputController {
                 break;
 
             case MenuCommand.Quit:
-                // TODO: Open quit.
+                // TODO: O(MIC-01) pen quit.
                 break;
 
             default:
@@ -216,7 +216,7 @@ public class MenuState : UIState, IMenuInputController {
     /// Function used to close the menu state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation.
+        // TODO: (UICA-01) Implement closing animation.
         gameUIContext.PopUIStack();
         gameUIContext.Resume();
         closed = true;
@@ -242,7 +242,7 @@ public class MenuState : UIState, IMenuInputController {
 
     // Components.
     private readonly ChoiceBoxComponent choiceBox;
-    // TODO: Implement info text here.
+    // TODO: (MIC-01) Implement info text here.
     //private readonly ListTextComponent infoText;
 
     private readonly List<MenuOption> menuOptions;

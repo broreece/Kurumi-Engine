@@ -56,7 +56,7 @@ public class DialogueState : WindowedState, IDialogueInputController {
     /// Function used to close the dialogue state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation.
+        // TODO: (UICA-01) Implement closing animation.
         scriptContext.PopUIState();
         scriptContext.Resume();
         scriptContext.ContinueScript(currentStep);

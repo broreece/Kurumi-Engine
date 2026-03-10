@@ -22,5 +22,5 @@ public interface IInventoryItemAccessor {
     /// <returns>The description of the item.</returns>
     public string GetItemDescription();
 
-    // TODO: Add things like get sprite id, get weight, get usable in menu, targets all here and in the inventory item class.
+    // TODO: (MIC-01) Add things like get sprite id, get weight, get usable in menu, targets all here and in the inventory item class.
 }

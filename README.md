@@ -17,12 +17,12 @@ Recent work focused on a large **core refactor** to improve engine architecture 
 Current cleanup tasks include:
 - Fixing UI script steps (dialogue / choice boxes)
 - Pausing script execution during forced movement of actors
-- All 'TODO's marked with a linked task in the roadmap
 - Exceptions are all unique and handled in code
 
 Next milestone:
 - Introduction of unit testing
-- Expanding battle state scope
+- Expanding battle state scope (No more hard coded choices)
+- Fixing issue involving strange percentage of height for choice boxes
 
 ---
 

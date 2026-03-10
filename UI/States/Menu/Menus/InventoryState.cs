@@ -93,7 +93,7 @@ public class InventoryState : UIState, IInventoryInputController {
         }
 
         // Choice boxes.
-        // TODO: Get rid of magic number here add choice box height into config. Use offset too.
+        // TODO: (MIC-01) Get rid of magic number here add choice box height into config. Use offset too.
         int choiceBoxHeight = (itemsWindowHeight / fontSize) * 2;
         leftChoiceBox = new ChoiceBoxComponent(itemsWindowX, itemsWindowY, itemsWindowWidth / 2, choiceBoxHeight,  fontSize, 
             choiceBoxArtFileName, leftSideInventory.Count, windowConfig, gameWindowScalesAccessor);
@@ -106,7 +106,7 @@ public class InventoryState : UIState, IInventoryInputController {
     /// Select function.
     /// </summary>
     public void Select() {
-        // TODO: Implement select.
+        // TODO: (MIC-01) Implement select.
     }
 
     /// <summary>
@@ -119,7 +119,7 @@ public class InventoryState : UIState, IInventoryInputController {
             rightSideInventory.Count : leftSideInventory.Count - 1;
         if (oldChoiceY != currentChoiceY) {
             UpdateDescription();
-            // TODO: Scroll up, update the item names.
+            // TODO: (MIC-01) Scroll up, update the item names.
         }
     }
 
@@ -133,7 +133,7 @@ public class InventoryState : UIState, IInventoryInputController {
             ? currentChoiceY + 1 : 0;
         if (oldChoiceY != currentChoiceY) {
             UpdateDescription();
-            // TODO: Scroll down, update the item names.
+            // TODO: (MIC-01) Scroll down, update the item names.
         }
     }
 
@@ -170,7 +170,7 @@ public class InventoryState : UIState, IInventoryInputController {
     /// Function used to close the inventory state.
     /// </summary>
     protected override void Close() {
-        // TODO: Implement closing animation.
+        // TODO: (UICA-01) Implement closing animation.
         closed = true;
     }
 
@@ -205,7 +205,7 @@ public class InventoryState : UIState, IInventoryInputController {
     /// Helper function used to add item names to the item text list.
     /// </summary>
     private void AssignItemText(List<IInventoryItemAccessor> inventory, int xLocation, int yLocation) {
-        // TODO: When we implement scrolling make sure this doesen't go over the scroll limit...
+        // TODO: (MIC-01) When we implement scrolling make sure this doesen't go over the scroll limit...
         int itemIndex = 0;
         foreach (IInventoryItemAccessor inventoryItemAccessor in inventory) {
             itemText.Add(new(xLocation, yLocation + (fontSize * itemIndex), fontSize, fontArtFileName, inventoryItemAccessor.GetItemName()));

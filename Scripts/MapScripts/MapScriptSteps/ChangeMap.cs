@@ -24,7 +24,7 @@ public sealed class ChangeMap : ScriptStep {
     /// </summary>
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
-        // TODO: Change both party assign and load new map to single functions in script context.
+        // TODO: (RGCA-01) Change both party assign and load new map to single functions in script context.
         Party party = scriptContext.GetGameContext().GetParty();
         party.SetCurrentMapId(mapId);
         party.SetXLocation(xLocation);

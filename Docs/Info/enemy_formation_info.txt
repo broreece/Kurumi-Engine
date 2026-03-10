@@ -26,7 +26,6 @@ Scripts:
 After all enemies each formation has a set of scripts:
 - "OnFoundScript" the actor information and scripts that execute when the enemy formation finds the player.
 - "MovementPatternScript" the actor information and scripts that execute before the enemy formation finds the player.
-- "AutoScript" TODO: Right now unused, I think we can delete this.
 - "OnLoseScript" script that activates when the party loses a battle with the formation.
 - "OnWinScript" script that activates when the party wins a battle with the formation.
 

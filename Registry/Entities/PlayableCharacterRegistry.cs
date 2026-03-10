@@ -56,7 +56,7 @@ public sealed class PlayableCharacterRegistry {
         return spriteIds;
     }
 
-    // TODO: Implement a save feature here.
+    // TODO: (AS-01) Implement a save feature here.
 
     private PlayableCharacter[] playableCharacters;
 }

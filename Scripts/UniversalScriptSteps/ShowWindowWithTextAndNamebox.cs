@@ -25,7 +25,7 @@ public sealed class ShowWindowWithTextAndNamebox : ScriptStep {
     /// </summary>
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
-        // TODO: We have to implement a new UI modal for dialogue with a name box.
+        // TODO: (TWNUI-01) We have to implement a new UI modal for dialogue with a name box.
     }
     
     /// <summary>

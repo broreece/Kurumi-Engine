@@ -20,7 +20,7 @@ public class ScriptContext {
     /// <param name="flagIndex">The flag index.</param>
     /// <param name="newValue">The new value of the flag.</param>
     public void SetGameFlag(int flagIndex, bool newValue) {
-        // TODO: Yets use one function in game context here.
+        // TODO: (RGCA-01) Create and use function in script context.
         gameContext.GetGameVariables().SetGameFlag(flagIndex, newValue);
     }
 
@@ -30,11 +30,11 @@ public class ScriptContext {
     /// <param name="flagIndex">The flag index.</param>
     /// <returns>The specified flags state.</returns>
     public bool GetGameFlag(int flagIndex) {
-        // TODO: Yets use one function in game context here.
+        // TODO: (RGCA-01) Create and use function in script context.
         return gameContext.GetGameVariables().GetGameFlag(flagIndex);
     }
 
-    // TODO: When we removed instances of this yets remove the function as it exposes too much.
+    // TODO: (RGCA-01) When we removed instances of this yets remove the function as it exposes too much.
     /// <summary>
     /// Getter for the game context object.
     /// </summary>

@@ -12,7 +12,6 @@ public static class FileSelectorConfigManager {
     /// The load function for the file selector config manager.
     /// </summary>
     /// <param name="fileName">The filename of the config being opened.</param>
-    /// TODO: Add exception here maybe under return.
     /// <return>The animated tile sheet config object.</return>
     public static FileSelectorConfig Load(string fileName) {
         // Load the config file data.
@@ -30,28 +29,25 @@ public static class FileSelectorConfigManager {
         int fileMessageWindowHeight = Convert.ToInt32(config["file_selector_message_window_height"]);
         int fileMessageWindowX = Convert.ToInt32(config["file_selector_message_window_x"]);
         int fileMessageWindowY = Convert.ToInt32(config["file_selector_message_window_y"]);
-        string? saveMessage = config["file_selector_save_message"].ToString();
-        string? loadMessage = config["file_selector_load_message"].ToString();
+        string? saveMessageNullable = config["file_selector_save_message"].ToString();
+        string? loadMessageNullable = config["file_selector_load_message"].ToString();
         int warningMessageWindowWidth = Convert.ToInt32(config["file_selector_warning_window_width"]);
         int warningMessageWindowHeight = Convert.ToInt32(config["file_selector_warning_window_height"]);
         int warningMessageWindowX = Convert.ToInt32(config["file_selector_warning_window_x"]);
         int warningMessageWindowY = Convert.ToInt32(config["file_selector_warning_window_y"]);
-        string? warningMessage = config["file_selector_warning_message"].ToString();
+        string? warningMessageNullable = config["file_selector_warning_message"].ToString();
         int warningChoiceWindowWidth = Convert.ToInt32(config["file_selector_warning_choice_width"]);
         int warningChoiceWindowHeight = Convert.ToInt32(config["file_selector_warning_choice_height"]);
         int warningChoiceWindowX = Convert.ToInt32(config["file_selector_warning_choice_x"]);
         int warningChoiceWindowY = Convert.ToInt32(config["file_selector_warning_choice_y"]);
 
         // Check for string null error here as we don't want any warnings.
-        if (saveMessage == null || loadMessage == null || warningMessage == null) {
-            // TODO: Throw custom exception here.
-            throw new Exception();
-        }
-        else {
-            return new FileSelectorConfig(fileSelectorWindowId, fileSelectorChoiceBoxId, fontId, fontSize, maxFilesOneScreen, 
-                fileMessageWindowWidth, fileMessageWindowHeight, fileMessageWindowX, fileMessageWindowY, saveMessage, loadMessage, 
-                warningMessageWindowWidth, warningMessageWindowHeight, warningMessageWindowX, warningMessageWindowY, 
-                warningMessage, warningChoiceWindowWidth, warningChoiceWindowHeight, warningChoiceWindowX, warningChoiceWindowY);
-        }
+        string saveMessage = saveMessageNullable ?? "";
+        string loadMessage = loadMessageNullable ?? "";
+        string warningMessage = warningMessageNullable ?? "";
+        return new FileSelectorConfig(fileSelectorWindowId, fileSelectorChoiceBoxId, fontId, fontSize, maxFilesOneScreen, 
+            fileMessageWindowWidth, fileMessageWindowHeight, fileMessageWindowX, fileMessageWindowY, saveMessage, loadMessage, 
+            warningMessageWindowWidth, warningMessageWindowHeight, warningMessageWindowX, warningMessageWindowY, 
+            warningMessage, warningChoiceWindowWidth, warningChoiceWindowHeight, warningChoiceWindowX, warningChoiceWindowY);
     }
 }

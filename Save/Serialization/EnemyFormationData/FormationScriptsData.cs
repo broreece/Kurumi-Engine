@@ -6,7 +6,6 @@ namespace Save.Serialization.EnemyFormationData;
 public class FormationScriptsData {
     public string OnFoundActor { get; set; } = "";
     public string MovementPatternActor { get; set; } = "";
-    public string AutoScript { get; set; } = "";
     public string OnLoseScript { get; set; } = "";
     public string OnWinScript { get; set; } = "";
 }

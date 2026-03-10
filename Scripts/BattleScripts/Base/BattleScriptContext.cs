@@ -26,7 +26,7 @@ public sealed class BattleScriptContext : SceneScriptContext {
             battleScript.SetHead(nextStep);
             battleScript.Activate(gameContext);
         }
-        // TODO: We can consider throwing a custom exception here just so we know the script is finished.
+        // TODO: (HE-01) Throw a custom exception here just so we know the script is finished.
     }
 
     /// <summary>

@@ -29,7 +29,7 @@ public sealed class MapScriptContext : SceneScriptContext {
         else {
             // Reset the map script current step if it's finished.
             mapScript.SetScriptStep(mapScript.GetHead());
-            // TODO: We can consider throwing a custom exception here just so we know the script is finished.
+            // TODO: (HE-01) Throw a custom exception here just so we know the script is finished.
         }
     }
 
@@ -39,7 +39,7 @@ public sealed class MapScriptContext : SceneScriptContext {
     /// <param name="keepDirection">Determines if the party will maintain a direction.</param>
     /// <param name="path">The path that the party will take.</param>
     public void ForceMoveParty(bool keepDirection, List<int> path) {
-        // TODO: Maybe we can later implement some type of manual setting of movement speed here...
+        // TODO: (ASE-01) Add a new parameter in the function and in the script for the force move party script step.
         GetMapState()?.StartForceMoveParty(keepDirection, path, gameContext.GetCharacterMovementSpeed());
     }
 

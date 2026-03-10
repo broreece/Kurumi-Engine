@@ -69,7 +69,6 @@
       "Scripts": {
         "OnFoundScript": "3,2,1000,10,2,1,0,0,0,0,0,0",
         "MovementPatternScript": "2,2,2000,5,2,1,0,0,0,0,0,0",
-        "AutoScript": "",
         "OnLoseScript": "",
         "OnWinScript": ""
       }

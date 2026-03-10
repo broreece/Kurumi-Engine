@@ -57,7 +57,7 @@ public sealed class GlobalMessageState : WindowedState {
     }
 
     protected override void Close() {
-        // TODO: Implement closing animation.
+        // TODO: (UICA-01) Implement closing animation.
         closed = true;
     }
     

@@ -44,14 +44,14 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
     /// Overriden update function for the battle state.
     /// </summary>
     public override void Update() {
-        // TODO: This might not neccesarily have to be empty.
+        // TODO: (BSI) This might not neccesarily have to be empty.
     }
 
     /// <summary>
     /// The select function. Attempts to perform an action based on the current choice/screen on.
     /// </summary>
     public void Select(){
-        // TODO: Play a sound effect here.
+        // TODO: (MI) Play a sound effect here.
         PlayableCharacter currentCharacter = party.GetPartyMember(currentCharacterIndex);
         int currentChoice = battleSceneView.GetCurrentChoice();
         // Check if the character opened a skill sub menu.
@@ -79,15 +79,15 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
 
         // Open skill sub menu.
         else if (currentSkillIndex >= 0 && currentSkillIndex < currentCharacter.GetSkills().Count) {
-            // TODO: Open sub menu.
+            // TODO: (BSI) Open sub menu.
         }
 
         // Hard coded inventory placement.
         else if (currentChoice == battleSceneView.GetChoicesLength() - 2) {
-            // TODO: Open inventory sub menu.
+            // TODO: (BSI) Open inventory sub menu.
         }
 
-        // TODO: Hard code run away command here.
+        // TODO: (BSI) Hard code run away command here.
 
         // If an ability was used.
         else {
@@ -114,7 +114,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
     /// The cancel function. Attempts to cancel and move back in the battle scene state.
     /// </summary>
     public void Cancel() {
-        // TODO: Implement a check here if it's a submenu or main menu.
+        // TODO: (BSI) Implement a check here if it's a submenu or main menu.
         // If the player is currently selecting an enemy.
         if (inEnemySelector) {
             inEnemySelector = false;
@@ -127,7 +127,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
             actions.RemoveAt(actions.Count - 1);
         }
 
-        // TODO: Play a sound effect here.
+        // TODO: (MI) Play a sound effect here.
     }
 
     /// <summary>
@@ -321,7 +321,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         // Load target.
         switch (actionTargetId) {
             case -1:
-                // TODO: Check if party member is dead and if so generate a new random number.
+                // TODO: (BSI) Check if party member is dead and if so generate a new random number.
                 Random random = new();
                 int randomNumber = random.Next(0, characterSprites);
                 target = party.GetPartyMember(randomNumber);
@@ -329,15 +329,15 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                 break;
             
             case -2:
-                // TODO: Implement party wide scripts here.
+                // TODO: (BSI) Implement party wide scripts here.
                 break;
 
             case -3:
-                // TODO: Implement random enemy here.
+                // TODO: (BSI) Implement random enemy here.
                 break;
             
             case -4:
-                // TODO: Implement enemy group scripts here.
+                // TODO: (BSI) Implement enemy group scripts here.
                 break;
 
             default:
@@ -361,7 +361,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
             throw new NullTargetException();
         }
 
-        // TODO: We should add a check here for skills as well.
+        // TODO: (BSI) We should add a check here for skills as well.
         // Calculate HP change alongside activating the effect.
         int oldHp = target.GetCurrentHp();
         EntityScript entityScript = new(user.GetBaseAbility(abilityId).GetEffect());
