@@ -45,7 +45,7 @@ public class Battle {
         int[] hpValues = new int[enemies.Length];
         int index = 0;
         foreach (Enemy enemy in enemies) {
-            hpValues[index] = 
+            hpValues[index] = enemy.GetCurrentHp();
             index ++;
         }
         return hpValues;

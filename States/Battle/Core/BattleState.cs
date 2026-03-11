@@ -66,7 +66,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                 "UseAbility," + currentChoice.ToString() + ",", enemy: false));
             battleSceneView.SetCurrentChoice(0);
             // Check if it's enemies turn now.
-            if (currentCharacterIndex >= characterSprites) {
+            if (currentCharacterIndex >= characterSprites - 1) {
                 ConductEnemyPhase();
                 ExecuteActions();
                 // After enemies turn increment turn count.

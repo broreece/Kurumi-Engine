@@ -44,7 +44,7 @@ public static class Formula {
                 // Check for static values stored in stats.
                 int statIndex = 0;
                 foreach (string statShortName in statShortNames) {
-                    if (stat == statShortName.ToLower()) {
+                    if (stat.Equals(statShortName, StringComparison.CurrentCultureIgnoreCase)) {
                         statValue = entity.GetStat(statIndex);
                         break;
                     }
@@ -180,7 +180,7 @@ public static class Formula {
         }
         int leftNumber = int.Parse(formula[leftIndex.. midIndex]);
         int rightNumber = int.Parse(formula[(midIndex + 1).. rightIndex]);
-        return new int[4] { leftIndex, rightIndex, leftNumber, rightNumber };
+        return [leftIndex, rightIndex, leftNumber, rightNumber];
     }
 
 }

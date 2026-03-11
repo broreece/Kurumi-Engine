@@ -46,20 +46,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-
-## Test battle state/scene ##
-### Status: In Progress ###
-### Complexity: 2 ###
-### Independence: 2 ###
-### Impact: 5 ### 
-
-**Description:** I noticed we have not yet tested battle state/scene. Can we test this.
-
-**Steps:** N/A
-
----
-
-
 ## (RGCA-01) Restrict "GameContext" access in script context ##
 ### Complexity: 1 ###
 ### Independent: 1 ###

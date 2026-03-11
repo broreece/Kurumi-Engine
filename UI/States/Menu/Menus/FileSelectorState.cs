@@ -39,7 +39,7 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
     /// <param name="mapName">The map name.</param>
     public FileSelectorState(IGameUIContext gameUIContext, FileSelectorConfig fileSelectorConfig,  WindowConfig windowConfig, 
         ICharacterDimensionsAccessor characterDimensionsAccessor, IGameWindowScaleAccessor gameWindowScalesAccessor,
-        PlayableCharacter[] playableCharacters, ISaveAssetAccessor saveAssetManager, SaveManager saveManager, 
+        ICharacterFileAccessor[] playableCharacters, ISaveAssetAccessor saveAssetManager, SaveManager saveManager, 
         IPartyDynamicDataAccessor partyInfoAccessor, GameVariables gameVariables, bool saving, int saveFiles, int maxPartySize, 
         string mapName) {
             
@@ -56,7 +56,6 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
         this.saveFiles = saveFiles;
         this.maxPartySize = maxPartySize;
         this.mapName = mapName;
-        // TODO: (MIC-01) I think we should interface the playable characters, we just need the sprite IDs and the saveable character interface.
         this.playableCharacters = playableCharacters;
         fileOffset = 0;
 
@@ -272,7 +271,7 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
     private readonly float widthScale;
     private readonly Vector2f characterScale;
     private readonly ISaveAssetAccessor saveAssetManager;
-    private readonly PlayableCharacter[] playableCharacters;
+    private readonly ICharacterFileAccessor[] playableCharacters;
     private readonly int[] spriteIds;
 
     // Components.

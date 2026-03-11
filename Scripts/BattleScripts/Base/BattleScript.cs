@@ -77,7 +77,7 @@ public class BattleScript : Script {
     /// </summary>
     /// <param name="gameContext">The context of the game used by script steps.</param>
     public void Activate(GameContext gameContext) {
-        ScriptContext scriptContext = new(gameContext);
+        BattleScriptContext scriptContext = new(gameContext, this);
         while (scriptStep != null) {
             scriptStep.Activate(scriptContext);
             scriptStep = scriptStep.GetNextStep();

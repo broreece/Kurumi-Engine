@@ -3,13 +3,13 @@ namespace Game.Entities.PlayableCharacter;
 using Game.Entities.Base;
 using Game.Entities.Skills;
 using Game.Items;
-using Save.Interfaces;
 using Scenes.Battle.Interfaces;
+using UI.Interfaces;
 
 /// <summary>
 /// The playable character class. Contains information relating to the playable characters. Inherits from entity.
 /// </summary>
-public sealed class PlayableCharacter : Entity, ISaveableCharacter, ICharacterSkillsNameAccessor {
+public sealed class PlayableCharacter : Entity, ICharacterFileAccessor, ICharacterSkillsNameAccessor {
     /// <summary>
     /// Playable character constructor.
     /// </summary>

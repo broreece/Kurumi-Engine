@@ -87,7 +87,13 @@ public sealed class Party : MapElement, IPartyAccessor, IPartyDynamicDataAccesso
         int[] sprites = new int[partyMembers.Length];
         int index = 0;
         foreach (PlayableCharacter playableCharacter in partyMembers) {
-            sprites[index] = playableCharacter.GetSpriteId();
+            if (playableCharacter != null) {
+                sprites[index] = playableCharacter.GetSpriteId();
+            } 
+            else {
+                // If the character isn't set don't create a sprite.
+                sprites[index] = -1;
+            }
             index ++;
         }
         return sprites;

@@ -90,7 +90,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
         choiceBoxChoices = [];
         // TODO: (BSE-03) We should change the 0 to get the first healthy party member.
         UpdateChoiceBoxChoices(partyAccessor, 0);
-        choiceBox = new ChoiceBoxComponent(choiceBoxWindowX, choiceBoxWindowY, choiceBoxWindowWidth, choiceBoxWindowHeight, 
+        choiceBox = new ChoiceBoxComponent(choiceBoxWindowX, choiceBoxWindowY, choiceBoxWindowWidth, choiceBoxWindowHeight / choiceBoxChoices.Count, 
             fontSize, choiceBoxFileName, choiceBoxChoices.Count, windowConfig, window);
 
         // Set in scene variables.
@@ -100,18 +100,16 @@ public class BattleScene : SceneBase, IBattleSceneView {
         Texture[] enemyTextures = new Texture[gameConfig.GetMaxEnemyFormationSize()];
         enemySprites = [];
         for (int enemyIndex = 0; enemyIndex < enemyFormation.Enemies.Count; enemyIndex ++) {
-            enemyTextures[enemyIndex] = new Texture("Files\\Art\\EnemyBattleSprites\\" +
-                assetManager.GetEnemyBattleSpriteFileName(enemySpriteAccessor.GetEnemySprite(enemyFormation.Enemies[enemyIndex].Id)));
+            enemyTextures[enemyIndex] = new Texture(assetManager.GetEnemyBattleSpriteFileName(
+                enemySpriteAccessor.GetEnemySprite(enemyFormation.Enemies[enemyIndex].Id)));
             enemySprites.Add(new Sprite(enemyTextures[enemyIndex]) {
                 Scale = scale,
                 Position = new(enemyFormation.Enemies[enemyIndex].X, enemyFormation.Enemies[enemyIndex].Y)
             });
-            enemyIndex ++;
         }
 
         // Load background sprite.
-        Texture battleBackgroundTexture = new("Files\\Art\\BattleBackgroundArt\\" 
-            + assetManager.GetBattleBackgroundFileName(battleBackgroundId));
+        Texture battleBackgroundTexture = new(assetManager.GetBattleBackgroundFileName(battleBackgroundId));
         battleBackgroundSprite = new Sprite(battleBackgroundTexture) {
             Scale = battleBackgroundScale
         };
@@ -122,18 +120,21 @@ public class BattleScene : SceneBase, IBattleSceneView {
         int[] partySprites = partyAccessor.GetPartyBattleSprites();
         for (int characterIndex = 0; characterIndex < partySprites.Length; characterIndex ++) {
             int character = partySprites[characterIndex];
-            characterTextures[characterIndex] = new Texture("Files\\Art\\CharacterBattleSpriteSheets\\" +
-                assetManager.GetCharacterBattleSpriteSheet(character));
-            characterSprites.Add(new Sprite(characterTextures[characterIndex]) {
-                Scale = scale
-            });
+            if (character != -1) {
+                characterTextures[characterIndex] = new Texture(assetManager.GetCharacterBattleSpriteSheet(character));
+                characterSprites.Add(new Sprite(characterTextures[characterIndex]) {
+                    Scale = scale
+                });
+            }
         }
 
-        // Load party sprites.
+        // Load party placement.
         int partyXPlacement = battleWindowConfig.GetPartyX();
         for (int characterIndex = 0; characterIndex < gameConfig.GetMaxPartySize(); characterIndex ++) {
-            int xShift = characterIndex * partyXPlacement;
-            characterSprites[characterIndex].Position = new(partyXPlacement + xShift, battleWindowConfig.GetPartyY());
+            if (partySprites[characterIndex] != -1) {
+                int xShift = characterIndex * partyXPlacement;
+                characterSprites[characterIndex].Position = new(partyXPlacement + xShift, battleWindowConfig.GetPartyY());
+            }
         }
 
         // Initalize battle targeting view as null, assign after state is created.

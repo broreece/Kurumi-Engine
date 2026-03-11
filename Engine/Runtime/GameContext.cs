@@ -169,6 +169,7 @@ public sealed class GameContext : IGameUIContext {
         currentScene = battleScene;
         Battle battle = new(enemyFormationRegistry, enemyRegistry, enemyFormationId);
         BattleState battleState = new(battle, this, battleScene);
+        battleScene.SetBattleTargetingView(battleState);
 
         // Set the controls after creation.
         BattleInputMap inputMap = new(battleState);
