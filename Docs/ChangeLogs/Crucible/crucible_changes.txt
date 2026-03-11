@@ -1,5 +1,4 @@
-The purpose of this document is to outline the changes made since the anvil release, "Crucible" was mostly focused on cleaning up post refractor
-and then small additions if any:
+The purpose of this document is to outline the changes made since the anvil release, "Crucible" was mostly focused on cleaning up post refractor:
 
 ------------------------------------------------------------------------------------------------
 
@@ -16,9 +15,25 @@ When game is in menu, actors and animated tiles will not be updating anymore eff
 
 ------------------------------------------------------------------------------------------------
 
-Scripts can now "pause" and wait untill a specified continue point to occur. This is mostly used in the choice box UI state.
+Scripts can now "pause" and wait untill a specified continue point to occur.
 
 ------------------------------------------------------------------------------------------------
 
 "ConditionalScript" has been renamed to "ConditionalScriptStep" better reflecting it's actual usage. Alongside this config has also been normalized
 meaning it's easier to read in both .yaml files and in fields/functions.
+
+------------------------------------------------------------------------------------------------
+
+The battle scene was previously not functional, now it is.
+
+------------------------------------------------------------------------------------------------
+
+In depth exceptions and logging system that gives highly detailed logs allowing for detailed explanations of errors.
+
+------------------------------------------------------------------------------------------------
+
+Introduction of unit testing with tests to prevent reversion errors.
+
+------------------------------------------------------------------------------------------------
+
+The game window now has a temporary icon.

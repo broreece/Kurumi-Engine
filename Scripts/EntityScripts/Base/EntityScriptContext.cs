@@ -1,6 +1,6 @@
 namespace Scripts.EntityScripts.Base;
 
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Scripts.Base;
 using Game.Entities.Base;
 

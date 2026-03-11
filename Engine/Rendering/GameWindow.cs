@@ -26,6 +26,12 @@ public sealed class GameWindow : IGameWindowScaleAccessor {
         VideoMode mode = new((uint) windowWidth, (uint) windowHeight);
         window = new(mode, gameWindowConfig.GetWindowTitle(), Styles.Titlebar | Styles.Close );
         window.SetVerticalSyncEnabled(true);
+
+        // Create and set game window icon.
+        Image icon = new("Assets\\Icons\\icon.png");
+        window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
+
+        // Set controls.
         window.Closed += (sender, args) => window.Close();
         window.KeyPressed += OnKeyPressed;
         

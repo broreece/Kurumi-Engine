@@ -1,6 +1,6 @@
 namespace Scripts.UniversalScriptSteps;
 
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Engine.Systems;
 using Scripts.Base;
 using Game.Entities.PlayableCharacter;

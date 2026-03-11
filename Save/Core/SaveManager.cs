@@ -10,6 +10,7 @@ using Registry.Items;
 using Registry.Names;
 using Registry.Skills;
 using Registry.Variables;
+using Save.Exceptions;
 using Save.Interfaces;
 using Save.Serialization.EnemyFormationData;
 using Save.Serialization.PartyData;
@@ -63,7 +64,7 @@ public sealed class SaveManager {
     /// <param name="maxPartySize">The max party size.</param>
     /// <param name="spriteIds">The sprite IDs array.</param>
     /// <returns>An array of ints representing the parties sprites.</returns>
-    /// <exception cref="MissingPartyDataException">Error thrown if a .json data file is missing.</exception>
+    /// <exception cref="SaveFileException">Error thrown if an issue occurs when trying to load party sprites.</exception>
     public int[] GetPartiesSprites(int saveIndex, int maxPartySize, int[] spriteIds) {
         int[] sprites = new int[maxPartySize];
         try {
@@ -74,8 +75,8 @@ public sealed class SaveManager {
             for (int partyIndex = 0; partyIndex < partyData.PartyMembers.Count; partyIndex ++) {
                 sprites[partyIndex] = spriteIds[partyData.PartyMembers[partyIndex]];
             }
-        } catch (FileNotFoundException) {
-            // TODO: (HE-01) Throw custom exception here.
+        } catch (Exception exception) {
+            throw new SaveFileException(exception.Message);
         }
         return sprites;
     }

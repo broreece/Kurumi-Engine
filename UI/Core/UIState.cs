@@ -2,6 +2,7 @@ namespace UI.Core;
 
 using Engine.Input.Core;
 using UI.Component.Core;
+using UI.Exceptions;
 
 /// <summary>
 /// The public abstract UI state class.
@@ -49,9 +50,10 @@ public abstract class UIState {
     /// Function used to load the UI states input map.
     /// </summary>
     /// <returns>The input map of the UI state.</returns>
+    /// <exception cref="InputMapNotSetException">Error thrown if no input map is set in the UI state when trying to retrieve it.</exception>
     public InputMap GetInputMap() {
         if (inputMap == null) {
-            throw new Exception();
+            throw new InputMapNotSetException();
         }
         return inputMap;
     }

@@ -1,6 +1,6 @@
 namespace Scripts.MapScripts.Base;
 
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Scripts.Base;
 using States.Map.Core;
 
@@ -29,7 +29,6 @@ public sealed class MapScriptContext : SceneScriptContext {
         else {
             // Reset the map script current step if it's finished.
             mapScript.SetScriptStep(mapScript.GetHead());
-            // TODO: (HE-01) Throw a custom exception here just so we know the script is finished.
         }
     }
 

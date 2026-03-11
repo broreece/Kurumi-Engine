@@ -7,6 +7,7 @@ using Engine.Rendering;
 using Engine.Assets;
 using Save.Serialization.EnemyFormationData;
 using Scenes.Base;
+using Scenes.Battle.Exceptions;
 using Scenes.Battle.Interfaces;
 using States.Battle.Interfaces;
 using UI.Component.Components;
@@ -144,6 +145,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
     /// <summary>
     /// Battle scenes update function, updates sprites used in the battle scene.
     /// </summary>
+    /// <exception cref="UnsetBattleTargetingViewException">Error thrown if no battle is set into the battle scene.</exception>
     public override void Update() {
         // Add background and component sprite.
         AddSprite(battleBackgroundSprite);
@@ -161,8 +163,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
 
         // Throw exception if battle targeting view is null here.
         if (battleTargetingView == null) {
-            // TODO: (HE-01) Custom exception here.
-            throw new Exception();
+            throw new UnsetBattleTargetingViewException();
         }
 
         // Draw party.
@@ -307,30 +308,28 @@ public class BattleScene : SceneBase, IBattleSceneView {
     /// </summary>
     /// <param name="partyMemberAccessor">The party member accessor object.</param>
     /// <param name="currentCharacterIndex">The character index being selected.</param>
+    /// <exception cref="NullBattleCharacterException">Error thrown if during a battle a new character index is passed.</exception>
     private void UpdateChoiceBoxChoices(IPartyMemberAccessor partyMemberAccessor, int currentCharacterIndex) {
         ICharacterSkillsNameAccessor ? character = partyMemberAccessor.GetPartyMember(currentCharacterIndex);
         choiceBoxChoices = [];
-        if (character != null) {
-            // Base abilities.
-            List<string> options = character.GetBaseAbilityNames();
-            // Skills.
-            options.AddRange(character.GetSkillNames());
-            // Additional options.
-            // TODO: (BSE-01) Move hard coded options into external file.
-            string[] hardCodedOptions = ["Items", "Run away"];
-            options.AddRange(hardCodedOptions);
-            
-            // Loop over all options here.
-            int index = 0;
-            foreach (string option in options) {
-                choiceBoxChoices.Add(new ListTextComponent(choiceBoxWindowX, choiceBoxWindowY + (index * fontSize), fontSize, fontFileName, 
-                    option));
-                index ++;
-            }
+        if (character == null) {
+            throw new NullBattleCharacterException();
         }
-        else {
-            // TODO: (HE-01) Custom exception here.
-            throw new Exception();
+        // Base abilities.
+        List<string> options = character.GetBaseAbilityNames();
+        // Skills.
+        options.AddRange(character.GetSkillNames());
+        // Additional options.
+        // TODO: (BSE-01) Move hard coded options into external file.
+        string[] hardCodedOptions = ["Items", "Run away"];
+        options.AddRange(hardCodedOptions);
+            
+        // Loop over all options here.
+        int index = 0;
+        foreach (string option in options) {
+            choiceBoxChoices.Add(new ListTextComponent(choiceBoxWindowX, choiceBoxWindowY + (index * fontSize), fontSize, fontFileName, 
+                option));
+            index ++;
         }
     }
 

@@ -1,6 +1,6 @@
 namespace Scripts.BattleScripts.Base;
 
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Scripts.Base;
 using States.Battle.Core;
 
@@ -26,7 +26,6 @@ public sealed class BattleScriptContext : SceneScriptContext {
             battleScript.SetHead(nextStep);
             battleScript.Activate(gameContext);
         }
-        // TODO: (HE-01) Throw a custom exception here just so we know the script is finished.
     }
 
     /// <summary>

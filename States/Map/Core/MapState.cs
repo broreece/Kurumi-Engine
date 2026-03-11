@@ -1,7 +1,7 @@
 namespace States.Map.Core;
 
 using Config.Runtime.Map;
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Game.Map.ActorControllers;
 using Game.Map.Actors.Base;
 using Game.Map.Core;

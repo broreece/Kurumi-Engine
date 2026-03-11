@@ -1,4 +1,4 @@
-namespace Engine.Runtime;
+namespace Engine.Runtime.Core;
 
 using Assets;
 using Config.Runtime.Battle;
@@ -12,6 +12,7 @@ using Engine.Input.Core;
 using Engine.Input.Scenes;
 using Engine.Maps.Core;
 using Engine.Rendering;
+using Engine.Runtime.Exceptions;
 using Engine.Systems;
 using Game.Battle;
 using Game.Entities.PlayableCharacter;
@@ -228,14 +229,14 @@ public sealed class GameContext : IGameUIContext {
     /// <summary>
     /// Function used to pop the UI queue.
     /// </summary>
+    /// <exception cref="PopEmptyUIStackException">Error thrown of an empty UI stack is attempted to be popped.</exception>
     public void PopUIStack() {
         uiStates.Pop();
         if (uiStates.Count > 0 && uiStates.Peek().TakesControl()) {
             currentInputMap = uiStates.Peek().GetInputMap();
         }
         if (currentInputMap == null) {
-            // TODO: (HE-01) Custom exception here.
-            throw new Exception();
+            throw new PopEmptyUIStackException();
         }
         gameWindow.SetInputMap(currentInputMap);
     }

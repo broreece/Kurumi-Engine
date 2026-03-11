@@ -3,8 +3,9 @@ namespace Scripts.Base;
 using Config.Runtime.Defaults;
 using Config.Runtime.Windows;
 using Engine.Rendering;
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Scenes.Base;
+using Scripts.Exceptions;
 using UI.Core;
 
 /// <summary>
@@ -15,8 +16,9 @@ public abstract class SceneScriptContext : ScriptContext {
     /// Constructor for the scene script context class.
     /// </summary>
     /// <param name="gameContext">The game's context object.</param>
+    /// <exception cref="SceneNotSetException">Error thrown if no current scene is set in the game context.</exception>
     protected SceneScriptContext(GameContext gameContext, Script script) : base(gameContext) {
-        scene = gameContext.GetCurrentScene() ?? throw new Exception();
+        scene = gameContext.GetCurrentScene() ?? throw new SceneNotSetException();
         this.script = script;
     }
 

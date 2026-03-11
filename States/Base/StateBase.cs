@@ -1,6 +1,6 @@
 namespace States.Base;
 
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Game.Party;
 
 /// <summary>

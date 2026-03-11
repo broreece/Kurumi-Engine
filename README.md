@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="Assets/Icons/readme_icon.png" width="220">
+</p>
+
 # Kurumi Engine
 
 Kurumi Engine is a modular RPG engine written in **C# using SFML**.  

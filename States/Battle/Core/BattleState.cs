@@ -1,6 +1,6 @@
 namespace States.Battle.Core;
 
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Game.Battle;
 using Game.Entities.Base;
 using Game.Entities.PlayableCharacter;

@@ -46,6 +46,34 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
+## (HE-01) Handle/Throw all exceptions ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Impact: 1 ###
+### Status: In progress ###
+
+**Description:** Any instances of exceptions being thrown we should catch them and use our engine logic to handle.
+
+**Steps:**
+- Create a new folder in Engine called "Exceptions" which has our base "EngineException" then our logger.
+    - Also create an enum for the severity of the exception. E.G: Fatal, Erorr, Warning, Info
+- Create a new field for scripts to include a script name.
+    - At script step exception throw an exception with the script name to pinpoint location of bug.
+- UI errors should state the UI state name that caused the error.
+- The current scene should also be logged.
+- Example log:
+ 
+```
+[ERROR]
+Scene: BattleScene
+UI Stack Depth: 0
+Script: sewer_encounter
+Exception: BattleSceneException
+Message: Targeting view empty.
+```
+
+---
+
 ## (TWNUI-01) Implement a WindowWithTextAndNamebox UI State ##
 ### Complexity: 3 ###
 ### Independent: 2 ###
@@ -71,22 +99,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 - When executing the force move script pass the script context and the script step.
 - After the force move ends do the same as UI script, resume and set the current script step.
 - If multiple force move perhaps we should store the script contexts and script steps in some type of dictionary or lists with indexes.
-
----
-
-## (HE-01) Handle/Throw all exceptions ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Impact: 1 ###
-
-**Description:** Any instances of exceptions being thrown we should catch them and use our engine logic to handle.
-
-**Steps:**
-- In the "PopUIStack()" function in game context throw an error if the empty stack is tried to pop.
-- In "GetPartiesSprites" function in save manager throw an error if the save file isn't found.
-- In the battle scene's "Update()" function throw an error if the battle targetting view is empty.
-- In the battle scene's "UpdateChoiceBoxChoices" function called when loading a characters options if a null character index is passed throw a custom exception.
-- In battle script context and map script context throw a custom exception if the script has been finished before pausing.
 
 ---
 

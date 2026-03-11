@@ -1,6 +1,6 @@
 namespace Scripts.BattleScripts.Base;
 
-using Engine.Runtime;
+using Engine.Runtime.Core;
 using Scripts.Base;
 using Scripts.BattleScripts.BattleScriptSteps;
 using Scripts.UniversalScriptSteps;
