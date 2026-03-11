@@ -1,6 +1,10 @@
 namespace Scripts.Base;
 
 using Engine.Runtime;
+using Engine.Systems;
+using Game.Entities.PlayableCharacter;
+using Game.Entities.Status;
+using Game.Party;
 
 /// <summary>
 /// Script context class, contains parameters to be used in the activator function for each script sub class.
@@ -15,13 +19,19 @@ public class ScriptContext {
     }
 
     /// <summary>
+    /// Function used to load a new map scene / state and map object.
+    /// </summary>
+    public void LoadNewMap() {
+        gameContext.LoadNewMap();
+    }
+
+    /// <summary>
     /// Function that sets a game flag within the game variables object.
     /// </summary>
     /// <param name="flagIndex">The flag index.</param>
     /// <param name="newValue">The new value of the flag.</param>
     public void SetGameFlag(int flagIndex, bool newValue) {
-        // TODO: (RGCA-01) Create and use function in script context.
-        gameContext.GetGameVariables().SetGameFlag(flagIndex, newValue);
+        gameContext.SetGameFlag(flagIndex, newValue);
     }
 
     /// <summary>
@@ -30,17 +40,40 @@ public class ScriptContext {
     /// <param name="flagIndex">The flag index.</param>
     /// <returns>The specified flags state.</returns>
     public bool GetGameFlag(int flagIndex) {
-        // TODO: (RGCA-01) Create and use function in script context.
-        return gameContext.GetGameVariables().GetGameFlag(flagIndex);
+        return gameContext.GetGameFlag(flagIndex);
     }
 
-    // TODO: (RGCA-01) When we removed instances of this yets remove the function as it exposes too much.
     /// <summary>
-    /// Getter for the game context object.
+    /// Getter for the party instance.
     /// </summary>
-    /// <returns>The game context.</returns>
-    public GameContext GetGameContext() {
-        return gameContext;
+    /// <returns>The party.</returns>
+    public Party GetParty() {
+        return gameContext.GetParty();
+    }
+
+    /// <summary>
+    /// Getter for the party instance's party members.
+    /// </summary>
+    /// <returns>The array of party members.</returns>
+    public PlayableCharacter[] GetPartyMembers() {
+        return gameContext.GetPartyMembers();
+    }
+
+    /// <summary>
+    /// Getter for the status resolver system.
+    /// </summary>
+    /// <returns>The status resolver system.</returns>
+    public StatusResolver GetStatusResolver() {
+        return gameContext.GetStatusResolver();
+    }
+
+    /// <summary>
+    /// Function that returns a specific status from the status registry.
+    /// </summary>
+    /// <param name="statusId">The ID of the desired status.</param>
+    /// <returns>The status object.</returns>
+    public Status GetStatus(int statusId) {
+        return gameContext.GetStatus(statusId);
     }
     
     protected readonly GameContext gameContext;

@@ -46,19 +46,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (RGCA-01) Restrict "GameContext" access in script context ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Impact: 1 ###
-
-**Description:** Currently we have a getter for the game context, this shouldn't be the case instead use functions on script context:
-
-**Steps:**
-- Remove any instances of "GetGameContext().SomeFunction()" in script steps and just call functions in script context.
-- Remove accessto "GetGameContext()" entirely.
-
----
-
 ## (TWNUI-01) Implement a WindowWithTextAndNamebox UI State ##
 ### Complexity: 3 ###
 ### Independent: 2 ###

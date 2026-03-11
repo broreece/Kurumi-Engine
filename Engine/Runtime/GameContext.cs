@@ -15,6 +15,7 @@ using Engine.Rendering;
 using Engine.Systems;
 using Game.Battle;
 using Game.Entities.PlayableCharacter;
+using Game.Entities.Status;
 using Game.Map.Core;
 using Game.Party;
 using Registry.Enemies;
@@ -277,6 +278,24 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
+    /// Function that sets a game flag within the game variables object.
+    /// </summary>
+    /// <param name="flagIndex">The flag index.</param>
+    /// <param name="newValue">The new value of the flag.</param>
+    public void SetGameFlag(int flagIndex, bool newValue) {
+        gameVariables.SetGameFlag(flagIndex, newValue);
+    }
+
+    /// <summary>
+    /// Function that returns a flag value within the game variables object.
+    /// </summary>
+    /// <param name="flagIndex">The flag index.</param>
+    /// <returns>The specified flags state.</returns>
+    public bool GetGameFlag(int flagIndex) {
+        return gameVariables.GetGameFlag(flagIndex);
+    }
+
+    /// <summary>
     /// Function used to check if the game is paused.
     /// </summary>
     /// <returns>If the game is paused.</returns>
@@ -365,6 +384,15 @@ public sealed class GameContext : IGameUIContext {
     /// <returns>The array of field sprite IDs.</returns>
     public int[] GetPlayableCharacterFieldSpriteIds() {
         return playableCharacterRegistry.GetPlayableCharacterFieldSpriteIds();
+    }
+
+    /// <summary>
+    /// Function that returns a specific status from the status registry.
+    /// </summary>
+    /// <param name="statusId">The ID of the desired status.</param>
+    /// <returns>The status object.</returns>
+    public Status GetStatus(int statusId) {
+        return statusRegistry.GetStatus(statusId);
     }
 
     /// <summary>
@@ -578,7 +606,7 @@ public sealed class GameContext : IGameUIContext {
     /// <summary>
     /// Getter for the party instance's party members.
     /// </summary>
-    /// <returns>The array of party members..</returns>
+    /// <returns>The array of party members.</returns>
     public PlayableCharacter[] GetPartyMembers() {
         return party.GetPartyMembers();
     }

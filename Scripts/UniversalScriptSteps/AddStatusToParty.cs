@@ -23,12 +23,9 @@ public sealed class AddStatusToParty : ScriptStep {
     /// </summary>
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
-        // TODO: (RGCA-01) Change function used here for getparty.getpartymembers, just use game context function.
-        GameContext gameContext = scriptContext.GetGameContext();
-        PlayableCharacter[] partyMembers = gameContext.GetParty().GetPartyMembers();
-        StatusResolver statusResolver = gameContext.GetStatusResolver();
-        // TODO: (RGCA-01) Same here use a game context function.
-        Status status = gameContext.GetStatusRegistry().GetStatus(statusId);
+        PlayableCharacter[] partyMembers = scriptContext.GetPartyMembers();
+        StatusResolver statusResolver = scriptContext.GetStatusResolver();
+        Status status = scriptContext.GetStatus(statusId);
         foreach (PlayableCharacter character in partyMembers) {
             statusResolver.ApplyStatus(character, status);
         }
