@@ -11,16 +11,6 @@ using Save.Interfaces;
 /// </summary>
 public class Status : EntityElement, IIDAccessor {
     /// <summary>
-    /// Enum used for readability. These values will be hardcoded so just to make it more readable for dev work.
-    /// </summary>
-    public enum Priority {
-        EraseIfOtherIsAdded = 0,
-        CanStackWithOthers = 1,
-        EraseAllOthersWhenAdded = 2,
-        Fainted = 3
-    }
-    
-    /// <summary>
     /// Constructor for the status element object. 
     /// </summary>
     /// <param name="name">The name of the nameable element.</param>

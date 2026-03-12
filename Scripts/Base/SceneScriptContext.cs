@@ -18,7 +18,7 @@ public abstract class SceneScriptContext : ScriptContext {
     /// <param name="gameContext">The game's context object.</param>
     /// <exception cref="SceneNotSetException">Error thrown if no current scene is set in the game context.</exception>
     protected SceneScriptContext(GameContext gameContext, Script script) : base(gameContext) {
-        scene = gameContext.GetCurrentScene() ?? throw new SceneNotSetException();
+        scene = gameContext.GetCurrentScene() ?? throw new SceneNotSetException("The game contexts current scene is not found");
         this.script = script;
     }
 

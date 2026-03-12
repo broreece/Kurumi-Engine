@@ -16,8 +16,15 @@ using System.Text.Json;
 public sealed class MapManager {
     public MapManager(string registryPath) {
         // Load json file.
-        string json = File.ReadAllText(registryPath);
-        var data = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? throw new MissingJsonFileException();
+        string json;
+        Dictionary<string, string> data;
+        try {
+            json = File.ReadAllText(registryPath);
+            data = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? throw new Exception();;
+        } 
+        catch (Exception) {
+            throw new MissingJsonFileException($"Registry path: {registryPath} not found or invalid format");
+        }
 
         // Store file names in array.
         mapFileNames = [.. data.Values];
@@ -31,8 +38,15 @@ public sealed class MapManager {
     /// <exception cref="MissingJsonFileException">Error thrown if a .json data file is missing.</exception>
     public Map LoadMap(Party party, TileObjectRegistry tileObjectRegistry) {
         // Load from passed file.
-        var json = File.ReadAllText(mapFileNames[party.GetCurrentMapId()]);
-        MapData mapData = JsonSerializer.Deserialize<MapData>(json) ?? throw new MissingJsonFileException();
+        MapData mapData;
+        try {
+            var json = File.ReadAllText(mapFileNames[party.GetCurrentMapId()]);
+            mapData = JsonSerializer.Deserialize<MapData>(json) ?? 
+                throw new Exception();
+        }
+        catch (Exception) {
+            throw new MissingJsonFileException($"Map file: {mapFileNames[party.GetCurrentMapId()]} could not be found or contains an invalid format");
+        }
         
         // Load base values.
         string mapName = mapData.Name;

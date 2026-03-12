@@ -113,13 +113,13 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             int evasion = (int) (long) data[row, 9];
             string effect = new((string) data[row, 10]);
             int turnEffectSpriteId = (int) (long) data[row, 11];
-            object[,] abilities = Load("equipment_abilities", new string[1] {"equipment_id"}, 
+            object[,] abilities = Load("equipment_abilities", ["equipment_id"], 
                 new string[1] {id.ToString()}, "equipment_id");
-            object[,] skills = Load("equipment_skills", new string[1] {"equipment_id"}, 
+            object[,] skills = Load("equipment_skills", ["equipment_id"], 
                 new string[1] {id.ToString()}, "equipment_id");
-            object[,] statData = Load("equipment_stats", new string[1] {"equipment_id"}, 
+            object[,] statData = Load("equipment_stats", ["equipment_id"], 
                 new string[1] {id.ToString()}, "equipment_id");
-            object[,] elementData = Load("equipment_elements", new string[1] {"equipment_id"}, 
+            object[,] elementData = Load("equipment_elements", ["equipment_id"], 
                 new string[1] {id.ToString()}, "equipment_id");
             int abilityResults = abilities.GetLength(0);
             int skillResults = skills.GetLength(0);
@@ -184,13 +184,13 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             int turnEffectSpriteId = (int) (long) data[row, 10];
             string turnScript = new((string) data[row, 11]);
 
-            object[,] abilities = Load("statuses_abilities", new string[1] {"status_id"}, 
+            object[,] abilities = Load("statuses_abilities", ["status_id"], 
                 new string[1] {id.ToString()}, "ability_id");
-            object[,] skills = Load("statuses_skills", new string[1] {"status_id"}, 
+            object[,] skills = Load("statuses_skills", ["status_id"], 
                 new string[1] {id.ToString()}, "skill_id");
-            object[,] statData = Load("statuses_stats", new string[1] {"status_id"}, 
+            object[,] statData = Load("statuses_stats", ["status_id"], 
                 new string[1] {id.ToString()}, "stat_id");
-            object[,] elementData = Load("statuses_elements", new string[1] {"status_id"}, 
+            object[,] elementData = Load("statuses_elements", ["status_id"], 
                 new string[1] {id.ToString()}, "element_id");
             int abilityResults = abilities.GetLength(0);
             int skillResults = skills.GetLength(0);
@@ -276,13 +276,13 @@ public sealed class DatabaseManager : ICharacterDataLoader {
         for (int row = 0; row < results; row ++) {
             List<Ability> enemyAbilities = [];
             long id = (long) data[row, 0];
-            object[,] statData = Load("enemy_stats", new string[1] {"enemy_id"},
+            object[,] statData = Load("enemy_stats", ["enemy_id"],
                 new string[1] {id.ToString()});
-            object[,] abilities = Load("enemy_abilities", new string[1] {"enemy_id"}, 
+            object[,] abilities = Load("enemy_abilities", ["enemy_id"], 
                 new string[1] {id.ToString()}, "ability_id");
-            object[,] elementData = Load("enemy_elements", new string[1] {"enemy_id"},
+            object[,] elementData = Load("enemy_elements", ["enemy_id"],
                 new string[1] {id.ToString()});
-            object[,] statusRegistry = Load("enemy_statuses", new string[1] {"enemy_id"}, 
+            object[,] statusRegistry = Load("enemy_statuses", ["enemy_id"], 
                 new string[1] {id.ToString()});
             int statResults = statData.GetLength(0);
             int abilityResults = abilities.GetLength(0);
@@ -390,35 +390,35 @@ public sealed class DatabaseManager : ICharacterDataLoader {
         long count;
         // If no conditions set load all.
         command.CommandText =
-        @"
+        $@"
             SELECT *
-            FROM " + tableName;
+            FROM {tableName}";
         countCommand.CommandText =
-        @"
+        $@"
             SELECT COUNT(*)
-            FROM " + tableName;
+            FROM {tableName}";
         // If conditions set only load from condition.
         if (conditions != null && values != null) {
-            command.CommandText += " WHERE ";
-            countCommand.CommandText += " WHERE ";
+            command.CommandText = $"{command.CommandText} WHERE ";
+            countCommand.CommandText = $"{countCommand.CommandText} WHERE ";
             for (int index = 0; index < conditions.Length; index++) {
-                command.CommandText = command.CommandText + conditions[index] + " = " + values[index];
-                countCommand.CommandText = countCommand.CommandText + conditions[index] + " = " + values[index];
+                command.CommandText = $"{command.CommandText}{conditions[index]} = {values[index]}";
+                countCommand.CommandText = $"{countCommand.CommandText}{conditions[index]} = {values[index]}";
                 if (index < conditions.Length - 1) {
-                    command.CommandText += " AND ";
-                    countCommand.CommandText += " AND ";
+                    command.CommandText = $"{command.CommandText} AND ";
+                    countCommand.CommandText = $"{countCommand.CommandText} AND ";
                 }
             }
         }
         // If sort is set sort by the passed variable.
         if (sortBy != null) {
-            command.CommandText = command.CommandText + " ORDER BY " + sortBy + " DESC";
+            command.CommandText = $"{command.CommandText} ORDER BY {sortBy} DESC";
         }
         object ? test = countCommand.ExecuteScalar();
         if (test != null) {
             count = (long) test;
         } else {
-            throw new MissingDatabaseTableException("Table: " + tableName + " is missing from the database.");
+            throw new MissingDatabaseTableException($"Table: {tableName} is missing from the database.");
         }
         // Load each row storing the tables data in array.
         SqliteDataReader query = command.ExecuteReader();

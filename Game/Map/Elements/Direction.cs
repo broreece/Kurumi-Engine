@@ -4,8 +4,8 @@ namespace Game.Map.Elements;
 /// Enumerates directions that map elements can face.
 /// </summary>
 public enum Direction {
-    North = 0,
-    East = 1,
-    South = 2,
-    West = 3
+    North,
+    East,
+    South,
+    West
 }

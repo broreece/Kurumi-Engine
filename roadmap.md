@@ -47,16 +47,14 @@ Tickets will also display a brief description, a set of planned steps for comple
 ---
 
 ## (HE-01) Handle/Throw all exceptions ##
-### Complexity: 2 ###
-### Independent: 1 ###
+### Complexity: 3 ###
+### Independent: 2 ###
 ### Impact: 1 ###
 ### Status: In progress ###
 
 **Description:** Any instances of exceptions being thrown we should catch them and use our engine logic to handle.
 
 **Steps:**
-- Create a new folder in Engine called "Exceptions" which has our base "EngineException" then our logger.
-    - Also create an enum for the severity of the exception. E.G: Fatal, Erorr, Warning, Info
 - Create a new field for scripts to include a script name.
     - At script step exception throw an exception with the script name to pinpoint location of bug.
 - UI errors should state the UI state name that caused the error.

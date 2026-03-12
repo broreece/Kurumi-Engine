@@ -53,7 +53,7 @@ public abstract class UIState {
     /// <exception cref="InputMapNotSetException">Error thrown if no input map is set in the UI state when trying to retrieve it.</exception>
     public InputMap GetInputMap() {
         if (inputMap == null) {
-            throw new InputMapNotSetException();
+            throw new InputMapNotSetException("INput map is not currently assigned.");
         }
         return inputMap;
     }

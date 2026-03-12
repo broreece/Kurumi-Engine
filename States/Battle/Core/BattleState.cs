@@ -358,7 +358,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                 break;
         }
         if (target == null) {
-            throw new NullTargetException();
+            throw new NullTargetException("Target was not found.");
         }
 
         // TODO: (BSI) We should add a check here for skills as well.

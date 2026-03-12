@@ -17,16 +17,16 @@ public sealed class StatusResolver {
 
         // Check if all existing statuses needs to be removed.
         if (statuses.Count != 0) {
-            if (!(statuses[0].GetPriority() == Status.Priority.Fainted)) {
+            if (!(statuses[0].GetPriority() == Priority.Fainted)) {
                 switch (newStatus.GetPriority()) {
-                    case Status.Priority.CanStackWithOthers:
+                    case Priority.CanStackWithOthers:
                         bool canAdd = true;
                         foreach (Status status in statuses) {
-                            if (status.GetPriority() == Status.Priority.EraseIfOtherIsAdded) {
+                            if (status.GetPriority() == Priority.EraseIfOtherIsAdded) {
                                 entity.RemoveStatus(status);
                             }
-                            else if (status.GetPriority() == Status.Priority.EraseAllOthersWhenAdded
-                                || status.GetPriority() == Status.Priority.Fainted) {
+                            else if (status.GetPriority() == Priority.EraseAllOthersWhenAdded
+                                || status.GetPriority() == Priority.Fainted) {
                                 canAdd = false;
                             }
                         }
@@ -35,10 +35,10 @@ public sealed class StatusResolver {
                         }
                         break;
 
-                    case Status.Priority.EraseIfOtherIsAdded:
+                    case Priority.EraseIfOtherIsAdded:
                         bool canAddErase = true;
                         foreach (Status status in statuses) {
-                            if (status.GetPriority() == Status.Priority.EraseIfOtherIsAdded) {
+                            if (status.GetPriority() == Priority.EraseIfOtherIsAdded) {
                                 entity.RemoveStatus(status);
                             }
                             else {

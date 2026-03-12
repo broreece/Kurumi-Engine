@@ -236,7 +236,7 @@ public sealed class GameContext : IGameUIContext {
             currentInputMap = uiStates.Peek().GetInputMap();
         }
         if (currentInputMap == null) {
-            throw new PopEmptyUIStackException();
+            throw new PopEmptyUIStackException("UI Stack has been popped whilst it was empty.");
         }
         gameWindow.SetInputMap(currentInputMap);
     }

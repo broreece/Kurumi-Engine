@@ -1,8 +1,8 @@
-<p align="center">
-  <img src="Assets/Icons/readme_icon.png" width="220">
-</p>
-
 # Kurumi Engine
+
+<p align="center">
+  <img src="Assets/Icons/readme_icon.png" width="300">
+</p>
 
 Kurumi Engine is a modular RPG engine written in **C# using SFML**.  
 It focuses on **clean architecture, extensibility, and data-driven gameplay systems**.
@@ -41,7 +41,7 @@ Key ideas:
 - **Deterministic step-based event logic**
 - **Clear separation between engine systems**
 
-The engine aims to keep gameplay logic **explicit and readable**, avoiding overly abstract systems that obscure control flow.
+The engine aims to keep gameplay logic **explicit and readable**.
 
 ---
 
@@ -59,12 +59,13 @@ Current engine capabilities include:
 
 ### Gameplay Systems
 - Custom scripting and stored variables allows dynamic gameplay
-- Dynamic actor control systems that do not restrict player controls.
-- Threaded saving for performance.
+- Dynamic actor control systems that do not restrict player controls
+- Same script-driven event system applies in battles for unique battle experiences
 
 ### Engine Infrastructure
-- JSON/YAML configuration support
-- SQLite data storage
+- YAML used for config
+- JSON used for dynamic data
+- SQLite used for static data
 - Modular rendering pipeline
 
 ---
@@ -75,25 +76,13 @@ Kurumi Engine uses **step-based scripts** to control events and gameplay flow.
 
 Example:
 
-```yaml
-script:
-  - ShowDialogue:
-      speaker: "Guard"
-      text: "You shouldn't be here."
-
-  - ChoiceBox:
-      choices:
-        - "Leave"
-        - "Stay"
-
-  - Conditional:
-      if: choice == "Stay"
-      then:
-        - StartCombat:
-            enemy: "Guard"
+```
+"ChoiceBox,Yes-No,2,BasicTextWindow,You said no,StartBattle,0,0,0,"
 
 ```
-The above yaml is just an example, the real data is formatted in strings currently outline in the documentation.
+Where if you reply yes a battle will start and if you reply no no battle will start.
+
+Plans to change from a string format to a custom format exist.
 
 ---
 
@@ -145,7 +134,7 @@ Kurumi-Engine
 | **C# (.NET 8)** | Core engine development |
 | **SFML.NET** | Rendering, window management, and input handling |
 | **SQLite** | Structured game data storage |
-| **YAML / JSON** | Configuration files and save data |
+| **YAML / JSON** | Configuration files and dynamic save data |
 | **Git** | Version control and development workflow |
 
 ---
@@ -159,7 +148,7 @@ Core goals include:
 
 - Build a **modular RPG engine architecture** with clear system boundaries
 - Support **script-driven gameplay events** and deterministic step execution
-- Maintain **clean and readable gameplay logic** without excessive engine abstraction
+- Maintain **clean and readable gameplay logic**
 - Provide a flexible foundation for **AI actors, dialogue systems, and scripted events**
 - Develop a codebase that prioritizes **maintainability, extensibility, and clarity**
 

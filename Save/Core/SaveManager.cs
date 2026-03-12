@@ -158,8 +158,13 @@ public sealed class SaveManager {
             $"Save\\save_data\\save_{activeSlot}\\flags.json";
 
         // Load game variables.
-        var json = File.ReadAllText(fileName);
-        return JsonSerializer.Deserialize<VariablesData>(json) ?? throw new MissingJsonFileException();
+        try {
+            var json = File.ReadAllText(fileName);
+            return JsonSerializer.Deserialize<VariablesData>(json) ?? throw new Exception();
+        } 
+        catch (Exception) {
+            throw new MissingJsonFileException($"JSON file at {fileName} was not found or has incorrect formatting.");
+        }
     }
 
     /// <summary>
@@ -169,11 +174,17 @@ public sealed class SaveManager {
     /// <exception cref="MissingJsonFileException">Error thrown if a .json data file is missing.</exception>
     public EnemyFormationData[] LoadEnemyFormations() {
         // Load enemy formation data from the files enemy_formations.json.
-        var json = activeSlot == 0 ? File.ReadAllText("Save\\save_data\\new_game_data\\starting_enemy_formations.json") :
-            File.ReadAllText($"Save\\save_data\\save{activeSlot}\\enemy_formations.json");
-        EnemyFormationRootData root = JsonSerializer.Deserialize<EnemyFormationRootData>(json) 
-            ?? throw new MissingJsonFileException();
-        return [.. root.Formations];
+        string fileName = activeSlot == 0 ? "Save\\save_data\\new_game_data\\starting_enemy_formations.json" : 
+            $"Save\\save_data\\save{activeSlot}\\enemy_formations.json";
+        try {
+            var json = File.ReadAllText(fileName);
+            EnemyFormationRootData root = JsonSerializer.Deserialize<EnemyFormationRootData>(json) 
+                ?? throw new Exception();
+            return [.. root.Formations];
+        }
+        catch (Exception) {
+            throw new MissingJsonFileException($"JSON file at {fileName} was not found or has incorrect formatting.");
+        }
     }
 
     /// <summary>

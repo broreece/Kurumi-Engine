@@ -15,21 +15,22 @@ public sealed class AssetManager : ISaveAssetAccessor {
     public AssetManager(string registryPath) {
         // Load json file.
         string json = File.ReadAllText(registryPath);
-        var data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(json) ?? throw new MissingJsonFileException();
+        var data = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(json) ?? 
+            throw new MissingJsonFileException($"JSON file: {json} is not found");
 
         // Store file names in array.
-        animatedTileSheetFileNames = data["AnimatedTileSpriteSheets"].Values.ToArray();
-        battleBackgroundFileNames = data["BattleBackgroundArt"].Values.ToArray();
-        characterBattleSpriteSheetFileNames = data["CharacterBattleSpriteSheets"].Values.ToArray();
-        characterFieldSheetFileNames = data["CharacterFieldSpriteSheets"].Values.ToArray();
-        enemyBattleSpriteFileNames = data["EnemyBattleSprites"].Values.ToArray();
+        animatedTileSheetFileNames = [.. data["AnimatedTileSpriteSheets"].Values];
+        battleBackgroundFileNames = [.. data["BattleBackgroundArt"].Values];
+        characterBattleSpriteSheetFileNames = [.. data["CharacterBattleSpriteSheets"].Values];
+        characterFieldSheetFileNames = [.. data["CharacterFieldSpriteSheets"].Values];
+        enemyBattleSpriteFileNames = [.. data["EnemyBattleSprites"].Values];
         // TODO: (MSAC-01) Create actor field sheet file names.
         //actorFieldSheetFileNames = data["ActorFieldSpriteSheets"].Values.ToArray();
         fontFileNames = data["Fonts"].Values.ToArray();
-        mapBackgroundFileNames = data["MapBackgroundArt"].Values.ToArray();
-        tileSheetFileNames = data["TileSpriteSheets"].Values.ToArray();
-        windowArtFileNames = data["Windows"].Values.ToArray();
-        choiceSelectionFileNames = data["ChoiceSelectionArt"].Values.ToArray();
+        mapBackgroundFileNames = [.. data["MapBackgroundArt"].Values];
+        tileSheetFileNames = [.. data["TileSpriteSheets"].Values];
+        windowArtFileNames = [.. data["Windows"].Values];
+        choiceSelectionFileNames = [.. data["ChoiceSelectionArt"].Values];
     }
 
     /// <summary>

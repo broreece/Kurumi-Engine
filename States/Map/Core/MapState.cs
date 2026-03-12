@@ -335,7 +335,7 @@ public sealed class MapState : StateBase, IMapInputController {
             }
             index ++;
         }
-        throw new ActorMissingException();
+        throw new ActorMissingException($"Actor at location {xLocation}{yLocation} on map: {map.GetMapName()} was not found.");
     }
 
     /// <summary>

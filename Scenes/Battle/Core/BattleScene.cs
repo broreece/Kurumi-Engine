@@ -163,7 +163,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
 
         // Throw exception if battle targeting view is null here.
         if (battleTargetingView == null) {
-            throw new UnsetBattleTargetingViewException();
+            throw new UnsetBattleTargetingViewException("Battle targeting view was not found.");
         }
 
         // Draw party.
@@ -313,7 +313,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
         ICharacterSkillsNameAccessor ? character = partyMemberAccessor.GetPartyMember(currentCharacterIndex);
         choiceBoxChoices = [];
         if (character == null) {
-            throw new NullBattleCharacterException();
+            throw new NullBattleCharacterException("Attempted to load choices from a null party member.");
         }
         // Base abilities.
         List<string> options = character.GetBaseAbilityNames();
