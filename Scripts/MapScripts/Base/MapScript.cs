@@ -14,10 +14,12 @@ public class MapScript : Script {
     /// </summary>
     /// <param name="scriptText">The string representing each script step in the script.</param>
     public MapScript(string scriptText) {
+        name = scriptText[..scriptText.IndexOf(',')];
+        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
         while (scriptText.Contains(',')) {
-            string scriptName = scriptText[..scriptText.IndexOf(',')];
+            string scriptStepName = scriptText[..scriptText.IndexOf(',')];
             scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-            switch (scriptName) {
+            switch (scriptStepName) {
                 case "AddStatusToParty":
                     int statusId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
@@ -141,6 +143,7 @@ public class MapScript : Script {
     /// </summary>
     /// <param name="gameContext">The context of the game used by script steps.</param>
     public void Activate(GameContext gameContext) {
+        gameContext.SetCurrentScriptName(name);
         MapScriptContext scriptContext = new(gameContext, this);
         while (scriptStep != null && !scriptStep.IsPaused()) {
             scriptStep.Activate(scriptContext);
@@ -149,6 +152,7 @@ public class MapScript : Script {
             }
         }
         scriptStep = head;
+        gameContext.FinishScriptExecution();
     }
 
     /// <summary>

@@ -30,3 +30,6 @@ Save/save_data/*
 
 # - Ignore personal dev journel documents.
 PersonalDocs/
+
+# - Ignore logs.
+logs/*

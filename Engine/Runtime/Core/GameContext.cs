@@ -8,6 +8,7 @@ using Config.Runtime.Map;
 using Config.Runtime.Menus;
 using Config.Runtime.Windows;
 using Database.Core;
+using Engine.Exceptions;
 using Engine.Input.Core;
 using Engine.Input.Scenes;
 using Engine.Maps.Core;
@@ -186,32 +187,37 @@ public sealed class GameContext : IGameUIContext {
     /// </summary>
     public void GameLoop() {
         while (gameWindow.IsOpen()) {
-            gameWindow.Clear();
-            // Update all timers if not paused, otherwise reset all timers untill unpaused.
-            if (!paused) {
-                currentState?.Update();
-                currentScene?.Update();
-                currentScene?.Draw();
-            }
-            else {
-                currentScene?.ResetClocks();
-            }
-            // Check if the top UI state needs to be closed (Global message case).
-            if (uiStates.Count > 0) {
-                uiStates.Peek().Update(paused);
-                if (uiStates.Peek().IsClosed()) {
-                    uiStates.Pop();
+            try {
+                gameWindow.Clear();
+                // Update all timers if not paused, otherwise reset all timers untill unpaused.
+                if (!paused) {
+                    currentState?.Update();
+                    currentScene?.Update();
+                    currentScene?.Draw();
                 }
-            }
-            // Render all components of the UI.
-            foreach (UIState uiState in uiStates) {
-                IUIComponent[] components = [.. uiState.GetComponents()];
-                for (int componentIndex = components.Length - 1; componentIndex >= 0; componentIndex --) {
-                    gameWindow.Draw(components[componentIndex].CreateSprite());
+                else {
+                    currentScene?.ResetClocks();
                 }
+                // Check if the top UI state needs to be closed (Global message case).
+                if (uiStates.Count > 0) {
+                    uiStates.Peek().Update(paused);
+                    if (uiStates.Peek().IsClosed()) {
+                        uiStates.Pop();
+                    }
+                }
+                // Render all components of the UI.
+                foreach (UIState uiState in uiStates) {
+                    IUIComponent[] components = [.. uiState.GetComponents()];
+                    for (int componentIndex = components.Length - 1; componentIndex >= 0; componentIndex --) {
+                        gameWindow.Draw(components[componentIndex].CreateSprite());
+                    }
+                }
+                gameWindow.DispatchEvents();
+                gameWindow.Display();
             }
-            gameWindow.DispatchEvents();
-            gameWindow.Display();
+            catch (Exception exception) {
+                Handler.HandleGameException(exception, this);
+            }
         }
     }
 
@@ -288,6 +294,21 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
+    /// Function that sets a script name to the game context's currently executing script.
+    /// </summary>
+    /// <param name="scriptName">The name of the script currently executing.</param>
+    public void SetCurrentScriptName(string scriptName) {
+        currentScriptName = scriptName;
+    }
+
+    /// <summary>
+    /// Function used to unassign the currently executing script.
+    /// </summary>
+    public void FinishScriptExecution() {
+        currentScriptName = null;
+    }
+
+    /// <summary>
     /// Function that returns a flag value within the game variables object.
     /// </summary>
     /// <param name="flagIndex">The flag index.</param>
@@ -302,6 +323,14 @@ public sealed class GameContext : IGameUIContext {
     /// <returns>If the game is paused.</returns>
     public bool IsPaused() {
         return paused;
+    }
+
+    /// <summary>
+    /// Function used to get the size of the UI states stack.
+    /// </summary>
+    /// <returns>The UI stack depth.</returns>
+    public int GetUIStackDepth() {
+        return uiStates.Count;
     }
 
     /// <summary>
@@ -342,6 +371,28 @@ public sealed class GameContext : IGameUIContext {
     /// <returns>The character movement speed.</returns>
     public int GetCharacterMovementSpeed() {
         return characterFieldSpriteConfig.GetWalkAnimationSpeed();
+    }
+
+    /// <summary>
+    /// Getter for the scene type of the current scene.
+    /// </summary>
+    /// <returns>The scene type.</returns>
+    public string GetSceneType() {
+        if (currentScene == null) {
+            return "NULL scene type";
+        }
+        return currentScene.GetType().ToString();
+    }
+
+    /// <summary>
+    /// Getter for the currently executing script.
+    /// </summary>
+    /// <returns>The name of the currently executing script.</returns>
+    public string GetCurrentScriptName() {
+        if (currentScriptName == null) {
+            return "No script being executed";
+        }
+        return currentScriptName;
     }
 
     /// <summary>
@@ -695,13 +746,14 @@ public sealed class GameContext : IGameUIContext {
     // Game window object.
     private readonly GameWindow gameWindow;
 
-    // Active scene and the current state objects.
+    // Active scene, current state and current script name objects.
     private SceneBase? currentScene;
     private StateBase? currentState;
     private InputMap? currentInputMap;
+    private string? currentScriptName;
 
     // UI stack.
-    private Stack<UIState> uiStates;
+    private readonly Stack<UIState> uiStates;
 
     // Systems.
     private readonly StatusResolver statusResolver;

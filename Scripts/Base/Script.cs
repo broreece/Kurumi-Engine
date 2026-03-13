@@ -8,6 +8,7 @@ public abstract class Script {
     /// The constructor for scripts.
     /// </summary>
     protected Script() {
+        name = "";
         head = null;
         tail = null;
     }
@@ -27,6 +28,14 @@ public abstract class Script {
             tail.SetNext(newStep);
             tail = newStep;
         }
+    }
+
+    /// <summary>
+    /// Getter for the scripts name.
+    /// </summary>
+    /// <returns>The name of the script.</returns>
+    public string GetName() {
+        return name;
     }
 
     /// <summary>
@@ -61,5 +70,6 @@ public abstract class Script {
         head = newHead;
     }
 
+    protected string name;
     protected ScriptStep ? head, tail;
 }

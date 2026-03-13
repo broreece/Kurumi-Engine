@@ -11,6 +11,6 @@ public class ActorMissingException : EngineException {
     /// </summary>
     /// <param name="message">A message that can be passed for debugging.</param>
     public ActorMissingException(string message)
-        : base(message, Severity.Warning) {
+        : base(message, Severity.Error) {
     }
 }

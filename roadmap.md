@@ -44,33 +44,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 - Clean up post refractor.
 - Update roadmap to clearly seperate tickets and new fields.
 
----
-
-## (HE-01) Handle/Throw all exceptions ##
-### Complexity: 3 ###
-### Independent: 2 ###
-### Impact: 1 ###
-### Status: In progress ###
-
-**Description:** Any instances of exceptions being thrown we should catch them and use our engine logic to handle.
-
-**Steps:**
-- Create a new field for scripts to include a script name.
-    - At script step exception throw an exception with the script name to pinpoint location of bug.
-- UI errors should state the UI state name that caused the error.
-- The current scene should also be logged.
-- Example log:
- 
-```
-[ERROR]
-Scene: BattleScene
-UI Stack Depth: 0
-Script: sewer_encounter
-Exception: BattleSceneException
-Message: Targeting view empty.
-```
-
----
 
 ## (TWNUI-01) Implement a WindowWithTextAndNamebox UI State ##
 ### Complexity: 3 ###
@@ -284,6 +257,39 @@ Allow battle scenes to end either in victory of fail.
 
 **Related tickets:**
 - (MSAC-02)
+
+---
+
+## (LI-01) Log improvements and throw exceptions when failing to load config ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Impact: 1 ###
+
+**Description:** Improve logger by making it not static and store config.
+
+**Steps:**
+- Make new config object/runtime and yaml file for logger:
+    - This should contain directory name and file name.
+- Make the logger non-static.
+- Pass config into constructor.
+- Build logger in bootstrap before any other config object.
+- In each config object we should find a way to try and catch if the config yaml is missing.
+- Surrond the load config objects witha try and catch in bootstrap, if an exception is thrown we can log and handle it.
+
+---
+
+## (EMI-01) Improvements to error messages ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Impact: 1 ###
+
+**Description:** Make the error message look more like a windows error message.
+
+**Steps:**
+- Make a icon for the error windows.
+- Make a button that closes the error windows.
+- Import a default font for the error windows.
+- Add another new icon for the error windows a big X.
 
 ---
 

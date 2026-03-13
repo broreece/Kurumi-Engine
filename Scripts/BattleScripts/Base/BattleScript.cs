@@ -14,6 +14,8 @@ public class BattleScript : Script {
     /// </summary>
     /// <param name="scriptInformation">The string representing each script step in the script.</param>
     public BattleScript(string scriptText) {
+        name = scriptText[..scriptText.IndexOf(',')];
+        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
         while (scriptText.Contains(',')) {
             string scriptName = scriptText[..scriptText.IndexOf(',')];
             scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
@@ -77,12 +79,14 @@ public class BattleScript : Script {
     /// </summary>
     /// <param name="gameContext">The context of the game used by script steps.</param>
     public void Activate(GameContext gameContext) {
+        gameContext.SetCurrentScriptName(name);
         BattleScriptContext scriptContext = new(gameContext, this);
         while (scriptStep != null) {
             scriptStep.Activate(scriptContext);
             scriptStep = scriptStep.GetNextStep();
         }
         scriptStep = head;
+        gameContext.FinishScriptExecution();
     }
 
     /// <summary>
