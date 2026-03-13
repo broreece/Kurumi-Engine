@@ -63,6 +63,7 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="mapBackgroundSpriteConfig">The map background sprite config object.</param>
     /// <param name="mapConfig">The map config object.</param>
     /// <param name="mainMenuConfig">The main menu config object.</param>
+    /// <param name="partyChoicesConfig">The party choices config object.</param>
     /// <param name="tileSheetConfig">The tile sheet config object.</param>
     /// <param name="windowConfig">The window config object.</param>
     /// <param name="choiceBoxDefaults">The choice box defaults object.</param>
@@ -71,10 +72,10 @@ public sealed class GameContext : IGameUIContext {
     public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, MapManager mapManager,
         AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
         BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, CharacterFieldSpriteConfig characterFieldSpriteConfig, 
-        FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, InventoryConfig inventoryConfig,
-        MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, MainMenuConfig mainMenuConfig, 
-        TileSheetConfig tileSheetConfig, WindowConfig windowConfig, ChoiceBoxDefaults choiceBoxDefaults, 
-        GlobalMessageDefaults globalMessageDefaults, TextWindowDefaults textWindowDefaults) {
+        FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, InventoryConfig inventoryConfig, 
+        MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, MainMenuConfig mainMenuConfig, PartyChoicesConfig partyChoicesConfig,  
+        TileSheetConfig tileSheetConfig, WindowConfig windowConfig, ChoiceBoxDefaults choiceBoxDefaults, GlobalMessageDefaults globalMessageDefaults, 
+        TextWindowDefaults textWindowDefaults) {
         // Store config objects.
         this.animatedTileSheetConfig = animatedTileSheetConfig;
         this.battleBackgroundSpriteConfig = battleBackgroundSpriteConfig;
@@ -87,6 +88,7 @@ public sealed class GameContext : IGameUIContext {
         this.mapBackgroundSpriteConfig = mapBackgroundSpriteConfig;
         this.mapConfig = mapConfig;
         this.mainMenuConfig = mainMenuConfig;
+        this.partyChoicesConfig = partyChoicesConfig;
         this.tileSheetConfig = tileSheetConfig;
         this.windowConfig = windowConfig;
         this.choiceBoxDefaults = choiceBoxDefaults;
@@ -167,8 +169,9 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="battleBackgroundArtId">The battle background art ID.</param>
     /// <param name="enemyFormationId">The enemy formation used in the battle.</param>
     public void LoadNewBattle(int backgroundMusicId, int battleBackgroundArtId, int enemyFormationId) {
-        BattleScene battleScene = new(gameWindow, gameConfig, battleBackgroundSpriteConfig, battleSceneConfig, battleWindowConfig, windowConfig,
-             assetManager, party, enemyFormationRegistry.GetEnemyFormation(enemyFormationId), enemyRegistry, battleBackgroundArtId, backgroundMusicId);
+        BattleScene battleScene = new(gameWindow, gameConfig, battleBackgroundSpriteConfig, battleSceneConfig, battleWindowConfig, 
+            partyChoicesConfig, windowConfig, assetManager, party, enemyFormationRegistry.GetEnemyFormation(enemyFormationId), 
+            enemyRegistry, battleBackgroundArtId, backgroundMusicId);
         currentScene = battleScene;
         Battle battle = new(enemyFormationRegistry, enemyRegistry, enemyFormationId);
         BattleState battleState = new(battle, this, battleScene);
@@ -700,6 +703,7 @@ public sealed class GameContext : IGameUIContext {
     private readonly BattleBackgroundSpriteConfig battleBackgroundSpriteConfig;
     private readonly BattleSceneConfig battleSceneConfig;
     private readonly BattleWindowConfig battleWindowConfig;
+    private readonly PartyChoicesConfig partyChoicesConfig;
     private readonly CharacterFieldSpriteConfig characterFieldSpriteConfig;
     private readonly FileSelectorConfig fileSelectorConfig;
     private readonly GameConfig gameConfig;

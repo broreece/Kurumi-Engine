@@ -1,0 +1,4 @@
+items_enabled: 1
+run_away_enabled: 1
+items_text: "Items"
+run_away_text: "Run away"

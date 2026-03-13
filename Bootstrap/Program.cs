@@ -41,6 +41,7 @@ public static class Program {
         BattleWindowConfig battleWindowConfig = BattleWindowConfigManager.Load("Battle\\battle_window_config.yaml");
         CharacterBattleSpriteConfig characterBattleSpriteConfig = CharacterBattleSpriteConfigManager.Load("Battle\\character_battle_sprite_config.yaml");
         EnemyBattleSpriteConfig enemyBattleSpriteConfig = EnemyBattleSpriteConfigManager.Load("Battle\\enemy_battle_sprite_config.yaml");
+        PartyChoicesConfig partyChoicesConfig = PartyChoicesConfigManager.Load("Battle\\party_choices_config.yaml");
 
         // Defaults.
         ChoiceBoxDefaults choiceBoxDefaults = ChoiceBoxDefaultsManager.Load("Defaults\\choice_box_defaults.yaml");
@@ -70,7 +71,8 @@ public static class Program {
 
         // Create game context with neccesary arguments.
         GameContext gameContext = new(database, saveManager, assetManager, mapManager, animatedTileSheetConfig, battleBackgroundSpriteConfig, 
-            battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, gameWindowConfig, inventoryConfig, 
-            mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, tileSheetConfig, windowConfig, choiceBoxDefaults, globalMessageDefaults, textWindowDefaults);
+            battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, gameWindowConfig, 
+            inventoryConfig, mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, partyChoicesConfig, tileSheetConfig, windowConfig,
+            choiceBoxDefaults, globalMessageDefaults, textWindowDefaults);
     }
 }

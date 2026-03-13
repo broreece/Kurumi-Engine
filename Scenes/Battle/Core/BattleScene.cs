@@ -28,6 +28,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
     /// <param name="battleBackgroundSpriteConfig">The battle background sprite config object.</param>
     /// <param name="battleSceneConfig">The battle scene config object.</param>
     /// <param name="battleWindowConfig">The battle window config object.</param>
+    /// <param name="partyChoicesConfig">The party choices config object.</param>
     /// <param name="windowConfig">The window config object.</param>
     /// <param name="assetManager">The game asset manager object, used to load textures, fonts etc.</param>
     /// <param name="partyAccessor">The party accessor object.</param>
@@ -36,11 +37,13 @@ public class BattleScene : SceneBase, IBattleSceneView {
     /// <param name="battleBackgroundId">The background art ID used in the battle scene.</param>
     /// <param name="backgroundMusicId">The background music played in the battle scene.</param>
     public BattleScene(GameWindow window, GameConfig gameConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig, 
-        BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, WindowConfig windowConfig, AssetManager assetManager, 
-        IPartyAccessor partyAccessor, EnemyFormationData enemyFormation, IEnemySpriteAccessor enemySpriteAccessor, int battleBackgroundId, 
+        BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, PartyChoicesConfig partyChoicesConfig, 
+        WindowConfig windowConfig, AssetManager assetManager, IPartyAccessor partyAccessor, EnemyFormationData enemyFormation, 
+        IEnemySpriteAccessor enemySpriteAccessor, int battleBackgroundId, 
         int backgroundMusicId)
         : base(window, assetManager) {
         // Store reused config variables.
+        this.partyChoicesConfig = partyChoicesConfig;
         damageDisplayLength = battleSceneConfig.GetDamageDisplayLength();
         fontId = battleWindowConfig.GetFontId();
 
@@ -320,9 +323,14 @@ public class BattleScene : SceneBase, IBattleSceneView {
         // Skills.
         options.AddRange(character.GetSkillNames());
         // Additional options.
-        // TODO: (BSE-01) Move hard coded options into external file.
-        string[] hardCodedOptions = ["Items", "Run away"];
-        options.AddRange(hardCodedOptions);
+        List<string> additionalOptions = [];
+        if (partyChoicesConfig.ItemsEnabled()) {
+            additionalOptions.Add(partyChoicesConfig.GetItemsText());
+        }
+        if (partyChoicesConfig.RunAwayEnabled()) {
+            additionalOptions.Add(partyChoicesConfig.GetRunAwayText());
+        }
+        options.AddRange(additionalOptions);
             
         // Loop over all options here.
         int index = 0;
@@ -354,6 +362,7 @@ public class BattleScene : SceneBase, IBattleSceneView {
 
     // Stored config variables.
     private readonly int damageDisplayLength, fontId;
+    private readonly PartyChoicesConfig partyChoicesConfig;
 
     // Timer and settings for the damage display.
     private bool damageDisplayed;

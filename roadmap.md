@@ -1,6 +1,6 @@
 # Roadmap
 
-This file outlines all future tickets alongside a set of fields that determine how complex, independent and how big the impact is on the engine.
+This file outlines all future tickets alongside a set of fields that determine how complex, independent, the momentum a ticket carries and how big the impact is on the engine.
 
 ### Complexity
 
@@ -21,6 +21,14 @@ This file outlines all future tickets alongside a set of fields that determine h
 |**3**|Medium interference|
 |**4**|Large interference|
 |**5**|Completely prevents any other work|
+
+### Momentum
+
+| Ranking | Description |
+|-------|-----------|
+|**1**|Quick win. Easy to start and finish in one sitting.|
+|**2**|Moderate focus required.|
+|**3**|Heavy thinking / architectural work.|
 
 ### Impact
 
@@ -44,24 +52,12 @@ Tickets will also display a brief description, a set of planned steps for comple
 - Clean up post refractor.
 - Update roadmap to clearly seperate tickets and new fields.
 
-
-## (TWNUI-01) Implement a WindowWithTextAndNamebox UI State ##
-### Complexity: 3 ###
-### Independent: 2 ###
-### Impact: 2 ###
-
-**Description:** Create a new UI State Modal for the window with text and namebox script.
-
-**Steps:**
-- This is almost identical to Dialogue state but includes an additional window, perhaps we can inherit from Dialgoue state.
-- Create custom defaults class that contains both a name box, we then pass both the textwindowdefaults and the new defaults to construct the objects.
-- Use inheritance to reduce duplicated code.
-
 ---
 
 ## (FMA-01) Forced move actors should pause script execution too ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
+### Momentum: 2 ###
 ### Impact: 2 ###
 
 **Desciption:** When using the force move actors step pause the script step and look into continuing the script after the force move controller is popped.
@@ -73,9 +69,26 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
+
+## (TWNUI-01) Implement a WindowWithTextAndNamebox UI State ##
+### Complexity: 3 ###
+### Independent: 2 ###
+### Momentum: 2 ###
+### Impact: 2 ###
+
+**Description:** Create a new UI State Modal for the window with text and namebox script.
+
+**Steps:**
+- This is almost identical to Dialogue state but includes an additional window, perhaps we can inherit from Dialgoue state.
+- Create custom defaults class that contains both a name box, we then pass both the textwindowdefaults and the new defaults to construct the objects.
+- Use inheritance to reduce duplicated code.
+
+---
+
 ## (CBPI-01) Choice box parameter investigation ##
 ### Complexity: 3 ###
 ### Independent: 1 ###
+### Momentum: 2 ###
 ### Impact: 2 ###
 
 **Description:** When the choice box height is 14 it's way too small for the default font size, when it's 15 it's way too big
@@ -98,6 +111,7 @@ We need to fix tiles animating and the global message timer not resetting when t
 ## Introduce unit testing ##
 ### Complexity: 3 ###
 ### Independent: 1 ###
+### Momentum: 3 ###
 ### Impact: 1 ###
 
 **Description:** Create unit testing to ensure no reversion bugs ever occur.
@@ -121,21 +135,10 @@ We need to fix tiles animating and the global message timer not resetting when t
 
 ---
 
-## (BSE-01) Hard coded battle scene changes ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Impact: 2 ###
-
-**Description:** Currently some choices in the battle scene are hard coded "Run Away"/"Items" perhaps these should be moved into a yaml to check if they are enabled, disabled, what the text says.
-
-**Steps:**
-- Introduce a new config file to determine the textand if items/run away are enabled.
-
----
-
 ## Plan next roadmap tasks to implement for next build.
 ### Complexity: 1 ###
 ### Independent: 1 ###
+### Momentum: 1 ###
 ### Impact: 1 ###
 
 **Description:** Move the tasks for the next build into a group, make a name for the build as well.
@@ -151,6 +154,7 @@ Crucible build release point. At this point any clean up tasks post our refracto
 ## Add custom stun status and status changes ##
 ### Complexity: 2 ###
 ### Independent: 3 ###
+### Momentum: 3 ###
 ### Impact: 2 ###
 
 **Description:** Create the ability for statuses to block movement in battle, and testing creation of new statuses in the database.
@@ -170,6 +174,7 @@ Crucible build release point. At this point any clean up tasks post our refracto
 ## (BSE-02) Battle scene changes ##
 ### Complexity: 2 ###
 ### Independent: 2 ###
+### Momentum: 2 ###
 ### Impact: 3 ###
 
 **Description:**
@@ -189,6 +194,7 @@ Allow battle scenes to end either in victory of fail.
 ## (AS-01) Advanced saving implementation ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
+### Momentum: 3 ###
 ### Impact: 3 ###
 
 **Description:** Allow saving of enemy formation and the playable characters.
@@ -207,6 +213,7 @@ Allow battle scenes to end either in victory of fail.
 ## (MSAC) Map scene actor changes ##
 ### Complexity: 4 ###
 ### Independent: 4 ###
+### Momentum: 3 ###
 ### Impact: 4 ###
 
 **Description:** Allow dynamically sized actor sprites, allow sprites to be rendered under the party or above and allows larger then tile sized party field sprites.
@@ -232,6 +239,7 @@ Allow battle scenes to end either in victory of fail.
 ## AI and enemy formation map data implementation ##
 ### Complexity: 5 ###
 ### Independent: 5 ###
+### Momentum: 3 ###
 ### Impact: 5 ###
 
 **Description:** This task is focused on finishing all implementation of enemy formations on the map. This will allow enemy formation interaction a core part of the gameplay loop.
@@ -263,6 +271,7 @@ Allow battle scenes to end either in victory of fail.
 ## (LI-01) Log improvements and throw exceptions when failing to load config ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
+### Momentum: 1 ###
 ### Impact: 1 ###
 
 **Description:** Improve logger by making it not static and store config.
@@ -281,6 +290,7 @@ Allow battle scenes to end either in victory of fail.
 ## (EMI-01) Improvements to error messages ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
+### Momentum: 2 ###
 ### Impact: 1 ###
 
 **Description:** Make the error message look more like a windows error message.
@@ -296,6 +306,7 @@ Allow battle scenes to end either in victory of fail.
 ## (ASE-01) Additional script enhancements ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
+### Momentum: 1 ###
 ### Impact: 1 ###
 
 **Description:** Allow dynamic speed in the force move party script step.
@@ -309,13 +320,14 @@ Allow battle scenes to end either in victory of fail.
 ## Item pool implementation ##
 ### Complexity: 3 ###
 ### Independent: 2 ###
+### Momentum: 2 ###
 ### Impact: 3 ###
 
 **Description:** Allow item pool containers, granting dynamic rogue like features in the engine.
 
 **Steps:**
-- Load item pools in core: (Mid Priority)
-    - We already have a database table representing item pools, We need to create an item pool 2d list of ints.
+- Load item pools in database: (Mid Priority)
+    - We already have a database table representing item pools, We need to create an item pool 2D list of ints.
     - The 1st index is the item pool id, the second index is the item ids in the list.
     - Create a map scene event step that adds a random item from an item pool to the inventory, display a text window displaying the name
     of the item as well.
@@ -325,6 +337,7 @@ Allow battle scenes to end either in victory of fail.
 ## Global world elements ##
 ### Complexity: 4 ###
 ### Independent: 4 ###
+### Momentum: 3 ###
 ### Impact: 4 ###
 
 **Description:** Expand the engine to feature a global timer and mechanics that force the player to plan on the moment.
@@ -345,6 +358,7 @@ Allow battle scenes to end either in victory of fail.
 ## Status/health and MP art implementations ##
 ### Complexity: 3 ###
 ### Independent: 2 ###
+### Momentum: 3 ###
 ### Impact: 2 ###
 
 **Description:** Give an easy to read representation for HP/MP and status values.
@@ -363,6 +377,7 @@ Allow battle scenes to end either in victory of fail.
 ## Battle sprite character additions ## 
 ### Complexity: 3 ###
 ### Independent: 2 ###
+### Momentum: 3 ###
 ### Impact: 2 ###
 
 **Description:** Adds dynamic display to battle scenes.
@@ -380,6 +395,7 @@ Allow battle scenes to end either in victory of fail.
 ## (TS-01) Title screen implementation ## 
 ### Complexity: 2 ###
 ### Independent: 1 ###
+### Momentum: 3 ###
 ### Impact: 3 ###
 
 **Description:** Create a title screen.
@@ -395,6 +411,7 @@ Allow battle scenes to end either in victory of fail.
 ## (BSE-03) Battle scene enhancements ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
+### Momentum: 2 ###
 ### Impact: 3 ###
 
 **Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, font size for damage display and more dynamic enemy targetting.
@@ -414,6 +431,7 @@ Allow battle scenes to end either in victory of fail.
 ## Actor vision enhancements ## 
 ### Complexity: 3 ###
 ### Independent: 3 ###
+### Momentum: 3 ###
 ### Impact: 2 ###
 
 **Description:** Consider planning out actor visions.
@@ -432,6 +450,7 @@ Allow battle scenes to end either in victory of fail.
 ## (MIC-01) Menu implementation completion ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
+### Momentum: 3 ###
 ### Impact: 3 ###
 
 **Description:** Finish implementation of the various menus such as inventory, save and load etc.
@@ -443,6 +462,7 @@ Allow battle scenes to end either in victory of fail.
 ## (UICA-01) UI closing animation implementation ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
+### Momentum: 3 ###
 ### Impact: 1 ###
 
 **Description:** Make a plan for closing of UI components, each component should have a way to close.
@@ -454,6 +474,7 @@ Allow battle scenes to end either in victory of fail.
 ## (BSI) Battle scene implementation ##
 ### Complexity: 4 ###
 ### Independent: 3 ###
+### Momentum: 3 ###
 ### Impact: 4 ###
 
 **Description:** Battle scene is currently incomplete. Make a plan and write notes here.
@@ -465,6 +486,7 @@ Allow battle scenes to end either in victory of fail.
 ## (MI) Music implementation: ##
 ### Complexity: 2 ###
 ### Independent: 2 ###
+### Momentum: 3 ###
 ### Impact: 4 ###
 
 **Description:** Implement both sound effects and music. Make a plan and write notes here.
@@ -476,6 +498,7 @@ Allow battle scenes to end either in victory of fail.
 ## Potential Threading actor AIs ##
 ### Complexity: 5 ###
 ### Independent: 5 ###
+### Momentum: 3 ###
 ### Impact: 2 ###
 
 **Description** Just a plan ticket, if we do thread actor AIs it might improve performance however we will need to carefully account for the current system and how we will implement threading here.
