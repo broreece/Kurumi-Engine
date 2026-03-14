@@ -1,7 +1,6 @@
 namespace UI.States.Modal.Modals;
 
 using Engine.Input.Scenes;
-using Scripts.Conditional;
 using UI.Component.Components;
 using UI.Core;
 using UI.Input;
@@ -36,7 +35,7 @@ public class ChoiceState : UIState, IChoiceInputController {
     public ChoiceState(int windowXPosition, int windowYPosition, int windowWidth, int windowHeight, int fontSize, string fontFileName, 
         string windowFileName, IWindowFileAccessors fileAccessors, IGameWindowDimensionsAccessor gameWindowDimensionsAccessor, 
         int choiceBoxXPosition, int choiceBoxYPosition, int choiceBoxWidth, int choiceBoxHeight, int spacing, string choiceBoxFileName, 
-        string[] choices, ConditionalScriptStep conditionalScriptStepAccessor, IContinuableScript continuableScript) {
+        string[] choices, IConditionalStepAccessor conditionalScriptStepAccessor, IContinuableScript continuableScript) {
         // Assign script context.
         this.conditionalScriptStepAccessor = conditionalScriptStepAccessor;
         this.continuableScript = continuableScript;

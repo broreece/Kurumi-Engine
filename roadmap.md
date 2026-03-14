@@ -54,21 +54,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (TWNUI-01) Implement a WindowWithTextAndNamebox UI State ##
-### Complexity: 3 ###
-### Independent: 2 ###
-### Momentum: 2 ###
-### Impact: 2 ###
-
-**Description:** Create a new UI State Modal for the window with text and namebox script.
-
-**Steps:**
-- This is almost identical to Dialogue state but includes an additional window, perhaps we can inherit from Dialgoue state.
-- Create custom defaults class that contains both a name box, we then pass both the textwindowdefaults and the new defaults to construct the objects.
-- Use inheritance to reduce duplicated code.
-
----
-
 ## (FMAS-02) Clean up the forced movement resuming scripts. ##
 ### Complexity: 2 ###
 ### Independent: 1 ###

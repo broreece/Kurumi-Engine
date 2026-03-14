@@ -68,6 +68,7 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="windowConfig">The window config object.</param>
     /// <param name="choiceBoxDefaults">The choice box defaults object.</param>
     /// <param name="globalMessageDefaults">The global message defaults object.</param>
+    /// <param name="nameBoxDefaults">The name box defaults object.</param>
     /// <param name="textWindowDefaults">The text window defaults object.</param>
     public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, MapManager mapManager,
         AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
@@ -75,7 +76,7 @@ public sealed class GameContext : IGameUIContext {
         FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, InventoryConfig inventoryConfig, 
         MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, MainMenuConfig mainMenuConfig, PartyChoicesConfig partyChoicesConfig,  
         TileSheetConfig tileSheetConfig, WindowConfig windowConfig, ChoiceBoxDefaults choiceBoxDefaults, GlobalMessageDefaults globalMessageDefaults, 
-        TextWindowDefaults textWindowDefaults) {
+        NameBoxDefaults nameBoxDefaults, TextWindowDefaults textWindowDefaults) {
         // Store config objects.
         this.animatedTileSheetConfig = animatedTileSheetConfig;
         this.battleBackgroundSpriteConfig = battleBackgroundSpriteConfig;
@@ -93,6 +94,7 @@ public sealed class GameContext : IGameUIContext {
         this.windowConfig = windowConfig;
         this.choiceBoxDefaults = choiceBoxDefaults;
         this.globalMessageDefaults = globalMessageDefaults;
+        this.nameBoxDefaults = nameBoxDefaults;
         this.textWindowDefaults = textWindowDefaults;
 
         // Database data.
@@ -518,6 +520,14 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
+    /// Getter for the name box defaults object.
+    /// </summary>
+    /// <returns>The name box defaults.</returns>
+    public NameBoxDefaults GetNameBoxDefaults() {
+        return nameBoxDefaults;
+    }
+
+    /// <summary>
     /// Getter for the text window defaults object.
     /// </summary>
     /// <returns>The text window defaults.</returns>
@@ -728,6 +738,7 @@ public sealed class GameContext : IGameUIContext {
     // Defaults objects.
     private readonly ChoiceBoxDefaults choiceBoxDefaults;
     private readonly GlobalMessageDefaults globalMessageDefaults;
+    private readonly NameBoxDefaults nameBoxDefaults;
     private readonly TextWindowDefaults textWindowDefaults;
 
     // Data registry objects.

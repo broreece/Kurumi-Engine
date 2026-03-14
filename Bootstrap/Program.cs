@@ -73,6 +73,6 @@ public static class Program {
         GameContext gameContext = new(database, saveManager, assetManager, mapManager, animatedTileSheetConfig, battleBackgroundSpriteConfig, 
             battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, gameWindowConfig, 
             inventoryConfig, mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, partyChoicesConfig, tileSheetConfig, windowConfig,
-            choiceBoxDefaults, globalMessageDefaults, textWindowDefaults);
+            choiceBoxDefaults, globalMessageDefaults, nameBoxDefaults, textWindowDefaults);
     }
 }

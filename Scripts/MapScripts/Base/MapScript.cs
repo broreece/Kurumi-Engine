@@ -69,6 +69,17 @@ public class MapScript : Script {
                     AddStep(new ChoiceBox(choices, choiceBoxNextIfFalse));
                     break;
 
+                case "ChoiceBoxWithText":
+                    string choiceBoxWithTextText = scriptText[..scriptText.IndexOf(',')];
+                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
+                    string choiceBoxWithTextFullChoices = scriptText[..scriptText.IndexOf(',')];
+                    string[] choiceBoxWithTextChoices = choiceBoxWithTextFullChoices.Split('-');
+                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
+                    int choiceBoxWithTextNextIfFalse = int.Parse(scriptText[..scriptText.IndexOf(',')]);
+                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
+                    AddStep(new ChoiceBoxWithText(choiceBoxWithTextText, choiceBoxWithTextChoices, choiceBoxWithTextNextIfFalse));
+                    break;
+
                 case "DisplayGlobalMessage":
                     int globalMessageTimeLimit = int.Parse(scriptText[..scriptText.IndexOf(',')]);
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
@@ -120,15 +131,11 @@ public class MapScript : Script {
                     break;
 
                 case "WindowWithTextAndNamebox":
-                    int windowAndNameArtId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    int windowAndNameFontId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     string mainText = scriptText[..scriptText.IndexOf(',')];
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     string nameText = scriptText[..scriptText.IndexOf(',')];
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    AddStep(new ShowWindowWithTextAndNamebox(windowAndNameArtId, windowAndNameFontId, mainText, nameText));
+                    AddStep(new ShowWindowWithTextAndNamebox(mainText, nameText));
                     break;
 
                 default:

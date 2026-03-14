@@ -112,6 +112,14 @@ public abstract class SceneScriptContext : ScriptContext, IContinuableScript {
     }
 
     /// <summary>
+    /// Getter for the name box defaults object.
+    /// </summary>
+    /// <returns>The name box defaults.</returns>
+    public NameBoxDefaults GetNameBoxDefaults() {
+        return gameContext.GetNameBoxDefaults();
+    }
+
+    /// <summary>
     /// Getter for the text window defaults object.
     /// </summary>
     /// <returns>The text window defaults.</returns>

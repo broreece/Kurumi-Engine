@@ -1,6 +1,9 @@
 namespace Scripts.UniversalScriptSteps;
 
+using Config.Runtime.Defaults;
 using Scripts.Base;
+using UI.States.Modal.Modals;
+using Utils.Strings;
 
 /// <summary>
 /// The window with text and namebox scene script step.
@@ -9,13 +12,9 @@ public sealed class ShowWindowWithTextAndNamebox : ScriptStep {
     /// <summary>
     /// Constructor for the window with text and name box script step.
     /// </summary>
-    /// <param name="windowArtId">The window art id used by text and namebox.</param>
-    /// <param name="fontId">The font id used by text and namebox.</param>
     /// <param name="text">The text displayed on the text window.</param>
     /// <param name="name">The name displayed on the name window.</param>
-    public ShowWindowWithTextAndNamebox(int windowArtId, int fontId, string text, string name) {
-        this.windowArtId = windowArtId;
-        this.fontId = fontId;
+    public ShowWindowWithTextAndNamebox(string text, string name) {
         this.text = text;
         this.name = name;
     }
@@ -25,23 +24,34 @@ public sealed class ShowWindowWithTextAndNamebox : ScriptStep {
     /// </summary>
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
-        // TODO: (TWNUI-01) We have to implement a new UI modal for dialogue with a name box.
-    }
-    
-    /// <summary>
-    /// Getter for the windows art id.
-    /// </summary>
-    /// <returns>Returns the window art ID of the text window script.</returns>
-    public int GetWindowArtId() {
-        return windowArtId;
-    }
-    
-    /// <summary>
-    /// Getter for the font id.
-    /// </summary>
-    /// <returns>Returns the font ID of the text window script.</returns>
-    public int GetFontId() {
-        return fontId;
+        SceneScriptContext sceneScriptContext = (SceneScriptContext) scriptContext;
+        // Load default text window values.
+        TextWindowDefaults textWindowDefaults = sceneScriptContext.GetTextWindowDefaults();
+        int xPosition = textWindowDefaults.GetWindowX();
+        int yPosition = textWindowDefaults.GetWindowY();
+        int width = textWindowDefaults.GetWindowWidth();
+        int height = textWindowDefaults.GetWindowHeight();
+        int windowId = textWindowDefaults.GetWindowId();
+        int fontId = textWindowDefaults.GetFontId();
+        string windowFileName = sceneScriptContext.GetWindowArtFileName(windowId);
+        string fontFileName = sceneScriptContext.GetFontFileName(fontId);
+
+        // Load default name box values.
+        NameBoxDefaults nameBoxDefaults = sceneScriptContext.GetNameBoxDefaults();
+        int nameBoxXPosition = nameBoxDefaults.GetNameBoxX();
+        int nameBoxYPosition = nameBoxDefaults.GetNameBoxY();
+        int nameBoxWidth = nameBoxDefaults.GetNameBoxWidth();
+        int nameBoxHeight = nameBoxDefaults.GetNameBoxHeight();
+
+        // Pause the script step and the game to be continued after the dialogue state closes.
+        Pause();
+        sceneScriptContext.Pause();
+
+        // Create the new dialogue UI state.
+        sceneScriptContext.AddUIState(new DialogueWithNameState(xPosition, yPosition, nameBoxXPosition, nameBoxYPosition, 
+            width, height, nameBoxWidth, nameBoxHeight, windowFileName, sceneScriptContext.GetWindowConfig(), sceneScriptContext.GetGameWindow(), 
+            xPosition, yPosition, nameBoxXPosition, nameBoxYPosition, textWindowDefaults.GetFontSize(), fontFileName, 
+            PageGenerator.TurnTextIntoPages(text, sceneScriptContext.GetMaxLinesPerPage()), name, this, sceneScriptContext));
     }
     
     /// <summary>
@@ -60,6 +70,5 @@ public sealed class ShowWindowWithTextAndNamebox : ScriptStep {
         return name;
     }
     
-    private readonly int windowArtId, fontId;
     private readonly string text, name;
 }

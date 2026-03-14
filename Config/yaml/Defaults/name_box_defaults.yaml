@@ -1,7 +1,4 @@
-window_id: 1
-font_id: 0
-font_size: 25
 name_box_width: 20
-name_box_height: 10
-name_box_x: 500
-name_box_y: 500
+name_box_height: 8
+name_box_x: 51
+name_box_y: 400
