@@ -38,6 +38,13 @@ public abstract class SceneScriptContext : ScriptContext {
     }
 
     /// <summary>
+    /// Function used to pause the game.
+    /// </summary>
+    public void Pause() {
+        gameContext.Pause();
+    }
+
+    /// <summary>
     /// Function used to resume the game.
     /// </summary>
     public void Resume() {

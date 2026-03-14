@@ -196,11 +196,11 @@ public sealed class GameContext : IGameUIContext {
                 if (!paused) {
                     currentState?.Update();
                     currentScene?.Update();
-                    currentScene?.Draw();
                 }
                 else {
                     currentScene?.ResetClocks();
                 }
+                currentScene?.Draw();
                 // Check if the top UI state needs to be closed (Global message case).
                 if (uiStates.Count > 0) {
                     uiStates.Peek().Update(paused);

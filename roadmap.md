@@ -443,6 +443,18 @@ Allow battle scenes to end either in victory of fail.
 
 # Unplaned tickets:
 
+## Custom script and actor format implementation ##
+### Complexity: 5 ###
+### Independent: 5 ###
+### Momentum: 3 ###
+### Impact: 1 ###
+
+**Description:** Currently scripts and actors are stored in string format, we should create a custom format.
+
+**Steps:** N/A
+
+---
+
 ## (MIC-01) Menu implementation completion ##
 ### Complexity: 3 ###
 ### Independent: 3 ###

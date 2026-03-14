@@ -32,8 +32,9 @@ public sealed class BasicTextWindow : ScriptStep {
         string windowFileName = sceneScriptContext.GetWindowArtFileName(windowId);
         string fontFileName = sceneScriptContext.GetFontFileName(fontId);
 
-        // Pause the script step to be continued after the dialogue state closes.
+        // Pause the script step and the game to be continued after the dialogue state closes.
         Pause();
+        sceneScriptContext.Pause();
 
         // Create the new dialogue UI state.
         sceneScriptContext.AddUIState(new DialogueState(xPosition, yPosition, textWindowDefaults.GetWindowWidth(), 

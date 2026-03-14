@@ -44,6 +44,7 @@ public sealed class ChoiceBox : ConditionalScriptStep {
 
         // Pause the script step to be continued after the dialogue state closes.
         Pause();
+        sceneScriptContext.Pause();
 
         // Create the new choice box UI state.
         sceneScriptContext.AddUIState(new ChoiceState(xPosition, yPosition, windowWidth, windowHeight, fontSize, fontFileName, windowFileName,
