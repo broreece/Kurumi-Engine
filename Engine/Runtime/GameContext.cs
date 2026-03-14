@@ -128,8 +128,8 @@ public sealed class GameContext : IGameUIContext {
         // Game window.
         gameWindow = new(gameWindowConfig, mapConfig, tileSheetConfig);
 
-        // UI stack.
-        uiStates = new Stack<UIState>();
+        // UI queue.
+        uiStates = new Queue<UIState>();
 
         // Load initial map, scene and state.
         // Add map name here, it'll be set in the function.
@@ -206,7 +206,7 @@ public sealed class GameContext : IGameUIContext {
                 // Check if the top UI state needs to be closed.
                 if (uiStates.Count > 0) {
                     if (uiStates.Peek().IsClosed()) {
-                        PopUIStack();
+                        DeqeueUIQueue();
                     }
                 }
                 // Render all components of the UI.
@@ -234,27 +234,21 @@ public sealed class GameContext : IGameUIContext {
         if (newUIState.TakesControl()) {
             gameWindow.SetInputMap(newUIState.GetInputMap());
         }
-        uiStates.Push(newUIState);
+        uiStates.Enqueue(newUIState);
     }
 
     /// <summary>
-    /// Function used to pop the UI queue.
+    /// Function used to dequeue the UI queue.
     /// </summary>
     /// <exception cref="InputMapNotSetException">Error thrown if no input map has been set.</exception>
-    public void PopUIStack() {
-        uiStates.Pop();
+    public void DeqeueUIQueue() {
+        uiStates.Dequeue();
         bool newControlSet = false;
-        if (uiStates.Count > 0 && uiStates.Peek().TakesControl()) {
-            currentInputMap = uiStates.Peek().GetInputMap();
-            newControlSet = true;
-        }
-        else {
-            foreach (UIState uiState in uiStates) {
-                if (uiState.TakesControl()) {
-                    currentInputMap = uiStates.Peek().GetInputMap();
-                    newControlSet = true;
-                    break;
-                }
+        foreach (UIState uiState in uiStates) {
+            if (uiState.TakesControl()) {
+                currentInputMap = uiState.GetInputMap();
+                newControlSet = true;
+                break;
             }
         }
         // If we couldn't find any new input mapping we resume the game and set the controls to the state.
@@ -269,7 +263,7 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
-    /// Function add the main menu to the UI stack.
+    /// Function add the main menu to the UI queue.
     /// </summary>
     public void OpenMainMenu() {
         AddUIState(new MenuState(this, mainMenuConfig, inventoryConfig, fileSelectorConfig, windowConfig, gameWindow, 
@@ -347,9 +341,9 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
-    /// Function used to get the size of the UI states stack.
+    /// Function used to get the size of the UI states queue.
     /// </summary>
-    /// <returns>The UI stack depth.</returns>
+    /// <returns>The UI queue depth.</returns>
     public int GetUIStackDepth() {
         return uiStates.Count;
     }
@@ -774,8 +768,8 @@ public sealed class GameContext : IGameUIContext {
     private InputMap? currentInputMap, stateInputMap;
     private string? currentScriptName;
 
-    // UI stack.
-    private readonly Stack<UIState> uiStates;
+    // UI queue.
+    private readonly Queue<UIState> uiStates;
 
     // Systems.
     private readonly StatusResolver statusResolver;

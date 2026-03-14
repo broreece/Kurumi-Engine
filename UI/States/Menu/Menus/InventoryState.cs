@@ -155,14 +155,11 @@ public class InventoryState : UIState, IInventoryInputController {
     /// The cancel function.
     /// </summary>
     public void Cancel() {
-        gameUIContext.PopUIStack();
         gameUIContext.OpenMainMenu();
         Close();
     }
 
     public void Escape() {
-        gameUIContext.PopUIStack();
-        gameUIContext.Resume();
         Close();
     }
 

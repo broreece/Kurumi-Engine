@@ -209,7 +209,6 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
     /// The cancel function.
     /// </summary>
     public void Cancel() {
-        gameUIContext.PopUIStack();
         gameUIContext.OpenMainMenu();
         Close();
     }
@@ -218,7 +217,6 @@ public class FileSelectorState : UIState, IFileSelectorInputController {
     /// The escape function.
     /// </summary>
     public void Escape() {
-        gameUIContext.PopUIStack();
         gameUIContext.OpenMainMenu();
         Close();
     }

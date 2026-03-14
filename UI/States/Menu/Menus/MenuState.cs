@@ -146,7 +146,6 @@ public class MenuState : UIState, IMenuInputController {
     /// </summary>
     public void Select() {
         int choice = choiceBox.GetChoice();
-        gameUIContext.PopUIStack();
         switch (menuOptions[choice].GetMenuCommand()) {
             case MenuCommand.Items:
                 gameUIContext.AddUIState(new InventoryState(gameUIContext, inventoryConfig, windowConfig, gameWindowScaleAccessor, 
@@ -217,8 +216,6 @@ public class MenuState : UIState, IMenuInputController {
     /// </summary>
     protected override void Close() {
         // TODO: (UICA-01) Implement closing animation.
-        gameUIContext.PopUIStack();
-        gameUIContext.Resume();
         closed = true;
     }
 

@@ -1,5 +1,6 @@
 namespace Save.Core;
 
+using Engine.Exceptions;
 using Game.Entities.PlayableCharacter;
 using Game.Entities.Status;
 using Game.Entities.Skills;
@@ -71,12 +72,12 @@ public sealed class SaveManager {
             string json = File.ReadAllText($"Save\\save_data\\save_{saveIndex + 1}\\info.json");
             // Load party members and party info.
             PartyData ? partyData = JsonSerializer.Deserialize<PartyData>(json) 
-                ?? throw new MissingPartyDataException("info.json is missing");
+                ?? throw new MissingPartyDataException($"Save\\save_data\\save_{saveIndex + 1}\\info.json format is broken or missing");
             for (int partyIndex = 0; partyIndex < partyData.PartyMembers.Count; partyIndex ++) {
                 sprites[partyIndex] = spriteIds[partyData.PartyMembers[partyIndex]];
             }
         } catch (Exception exception) {
-            throw new SaveFileException(exception.Message);
+            Handler.HandleInfoException(exception);
         }
         return sprites;
     }

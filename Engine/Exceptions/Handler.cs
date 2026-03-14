@@ -20,6 +20,14 @@ public static class Handler {
     }
 
     /// <summary>
+    /// Function used to ignore severity of an exception and just log it's information to the logger.
+    /// </summary>
+    /// <param name="exception">The info exception.</param>
+    public static void HandleInfoException(Exception exception) {
+        Logger.LogInfo(exception.Message);
+    }
+
+    /// <summary>
     /// Handler for game exceptions, these are exceptions that occur during the game after config is loaded.
     /// </summary>
     /// <param name="exception">The game exception thrown.</param>

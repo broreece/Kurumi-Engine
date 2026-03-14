@@ -24,9 +24,9 @@ public abstract class SceneScriptContext : ScriptContext, IContinuableScript {
     }
 
     /// <summary>
-    /// Function used to add a new UI state to the game UI stack.
+    /// Function used to add a new UI state to the game UI queue.
     /// </summary>
-    /// <param name="uIState">The new UIState to be added to the stack.</param>
+    /// <param name="uIState">The new UIState to be added to the queue.</param>
     public void AddUIState(UIState uIState) {
         gameContext.AddUIState(uIState);
     }

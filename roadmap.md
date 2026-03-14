@@ -69,21 +69,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (CBPI-01) Choice box parameter investigation ##
-### Complexity: 3 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 2 ###
-
-**Description:** When the choice box height is 14 it's way too small for the default font size, when it's 15 it's way too big
-
-**Steps:**
-- We need to figure out why it's drastically changing what should be 1% of the screen size.
-- Fix this and recursion test against the other window UI components.
-- Introduce custom spacing in the choice box config.
-
----
-
 ## (FMAS-02) Clean up the forced movement resuming scripts. ##
 ### Complexity: 2 ###
 ### Independent: 1 ###

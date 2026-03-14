@@ -20,7 +20,7 @@ Recent work focused on a large **core refactor** to improve engine architecture 
 
 Current tasks include:
 - Introduction of unit testing
-- Fixing issue involving strange percentage of height for choice boxes
+- Creationg of a new UI modal for a text box with a name box.
 
 ---
 

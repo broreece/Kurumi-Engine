@@ -4,7 +4,7 @@ using Game.Entities.PlayableCharacter;
 using UI.Core;
 
 /// <summary>
-/// The game UI interface, enables access to the party and adding new UI states to the UI state stack.
+/// The game UI interface, enables access to the party and adding new UI states to the UI state queue.
 /// </summary>
 public interface IGameUIContext {
     /// <summary>
@@ -14,19 +14,9 @@ public interface IGameUIContext {
     public void AddUIState(UIState newUIState);
 
     /// <summary>
-    /// Function used to just pop the most recently pushed UI stack object.
-    /// </summary>
-    public void PopUIStack();
-
-    /// <summary>
-    /// Function add the main menu to the UI stack.
+    /// Function add the main menu to the UI queue.
     /// </summary>
     public void OpenMainMenu();
-
-    /// <summary>
-    /// Function used to resume the game.
-    /// </summary>
-    public void Resume();
     
     /// <summary>
     /// Getter for the party instance's party members.

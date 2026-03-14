@@ -20,8 +20,8 @@ public abstract class ImageComponentBase : PositionableComponent {
         // Apply scale:
         int gameWindowWidth = gameWindowDimensionAccessor.GetWidth();
         int gameWindowHeight = gameWindowDimensionAccessor.GetHeight();
-        this.width = (int) ((float) gameWindowWidth * ((float) width / (float) 100)) / fileWidth;
-        this.height = (int) ((float) gameWindowHeight * ((float) height / (float) 100)) / fileHeight;
+        this.width = (gameWindowWidth * (width / 100f)) / fileWidth;
+        this.height = (gameWindowHeight * (height / 100f)) / fileHeight;
         this.fileName = fileName;
     }
 
@@ -29,7 +29,7 @@ public abstract class ImageComponentBase : PositionableComponent {
     /// Getter for the component's width.
     /// </summary>
     /// <returns>Returns the component's width.</returns>
-    public int GetWidth() {
+    public float GetWidth() {
         return width;
     }
 
@@ -37,10 +37,10 @@ public abstract class ImageComponentBase : PositionableComponent {
     /// Getter for the component's height.
     /// </summary>
     /// <returns>Returns the component's height.</returns>
-    public int GetHeight() {
+    public float GetHeight() {
         return height;
     }
 
-    protected readonly int width, height;
+    protected readonly float width, height;
     protected readonly string fileName;
 }
