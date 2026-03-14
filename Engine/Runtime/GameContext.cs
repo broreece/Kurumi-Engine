@@ -128,8 +128,8 @@ public sealed class GameContext : IGameUIContext {
         // Game window.
         gameWindow = new(gameWindowConfig, mapConfig, tileSheetConfig);
 
-        // UI queue.
-        uiStates = new Queue<UIState>();
+        // UI list.
+        uiStates = [];
 
         // Load initial map, scene and state.
         // Add map name here, it'll be set in the function.
@@ -203,15 +203,13 @@ public sealed class GameContext : IGameUIContext {
                 }
                 currentScene?.Update();
                 currentScene?.Draw();
-                // Check if the top UI state needs to be closed.
-                if (uiStates.Count > 0) {
-                    if (uiStates.Peek().IsClosed()) {
-                        DeqeueUIQueue();
-                    }
-                }
                 // Render all components of the UI.
-                foreach (UIState uiState in uiStates) {
+                foreach (UIState uiState in uiStates.ToArray()) {
                     uiState.Update(paused);
+                    // Check if the UI state needs to be closed.
+                    if (uiState.IsClosed()) {
+                        RemoveUIState(uiState);
+                    }
                     IUIComponent[] components = [.. uiState.GetComponents()];
                     for (int componentIndex = components.Length - 1; componentIndex >= 0; componentIndex --) {
                         gameWindow.Draw(components[componentIndex].CreateSprite());
@@ -227,22 +225,23 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
-    /// Function used to enqueue a new UI state.
+    /// Function used to add a new UI state.
     /// </summary>
-    /// <param name="newUIState">The new state to be added to the end of the queue.</param>
+    /// <param name="newUIState">The new state to be added to the end of the UI list.</param>
     public void AddUIState(UIState newUIState) {
         if (newUIState.TakesControl()) {
             gameWindow.SetInputMap(newUIState.GetInputMap());
         }
-        uiStates.Enqueue(newUIState);
+        uiStates.Add(newUIState);
     }
 
     /// <summary>
-    /// Function used to dequeue the UI queue.
+    /// Function used to remove a UI state from the UI list.
     /// </summary>
+    /// <param name="targetUIState">The UI state to be removed from the list.</param>
     /// <exception cref="InputMapNotSetException">Error thrown if no input map has been set.</exception>
-    public void DeqeueUIQueue() {
-        uiStates.Dequeue();
+    public void RemoveUIState(UIState targetUIState) {
+        uiStates.Remove(targetUIState);
         bool newControlSet = false;
         foreach (UIState uiState in uiStates) {
             if (uiState.TakesControl()) {
@@ -263,7 +262,7 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
-    /// Function add the main menu to the UI queue.
+    /// Function add the main menu to the UI list.
     /// </summary>
     public void OpenMainMenu() {
         AddUIState(new MenuState(this, mainMenuConfig, inventoryConfig, fileSelectorConfig, windowConfig, gameWindow, 
@@ -341,9 +340,9 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
-    /// Function used to get the size of the UI states queue.
+    /// Function used to get the size of the UI states list.
     /// </summary>
-    /// <returns>The UI queue depth.</returns>
+    /// <returns>The UI list depth.</returns>
     public int GetUIStackDepth() {
         return uiStates.Count;
     }
@@ -768,8 +767,8 @@ public sealed class GameContext : IGameUIContext {
     private InputMap? currentInputMap, stateInputMap;
     private string? currentScriptName;
 
-    // UI queue.
-    private readonly Queue<UIState> uiStates;
+    // UI list.
+    private readonly List<UIState> uiStates;
 
     // Systems.
     private readonly StatusResolver statusResolver;

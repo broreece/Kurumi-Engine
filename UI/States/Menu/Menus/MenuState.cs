@@ -173,7 +173,7 @@ public class MenuState : UIState, IMenuInputController {
                 break;
 
             case MenuCommand.Quit:
-                // TODO: O(MIC-01) pen quit.
+                // TODO: (MIC-01) Open quit.
                 break;
 
             default:

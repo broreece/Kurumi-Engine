@@ -31,7 +31,7 @@ public abstract class UIState {
     }
 
     /// <summary>
-    /// Function used to check if a UI state has finished and can be removed from the UI queue.
+    /// Function used to check if a UI state has finished and can be removed from the UI list.
     /// </summary>
     /// <returns>If the UI state has finished executing.</returns>
     public bool IsClosed() {

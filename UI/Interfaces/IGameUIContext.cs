@@ -4,17 +4,17 @@ using Game.Entities.PlayableCharacter;
 using UI.Core;
 
 /// <summary>
-/// The game UI interface, enables access to the party and adding new UI states to the UI state queue.
+/// The game UI interface, enables access to the party and adding new UI states to the UI state list.
 /// </summary>
 public interface IGameUIContext {
     /// <summary>
-    /// Function used to enqueue a new UI state.
+    /// Function used to add a new UI state.
     /// </summary>
-    /// <param name="newUIState">The new state to be added to the end of the queue.</param>
+    /// <param name="newUIState">The new state to be added to the end of the list.</param>
     public void AddUIState(UIState newUIState);
 
     /// <summary>
-    /// Function add the main menu to the UI queue.
+    /// Function add the main menu to the UI list.
     /// </summary>
     public void OpenMainMenu();
     
