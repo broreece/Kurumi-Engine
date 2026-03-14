@@ -20,7 +20,6 @@ Recent work focused on a large **core refactor** to improve engine architecture 
 
 Current tasks include:
 - Introduction of unit testing
-- Creationg of a new UI modal for a text box with a name box.
 
 ---
 

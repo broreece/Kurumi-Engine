@@ -50,7 +50,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - Clean up post refractor.
-- Update roadmap to clearly seperate tickets and new fields.
 
 ---
 
@@ -106,6 +105,20 @@ Tickets will also display a brief description, a set of planned steps for comple
 ---
 
 Crucible build release point. At this point any clean up tasks post our refractor have finished and we can move on to new features.
+
+---
+
+## Add text window with namebox and choice box ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Create the ability to add a new text window with namebox and choice box.
+
+**Steps:**
+- Add a new UI State inherit from dialogue with choice state and then add a namebox component.
+- Create a new script that performs the same function as the previous one but also loads the name box defaults.
 
 ---
 
