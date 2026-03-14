@@ -2,7 +2,7 @@ namespace UI.Core;
 
 using Engine.Input.Core;
 using UI.Component.Core;
-using UI.Exceptions;
+using Utils.Exceptions;
 
 /// <summary>
 /// The public abstract UI state class.

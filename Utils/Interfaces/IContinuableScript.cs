@@ -1,6 +1,4 @@
-namespace States.Map.Interfaces;
-
-using Scripts.Base;
+namespace Utils.Interfaces;
 
 /// <summary>
 /// The public continuable script interface, used to continue scripts during the map state.
@@ -10,5 +8,5 @@ public interface IContinuableScript {
     /// Function used to continue a script following from a previous script step.
     /// </summary>
     /// <param name="previousStep">The last executed scene step.</param>
-    public void ContinueScript(ScriptStep previousStep);
+    public void ContinueScript(INextScriptStepAccessor previousStep);
 }

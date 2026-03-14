@@ -1,7 +1,7 @@
 namespace Game.Map.ActorControllers;
 
 using Scripts.Base;
-using States.Map.Interfaces;
+using Utils.Interfaces;
 
 /// <summary>
 /// The pathed actor controller class, handles pathed actors.

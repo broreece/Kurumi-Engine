@@ -1,7 +1,7 @@
 namespace Engine.Exceptions;
 
 using Engine.Logger;
-using Engine.Runtime.Core;
+using Engine.Runtime;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;

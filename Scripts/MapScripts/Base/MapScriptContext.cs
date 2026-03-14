@@ -1,9 +1,9 @@
 namespace Scripts.MapScripts.Base;
 
-using Engine.Runtime.Core;
+using Engine.Runtime;
 using Scripts.Base;
 using States.Map.Core;
-using States.Map.Interfaces;
+using Utils.Interfaces;
 
 /// <summary>
 /// Map script context class, contains additional functions that utilize map scene and state.
@@ -20,7 +20,7 @@ public sealed class MapScriptContext : SceneScriptContext, IContinuableScript {
     /// Function used to continue a script following from a previous script step.
     /// </summary>
     /// <param name="previousStep">The last executed scene step.</param>
-    public override void ContinueScript(ScriptStep previousStep) {
+    public override void ContinueScript(INextScriptStepAccessor previousStep) {
         ScriptStep? nextStep = previousStep.GetNextStep();
         MapScript mapScript = (MapScript) script;
         if (nextStep != null) {

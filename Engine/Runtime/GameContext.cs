@@ -1,4 +1,4 @@
-namespace Engine.Runtime.Core;
+namespace Engine.Runtime;
 
 using Assets;
 using Config.Runtime.Battle;
@@ -13,7 +13,6 @@ using Engine.Input.Core;
 using Engine.Input.Scenes;
 using Engine.Maps.Core;
 using Engine.Rendering;
-using Engine.Runtime.Exceptions;
 using Engine.Systems;
 using Game.Battle;
 using Game.Entities.PlayableCharacter;
@@ -38,6 +37,7 @@ using UI.Component.Core;
 using UI.Core;
 using UI.Interfaces;
 using UI.States.Menu.Menus;
+using Utils.Exceptions;
 
 /// <summary>
 /// The game context class. The game context stores the current state of the game, including the data registries,
@@ -156,6 +156,7 @@ public sealed class GameContext : IGameUIContext {
 
         // Set the controls after creation.
         MapInputMap inputMap = new(mapState);
+        stateInputMap = inputMap;
         currentInputMap = inputMap;
         gameWindow.SetInputMap(inputMap);
         
@@ -179,6 +180,7 @@ public sealed class GameContext : IGameUIContext {
 
         // Set the controls after creation.
         BattleInputMap inputMap = new(battleState);
+        stateInputMap = inputMap;
         currentInputMap = inputMap;
         gameWindow.SetInputMap(inputMap);
         
@@ -195,21 +197,21 @@ public sealed class GameContext : IGameUIContext {
                 // Update all timers if not paused, otherwise reset all timers untill unpaused.
                 if (!paused) {
                     currentState?.Update();
-                    currentScene?.Update();
                 }
                 else {
                     currentScene?.ResetClocks();
                 }
+                currentScene?.Update();
                 currentScene?.Draw();
-                // Check if the top UI state needs to be closed (Global message case).
+                // Check if the top UI state needs to be closed.
                 if (uiStates.Count > 0) {
-                    uiStates.Peek().Update(paused);
                     if (uiStates.Peek().IsClosed()) {
-                        uiStates.Pop();
+                        PopUIStack();
                     }
                 }
                 // Render all components of the UI.
                 foreach (UIState uiState in uiStates) {
+                    uiState.Update(paused);
                     IUIComponent[] components = [.. uiState.GetComponents()];
                     for (int componentIndex = components.Length - 1; componentIndex >= 0; componentIndex --) {
                         gameWindow.Draw(components[componentIndex].CreateSprite());
@@ -238,14 +240,30 @@ public sealed class GameContext : IGameUIContext {
     /// <summary>
     /// Function used to pop the UI queue.
     /// </summary>
-    /// <exception cref="PopEmptyUIStackException">Error thrown of an empty UI stack is attempted to be popped.</exception>
+    /// <exception cref="InputMapNotSetException">Error thrown if no input map has been set.</exception>
     public void PopUIStack() {
         uiStates.Pop();
+        bool newControlSet = false;
         if (uiStates.Count > 0 && uiStates.Peek().TakesControl()) {
             currentInputMap = uiStates.Peek().GetInputMap();
+            newControlSet = true;
+        }
+        else {
+            foreach (UIState uiState in uiStates) {
+                if (uiState.TakesControl()) {
+                    currentInputMap = uiStates.Peek().GetInputMap();
+                    newControlSet = true;
+                    break;
+                }
+            }
+        }
+        // If we couldn't find any new input mapping we resume the game and set the controls to the state.
+        if (!newControlSet) {
+            currentInputMap = stateInputMap;
+            Resume();
         }
         if (currentInputMap == null) {
-            throw new PopEmptyUIStackException("UI Stack has been popped whilst it was empty.");
+            throw new InputMapNotSetException("Input map has not been set.");
         }
         gameWindow.SetInputMap(currentInputMap);
     }
@@ -753,7 +771,7 @@ public sealed class GameContext : IGameUIContext {
     // Active scene, current state and current script name objects.
     private SceneBase? currentScene;
     private StateBase? currentState;
-    private InputMap? currentInputMap;
+    private InputMap? currentInputMap, stateInputMap;
     private string? currentScriptName;
 
     // UI stack.

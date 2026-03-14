@@ -82,14 +82,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 - Fix this and recursion test against the other window UI components.
 - Introduce custom spacing in the choice box config.
 
-
-The global message displays when another UI state is up but the second the game is unpaused the message disapears:
-Priority: High
-
-We need to fix tiles animating and the global message timer not resetting when the game is paused like other timers.
-    - When paused loop over the UI stack updating with the paused value, ensure that in the global message we reset if paused.
-    - Add animated tiles timer to the reset clock in the map scene.
-
 ---
 
 ## (FMAS-02) Clean up the forced movement resuming scripts. ##

@@ -1,6 +1,6 @@
 namespace Scripts.MapScripts.Base;
 
-using Engine.Runtime.Core;
+using Engine.Runtime;
 using Scripts.Base;
 using Scripts.MapScripts.MapScriptSteps;
 using Scripts.UniversalScriptSteps;

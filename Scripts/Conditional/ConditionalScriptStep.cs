@@ -1,13 +1,14 @@
 namespace Scripts.Conditional;
 
 using Scripts.Base;
+using UI.Interfaces;
 
 /// <summary>
 /// Class for the script conditional, contains a condition and branches script steps.
 /// If nextIsFalse is set to 0 it equates to the script ending if the condition is not met.
 /// Otherwise next is false skips indexes aka if set to 2 it'd skip the first step in front of it.
 /// </summary>
-public abstract class ConditionalScriptStep : ScriptStep {
+public abstract class ConditionalScriptStep : ScriptStep, IConditionalStepAccessor {
     /// <summary>
     /// Constructor for the script conditional.
     /// </summary>

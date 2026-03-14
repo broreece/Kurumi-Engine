@@ -1,4 +1,4 @@
-namespace UI.Exceptions;
+namespace Utils.Exceptions;
 
 using Engine.Exceptions;
 
@@ -11,6 +11,6 @@ public sealed class InputMapNotSetException : EngineException {
     /// </summary>
     /// <param name="message">A message that can be passed for debugging.</param>
     public InputMapNotSetException(string message)
-        : base(message, Severity.Error) {
+        : base(message, Severity.Fatal) {
     }
 }

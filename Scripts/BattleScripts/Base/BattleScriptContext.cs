@@ -1,8 +1,9 @@
 namespace Scripts.BattleScripts.Base;
 
-using Engine.Runtime.Core;
+using Engine.Runtime;
 using Scripts.Base;
 using States.Battle.Core;
+using Utils.Interfaces;
 
 /// <summary>
 /// Battle script context class, contains additional functions that utilize battle scene and state.
@@ -19,7 +20,7 @@ public sealed class BattleScriptContext : SceneScriptContext {
     /// Function used to continue a script following from a previous script step.
     /// </summary>
     /// <param name="previousStep">The last executed scene step.</param>
-    public override void ContinueScript(ScriptStep previousStep) {
+    public override void ContinueScript(INextScriptStepAccessor previousStep) {
         ScriptStep? nextStep = previousStep.GetNextStep();
         BattleScript battleScript = (BattleScript) script;
         if (nextStep != null) {

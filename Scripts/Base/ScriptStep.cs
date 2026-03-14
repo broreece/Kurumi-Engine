@@ -1,9 +1,11 @@
 namespace Scripts.Base;
 
+using Utils.Interfaces;
+
 /// <summary>
 /// Abstract script step class, scripts are lists of scripts steps.
 /// </summary>
-public abstract class ScriptStep {
+public abstract class ScriptStep : INextScriptStepAccessor {
     /// <summary>
     /// Constructor for the script step class.
     /// </summary>

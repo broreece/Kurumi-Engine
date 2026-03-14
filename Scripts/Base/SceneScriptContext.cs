@@ -3,15 +3,16 @@ namespace Scripts.Base;
 using Config.Runtime.Defaults;
 using Config.Runtime.Windows;
 using Engine.Rendering;
-using Engine.Runtime.Core;
+using Engine.Runtime;
 using Scenes.Base;
 using Scripts.Exceptions;
 using UI.Core;
+using Utils.Interfaces;
 
 /// <summary>
 /// Scene script context class, instance of script context that also loads and stores the scene controller..
 /// </summary>
-public abstract class SceneScriptContext : ScriptContext {
+public abstract class SceneScriptContext : ScriptContext, IContinuableScript {
     /// <summary>
     /// Constructor for the scene script context class.
     /// </summary>
@@ -31,13 +32,6 @@ public abstract class SceneScriptContext : ScriptContext {
     }
 
     /// <summary>
-    /// Function used to pop the top UI state from the game UI stack.
-    /// </summary>
-    public void PopUIState() {
-        gameContext.PopUIStack();
-    }
-
-    /// <summary>
     /// Function used to pause the game.
     /// </summary>
     public void Pause() {
@@ -45,17 +39,10 @@ public abstract class SceneScriptContext : ScriptContext {
     }
 
     /// <summary>
-    /// Function used to resume the game.
-    /// </summary>
-    public void Resume() {
-        gameContext.Resume();
-    }
-
-    /// <summary>
     /// Function used to continue a script following from a previous script step.
     /// </summary>
     /// <param name="previousStep">The last executed scene step.</param>
-    public abstract void ContinueScript(ScriptStep previousStep);
+    public abstract void ContinueScript(INextScriptStepAccessor previousStep);
 
     /// <summary>
     /// Function used to load the max number of lines in one page.

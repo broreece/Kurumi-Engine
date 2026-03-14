@@ -296,9 +296,6 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         foreach (Clock actorControllerClock in actorControllerClocks) {
             actorControllerClock.Restart();
         }
-        animationClock.Restart();
-        partyWalkAnimationClock.Restart();
-        scrollingCameraClock.Restart();
     }
 
     /// <summary>

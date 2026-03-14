@@ -1,12 +1,12 @@
 namespace UI.States.Modal.Modals;
 
 using Engine.Input.Scenes;
-using Scripts.Base;
 using Scripts.Conditional;
 using UI.Component.Components;
 using UI.Core;
 using UI.Input;
 using UI.Interfaces;
+using Utils.Interfaces;
 
 /// <summary>
 /// The choice state class, choice state occurs when in choice boxes or in UIs that enable selecting multiple options.
@@ -31,15 +31,15 @@ public class ChoiceState : UIState, IChoiceInputController {
     /// <param name="spacing">The spacing of the choice box.</param>
     /// <param name="choiceBoxFileName">The choice box file name.</param>
     /// <param name="choices">The array containing all the possible choices.</param>
-    /// <param name="currentStep">The current step being executed.</param>
-    /// <param name="scriptContext">The context of a script being executed.</param>
+    /// <param name="conditionalScriptStepAccessor">The current step being executed.</param>
+    /// <param name="continuableScript">The context of a script being executed.</param>
     public ChoiceState(int windowXPosition, int windowYPosition, int windowWidth, int windowHeight, int fontSize, string fontFileName, 
         string windowFileName, IWindowFileAccessors fileAccessors, IGameWindowDimensionsAccessor gameWindowDimensionsAccessor, 
         int choiceBoxXPosition, int choiceBoxYPosition, int choiceBoxWidth, int choiceBoxHeight, int spacing, string choiceBoxFileName, 
-        string[] choices, ConditionalScriptStep currentStep, SceneScriptContext scriptContext) {
+        string[] choices, ConditionalScriptStep conditionalScriptStepAccessor, IContinuableScript continuableScript) {
         // Assign script context.
-        this.currentStep = currentStep;
-        this.scriptContext = scriptContext;
+        this.conditionalScriptStepAccessor = conditionalScriptStepAccessor;
+        this.continuableScript = continuableScript;
 
         // Input map.
         inputMap = new ChoiceInputMap(this);
@@ -93,14 +93,12 @@ public class ChoiceState : UIState, IChoiceInputController {
     /// </summary>
     protected override void Close() {
         // TODO: (UICA-01) Implement closing animation.
-        currentStep.SetConditionMet(GetCurrentChoice() == 1);
-        scriptContext.PopUIState();
-        scriptContext.Resume();
-        scriptContext.ContinueScript(currentStep);
+        conditionalScriptStepAccessor.SetConditionMet(GetCurrentChoice() == 1);
+        continuableScript.ContinueScript(conditionalScriptStepAccessor);
         closed = true;
     }
 
     private readonly ChoiceBoxComponent choiceBoxComponent;
-    private readonly ConditionalScriptStep currentStep;
-    private readonly SceneScriptContext scriptContext;
+    private readonly IConditionalStepAccessor conditionalScriptStepAccessor;
+    private readonly IContinuableScript continuableScript;
 }

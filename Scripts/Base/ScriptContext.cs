@@ -1,6 +1,6 @@
 namespace Scripts.Base;
 
-using Engine.Runtime.Core;
+using Engine.Runtime;
 using Engine.Systems;
 using Game.Entities.PlayableCharacter;
 using Game.Entities.Status;

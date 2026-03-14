@@ -1,7 +1,7 @@
 namespace States.Map.Core;
 
 using Config.Runtime.Map;
-using Engine.Runtime.Core;
+using Engine.Runtime;
 using Game.Map.ActorControllers;
 using Game.Map.Actors.Base;
 using Game.Map.Core;
@@ -12,6 +12,7 @@ using States.Base;
 using States.Map.Exceptions;
 using States.Map.Input;
 using States.Map.Interfaces;
+using Utils.Interfaces;
 
 /// <summary>
 /// The map state class. Contains the dynamic duties of changing a map during the map scene.
