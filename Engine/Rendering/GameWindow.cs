@@ -28,7 +28,7 @@ public sealed class GameWindow : IGameWindowScaleAccessor {
         window.SetVerticalSyncEnabled(true);
 
         // Create and set game window icon.
-        Image icon = new("Assets\\Icons\\icon.png");
+        Image icon = new("Assets\\Icons\\window_icon.png");
         window.SetIcon(icon.Size.X, icon.Size.Y, icon.Pixels);
 
         // Set controls.

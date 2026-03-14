@@ -6,6 +6,7 @@ using Game.Map.ActorControllers;
 using Game.Map.Actors.Base;
 using Game.Map.Core;
 using Game.Map.Elements;
+using Scripts.Base;
 using Scripts.MapScripts.Base;
 using States.Base;
 using States.Map.Exceptions;
@@ -38,6 +39,8 @@ public sealed class MapState : StateBase, IMapInputController {
         keepsDirection = false;
         isForcedMoving = false;
         isActorForcedMoving = false;
+        forceMoveScript = null;
+        currentForceMoveStep = null;
 
         // Acctivate all auto actors.
         foreach (IActorHandler autoActor in map.GetAutoActors()) {
@@ -55,18 +58,27 @@ public sealed class MapState : StateBase, IMapInputController {
             if (forcedMoveElapsedTime >= forcedMoveDuration) {
                 // In the case of the party we check the movement speed for each move.
                 if (!isActorForcedMoving) {
+                    forcedMoveElapsedTime = 0;
                     Direction move = (Direction) forcedMovePath[forcedMoveIndex];
                     MoveParty(move, keepsDirection);
                     forcedMoveIndex ++;
                     if (forcedMoveIndex == forcedMovePath.Count) {
                         isForcedMoving = false;
                         gameContext.ResumeInput();
+                        if (currentForceMoveStep == null || forceMoveScript == null) {
+                            throw new ForceMoveScriptNullException("Script that forced party movement can not be found stored in map state.");
+                        }
+                        forceMoveScript.ContinueScript(currentForceMoveStep);
                     }
                 }
                 // In case of actor we just finish the process when the elapsed time reaches the limit.
                 else {
                     isForcedMoving = false;
                     gameContext.ResumeInput();
+                    if (currentForceMoveStep == null || forceMoveScript == null) {
+                        throw new ForceMoveScriptNullException("Script that forced actor movement can not be found stored in map state");
+                    }
+                    forceMoveScript.ContinueScript(currentForceMoveStep);
                 }
             }
         }
@@ -198,9 +210,16 @@ public sealed class MapState : StateBase, IMapInputController {
     /// <param name="keepsDirection">If the parties direction is maintained.</param>
     /// <param name="path">The path the party follows.</param>
     /// <param name="characterMovementSpeed">The speed that the party walks at.</param>
-    public void StartForceMoveParty(bool keepsDirection, List<int> path, int characterMovementSpeed) {
+    /// <param name="continuableScript">The script that started this forced movement.</param>
+    /// <param name="currentStep">The current step that executed this force move.</param>
+    public void StartForceMoveParty(bool keepsDirection, List<int> path, int characterMovementSpeed, 
+        IContinuableScript continuableScript, ScriptStep currentStep) {
+        // Set the force move script and current force move step variables for continuing later.
+        forceMoveScript = continuableScript;
+        currentForceMoveStep = currentStep;
+
         // Start the forced movement function.
-        StartForcedMovement(false, keepsDirection, characterMovementSpeed);
+        StartForcedMovement(isActor: false, keepsDirection, characterMovementSpeed);
 
         // Parties forced movement should store a path whereas actors update the controler. 
         forcedMovePath = path;
@@ -213,7 +232,6 @@ public sealed class MapState : StateBase, IMapInputController {
     /// <param name="actorIndex">The index of the actor (Uses the list of all actors).</param>
     /// <param name="direction">The direction that the actor will move in.</param>
     /// <param name="keepDirection">If the actor's direction is maintained.</param>
-    /// 
     public bool MoveActor(int actorIndex, int direction, bool keepDirection) {
         bool couldMove = false;
         List<IActorHandler> actorsList = map.GetListActors();
@@ -281,17 +299,21 @@ public sealed class MapState : StateBase, IMapInputController {
     /// <param name="actorX">The actor's X location.</param>
     /// <param name="actorY">The actor's Y location.</param>
     /// <param name="path">The path the actor follows.</param>
+    /// <param name="continuableScript">The script that started this forced movement.</param>
+    /// <param name="currentStep">The current step that executed this force move.</param>
     /// <exception cref="ActorMissingException">Error thrown if a actor is missing.</exception>
     public void ForceMoveActor(bool keepsDirection, bool lockMovement, bool instant, int actorX, int actorY,
-        List<int> path) {
+        List<int> path, IContinuableScript continuableScript, ScriptStep currentStep) {
         // Load chosen actor or throw exception.
         IActorHandler? currentActor = map.GetActorAt(actorX, actorY) ??
-            throw new ActorMissingException("Error found on map: " + map.GetMapName()
-            + " At X: " + actorX + " And Y: " + actorY);
+            throw new ActorMissingException($"Error found on map: {map.GetMapName()} At X: {actorX} And Y: {actorY}");
 
         // If movement needs to be locked activate freeze timer in scene and freeze controls.
         if (lockMovement && !instant) {
-            StartForcedMovement(true, keepsDirection, currentActor.GetMovementSpeed() * path.Count);
+            // Set the force move script and current force move step variables for continuing later.
+            forceMoveScript = continuableScript;
+            currentForceMoveStep = currentStep;
+            StartForcedMovement(isActor: true, keepsDirection, currentActor.GetMovementSpeed() * path.Count);
         }
 
         // If instant, move the actor in the path specified.
@@ -312,11 +334,12 @@ public sealed class MapState : StateBase, IMapInputController {
                     currentActor.SetDirection((Direction) direction);
                 }
             }
+            continuableScript.ContinueScript(currentStep);
         }
         else {
             // If not instant update actor's controller to be pathed.
             currentActor.PushController(new PathedActorController(currentActor.GetMovementSpeed(), currentActor.GetXLocation(),
-                currentActor.GetYLocation(), true, path));
+                currentActor.GetYLocation(), forcedMovement: true, path, continuableScript, currentStep));
         }
     }
 
@@ -475,4 +498,6 @@ public sealed class MapState : StateBase, IMapInputController {
     private List<int> forcedMovePath;
     private int forcedMoveIndex, forcedMoveDuration, forcedMoveElapsedTime;
     private bool keepsDirection, isForcedMoving, isActorForcedMoving;
+    private IContinuableScript? forceMoveScript;
+    private ScriptStep? currentForceMoveStep;
 }

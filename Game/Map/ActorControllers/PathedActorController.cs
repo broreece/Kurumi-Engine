@@ -1,5 +1,8 @@
 namespace Game.Map.ActorControllers;
 
+using Scripts.Base;
+using States.Map.Interfaces;
+
 /// <summary>
 /// The pathed actor controller class, handles pathed actors.
 /// </summary>
@@ -12,12 +15,19 @@ public sealed class PathedActorController : ActorController {
     /// <param name="yLocation">The stored y location of the actor.</param>
     /// <param name="forcedMovement">If this controller is a forced movement.</param>
     /// <param name="actorPath">The list of movements the actor takes.</param>
-    public PathedActorController(int interval, int xLocation, int yLocation, bool forcedMovement, List<int> actorPath) 
+    /// TODO: (FMAS-02) Change this architect.
+    /// <param name="forceMoveScript">The possible continuable script the pathed actor has to execute when the path is finished.</param>
+    /// <param name="currentForceMoveStep">The possible step of the script that resulted in this pathed movement.</param>
+    public PathedActorController(int interval, int xLocation, int yLocation, bool forcedMovement, List<int> actorPath,
+        IContinuableScript? forceMoveScript = null, ScriptStep? currentForceMoveStep = null) 
         : base(interval, xLocation, yLocation) {
         followPathIndex = 0;
         finished = false;
         this.forcedMovement = forcedMovement;
         this.actorPath = actorPath;
+        // TODO: (FMAS-02) Change this architect.
+        this.forceMoveScript = forceMoveScript;
+        this.currentForceMoveStep = currentForceMoveStep;
     }
 
     /// <summary>
@@ -29,6 +39,13 @@ public sealed class PathedActorController : ActorController {
         // Reset path if finished.
         if (followPathIndex >= actorPath.Count - 1) {
             finished = forcedMovement;
+            // TODO: (FMAS-02) Change this architect.
+            if (finished) {
+                if (currentForceMoveStep == null) {
+                    throw new Exception();
+                }
+                forceMoveScript?.ContinueScript(currentForceMoveStep);
+            }
             followPathIndex = 0;
         } else {
             followPathIndex ++;
@@ -60,4 +77,9 @@ public sealed class PathedActorController : ActorController {
     private readonly bool forcedMovement;
     private bool finished;
     private readonly List<int> actorPath;
+
+    // TODO: (FMAS-02) Change this architect.
+    // Stored variables if this is a forced movement from a script.
+    private IContinuableScript? forceMoveScript;
+    private ScriptStep? currentForceMoveStep;
 }

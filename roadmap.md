@@ -54,22 +54,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (FMA-01) Forced move actors should pause script execution too ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 2 ###
-### Impact: 2 ###
-
-**Desciption:** When using the force move actors step pause the script step and look into continuing the script after the force move controller is popped.
-
-**Steps:**
-- When executing the force move script pass the script context and the script step.
-- After the force move ends do the same as UI script, resume and set the current script step.
-- If multiple force move perhaps we should store the script contexts and script steps in some type of dictionary or lists with indexes.
-
----
-
-
 ## (TWNUI-01) Implement a WindowWithTextAndNamebox UI State ##
 ### Complexity: 3 ###
 ### Independent: 2 ###
@@ -105,6 +89,18 @@ Priority: High
 We need to fix tiles animating and the global message timer not resetting when the game is paused like other timers.
     - When paused loop over the UI stack updating with the paused value, ensure that in the global message we reset if paused.
     - Add animated tiles timer to the reset clock in the map scene.
+
+---
+
+## (FMAS-02) Clean up the forced movement resuming scripts. ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Desciption:** We currently have it implemented in a way that doesen't feel right. Pathed actor controllers store and hold the scripts and script steps. This should be stored in some type of dicitonary or subscriber where when the pathed actor is finished we fire a signal that activates in map state then executes the stored script.
+
+**Steps:** N/A
 
 ---
 

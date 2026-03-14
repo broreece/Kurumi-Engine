@@ -7,7 +7,7 @@
 Kurumi Engine is a modular RPG engine written in **C# using SFML**.  
 It focuses on **clean architecture, extensibility, and data-driven gameplay systems**.
 
-The engine is designed for building **narrative-heavy RPGs** with scripted events, AI actors, and modular UI systems.
+The engine is designed for building **RPGs** with scripted events, AI actors, and modular UI systems.
 
 ---
 
@@ -18,14 +18,8 @@ Active Development
 
 Recent work focused on a large **core refactor** to improve engine architecture and maintainability.
 
-Current cleanup tasks include:
-- Fixing UI script steps (dialogue / choice boxes)
-- Pausing script execution during forced movement of actors
-- Exceptions are all unique and handled in code
-
-Next milestone:
+Current tasks include:
 - Introduction of unit testing
-- Expanding battle state scope (No more hard coded choices)
 - Fixing issue involving strange percentage of height for choice boxes
 
 ---
@@ -36,12 +30,11 @@ Kurumi Engine is heavily inspired by the design philosophy behind games like **F
 
 Key ideas:
 
-- **Script-driven gameplay**
 - **Minimal engine magic**
-- **Deterministic step-based event logic**
-- **Clear separation between engine systems**
+- **Deterministic step-based script logic in map and battle**
+- **Engine follows SOLID principles**
 
-The engine aims to keep gameplay logic **explicit and readable**.
+The engine aims to keep any gameplay logic outisde of scripts **explicit and readable**.
 
 ---
 
@@ -58,15 +51,9 @@ Current engine capabilities include:
 - Input mapping system
 
 ### Gameplay Systems
-- Custom scripting and stored variables allows dynamic gameplay
+- Custom scripting and stored variables/flags allows dynamic gameplay
 - Dynamic actor control systems that do not restrict player controls
 - Same script-driven event system applies in battles for unique battle experiences
-
-### Engine Infrastructure
-- YAML used for config
-- JSON used for dynamic data
-- SQLite used for static data
-- Modular rendering pipeline
 
 ---
 
@@ -96,34 +83,43 @@ Kurumi-Engine
 ├── Assets
 │
 |── Bootstrap
+| |── Contains the program that opens the game.
 |
 ├── Config
-│
+| |── Contains config yaml files, managers and runtime objects.
+|
 ├── Database
+| |── Contains the SQL database and database loader object.
 │
 |── Docs
+| |── Contains any documentation of the project.
 |
 ├── Engine
-│ ├── Input
-│ ├── Rendering
-│ ├── Runtime
-│ ├── Systems
+| |── Contains core engine features such as the logger, exception handler, game context, render window object etc.
 │
 |── Game
+| |── Contains game elements.
 |
 |── Registry
+| |── Registry contains and stores the game elements.
 |
 ├── Save
+| |── Contains the save manager and save files as well as the seralization data formats.
 |
 |── Scenes
+| |── Contains the SFML displaying scenes.
 |
 |── Scripts
+| |── Contains all logic surronding scripts and the script steps that make up a script.
 |
 |── States
+| |── Contains the backend logic of the scenes.
 |
 |── UI
+| |── Contains all logic surronding the UI system and the possible UI states and components.
 |
 |── Utils
+| |── Any utility classes required.
 ```
 ---
 
@@ -141,15 +137,7 @@ Kurumi-Engine
 
 ## Project Goals
 
-Kurumi Engine aims to provide a clean, modular foundation for building narrative-driven RPGs.  
-The project focuses on long-term maintainability, deterministic gameplay systems, and a data-driven design philosophy.
-
-Core goals include:
-
-- Build a **modular RPG engine architecture** with clear system boundaries
-- Support **script-driven gameplay events** and deterministic step execution
-- Maintain **clean and readable gameplay logic**
-- Provide a flexible foundation for **AI actors, dialogue systems, and scripted events**
-- Develop a codebase that prioritizes **maintainability, extensibility, and clarity**
+- Build a **modular RPG engine architecture** with clear system boundaries and clean and readable code.
+- Build an engine that is both simple to use and allows for complex situations.
 
 ---

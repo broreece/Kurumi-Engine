@@ -3,11 +3,12 @@ namespace Scripts.MapScripts.Base;
 using Engine.Runtime.Core;
 using Scripts.Base;
 using States.Map.Core;
+using States.Map.Interfaces;
 
 /// <summary>
 /// Map script context class, contains additional functions that utilize map scene and state.
 /// </summary>
-public sealed class MapScriptContext : SceneScriptContext {
+public sealed class MapScriptContext : SceneScriptContext, IContinuableScript {
     /// <summary>
     /// Constructor for the map script context class.
     /// </summary>
@@ -37,9 +38,10 @@ public sealed class MapScriptContext : SceneScriptContext {
     /// </summary>
     /// <param name="keepDirection">Determines if the party will maintain a direction.</param>
     /// <param name="path">The path that the party will take.</param>
-    public void ForceMoveParty(bool keepDirection, List<int> path) {
+    /// <param name="currentStep">The current step that executed this force move.</param>
+    public void ForceMoveParty(bool keepDirection, List<int> path, ScriptStep currentStep) {
         // TODO: (ASE-01) Add a new parameter in the function and in the script for the force move party script step.
-        GetMapState()?.StartForceMoveParty(keepDirection, path, gameContext.GetCharacterMovementSpeed());
+        GetMapState()?.StartForceMoveParty(keepDirection, path, gameContext.GetCharacterMovementSpeed(), this, currentStep);
     }
 
     /// <summary>
@@ -50,10 +52,11 @@ public sealed class MapScriptContext : SceneScriptContext {
     /// <param name="scriptX">The actor's X location.</param>
     /// <param name="scriptY">The actor's Y location.</param>
     /// <param name="path">The path the actor follows.</param>
+    /// <param name="currentStep">The current step that executed this force move.</param>
     /// <exception cref="MapScriptMissingException">Error thrown if a map script is missing.</exception>
     public void ForceMoveActor(bool keepDirection, bool lockMovement, bool instant, int scriptX, int scriptY,
-        List<int> path) {
-        GetMapState()?.ForceMoveActor(keepDirection, lockMovement, instant, scriptX, scriptY, path);
+        List<int> path, ScriptStep currentStep) {
+        GetMapState()?.ForceMoveActor(keepDirection, lockMovement, instant, scriptX, scriptY, path, this, currentStep);
     }
 
     /// <summary>

@@ -23,7 +23,8 @@ public sealed class ForceMoveParty : ScriptStep {
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
         MapScriptContext mapScriptContext = (MapScriptContext) scriptContext;
-        mapScriptContext.ForceMoveParty(keepDirection, path);
+        Pause();
+        mapScriptContext.ForceMoveParty(keepDirection, path, this);
     }
     
     /// <summary>

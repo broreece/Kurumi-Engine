@@ -31,8 +31,8 @@ public sealed class ForceMoveScript : ScriptStep {
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
         MapScriptContext mapScriptContext = (MapScriptContext) scriptContext;
-        mapScriptContext.ForceMoveActor(keepDirection, lockMovement, instant, actorX, actorY, path);
-        // TODO: (FMA-01) We should pause the script untill after the forced movement finishes.
+        Pause();
+        mapScriptContext.ForceMoveActor(keepDirection, lockMovement, instant, actorX, actorY, path, this);
     }
     
     /// <summary>
