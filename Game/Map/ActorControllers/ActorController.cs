@@ -1,10 +1,12 @@
 namespace Game.Map.ActorControllers;
 
+using States.Map.Interfaces;
+
 /// <summary>
 /// The actor controller class, used to timing and movement of actors.
 /// Inherited by pathed actor handlers and random actor handlers.
 /// </summary>
-public abstract class ActorController {
+public abstract class ActorController : IFinishable {
     /// <summary>
     /// Constructor for the actor controller.
     /// </summary>

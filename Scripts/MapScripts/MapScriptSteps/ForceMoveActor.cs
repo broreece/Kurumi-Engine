@@ -6,7 +6,7 @@ using Scripts.MapScripts.Base;
 /// <summary>
 /// The force move actor map script step.
 /// </summary>
-public sealed class ForceMoveScript : ScriptStep {
+public sealed class ForceMoveActor : ScriptStep {
     /// <summary>
     /// Constructor for the force move actor script step.
     /// </summary>
@@ -16,7 +16,7 @@ public sealed class ForceMoveScript : ScriptStep {
     /// <param name="actorX">The x location of the actor to move.</param>
     /// <param name="actorY">The y location of the actor to move.</param>
     /// <param name="path">The path that the actor will take.</param>
-    public ForceMoveScript(bool keepDirection, bool lockMovement, bool instant, int actorX, int actorY, List<int> path) {
+    public ForceMoveActor(bool keepDirection, bool lockMovement, bool instant, int actorX, int actorY, List<int> path) {
         this.keepDirection = keepDirection;
         this.lockMovement = lockMovement;
         this.instant = instant;
@@ -26,7 +26,7 @@ public sealed class ForceMoveScript : ScriptStep {
     }
     
     /// <summary>
-    /// Activates the force move script script step by calling the force move function in the map scene.
+    /// Activates the force move actor script step by calling the force move function in the map scene.
     /// </summary>
     /// <param name="scriptContext">The context of the script.</param>
     public override void Activate(ScriptContext scriptContext) {
@@ -76,9 +76,9 @@ public sealed class ForceMoveScript : ScriptStep {
     }
     
     /// <summary>
-    /// Getter for the force move script path.
+    /// Getter for the force move actor path.
     /// </summary>
-    /// <returns>The path the script will move.</returns>
+    /// <returns>The path the actor will move.</returns>
     public List<int> GetPath() {
         return path;
     }

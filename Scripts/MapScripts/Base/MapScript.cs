@@ -88,7 +88,7 @@ public class MapScript : Script {
                     AddStep(new DisplayGlobalMessage(globalMessageTimeLimit, globalMessageText));
                     break;
 
-                case "ForceMoveScript":
+                case "ForceMoveActor":
                     bool keepDirection = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
                     scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     bool lockMovement = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
@@ -105,7 +105,7 @@ public class MapScript : Script {
                         path.Add(nextStep);
                         scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
                     }
-                    AddStep(new ForceMoveScript(keepDirection, lockMovement, instant, scriptX, scriptY, path));
+                    AddStep(new ForceMoveActor(keepDirection, lockMovement, instant, scriptX, scriptY, path));
                     break;
 
                 case "ForceMoveParty":

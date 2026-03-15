@@ -53,18 +53,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (FMAS-02) Clean up the forced movement resuming scripts. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Desciption:** We currently have it implemented in a way that doesen't feel right. Pathed actor controllers store and hold the scripts and script steps. This should be stored in some type of dicitonary or subscriber where when the pathed actor is finished we fire a signal that activates in map state then executes the stored script.
-
-**Steps:** N/A
-
----
-
 ## Introduce unit testing ##
 ### Complexity: 3 ###
 ### Independent: 1 ###

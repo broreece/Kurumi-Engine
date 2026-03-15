@@ -35,6 +35,7 @@ public sealed class MapState : StateBase, IMapInputController {
         mapMaxTilesHigh = mapConfig.GetMaxTilesHigh();
 
         // Variables used during forced movement.
+        scriptedActorControllers = [];
         forcedMovePath = [];
         forcedMoveIndex = 0;
         keepsDirection = false;
@@ -81,6 +82,14 @@ public sealed class MapState : StateBase, IMapInputController {
                     }
                     forceMoveScript.ContinueScript(currentForceMoveStep);
                 }
+            }
+        }
+
+        // Check if any of the scripted actor controllers need to continue their script.
+        foreach (ScriptedActorController scriptedActorController in scriptedActorControllers.ToArray()) {
+            if (scriptedActorController.IsFinished()) {
+                scriptedActorController.Continue();
+                scriptedActorControllers.Remove(scriptedActorController);
             }
         }
 
@@ -339,8 +348,12 @@ public sealed class MapState : StateBase, IMapInputController {
         }
         else {
             // If not instant update actor's controller to be pathed.
-            currentActor.PushController(new PathedActorController(currentActor.GetMovementSpeed(), currentActor.GetXLocation(),
-                currentActor.GetYLocation(), forcedMovement: true, path, continuableScript, currentStep));
+            PathedActorController forcedController = new(currentActor.GetMovementSpeed(), currentActor.GetXLocation(),
+                currentActor.GetYLocation(), forcedMovement: true, path);
+            currentActor.PushController(forcedController);
+            // Add actors controller into our scripted actor controller list to be checked if it has finished in the update to 
+            // continue the script.
+            scriptedActorControllers.Add(new ScriptedActorController(forcedController, continuableScript, currentStep));
         }
     }
 
@@ -496,6 +509,7 @@ public sealed class MapState : StateBase, IMapInputController {
     private readonly int mapMaxTilesWide, mapMaxTilesHigh;
 
     // Variables used during forced party / actor movement.
+    private List<ScriptedActorController> scriptedActorControllers;
     private List<int> forcedMovePath;
     private int forcedMoveIndex, forcedMoveDuration, forcedMoveElapsedTime;
     private bool keepsDirection, isForcedMoving, isActorForcedMoving;

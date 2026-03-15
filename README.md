@@ -4,7 +4,7 @@
   <img src="Assets/Icons/readme_icon.png" width="300">
 </p>
 
-Kurumi Engine is a modular RPG engine written in **C# using SFML**.  
+Kurumi Engine is a modular RPG engine written in **C# using SFML**.
 It focuses on **clean architecture, extensibility, and data-driven gameplay systems**.
 
 The engine is designed for building **RPGs** with scripted events, AI actors, and modular UI systems.
@@ -33,7 +33,7 @@ Key ideas:
 - **Deterministic step-based script logic in map and battle**
 - **Engine follows SOLID principles**
 
-The engine aims to keep any gameplay logic outisde of scripts **explicit and readable**.
+The engine aims to keep any gameplay logic outside of scripts **explicit and readable**.
 
 ---
 
@@ -50,9 +50,9 @@ Current engine capabilities include:
 - Input mapping system
 
 ### Gameplay Systems
-- Custom scripting and stored variables/flags allows dynamic gameplay
+- Custom scripting and stored variables/flags allow dynamic gameplay
 - Dynamic actor control systems that do not restrict player controls
-- Same script-driven event system applies in battles for unique battle experiences
+- The same script-driven event system applies in battles for unique battle experiences
 
 ---
 
@@ -66,7 +66,7 @@ Example:
 "ChoiceBox,Yes-No,2,BasicTextWindow,You said no,StartBattle,0,0,0,"
 
 ```
-Where if you reply yes a battle will start and if you reply no no battle will start.
+Where if you reply 'yes' a battle will start, and if you reply 'no' no battle will start.
 
 Plans to change from a string format to a custom format exist.
 
