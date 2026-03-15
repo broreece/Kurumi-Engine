@@ -8,28 +8,28 @@ Kurumi-Engine.sln
 .VSCodeCounter
 
 # - Ignore assets
-Assets/Art/AnimatedTileSpriteSheets/*
-Assets/Art/AnimationSpriteSheets/*
-Assets/Art/BattleBackgroundArt/*
-Assets/Art/CharacterBattleSpriteSheets/*
-Assets/Art/CharacterFieldSpriteSheets/*
-Assets/Art/CharacterMenuSpriteSheets/*
-Assets/Art/EnemyBattleSprites/*
-Assets/Art/MapBackgroundArt/*
-Assets/Art/TileSpriteSheets/*
-Assets/Art/Windows/ChoiceSelectionArt/*
-Assets/Art/Windows/WindowArt/*
-Assets/Fonts/*
-Assets/Licenses/*
-Assets/Maps/*
-Assets/Registry/*
-Database/Schema/*
+Kurumi-Engine/Assets/Art/AnimatedTileSpriteSheets/*
+Kurumi-Engine/Assets/Art/AnimationSpriteSheets/*
+Kurumi-Engine/Assets/Art/BattleBackgroundArt/*
+Kurumi-Engine/Assets/Art/CharacterBattleSpriteSheets/*
+Kurumi-Engine/Assets/Art/CharacterFieldSpriteSheets/*
+Kurumi-Engine/Assets/Art/CharacterMenuSpriteSheets/*
+Kurumi-Engine/Assets/Art/EnemyBattleSprites/*
+Kurumi-Engine/Assets/Art/MapBackgroundArt/*
+Kurumi-Engine/Assets/Art/TileSpriteSheets/*
+Kurumi-Engine/Assets/Art/Windows/ChoiceSelectionArt/*
+Kurumi-Engine/Assets/Art/Windows/WindowArt/*
+Kurumi-Engine/Assets/Fonts/*
+Kurumi-Engine/Assets/Licenses/*
+Kurumi-Engine/Assets/Maps/*
+Kurumi-Engine/Assets/Registry/*
+Kurumi-Engine/Database/Schema/*
 
 # - Ignore save files.
-Save/save_data/*
+Kurumi-Engine/Save/save_data/*
 
 # - Ignore personal dev journel documents.
 PersonalDocs/
 
 # - Ignore logs.
-logs/*
+Kurumi-Engine/logs/*
