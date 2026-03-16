@@ -6,6 +6,7 @@ using Game.Entities.PlayableCharacter;
 using Game.Entities.Skills;
 using Game.Entities.Status;
 using Game.Items;
+using Game.Map.Actors.Base;
 using Game.Map.Tiles;
 using Registry.Items;
 using Registry.Skills;
@@ -24,7 +25,7 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             AppContext.BaseDirectory,
             "Database",
             "Schema",
-            "database.db"
+            "game_data.db"
         );
         connection = new($"Data Source={databasePath}");
     }
@@ -120,13 +121,13 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             string effect = new((string) data[row, 10]);
             int turnEffectSpriteId = (int) (long) data[row, 11];
             object[,] abilities = Load("equipment_abilities", ["equipment_id"], 
-                new string[1] {id.ToString()}, "equipment_id");
+                [id.ToString()], "equipment_id");
             object[,] skills = Load("equipment_skills", ["equipment_id"], 
-                new string[1] {id.ToString()}, "equipment_id");
+                [id.ToString()], "equipment_id");
             object[,] statData = Load("equipment_stats", ["equipment_id"], 
-                new string[1] {id.ToString()}, "equipment_id");
+                [id.ToString()], "equipment_id");
             object[,] elementData = Load("equipment_elements", ["equipment_id"], 
-                new string[1] {id.ToString()}, "equipment_id");
+                [id.ToString()], "equipment_id");
             int abilityResults = abilities.GetLength(0);
             int skillResults = skills.GetLength(0);
             int statResults = statData.GetLength(0);
@@ -191,13 +192,13 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             string turnScript = new((string) data[row, 11]);
 
             object[,] abilities = Load("statuses_abilities", ["status_id"], 
-                new string[1] {id.ToString()}, "ability_id");
+                [id.ToString()], "ability_id");
             object[,] skills = Load("statuses_skills", ["status_id"], 
-                new string[1] {id.ToString()}, "skill_id");
+                [id.ToString()], "skill_id");
             object[,] statData = Load("statuses_stats", ["status_id"], 
-                new string[1] {id.ToString()}, "stat_id");
+                [id.ToString()], "stat_id");
             object[,] elementData = Load("statuses_elements", ["status_id"], 
-                new string[1] {id.ToString()}, "element_id");
+                [id.ToString()], "element_id");
             int abilityResults = abilities.GetLength(0);
             int skillResults = skills.GetLength(0);
             int statResults = statData.GetLength(0);
@@ -283,13 +284,13 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             List<Ability> enemyAbilities = [];
             long id = (long) data[row, 0];
             object[,] statData = Load("enemy_stats", ["enemy_id"],
-                new string[1] {id.ToString()});
+                [id.ToString()]);
             object[,] abilities = Load("enemy_abilities", ["enemy_id"], 
-                new string[1] {id.ToString()}, "ability_id");
+                [id.ToString()], "ability_id");
             object[,] elementData = Load("enemy_elements", ["enemy_id"],
-                new string[1] {id.ToString()});
+                [id.ToString()]);
             object[,] statusRegistry = Load("enemy_statuses", ["enemy_id"], 
-                new string[1] {id.ToString()});
+                [id.ToString()]);
             int statResults = statData.GetLength(0);
             int abilityResults = abilities.GetLength(0);
             int elementResults = elementData.GetLength(0);
@@ -359,6 +360,23 @@ public sealed class DatabaseManager : ICharacterDataLoader {
                 statusResistances, characterEquipment, characterBaseAbilities, equipmentTypes, characterSkills);
         }
         return playableCharacters;
+    }
+
+    /// <summary>
+    /// Function that loads all actors in the database.
+    /// </summary>
+    /// <returns>The actors stored in the database.</returns>
+    public ActorInfo[] LoadActors() {
+        object[,] data = Load("actors");
+        int results = data.GetLength(0);
+        ActorInfo[] actors = new ActorInfo[results];
+        for (int row = 0; row < results; row ++) {
+            int spriteId = Convert.ToInt32((long) data[row, 0]);
+            int width = Convert.ToInt32((long) data[row, 1]);
+            int height = Convert.ToInt32((long) data[row, 2]);
+            actors[row] = new(spriteId, width, height);
+        }
+        return actors;
     }
 
     /// <summary>

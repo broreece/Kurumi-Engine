@@ -9,6 +9,7 @@ using Game.Map.Tiles;
 using Registry.TileObjects;
 using Utils.Exceptions;
 using System.Text.Json;
+using Registry.Actors;
 
 /// <summary>
 /// The map manager class, loads and stores string file name locations for maps.
@@ -34,9 +35,10 @@ public sealed class MapManager {
     /// Deseralizes a specified map id and then returns that map object.
     /// </summary>
     /// <param name="party">The game's party.</param>
-    /// <param name="tileObjectRegistry">The tile objects data.</param>
+    /// <param name="actorRegistry">The actor registry.</param>
+    /// <param name="tileObjectRegistry">The tile objects registry.</param>
     /// <exception cref="MissingJsonFileException">Error thrown if a .json data file is missing.</exception>
-    public Map LoadMap(Party party, TileObjectRegistry tileObjectRegistry) {
+    public Map LoadMap(Party party, ActorRegistry actorRegistry, TileObjectRegistry tileObjectRegistry) {
         // Load from passed file.
         MapData mapData;
         try {
@@ -87,7 +89,7 @@ public sealed class MapManager {
             animatedTiles[tileData.XIndex, tileData.YIndex] = tiles[tileData.XIndex, tileData.YIndex].IsAnimated();
             // Check here if an actor exists.
             if (tileData.Actor.Contains(',')) {
-                Actor actor = new(tileData.XIndex, tileData.YIndex, tileData.Actor);
+                Actor actor = new(tileData.XIndex, tileData.YIndex, actorRegistry, tileData.Actor);
                 actors[tileData.XIndex, tileData.YIndex] = actor;
                 switch (actor.GetBehaviour()) {
                     case Behaviour.FollowsPath:

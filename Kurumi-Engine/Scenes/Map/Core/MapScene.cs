@@ -97,10 +97,9 @@ public sealed class MapScene : SceneBase, IMapSceneView {
 
         // Load all clocks and actor textures from map.
         for (int mapActorIndex = 0; mapActorIndex < mapActors.Count; mapActorIndex ++) {
-            // TODO: (MSAC-01) Change the character field sheet file names to actor field sheet file names.
             string actorFieldSheetPath = Path.Combine(
                 AppContext.BaseDirectory,
-                assetManager.GetCharacterFieldSheetFileName(mapActors[mapActorIndex].GetFieldSpriteId())
+                assetManager.GetActorSheetFileName(mapActors[mapActorIndex].GetFieldSpriteId() - 1)
             );
             actorTextures[mapActorIndex] = new Texture(actorFieldSheetPath);
             actorWalkAnimationClocks.Add(new Clock());

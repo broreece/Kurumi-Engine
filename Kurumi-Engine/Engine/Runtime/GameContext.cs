@@ -19,6 +19,7 @@ using Game.Entities.PlayableCharacter;
 using Game.Entities.Status;
 using Game.Map.Core;
 using Game.Party;
+using Registry.Actors;
 using Registry.Enemies;
 using Registry.Entities;
 using Registry.Items;
@@ -98,6 +99,7 @@ public sealed class GameContext : IGameUIContext {
         this.textWindowDefaults = textWindowDefaults;
 
         // Database data.
+        actorRegistry = new ActorRegistry(databaseManager.LoadActors());
         abilityRegistry = new AbilityRegistry(databaseManager.LoadAbilities());
         elementNameRegistry = new ElementNameRegistry(databaseManager.LoadElementNames());
         enemyRegistry = new EnemyRegistry(databaseManager.LoadEnemies(abilityRegistry));
@@ -149,7 +151,7 @@ public sealed class GameContext : IGameUIContext {
     /// Function used to load a new map scene / state and map object.
     /// </summary>
     public void LoadNewMap() {
-        Map map = mapManager.LoadMap(party, tileObjectRegistry);
+        Map map = mapManager.LoadMap(party, actorRegistry, tileObjectRegistry);
         mapName = map.GetMapName();
         MapScene mapScene = new(gameWindow, assetManager, animatedTileSheetConfig, characterFieldSpriteConfig, 
             mapBackgroundSpriteConfig, mapConfig, tileSheetConfig, map);
@@ -536,6 +538,14 @@ public sealed class GameContext : IGameUIContext {
     }
 
     /// <summary>
+    /// Getter for the actor data registry.
+    /// </summary>
+    /// <returns>The actor data.</returns>
+    public ActorRegistry GetActorRegistry() {
+        return actorRegistry;
+    }
+
+    /// <summary>
     /// Getter for the ability data registry.
     /// </summary>
     /// <returns>The ability data.</returns>
@@ -743,6 +753,7 @@ public sealed class GameContext : IGameUIContext {
 
     // Data registry objects.
     // Data that will not change.
+    private readonly ActorRegistry actorRegistry;
     private readonly AbilityRegistry abilityRegistry;
     private readonly ElementNameRegistry elementNameRegistry;
     private readonly EnemyRegistry enemyRegistry;

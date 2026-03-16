@@ -4,7 +4,8 @@ using Game.Map.ActorControllers;
 using Game.Map.Elements;
 
 /// <summary>
-/// Pathed actors are an object that holds an actor and a path.
+/// Actor handlers are containers for actor objects. They exist to allow actors to exist independently from actor controllers but also
+/// perform the same functions allowing for creation of actors before their AI is created.
 /// </summary>
 public abstract class ActorHandler : IActorHandler {
     /// <summary>

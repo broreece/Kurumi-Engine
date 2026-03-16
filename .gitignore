@@ -8,6 +8,7 @@ Kurumi-Engine.sln
 .VSCodeCounter
 
 # - Ignore assets
+Kurumi-Engine/Assets/Art/ActorSpriteSheets/*
 Kurumi-Engine/Assets/Art/AnimatedTileSpriteSheets/*
 Kurumi-Engine/Assets/Art/AnimationSpriteSheets/*
 Kurumi-Engine/Assets/Art/BattleBackgroundArt/*
@@ -23,7 +24,6 @@ Kurumi-Engine/Assets/Fonts/*
 Kurumi-Engine/Assets/Licenses/*
 Kurumi-Engine/Assets/Maps/*
 Kurumi-Engine/Assets/Registry/*
-Kurumi-Engine/Database/Schema/*
 
 # - Ignore save files.
 Kurumi-Engine/Save/save_data/*

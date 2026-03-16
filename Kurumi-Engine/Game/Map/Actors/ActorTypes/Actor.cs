@@ -3,21 +3,23 @@ namespace Game.Map.Actors.ActorTypes;
 using Game.Map.ActorControllers;
 using Game.Map.Actors.Base;
 using Game.Map.Elements;
+using Registry.Actors;
 
 /// <summary>
 /// Actors are map elements that contain a list of possible scripts as well as information surronding it's appearence and how it's activated.
 /// </summary>
-public sealed class Actor : MapElement, IActorHandler {
+public class Actor : MapElement, IActorHandler {
     /// <summary>
     /// Constructor for the actor class.
     /// </summary>
     /// <param name="xLocation">The x coordinate of the actor.</param>
     /// <param name="yLocation">The y coordinate of the actor.</param>
+    /// <param name="ActorRegistry">The actor registry.</param>
     /// <param name="scriptText">The text representing the script.</param>
-    public Actor(int xLocation, int yLocation, string scriptText) : base(xLocation, yLocation) {
+    public Actor(int xLocation, int yLocation, ActorRegistry actorRegistry, string scriptText) : base(xLocation, yLocation) {
         behaviour = (Behaviour) int.Parse(scriptText[..scriptText.IndexOf(',')]);
         scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        fieldSpriteId = int.Parse(scriptText[..scriptText.IndexOf(',')]);
+        actorInfo = actorRegistry.GetActor(int.Parse(scriptText[..scriptText.IndexOf(',')]));
         scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
         movementSpeed = int.Parse(scriptText[..scriptText.IndexOf(',')]);
         scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
@@ -93,11 +95,11 @@ public sealed class Actor : MapElement, IActorHandler {
     }
 
     /// <summary>
-    /// Setter for the field sprite id of the actor.
+    /// Setter for the info id of the actor.
     /// </summary>
-    /// <param name="newFieldSpriteId">The new field sprite id of the actor.</param>
-    public void SetFieldSpriteId(int newFieldSpriteId) {
-        fieldSpriteId = newFieldSpriteId;
+    /// <param name="newActorInfo">The new info id of the actor.</param>
+    public void SetActorInfo(ActorInfo newActorInfo) {
+        actorInfo = newActorInfo;
     }
 
     /// <summary>
@@ -169,7 +171,7 @@ public sealed class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <returns>The field sprite id of the actor.</returns>
     public int GetFieldSpriteId() {
-        return fieldSpriteId;
+        return actorInfo.GetSpriteId();
     }
     
     /// <summary>
@@ -296,7 +298,8 @@ public sealed class Actor : MapElement, IActorHandler {
     private readonly Stack<ActorController> actorControllers;
 
     // Actor Variables.
-    private int fieldSpriteId, movementSpeed, trackingRange;
+    private ActorInfo actorInfo;
+    private int movementSpeed, trackingRange;
     private bool belowParty, passable, onTouch, auto, onAction, onFind;
 
     // Actor script.

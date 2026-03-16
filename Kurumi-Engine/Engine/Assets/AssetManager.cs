@@ -19,18 +19,26 @@ public sealed class AssetManager : ISaveAssetAccessor {
             throw new MissingJsonFileException($"JSON file: {json} is not found");
 
         // Store file names in array.
+        actorSheetFileNames = [.. data["ActorSpriteSheets"].Values];
         animatedTileSheetFileNames = [.. data["AnimatedTileSpriteSheets"].Values];
         battleBackgroundFileNames = [.. data["BattleBackgroundArt"].Values];
         characterBattleSpriteSheetFileNames = [.. data["CharacterBattleSpriteSheets"].Values];
         characterFieldSheetFileNames = [.. data["CharacterFieldSpriteSheets"].Values];
         enemyBattleSpriteFileNames = [.. data["EnemyBattleSprites"].Values];
-        // TODO: (MSAC-01) Create actor field sheet file names.
-        //actorFieldSheetFileNames = data["ActorFieldSpriteSheets"].Values.ToArray();
         fontFileNames = data["Fonts"].Values.ToArray();
         mapBackgroundFileNames = [.. data["MapBackgroundArt"].Values];
         tileSheetFileNames = [.. data["TileSpriteSheets"].Values];
         windowArtFileNames = [.. data["Windows"].Values];
         choiceSelectionFileNames = [.. data["ChoiceSelectionArt"].Values];
+    }
+
+    /// <summary>
+    /// Getter for a specified actor sheet file name.
+    /// </summary>
+    /// <param name="index">The index of the desired actor sheet file name.</param>
+    /// <returns>A specified actor sheet file name.</returns>
+    public string GetActorSheetFileName(int index) {
+        return actorSheetFileNames[index];
     }
 
     /// <summary>
@@ -125,8 +133,7 @@ public sealed class AssetManager : ISaveAssetAccessor {
         return choiceSelectionFileNames[index];
     }
 
-    // TODO: (MSAC-01) Add actorFieldSheetFileNames.
-    private readonly string[] battleBackgroundFileNames, characterBattleSpriteSheetFileNames, characterFieldSheetFileNames,
+    private readonly string[] actorSheetFileNames, battleBackgroundFileNames, characterBattleSpriteSheetFileNames, characterFieldSheetFileNames,
         enemyBattleSpriteFileNames, fontFileNames, mapBackgroundFileNames, tileSheetFileNames, animatedTileSheetFileNames,
         windowArtFileNames, choiceSelectionFileNames;
 }

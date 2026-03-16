@@ -26,9 +26,9 @@ This file outlines all future tickets alongside a set of fields that determine h
 
 | Ranking | Description |
 |-------|-----------|
-|**1**|Quick win. Easy to start and finish in one sitting.|
-|**2**|Moderate focus required.|
-|**3**|Heavy thinking / architectural work.|
+|**1**|Quick win. Easy to start and finish in one sitting|
+|**2**|Moderate focus required|
+|**3**|Heavy thinking / architectural work|
 
 ### Impact
 
@@ -67,10 +67,7 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 **Steps:**
 - (MSAC-01) Allow varying sizes of actor sprites: (High Priority)
-    - Create a table "events" which contain art id, width and height.
-    - Load these as a class in core, "EventInfo".
-    - Create a folder for these actor art, move existing actor art into this folder.
-    - Then we will need to edit all instances where we call "EventArtId" to reference these "EventInfo" in core.
+    - Add functions in the actor class to load width and height.
     - When we create actor sprites, create it from actor info, width and height.
 -(MSAC-02) Implement below and above player actor sprites seperately to draw in different orders: (High Priority)
     - We already have a variable in events to indicate if they are under the player.
@@ -234,6 +231,23 @@ Allow battle scenes to end either in victory of fail.
 - Make a button that closes the error windows.
 - Import a default font for the error windows.
 - Add another new icon for the error windows a big X.
+
+---
+
+## (FD-01) Forge Demonstration Build ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 3 ###
+### Impact: 1 ###
+
+**Description:**
+Create a small demonstration scenario showcasing key engine capabilities implemented during the Forge build.
+
+**Steps:**
+- The first video should show two actors having forced movements, the player can still move during this time, then one actor
+continues with a speech, this should go directly into a cutscene.
+- The second video should demonstrate enemy formations, they chase the player for the player to escape. The game is then saved
+and when loaded the enemy formation persists on the map.
 
 ---
 
