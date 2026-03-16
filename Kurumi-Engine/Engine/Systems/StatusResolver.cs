@@ -13,11 +13,10 @@ public sealed class StatusResolver {
     /// <param name="entity">The entity which will have the status added.</param>
     /// <param name="status">The status being added to the entity.</param>
     public void ApplyStatus(Entity entity, Status newStatus) {
-        List<Status> statuses = entity.GetStatuses();
-
+        Status[] statuses = [.. entity.GetStatuses()];
         // Check if all existing statuses needs to be removed.
-        if (statuses.Count != 0) {
-            if (!(statuses[0].GetPriority() == Priority.Fainted)) {
+        if (statuses.Length != 0) {
+            if (statuses[0].GetPriority() != Priority.Fainted) {
                 switch (newStatus.GetPriority()) {
                     case Priority.CanStackWithOthers:
                         bool canAdd = true;

@@ -22,7 +22,7 @@ using Save.Core;
 /// The bootstrap program that loads all inital config, builds context, starts scene manager and starts game loop.
 /// </summary>
 public static class Program {
-    public static void Main(string[] args){
+    public static void Main(string[] args) {
         // Load database.
         DatabaseManager database = new();
 

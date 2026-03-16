@@ -1,7 +1,7 @@
 # Kurumi Engine
 
 <p align="center">
-  <img src="Assets/Icons/readme_icon.png" width="300">
+  <img src="Kurumi-Engine/Assets/Icons/readme_icon.png" width="300">
 </p>
 
 Kurumi Engine is a modular RPG engine written in **C# using SFML**.
@@ -13,13 +13,17 @@ The engine is designed for building **RPGs** with scripted events, AI actors, an
 
 ## Development Status
 
-Crucible 
+Forge 
 Active Development
 
 Recent work focused on a large **core refactor** to improve engine architecture and maintainability.
 
 Current tasks include:
-- Introduction of unit testing
+- AI and enemy formation map data implementation
+- Map scene actor enhancements
+- Battle scene implementation
+- Advanced saving implementation
+- Minor changes such as logger improvements and script enhancements
 
 ---
 
@@ -131,6 +135,7 @@ Kurumi-Engine
 | **SQLite** | Structured game data storage |
 | **YAML / JSON** | Configuration files and dynamic save data |
 | **Git** | Version control and development workflow |
+| **Xunit** | Unit tests |
 
 ---
 

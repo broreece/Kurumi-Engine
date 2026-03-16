@@ -15,8 +15,9 @@ public static class Handler {
     /// </summary>
     /// <param name="exception">The config exception thrown.</param>
     public static void HandleConfigException(Exception exception) {
-        Logger.LogFatal(exception.Message);
-        DisplayErrorMessage(exception.Message);
+        string message = $"{exception.Message}, {exception.StackTrace}";
+        Logger.LogFatal(message);
+        DisplayErrorMessage(message);
     }
 
     /// <summary>
@@ -38,7 +39,8 @@ public static class Handler {
                 Scene: {gameContext.GetSceneType()}
                 Script: {gameContext.GetCurrentScriptName()}
                 UI Depth: {gameContext.GetUIStackDepth()}
-                Message: {exception.Message}";
+                Message: {exception.Message}
+                Stack: {exception.StackTrace}";
             switch (engineException.GetSeverity()) {
                 case Severity.Fatal:
                     // TODO: (LI-01) Close game window here.
@@ -71,8 +73,10 @@ public static class Handler {
             }
         }
         else {
-            Logger.LogFatal(exception.Message);
-            DisplayErrorMessage(exception.Message);
+            string message = $@"[{exception.Message}]
+            Stack: {exception.StackTrace}";
+            Logger.LogFatal(message);
+            DisplayErrorMessage(message);
             // TODO: (LI-01) Close game window here.
         }
     }
@@ -85,7 +89,13 @@ public static class Handler {
         var window = new RenderWindow(new VideoMode(500, 250), "Error");
 
         // TODO: (EMI-01) Change this to config.
-        Font font = new("Kurumi-Engine/Assets/Fonts/template.otf");
+        string fontPath = Path.Combine(
+            AppContext.BaseDirectory,
+            "Assets",
+            "Fonts",
+            "template.otf"
+        );
+        Font font = new(fontPath);
 
         // TODO: (EMI-01) Change this to config.
         Text text = new(message, font, 18)

@@ -44,7 +44,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
     /// Overriden update function for the battle state.
     /// </summary>
     public override void Update() {
-        // TODO: (BSI) This might not neccesarily have to be empty.
+        // TODO: (BSE) This might not neccesarily have to be empty.
     }
 
     /// <summary>
@@ -79,15 +79,15 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
 
         // Open skill sub menu.
         else if (currentSkillIndex >= 0 && currentSkillIndex < currentCharacter.GetSkills().Count) {
-            // TODO: (BSI) Open sub menu.
+            // TODO: (BSE) Open sub menu.
         }
 
         // Hard coded inventory placement.
         else if (currentChoice == battleSceneView.GetChoicesLength() - 2) {
-            // TODO: (BSI) Open inventory sub menu.
+            // TODO: (BSE) Open inventory sub menu.
         }
 
-        // TODO: (BSI) Hard code run away command here.
+        // TODO: (BSE) Hard code run away command here.
 
         // If an ability was used.
         else {
@@ -114,7 +114,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
     /// The cancel function. Attempts to cancel and move back in the battle scene state.
     /// </summary>
     public void Cancel() {
-        // TODO: (BSI) Implement a check here if it's a submenu or main menu.
+        // TODO: (BSE) Implement a check here if it's a submenu or main menu.
         // If the player is currently selecting an enemy.
         if (inEnemySelector) {
             inEnemySelector = false;
@@ -321,7 +321,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         // Load target.
         switch (actionTargetId) {
             case -1:
-                // TODO: (BSI) Check if party member is dead and if so generate a new random number.
+                // TODO: (BSE) Check if party member is dead and if so generate a new random number.
                 Random random = new();
                 int randomNumber = random.Next(0, characterSprites);
                 target = party.GetPartyMember(randomNumber);
@@ -329,15 +329,15 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                 break;
             
             case -2:
-                // TODO: (BSI) Implement party wide scripts here.
+                // TODO: (BSE) Implement party wide scripts here.
                 break;
 
             case -3:
-                // TODO: (BSI) Implement random enemy here.
+                // TODO: (BSE) Implement random enemy here.
                 break;
             
             case -4:
-                // TODO: (BSI) Implement enemy group scripts here.
+                // TODO: (BSE) Implement enemy group scripts here.
                 break;
 
             default:
@@ -361,7 +361,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
             throw new NullTargetException("Target was not found.");
         }
 
-        // TODO: (BSI) We should add a check here for skills as well.
+        // TODO: (BSE) We should add a check here for skills as well.
         // Calculate HP change alongside activating the effect.
         int oldHp = target.GetCurrentHp();
         EntityScript entityScript = new(user.GetBaseAbility(abilityId).GetEffect());

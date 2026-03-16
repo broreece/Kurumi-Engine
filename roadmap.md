@@ -46,126 +46,14 @@ Tickets will also display a brief description, a set of planned steps for comple
 ---
 
 ## Next milestone:
-### Crucible
+### Forge
 **Focus areas:**
 
-- Clean up post refractor.
-
----
-
-## Introduce unit testing ##
-### Complexity: 3 ###
-### Independent: 1 ###
-### Momentum: 3 ###
-### Impact: 1 ###
-
-**Description:** Create unit testing to ensure no reversion bugs ever occur.
-
-**Steps:**
-- Research how to create C# unit testing.
-- Create new folder for unit tests.
-- Make test cases for the following:
-    - Test applying statuses:
-        - Add a status.
-        - Apply a status that removes other statuses.
-        - Apply multiple statuses.
-    - Test save/load:
-        - Ensure status can be loaded onto playable characters.
-        - Ensure any stat changes made to playable characters save.
-        - Ensure equipment is saved.
-        - Ensure inventory is saved.
-        - Ensure information remains the same.
-    - Damage formula:
-        - Use some hard coded values to ensure that damage is being calculated correctly.
-
----
-
-## Plan next roadmap tasks to implement for next build.
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Move the tasks for the next build into a group, make a name for the build as well.
-
-**Steps:** N/A 
-
----
-
-Crucible build release point. At this point any clean up tasks post our refractor have finished and we can move on to new features.
-
----
-
-## Add text window with namebox and choice box ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Create the ability to add a new text window with namebox and choice box.
-
-**Steps:**
-- Add a new UI State inherit from dialogue with choice state and then add a namebox component.
-- Create a new script that performs the same function as the previous one but also loads the name box defaults.
-
----
-
-## Add custom stun status and status changes ##
-### Complexity: 2 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 2 ###
-
-**Description:** Create the ability for statuses to block movement in battle, and testing creation of new statuses in the database.
-
-**Steps:**
-- Add a stun status: (Extremely Low Priority)
-    - Create status in database.
-    - Ensure that when checking if enemy/party commits action they are able to move by checking all their statuses and confirming they can move.
-    - Add battle scene event step to inflict statuses to a specified enemy only (Used for body parts).
-- Add a new "Hidden" boolean to statuses: (Extremely Low Priority)
-    - Add new field in table of database.
-    - Add new field into class of status.cs.
-    - When loading statuses in database.cs add new field.
-
----
-
-## (BSE-02) Battle scene changes ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 2 ###
-### Impact: 3 ###
-
-**Description:**
-Allow battle scenes to end either in victory of fail.
-
-**Steps:**
-- Implement defeat bool function: (Low Priority).
-    - Check if the enemy formation has a "OnLoseEvent", if so execute the event.
-    - If not we'll add a TODO to create a game over scene.
-- Implement victory bool function: (Low Priority)
-    - If all enemies are dead return to previous scene.
-    - If the event had a "OnWinEvent" execute it after returning to the scene.
-    - Make sure we always check defeat before victory.
-
----
-
-## (AS-01) Advanced saving implementation ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Allow saving of enemy formation and the playable characters.
-
-**Steps:**
-- Implement saving enemy formations: (Mid Priority)
-    - In save manager create a new save function where we write the enemy formation data back into the yaml format.
-    - Pass the enemy formation registry to update any existing enemy formations.
-- Implement Saving playable characters:
-    - In save manager create a new save function where we write the playable character data back into the yaml format.
-    - Pass playable character registry back to update playable characters.
-- Test both saves work.
+- AI and enemy formation map data implementation
+- Map scene actor enhancements
+- Battle scene implementation
+- Advanced saving implementation
+- Minor changes such as logger improvements and script enhancements
 
 ---
 
@@ -227,6 +115,93 @@ Allow battle scenes to end either in victory of fail.
 
 ---
 
+## (AS-01) Advanced saving implementation ##
+### Complexity: 3 ###
+### Independent: 3 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Allow saving of enemy formation and the playable characters.
+
+**Steps:**
+- Implement saving enemy formations: (Mid Priority)
+    - In save manager create a new save function where we write the enemy formation data back into the yaml format.
+    - Pass the enemy formation registry to update any existing enemy formations.
+- Implement Saving playable characters:
+    - In save manager create a new save function where we write the playable character data back into the yaml format.
+    - Pass playable character registry back to update playable characters.
+- Test both saves work.
+
+---
+
+## (BSE-03) Battle scene enhancements ##
+### Complexity: 3 ###
+### Independent: 3 ###
+### Momentum: 2 ###
+### Impact: 3 ###
+
+**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, font size for damage display and more dynamic enemy targetting.
+
+**Steps:** 
+- Implement additional attack options: (Low Priority)
+    - Implement party wide attacks.
+    - Implement enemy group wide attacks.
+    - Implement random enemy hit attacks.
+- Implement new config for the damage text to have a font size:
+    - Currently hard coded make sure it's in battle scene config.
+- Implement function to load the index of the first healthy party member when generating the first choices in a battle scene:
+    - Might have to check how this logic will work around the battle state ensure that the state and scene stay the same in both.
+
+---
+
+## (BSE-02) Battle scene changes ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 2 ###
+### Impact: 3 ###
+
+**Description:**
+Allow battle scenes to end either in victory of fail.
+
+**Steps:**
+- Implement defeat bool function: (Low Priority).
+    - Check if the enemy formation has a "OnLoseEvent", if so execute the event.
+    - If not we'll add a TODO to create a game over scene.
+- Implement victory bool function: (Low Priority)
+    - If all enemies are dead return to previous scene.
+    - If the event had a "OnWinEvent" execute it after returning to the scene.
+    - Make sure we always check defeat before victory.
+
+---
+
+## Add text window with namebox and choice box ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Create the ability to add a new text window with namebox and choice box.
+
+**Steps:**
+- Add a new UI State inherit from dialogue with choice state and then add a namebox component.
+- Create a new script that performs the same function as the previous one but also loads the name box defaults.
+
+---
+
+## (ASE-01) Additional script enhancements ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Allow dynamic speed in the force move party script step.
+
+**Steps:**
+- The force move party currently uses the parties base speed, we can change this to a custom one:
+    - Add a new parameter in "ForceMoveParty" in the map script context and pass it into the map state function.
+
+---
+
 ## (LI-01) Log improvements and throw exceptions when failing to load config ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
@@ -262,17 +237,27 @@ Allow battle scenes to end either in victory of fail.
 
 ---
 
-## (ASE-01) Additional script enhancements ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
+Forge build reached!
 
-**Description:** Allow dynamic speed in the force move party script step.
+---
+
+## Add custom stun status and status changes ##
+### Complexity: 2 ###
+### Independent: 3 ###
+### Momentum: 3 ###
+### Impact: 2 ###
+
+**Description:** Create the ability for statuses to block movement in battle, and testing creation of new statuses in the database.
 
 **Steps:**
-- The force move party currently uses the parties base speed, we can change this to a custom one:
-    - Add a new parameter in "ForceMoveParty" in the map script context and pass it into the map state function.
+- Add a stun status: (Extremely Low Priority)
+    - Create status in database.
+    - Ensure that when checking if enemy/party commits action they are able to move by checking all their statuses and confirming they can move.
+    - Add battle scene event step to inflict statuses to a specified enemy only (Used for body parts).
+- Add a new "Hidden" boolean to statuses: (Extremely Low Priority)
+    - Add new field in table of database.
+    - Add new field into class of status.cs.
+    - When loading statuses in database.cs add new field.
 
 ---
 
@@ -367,26 +352,6 @@ Allow battle scenes to end either in victory of fail.
 
 ---
 
-## (BSE-03) Battle scene enhancements ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 2 ###
-### Impact: 3 ###
-
-**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, font size for damage display and more dynamic enemy targetting.
-
-**Steps:** 
-- Implement additional attack options: (Low Priority)
-    - Implement party wide attacks.
-    - Implement enemy group wide attacks.
-    - Implement random enemy hit attacks.
-- Implement new config for the damage text to have a font size:
-    - Currently hard coded make sure it's in battle scene config.
-- Implement function to load the index of the first healthy party member when generating the first choices in a battle scene:
-    - Might have to check how this logic will work around the battle state ensure that the state and scene stay the same in both.
-
----
-
 ## Actor vision enhancements ## 
 ### Complexity: 3 ###
 ### Independent: 3 ###
@@ -401,6 +366,25 @@ Allow battle scenes to end either in victory of fail.
     - Create an enum for vision type similar to behaviour.
     - Add this enum value to all actors.
     - In the map scene "InRangeActor" function check the actors vision type and change code accordingly.
+
+---
+
+## Introduce save file unit testing ##
+### Complexity: 3 ###
+### Independent: 1 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Description:** Create unit testing cases for the save and load system.
+
+**Steps:**
+- Make test cases for the following:
+    - Test save/load:
+        - Ensure status can be loaded onto playable characters.
+        - Ensure any stat changes made to playable characters save.
+        - Ensure equipment is saved.
+        - Ensure inventory is saved.
+        - Ensure information remains the same.
 
 ---
 
@@ -437,18 +421,6 @@ Allow battle scenes to end either in victory of fail.
 ### Impact: 1 ###
 
 **Description:** Make a plan for closing of UI components, each component should have a way to close.
-
-**Steps:** N/A
-
----
-
-## (BSI) Battle scene implementation ##
-### Complexity: 4 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 4 ###
-
-**Description:** Battle scene is currently incomplete. Make a plan and write notes here.
 
 **Steps:** N/A
 

@@ -44,7 +44,8 @@ public sealed class SaveManager {
     /// <param name="playableCharacters">The playable character array.</param>
     /// <param name="gameVariables">The game variables object.</param>
     /// <param name="mapName">The map name.</param>
-    public async void Save(IPartyDynamicDataAccessor partyInfoAccessor, ISaveableCharacter[] playableCharacters, GameVariables gameVariables, string mapName) {
+    public async void Save(IPartyDynamicDataAccessor partyInfoAccessor, ISaveableCharacter[] playableCharacters, 
+        GameVariables gameVariables, string mapName) {
         // Store save directory for re-use.
         string saveDirectory = Path.Combine(
             saveRootPath,
