@@ -21,7 +21,6 @@ Recent work focused on a large **core refactor** to improve engine architecture 
 Current tasks include:
 - Custom data formats for scripts and actors
 - AI and enemy formation map data implementation
-- Map scene actor enhancements
 - Battle scene implementation
 - Advanced saving implementation
 - Minor changes such as logger improvements and script enhancements

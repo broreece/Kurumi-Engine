@@ -16,6 +16,7 @@ public class Actor : MapElement, IActorHandler {
     /// <param name="yLocation">The y coordinate of the actor.</param>
     /// <param name="actorSpriteRegistry">The actor sprite registry.</param>
     /// <param name="scriptText">The text representing the script.</param>
+    /// TODO: (CSAF) Change params here to be equal to the script text values, the real script param will be an integer reference.
     public Actor(int xLocation, int yLocation, ActorSpriteRegistry actorSpriteRegistry, string scriptText) : base(xLocation, yLocation) {
         behaviour = (Behaviour) int.Parse(scriptText[..scriptText.IndexOf(',')]);
         scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];

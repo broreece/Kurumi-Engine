@@ -3,6 +3,8 @@ namespace Game.Map.Actors.Base;
 using Game.Map.ActorControllers;
 using Game.Map.Elements;
 
+// TODO: (CSAF) Delete this file.
+
 /// <summary>
 /// Actor handlers are containers for actor objects. They exist to allow actors to exist independently from actor controllers but also
 /// perform the same functions allowing for creation of actors before their AI is created.
@@ -215,6 +217,15 @@ public abstract class ActorHandler : IActorHandler {
     /// <returns>If the duration is greater then or equal to the fixed interval limit.</returns>
     public bool CanMove() {
         return actor.CanMove();
+    }
+
+    /// <summary>
+    /// Returns if the actor's field sprite appears below the party.
+    /// </summary>
+    /// <returns>True: The field sprite will be drawn on the map scene before the party.
+    /// False: The field sprite is drawn after the party, will appear above.</returns>
+    public bool IsBelowParty() {
+        return actor.IsBelowParty();
     }
 
     /// <summary>

@@ -4,6 +4,8 @@ using Game.Map.ActorControllers;
 using Game.Map.Elements;
 using Scenes.Map.Interfaces;
 
+// TODO: (CSAF) Change the name of this file to actor view.
+
 /// <summary>
 /// The public actor handler, used to handle the actor's movement patterns, and state functions.
 /// </summary>

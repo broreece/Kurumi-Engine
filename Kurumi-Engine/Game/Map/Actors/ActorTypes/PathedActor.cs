@@ -3,6 +3,8 @@ namespace Game.Map.Actors.ActorTypes;
 using Game.Map.ActorControllers;
 using Game.Map.Actors.Base;
 
+// TODO: (CSAF) Inherit from actor here instead.
+
 /// <summary>
 /// Pathed actors are an object that holds an actor and a path.
 /// </summary>
@@ -11,6 +13,7 @@ public sealed class PathedActor : ActorHandler {
     /// Constructor for the pathed actor class.
     /// </summary>
     /// <param name="actor">The existing actor object.</param>
+    /// TODO: (CSAF) Change params here to the same as actor plus a list of ints representing movements.
     public PathedActor(Actor actor) : base(actor) {
         // Assign actor value and copy script.
         string scriptText = actor.GetScript();

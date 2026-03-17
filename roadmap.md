@@ -50,26 +50,9 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - AI and enemy formation map data implementation
-- Map scene actor enhancements
 - Battle scene implementation
 - Advanced saving implementation
 - Minor changes such as logger improvements and script enhancements
-
----
-
-## (MSAC) Map scene actor changes ##
-### Complexity: 4 ###
-### Independent: 4 ###
-### Momentum: 3 ###
-### Impact: 4 ###
-
-**Description:** Allow dynamically sized actor sprites, allow sprites to be rendered under the party or above and allows larger then tile sized party field sprites.
-
-**Steps:**
--(MSAC-02) Implement below and above player actor sprites seperately to draw in different orders: (High Priority)
-    - We already have a variable in events to indicate if they are under the player.
-    - When we are looping to draw events we should instead create two lists of actor sprites, ones under the player and ones above the player.
-    - In the render loop we should draw tiles, then events ubove the player, then the party, then the events above the player.
 
 ---
 

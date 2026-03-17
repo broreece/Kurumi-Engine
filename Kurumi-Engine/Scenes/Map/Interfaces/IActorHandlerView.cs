@@ -5,6 +5,12 @@ namespace Scenes.Map.Interfaces;
 /// </summary>
 public interface IActorHandlerView {
     /// <summary>
+    /// Sets the map element's current animation frame.
+    /// </summary>
+    /// <param name="newAnimationFrame">The new current animation frame of the map element.</param>
+    public void SetCurrentAnimationFrame(int animationFrame);
+
+    /// <summary>
     /// Getter for the field sprite id of the actor.
     /// </summary>
     /// <returns>The field sprite id of the actor.</returns>
@@ -59,8 +65,9 @@ public interface IActorHandlerView {
     public int GetDirection();
 
     /// <summary>
-    /// Sets the map element's current animation frame.
+    /// Returns if the actor's field sprite appears below the party.
     /// </summary>
-    /// <param name="newAnimationFrame">The new current animation frame of the map element.</param>
-    public void SetCurrentAnimationFrame(int animationFrame);
+    /// <returns>True: The field sprite will be drawn on the map scene before the party.
+    /// False: The field sprite is drawn after the party, will appear above.</returns>
+    public bool IsBelowParty();
 }

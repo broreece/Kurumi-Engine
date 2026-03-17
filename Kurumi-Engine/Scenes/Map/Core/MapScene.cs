@@ -139,7 +139,6 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         }        
 
         // Check parties current walk animation step, if cycle has ended change frames.
-        // TODO: We should change this double function instance.
         int currentWalkFrame = mapView.GetPartyCurrentAnimationFrame();
         int currentMoveTime = partyWalkAnimationClock.ElapsedTime.AsMilliseconds();
         if (currentWalkFrame > 0) {
@@ -192,27 +191,23 @@ public sealed class MapScene : SceneBase, IMapSceneView {
 
         if (movingLeft) {
             xScrolled = partyXLocation >= halfWidth && partyXLocation < (mapWidth - halfWidth) - 1;
-
             negativeMovement = true;
             movementAdjuster = 0;
             extraTileLeft = 1;
         }
         else if (movingRight) {
             xScrolled = partyXLocation > halfWidth && partyXLocation < (mapWidth - halfWidth);
-
             movementAdjuster *= -1;
             extraTileRight = 1;
         }
         else if (movingUp) {
             yScrolled = partyYLocation >= halfHeight && partyYLocation < (mapHeight - halfHeight) - 1;
-
             negativeMovement = true;
             movementAdjuster = 0;
             extraTileUp = 1;
         }
         else if (movingDown) {
             yScrolled = partyYLocation > halfHeight && partyYLocation < (mapHeight - halfHeight);
-
             movementAdjuster *= -1;
             extraTileDown = 1;
         }
@@ -272,6 +267,22 @@ public sealed class MapScene : SceneBase, IMapSceneView {
             }
         }
 
+        // Load all actors above and below the party.
+        List<IActorHandlerView> mapActors = mapView.GetListActorViews();
+        List<IActorHandlerView> actorsBelowParty = [];
+        List<IActorHandlerView> actorsAboveParty = [];
+        foreach (IActorHandlerView mapActor in mapActors) {
+            if (mapActor.IsBelowParty()) {
+                actorsBelowParty.Add(mapActor);
+            }
+            else {
+                actorsAboveParty.Add(mapActor);
+            }
+        }
+
+        // Draw actors below the party.
+        DrawActors(actorsBelowParty, xScrolled, yScrolled, extraTileRight, extraTileLeft, extraTileUp, extraTileDown);
+
         // Draw party.
         Sprite characterSprite = new(characterFieldSheetTexture,
             new IntRect(currentWalkFrame * characterWidth,
@@ -305,32 +316,8 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         characterSprite.Position = new Vector2f(finalX, finalY);
         AddSprite(characterSprite);
 
-        // Draw actors.
-        List<IActorHandlerView> mapActors = mapView.GetListActorViews();
-        for (int mapActorIndex = 0; mapActorIndex < mapActors.Count; mapActorIndex ++) {
-            int xLocation = mapActors[mapActorIndex].GetXLocation();
-            int yLocation = mapActors[mapActorIndex].GetYLocation();
-            // Check if the actor is in range to draw. Note if tiles right or tiles down is 0 we can skip that step.
-            if (mapView.GetWidth() <= mapMaxTilesWide && mapView.GetHeight() <= mapMaxTilesHigh) {
-                AddSprite(LoadActorSprite(mapActors[mapActorIndex], mapActorIndex, scrollingCamera,
-                    xScrolled, yScrolled));
-            }
-            // If map is larger than display, only draw NPCs within the view.
-            else if (mapView.GetWidth() > mapMaxTilesWide || mapView.GetHeight() > mapMaxTilesHigh) {
-                // Check first if either x or y will be in range.
-                bool insideX = mapView.GetWidth() <= mapMaxTilesWide;
-                bool insideY = mapView.GetHeight() <= mapMaxTilesHigh;
-                // Check again if it's already confirmed or if it is in range.
-                insideX = insideX || (xLocation >= tilesRight - 1 - extraTileRight 
-                    && xLocation <= tilesRight + mapMaxTilesWide + extraTileLeft);
-                insideY = insideY || (yLocation >= tilesDown - 1 - extraTileDown
-                    && yLocation <= tilesDown + mapMaxTilesHigh + extraTileUp);
-                if (insideX && insideY) {
-                    AddSprite(LoadActorSprite(mapActors[mapActorIndex], mapActorIndex, scrollingCamera,
-                        xScrolled, yScrolled));
-                }
-            }
-        }
+        // Draw actors above the party.
+        DrawActors(actorsAboveParty, xScrolled, yScrolled, extraTileRight, extraTileLeft, extraTileUp, extraTileDown);
     }
 
     /// <summary>
@@ -428,6 +415,50 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         }
         else {
             tilesDown = 0;
+        }
+    }
+
+    /// <summary>
+    /// Function that draws all actors from a provided list of actor handlers.
+    /// </summary>
+    /// <param name="actors">The list of actors to draw.</param>
+    /// <param name="xScrolled">If the camera scrolled horizontally.</param>
+    /// <param name="yScrolled">If the camera scrolled vertically.</param>
+    /// <param name="extraTileRight">The extra tile right camera variable.</param>
+    /// <param name="extraTileLeft">The extra tile left camera variable.</param>
+    /// <param name="extraTileDown">The extra tile down camera variable.</param>
+    /// <param name="extraTileUp">The extra tile up camera variable.</param>
+    private void DrawActors(List<IActorHandlerView> actors, bool xScrolled, bool yScrolled, int extraTileRight, 
+        int extraTileLeft, int extraTileDown, int extraTileUp) {
+        for (int mapActorIndex = 0; mapActorIndex < actors.Count; mapActorIndex++) {
+            IActorHandlerView actor = actors[mapActorIndex];
+
+            int xLocation = actor.GetXLocation();
+            int yLocation = actor.GetYLocation();
+
+            // If entire map fits on screen, draw everything
+            if (mapView.GetWidth() <= mapMaxTilesWide && mapView.GetHeight() <= mapMaxTilesHigh) {
+                AddSprite(LoadActorSprite(actor, mapActorIndex, scrollingCamera, xScrolled, yScrolled));
+            }
+            else {
+                // Check visibility bounds
+                bool insideX = mapView.GetWidth() <= mapMaxTilesWide;
+                bool insideY = mapView.GetHeight() <= mapMaxTilesHigh;
+
+                insideX = insideX || (
+                    xLocation >= tilesRight - 1 - extraTileRight &&
+                    xLocation <= tilesRight + mapMaxTilesWide + extraTileLeft
+                );
+
+                insideY = insideY || (
+                    yLocation >= tilesDown - 1 - extraTileDown &&
+                    yLocation <= tilesDown + mapMaxTilesHigh + extraTileUp
+                );
+
+                if (insideX && insideY) {
+                    AddSprite(LoadActorSprite(actor, mapActorIndex, scrollingCamera, xScrolled, yScrolled));
+                }
+            }
         }
     }
 
