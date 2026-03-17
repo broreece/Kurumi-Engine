@@ -130,6 +130,22 @@ public abstract class ActorHandler : IActorHandler {
     }
 
     /// <summary>
+    /// Getter for the width of the actor.
+    /// </summary>
+    /// <returns>The field sprite width of the actor.</returns>
+    public int GetWidth() {
+        return actor.GetWidth();
+    }
+
+    /// <summary>
+    /// Getter for the height of the actor.
+    /// </summary>
+    /// <returns>The field sprite height of the actor.</returns>
+    public int GetHeight() {
+        return actor.GetHeight();
+    }
+
+    /// <summary>
     /// Gets the map element's previous X location.
     /// </summary>
     /// <returns>The map elements previous X coordinate.</returns>
@@ -181,7 +197,7 @@ public abstract class ActorHandler : IActorHandler {
     /// Getter for the actor's movement speed.
     /// </summary>
     /// <returns>The movement speed of the actor.</returns>
-    public int GetMovementSpeed(){
+    public int GetMovementSpeed() {
         return actor.GetMovementSpeed();
     }
 
@@ -250,7 +266,7 @@ public abstract class ActorHandler : IActorHandler {
     /// Getter for the actor's behaviour.
     /// </summary>
     /// <returns>The behaviour of the actor.</returns>
-    public Behaviour GetBehaviour(){
+    public Behaviour GetBehaviour() {
         return actor.GetBehaviour();
     }
 
@@ -258,7 +274,7 @@ public abstract class ActorHandler : IActorHandler {
     /// Gets the actor's script.
     /// </summary>
     /// <returns>The script that the actor stores.</returns>
-    public string GetScript(){
+    public string GetScript() {
         return actor.GetScript();
     }
 

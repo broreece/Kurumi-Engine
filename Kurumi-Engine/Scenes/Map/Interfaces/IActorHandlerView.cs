@@ -11,6 +11,18 @@ public interface IActorHandlerView {
     public int GetFieldSpriteId();
 
     /// <summary>
+    /// Getter for the width of the actor.
+    /// </summary>
+    /// <returns>The field sprite width of the actor.</returns>
+    public int GetWidth();
+
+    /// <summary>
+    /// Getter for the height of the actor.
+    /// </summary>
+    /// <returns>The field sprite height of the actor.</returns>
+    public int GetHeight();
+
+    /// <summary>
     /// Gets the map element's previous X location.
     /// </summary>
     /// <returns>The map elements previous X coordinate.</returns>

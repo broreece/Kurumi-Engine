@@ -25,6 +25,9 @@ Kurumi-Engine/Assets/Licenses/*
 Kurumi-Engine/Assets/Maps/*
 Kurumi-Engine/Assets/Registry/*
 
+# - Ignore the game database.
+Kurumi-Engine/Database/Schema/game_data.db
+
 # - Ignore save files.
 Kurumi-Engine/Save/save_data/*
 

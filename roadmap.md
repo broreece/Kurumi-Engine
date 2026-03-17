@@ -66,17 +66,41 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Description:** Allow dynamically sized actor sprites, allow sprites to be rendered under the party or above and allows larger then tile sized party field sprites.
 
 **Steps:**
-- (MSAC-01) Allow varying sizes of actor sprites: (High Priority)
-    - Add functions in the actor class to load width and height.
-    - When we create actor sprites, create it from actor info, width and height.
 -(MSAC-02) Implement below and above player actor sprites seperately to draw in different orders: (High Priority)
     - We already have a variable in events to indicate if they are under the player.
     - When we are looping to draw events we should instead create two lists of actor sprites, ones under the player and ones above the player.
     - In the render loop we should draw tiles, then events ubove the player, then the party, then the events above the player.
-- (MSAC-03) Allow character map sprites to be larger then tiles and display above current tile: (High Priority)
-    - Edit the current height/width in the art .yaml file.
-    - When rendering current sprites width and height we should subtract it by the difference between the character height/width from the tile height/width.
-    - This change will also apply to actor sprites.
+
+---
+
+## (CSAF) Custom script and actor format implementation ##
+### Complexity: 5 ###
+### Independent: 5 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Currently scripts and actors are stored in string format, we should create a custom format.
+
+**Steps:**
+(CSAF-01):
+- Create a new table in the database called "actors" and "pathed_actors_path"
+    - Create fields in the actors table representing how we currently store just actors no scripts.
+    - In "pathed_actors_path" store a foreign key representing the actor, an id representing the move index and the move.
+- Create an "ActorRegistry" and update the actor constructor to take these new actor fields instead of a string.
+- Load these fields in the database in a "LoadActors" function:
+    - If the enum value for behaviour is a path check the "pathed_actors_path" to load a path.
+- We can completely remove the "ActorHandler" and "IActorHandler" class as a result of this change:
+    - Make pathed actor inherit from actor not actor handler and pass a path as an additional param.
+(CSAF-02):
+- Scripts should be stored in json formats.
+- Each script variable stored with a string key for higher readability.
+- Script steps should be indexed with the name of the type of script step so we'll maintain it's switch statement check.
+- Because it's json each script step can have different parameters which is better then database.
+- Store these scripts in "/Assets/Scripts" then create a registry file like the maps registry json file.
+(CSAF-03):
+- To link actors and scripts "actors" database should have a field for a linked script.
+- If the script value isn't empty or -1 load the script from the script registry.
+- We might need a file to deserealize scripts from json into our format.
 
 ---
 
@@ -404,13 +428,15 @@ Forge build reached!
 
 # Unplaned tickets:
 
-## Custom script and actor format implementation ##
-### Complexity: 5 ###
-### Independent: 5 ###
-### Momentum: 3 ###
-### Impact: 1 ###
+---
 
-**Description:** Currently scripts and actors are stored in string format, we should create a custom format.
+## Make a tiled application modification to output in our format ##
+### Complexity: 3 ###
+### Independent: 1 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Currently we have a messy way to convert files using a python script. Yets just modify the tiled application to do the work for us.
 
 **Steps:** N/A
 

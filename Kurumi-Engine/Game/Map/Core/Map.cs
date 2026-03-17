@@ -99,6 +99,14 @@ public sealed class Map : INavigationGrid, IMapView {
     }
 
     /// <summary>
+    /// Sets the parties current animation frame.
+    /// </summary>
+    /// <param name="newAnimationFrame">The new current animation frame of the party.</param>
+    public void SetPartyCurrentAnimationFrame(int animationFrame) {
+        party.SetCurrentAnimationFrame(animationFrame);
+    }
+
+    /// <summary>
     /// Checks if an actor at a given point is being forced to move.
     /// </summary>
     /// <param name="xLocation">The x location being checked.</param>
@@ -224,6 +232,38 @@ public sealed class Map : INavigationGrid, IMapView {
     /// <returns>The map's background art ID.</returns>
     public int GetBackgroundArtId() {
         return backgroundArtId;
+    }
+
+    /// <summary>
+    /// Gets the parties current animation frame.
+    /// </summary>
+    /// <returns>The parties current animation frame.</returns>
+    public int GetPartyCurrentAnimationFrame() {
+        return party.GetCurrentAnimationFrame();
+    }
+
+    /// <summary>
+    /// Gets the parties X location.
+    /// </summary>
+    /// <returns>The parties X coordinate.</returns>
+    public int GetPartyXLocation() {
+        return party.GetXLocation();
+    }
+
+    /// <summary>
+    /// Gets the parties Y location.
+    /// </summary>
+    /// <returns>The parties Y coordinate.</returns>
+    public int GetPartyYLocation() {
+        return party.GetYLocation();
+    }
+
+    /// <summary>
+    /// Getter for the parties direction.
+    /// </summary>
+    /// <returns>The direction the party is facing.</returns>
+    public int GetPartyDirection() {
+        return party.GetDirection();
     }
 
     /// <summary>

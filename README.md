@@ -19,6 +19,7 @@ Active Development
 Recent work focused on a large **core refactor** to improve engine architecture and maintainability.
 
 Current tasks include:
+- Custom data formats for scripts and actors
 - AI and enemy formation map data implementation
 - Map scene actor enhancements
 - Battle scene implementation

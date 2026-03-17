@@ -363,20 +363,20 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     }
 
     /// <summary>
-    /// Function that loads all actors in the database.
+    /// Function that loads all actor sprites in the database.
     /// </summary>
-    /// <returns>The actors stored in the database.</returns>
-    public ActorInfo[] LoadActors() {
-        object[,] data = Load("actors");
+    /// <returns>The actor sprites stored in the database.</returns>
+    public ActorSprite[] LoadActorSprites() {
+        object[,] data = Load("actor_sprites");
         int results = data.GetLength(0);
-        ActorInfo[] actors = new ActorInfo[results];
+        ActorSprite[] actorSprites = new ActorSprite[results];
         for (int row = 0; row < results; row ++) {
             int spriteId = Convert.ToInt32((long) data[row, 0]);
             int width = Convert.ToInt32((long) data[row, 1]);
             int height = Convert.ToInt32((long) data[row, 2]);
-            actors[row] = new(spriteId, width, height);
+            actorSprites[row] = new(spriteId, width, height);
         }
-        return actors;
+        return actorSprites;
     }
 
     /// <summary>

@@ -17,6 +17,12 @@ public interface IMapView {
     public void SetActorAtIsForcedMoved(int xLocation, int yLocation, bool value);
 
     /// <summary>
+    /// Sets the parties current animation frame.
+    /// </summary>
+    /// <param name="newAnimationFrame">The new current animation frame of the party.</param>
+    public void SetPartyCurrentAnimationFrame(int animationFrame);
+
+    /// <summary>
     /// Checks if an actor at a given point is being forced to move.
     /// </summary>
     /// <param name="xLocation">The x location being checked.</param>
@@ -73,6 +79,18 @@ public interface IMapView {
     /// </summary>
     /// <returns>The map's background art ID.</returns>
     public int GetBackgroundArtId();
+
+    /// <summary>
+    /// Function used to load the parties current animation frame.
+    /// </summary>
+    /// <returns>The current animation frame of the party.</returns>
+    public int GetPartyCurrentAnimationFrame();
+
+    public int GetPartyXLocation();
+
+    public int GetPartyYLocation();
+
+    public int GetPartyDirection();
 
     /// <summary>
     /// Getter for the party associated to the map.

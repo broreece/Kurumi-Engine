@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS "enemy_abilities" (
 	FOREIGN KEY("enemy_id") REFERENCES "enemies"("id"),
 	FOREIGN KEY("ability_id") REFERENCES "abilities"("id")
 );
-CREATE TABLE IF NOT EXISTS "actors" (
+CREATE TABLE IF NOT EXISTS "actor_sprites" (
 	"art_id"	INTEGER NOT NULL UNIQUE,
 	"width"	INTEGER NOT NULL,
 	"height"	INTEGER NOT NULL,

@@ -38,7 +38,7 @@ public sealed class MapManager {
     /// <param name="actorRegistry">The actor registry.</param>
     /// <param name="tileObjectRegistry">The tile objects registry.</param>
     /// <exception cref="MissingJsonFileException">Error thrown if a .json data file is missing.</exception>
-    public Map LoadMap(Party party, ActorRegistry actorRegistry, TileObjectRegistry tileObjectRegistry) {
+    public Map LoadMap(Party party, ActorSpriteRegistry actorSpriteRegistry, TileObjectRegistry tileObjectRegistry) {
         // Load from passed file.
         MapData mapData;
         try {
@@ -89,7 +89,7 @@ public sealed class MapManager {
             animatedTiles[tileData.XIndex, tileData.YIndex] = tiles[tileData.XIndex, tileData.YIndex].IsAnimated();
             // Check here if an actor exists.
             if (tileData.Actor.Contains(',')) {
-                Actor actor = new(tileData.XIndex, tileData.YIndex, actorRegistry, tileData.Actor);
+                Actor actor = new(tileData.XIndex, tileData.YIndex, actorSpriteRegistry, tileData.Actor);
                 actors[tileData.XIndex, tileData.YIndex] = actor;
                 switch (actor.GetBehaviour()) {
                     case Behaviour.FollowsPath:

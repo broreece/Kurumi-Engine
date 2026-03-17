@@ -31,7 +31,7 @@ public abstract class MapElement : PositionProvider {
     /// <summary>
     /// Gets the map element's current animation frame.
     /// </summary>
-    /// <returns>The map elements current animation frame.</returns>
+    /// <returns>The map element's current animation frame.</returns>
     public int GetCurrentAnimationFrame() {
         return currentAnimationFrame;
     }

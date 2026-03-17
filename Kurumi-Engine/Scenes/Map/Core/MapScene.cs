@@ -109,7 +109,7 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         // Update camera controls on map basis.
         cameraRight = mapView.GetWidth() < mapMaxTilesWide ? (float) (mapMaxTilesWide - mapView.GetHeight()) / 2 : 0;
         cameraDown = mapView.GetWidth() < mapMaxTilesHigh ? (float) (mapMaxTilesHigh - mapView.GetHeight()) / 2 : 0;
-        CenterParty(mapView.GetParty().GetXLocation(), mapView.GetParty().GetYLocation());
+        CenterParty(mapView.GetPartyXLocation(), mapView.GetPartyYLocation());
     }
 
     /// <summary>
@@ -139,13 +139,14 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         }        
 
         // Check parties current walk animation step, if cycle has ended change frames.
-        int currentWalkFrame = mapView.GetParty().GetCurrentAnimationFrame();
+        // TODO: We should change this double function instance.
+        int currentWalkFrame = mapView.GetPartyCurrentAnimationFrame();
         int currentMoveTime = partyWalkAnimationClock.ElapsedTime.AsMilliseconds();
         if (currentWalkFrame > 0) {
             if (currentMoveTime > (walkLength / (walkFrames - 1))) {
                 partyWalkAnimationClock.Restart();
                 currentWalkFrame = currentWalkFrame == walkFrames - 1 ? 0 : currentWalkFrame + 1;
-                mapView.GetParty().SetCurrentAnimationFrame(currentWalkFrame);
+                mapView.SetPartyCurrentAnimationFrame(currentWalkFrame);
             }
             // If the walk animation ended
             if (currentWalkFrame == 0) {
@@ -176,29 +177,42 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         int extraTileRight = 0;
         int extraTileDown = 0;
         int extraTileLeft = 0;
-        if (oldPartyXLocation > partyXLocation) {
-            xScrolled = (partyXLocation >= (mapMaxTilesWide / 2)
-                && partyXLocation < (mapView.GetWidth() - (mapMaxTilesWide / 2)) - 1);
+
+        // Calculate additional camera settings.
+        int halfWidth = mapMaxTilesWide / 2;
+        int halfHeight = mapMaxTilesHigh / 2;
+
+        int mapWidth = mapView.GetWidth();
+        int mapHeight = mapView.GetHeight();
+
+        bool movingLeft  = oldPartyXLocation > partyXLocation;
+        bool movingRight = oldPartyXLocation < partyXLocation;
+        bool movingUp    = oldPartyYLocation > partyYLocation;
+        bool movingDown  = oldPartyYLocation < partyYLocation;
+
+        if (movingLeft) {
+            xScrolled = partyXLocation >= halfWidth && partyXLocation < (mapWidth - halfWidth) - 1;
+
             negativeMovement = true;
             movementAdjuster = 0;
             extraTileLeft = 1;
         }
-        else if (oldPartyXLocation < partyXLocation) {
-            xScrolled = (partyXLocation > (mapMaxTilesWide / 2)
-                && partyXLocation < (mapView.GetWidth() - (mapMaxTilesWide / 2)));
+        else if (movingRight) {
+            xScrolled = partyXLocation > halfWidth && partyXLocation < (mapWidth - halfWidth);
+
             movementAdjuster *= -1;
             extraTileRight = 1;
         }
-        else if (oldPartyYLocation > partyYLocation) {
-            yScrolled = (partyYLocation >= (mapMaxTilesHigh / 2)
-                && partyYLocation < (mapView.GetHeight() - (mapMaxTilesHigh / 2)) - 1);
+        else if (movingUp) {
+            yScrolled = partyYLocation >= halfHeight && partyYLocation < (mapHeight - halfHeight) - 1;
+
             negativeMovement = true;
             movementAdjuster = 0;
             extraTileUp = 1;
         }
-        else if (oldPartyYLocation < partyYLocation) {
-            yScrolled = (partyYLocation > (mapMaxTilesHigh / 2)
-                && partyYLocation < (mapView.GetHeight() - (mapMaxTilesHigh / 2)));
+        else if (movingDown) {
+            yScrolled = partyYLocation > halfHeight && partyYLocation < (mapHeight - halfHeight);
+
             movementAdjuster *= -1;
             extraTileDown = 1;
         }
@@ -261,23 +275,34 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         // Draw party.
         Sprite characterSprite = new(characterFieldSheetTexture,
             new IntRect(currentWalkFrame * characterWidth,
-            mapView.GetParty().GetDirection() * characterHeight, characterWidth, characterHeight));
+            mapView.GetPartyDirection() * characterHeight, characterWidth, characterHeight));
+        // Load difference between tile size and character size.
+        int widthDifference = (characterWidth - tileWidth) / 2;
+        int heightDifference = characterHeight - tileHeight;
         // Calculate float based on current animation frame and check if party is currently moving.
         float walkingDistance = currentWalkFrame == 0 ? 0 : (float) currentWalkFrame / (float) walkFrames;
-        Vector2f characterPosition;
         // Draw based on animation cycle to target each movement.
+        float baseX = partyXLocation + cameraRight - tilesRight;
+        float baseY = partyYLocation + cameraDown - tilesDown;
+
         if (oldPartyXLocation != partyXLocation) {
-            characterPosition = new((partyXLocation + cameraRight + walkingDistance + scrollingCamera + movementAdjuster - tilesRight)
-                * tileWidth * widthScale, (partyYLocation + cameraDown - tilesDown) * tileHeight * heightScale);
-        } 
-        else {
-            characterPosition = new((partyXLocation + cameraRight - tilesRight) * tileWidth * widthScale,
-                (partyYLocation + movementAdjuster + cameraDown + scrollingCamera - tilesDown + walkingDistance) 
-                * tileHeight * heightScale);
+            // Horizontal movement
+            baseX += walkingDistance + scrollingCamera + movementAdjuster;
         }
-        Vector2f characterScale = new(widthScale, heightScale);
-        characterSprite.Position = characterPosition;
-        characterSprite.Scale = characterScale;
+        else {
+            // Vertical movement
+            baseY += movementAdjuster + scrollingCamera + walkingDistance;
+        }
+
+        // Convert to pixel space
+        float pixelX = (baseX * tileWidth) - widthDifference;
+        float pixelY = (baseY * tileHeight) - heightDifference;
+
+        // Apply scaling
+        float finalX = pixelX * widthScale;
+        float finalY = pixelY * heightScale;
+        characterSprite.Scale = new Vector2f(widthScale, heightScale);
+        characterSprite.Position = new Vector2f(finalX, finalY);
         AddSprite(characterSprite);
 
         // Draw actors.
@@ -440,32 +465,44 @@ public sealed class MapScene : SceneBase, IMapSceneView {
             int newFrame = currentWalkFrame == walkFrames - 1 ? 0 : currentWalkFrame + 1;
             currentActor.SetCurrentAnimationFrame(newFrame);
         }
+        // Get the actor width and height and calculate the placement on the tile basedon size difference.
+        int width = currentActor.GetWidth();
+        int height = currentActor.GetHeight();
+        int widthDifference = (width - tileWidth) / 2;
+        int heightDifference = height - tileHeight;
         Sprite actorSprite = new(actorTextures[actorIndex],
-            new IntRect(currentActor.GetCurrentAnimationFrame() * characterWidth,
-            currentActor.GetDirection() * characterHeight, characterWidth, characterHeight));
+            new IntRect(currentActor.GetCurrentAnimationFrame() * width, currentActor.GetDirection() * height, width, height));
         // Calculate float based on current animation frame and check if party is currently moving.
         float walkingDistance = currentWalkFrame == 0 ? 0 : (float) currentWalkFrame / (float) walkFrames;
         int movementAdjuster = currentWalkFrame == 0 ? 0 : 1;
         Vector2f actorPosition;
-        // Draw based on animation cycle to target each movement.
+        // Draw based on walk animation and all variables.
+        float baseX = xLocation + cameraRight - tilesRight + actorXScroll;
+        float baseY = yLocation + cameraDown - tilesDown + actorYScroll;
+
+        // Adjust for movement direction
         if (currentActor.GetOldXLocation() > xLocation) {
-            actorPosition = new((xLocation  + cameraRight - tilesRight + walkingDistance + actorXScroll)
-                * tileWidth * widthScale, (yLocation + cameraDown - tilesDown + actorYScroll) * tileHeight * heightScale);
-        } 
+            baseX += walkingDistance;
+        }
         else if (currentActor.GetOldXLocation() < xLocation) {
-            actorPosition = new((xLocation  + cameraRight - tilesRight - walkingDistance + actorXScroll)
-                * tileWidth * widthScale, (yLocation + cameraDown - tilesDown + actorYScroll) * tileHeight * heightScale);
-        } 
+            baseX -= walkingDistance;
+        }
         else if (currentActor.GetOldYLocation() > yLocation) {
-            actorPosition = new((xLocation + cameraRight - tilesRight + actorXScroll) * tileWidth * widthScale,
-                (yLocation + movementAdjuster + cameraDown - tilesDown - walkingDistance + actorYScroll)
-                * tileHeight * heightScale);
+            baseY += movementAdjuster - walkingDistance;
         }
         else {
-            actorPosition = new((xLocation + cameraRight - tilesRight + actorXScroll) * tileWidth * widthScale,
-                (yLocation - movementAdjuster + cameraDown - tilesDown + walkingDistance + actorYScroll) 
-                * tileHeight * heightScale);
+            baseY -= movementAdjuster - walkingDistance;
         }
+
+        // Convert to pixel space
+        float pixelX = (baseX * tileWidth) - widthDifference;
+        float pixelY = (baseY * tileHeight) - heightDifference;
+
+        // Apply scaling
+        float finalX = pixelX * widthScale;
+        float finalY = pixelY * heightScale;
+
+        actorPosition = new(finalX, finalY);
         actorSprite.Position = actorPosition;
         actorSprite.Scale = characterScale;
         return actorSprite;
