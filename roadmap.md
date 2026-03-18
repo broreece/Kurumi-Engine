@@ -49,6 +49,7 @@ Tickets will also display a brief description, a set of planned steps for comple
 ### Forge
 **Focus areas:**
 
+- Custom script and actor data no longer use strings.
 - AI and enemy formation map data implementation
 - Battle scene implementation
 - Advanced saving implementation
@@ -65,9 +66,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Description:** Currently scripts and actors are stored in string format, we should create a custom format.
 
 **Steps:**
-(CSAF-01):
-- Change "IActorHandler" class as a result of this change:
-    - Use interfaces in places we used to use actor handler.
 (CSAF-02):
 - Scripts should be stored in json formats.
 - Each script variable stored with a string key for higher readability.

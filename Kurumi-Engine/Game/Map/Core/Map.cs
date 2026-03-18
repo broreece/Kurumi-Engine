@@ -58,7 +58,6 @@ public sealed class Map : INavigationGrid, IMapView {
 
         foreach (Actor actor in listActors) {
             // Add the actor to lists based on when it's activated.
-            // TODO: (CSAF) Change these lists to interfaces.
             if (actor.ActivatesAutomatically()) {
                 autoActors.Add(actor);
             }
@@ -271,7 +270,6 @@ public sealed class Map : INavigationGrid, IMapView {
     /// Getter for the map's actors that activate automatically.
     /// </summary>
     /// <returns>The list of actors that activate automatically.</returns>
-    /// // TODO: (CSAF) Interface actor here.
     public List<Actor> GetAutoActors() {
         return autoActors;
     }
@@ -280,7 +278,6 @@ public sealed class Map : INavigationGrid, IMapView {
     /// Getter for the map's actors that activate when they find the party.
     /// </summary>
     /// <returns>The list of actors that activate when they find the party.</returns>
-    /// // TODO: (CSAF) Interface actor here.
     public List<Actor> GetOnFoundActors() {
         return onFoundActors;
     }
@@ -307,7 +304,6 @@ public sealed class Map : INavigationGrid, IMapView {
     private readonly int width, height, tileSheetId, backgroundArtId;
 
     // Map actor variables.
-    // TODO: (CSAF) We can actually make these into activatable interfaces as we don't need any additional info from these actors.
     private List<Actor> autoActors, onFoundActors;
 
     // Stored party currently loaded on the map.

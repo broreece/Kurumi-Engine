@@ -1,9 +1,11 @@
 namespace Game.Map.Elements;
 
+using Utils.Interfaces;
+
 /// <summary>
 /// The position provider class, contains and X and Y location, used to abstract data.
 /// </summary>
-public class PositionProvider {
+public abstract class PositionProvider : ICoordinateAccessor {
     /// <summary>
     /// The constructor for the position provider class.
     /// </summary>

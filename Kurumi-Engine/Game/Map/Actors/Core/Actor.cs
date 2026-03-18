@@ -5,11 +5,12 @@ using Game.Map.Actors.Base;
 using Game.Map.Elements;
 using Scenes.Map.Interfaces;
 using Scripts.MapScripts.Base;
+using States.Map.Interfaces;
 
 /// <summary>
 /// Actors are map elements that contain a list of possible scripts as well as information surronding it's appearence and how it's activated.
 /// </summary>
-public class Actor : MapElement, IActorView {
+public class Actor : MapElement, IActorView, IActionActorView, ITouchActorView, ITrackingActorWithScriptView, IMoveableActor, IPassabilityAccessor {
     /// <summary>
     /// Constructor for the actor class.
     /// </summary>

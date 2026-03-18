@@ -1,9 +1,11 @@
 namespace Scenes.Map.Interfaces;
 
+using Utils.Interfaces;
+
 /// <summary>
 /// The public actor scene interface, used to restrict access to the actors methods used in the map scene.
 /// </summary>
-public interface IActorView {
+public interface IActorView : ICoordinateAccessor, IDirectionAccessor {
     /// <summary>
     /// Sets the map element's current animation frame.
     /// </summary>
@@ -35,34 +37,16 @@ public interface IActorView {
     public int GetOldXLocation();
 
     /// <summary>
-    /// Gets the map element's X location.
-    /// </summary>
-    /// <returns>The map elements X coordinate.</returns>
-    public int GetXLocation();
-
-    /// <summary>
     /// Gets the map element's previous Y location.
     /// </summary>
     /// <returns>The map elements previous Y coordinate.</returns>
     public int GetOldYLocation();
 
     /// <summary>
-    /// Gets the map element's Y location.
-    /// </summary>
-    /// <returns>The map elements Y coordinate.</returns>
-    public int GetYLocation();
-
-    /// <summary>
     /// Gets the map element's current animation frame.
     /// </summary>
     /// <returns>The map elements current animation frame.</returns>
     public int GetCurrentAnimationFrame();
-
-    /// <summary>
-    /// Getter for the map elements direction.
-    /// </summary>
-    /// <returns>The direction the map element is facing.</returns>
-    public int GetDirection();
 
     /// <summary>
     /// Returns if the actor's field sprite appears below the party.
