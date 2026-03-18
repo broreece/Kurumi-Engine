@@ -4,7 +4,7 @@
   <img src="Kurumi-Engine/Assets/Icons/readme_icon.png" width="300">
 </p>
 
-Kurumi Engine is a modular RPG engine written in **C# using SFML**.
+Kurumi Engine is a modular RPG engine written in **C# using SFML**, alongside data stored in **SQL, YAML and JSON**.
 It focuses on **clean architecture, extensibility, and data-driven gameplay systems**.
 
 The engine is designed for building **RPGs** with scripted events, AI actors, and modular UI systems.
@@ -16,7 +16,7 @@ The engine is designed for building **RPGs** with scripted events, AI actors, an
 Forge 
 Active Development
 
-Recent work focused on a large **core refactor** to improve engine architecture and maintainability.
+First build worked focused on a large **core refactor** to improve engine architecture and maintainability, previous build 'crucible' focused on cleaning up up post refractor and creating tools to help development (Such as logging, unit tests).
 
 Current tasks include:
 - Custom data formats for scripts and actors
@@ -29,7 +29,7 @@ Current tasks include:
 
 ## Design Philosophy
 
-Kurumi Engine is heavily inspired by the design philosophy behind games like **Fear & Hunger**.
+Kurumi Engine is heavily inspired by the design philosophy behind games like **Fear & Hunger** and other engines such as **RPG Maker**.
 
 Key ideas:
 
@@ -37,7 +37,7 @@ Key ideas:
 - **Deterministic step-based script logic in map and battle**
 - **Engine follows SOLID principles**
 
-The engine aims to keep any gameplay logic outside of scripts **explicit and readable**.
+The engine aims to keep any gameplay logic outside of scripts **explicit and readable**. If any licensed user wanted to edit the engine for their own purpose it should be straight-forward.
 
 ---
 
@@ -50,13 +50,13 @@ Current engine capabilities include:
 - Script-driven event system
 - Actor AI controllers
 - Tile-based map navigation
-- Modular UI state system
-- Input mapping system
+- Modular UI state system that allows for blocking and non blocking UI elements
 
 ### Gameplay Systems
 - Custom scripting and stored variables/flags allow dynamic gameplay
 - Dynamic actor control systems that do not restrict player controls
 - The same script-driven event system applies in battles for unique battle experiences
+- Enemy formations can persist across saves meaning hostile NPCs affect the game world
 
 ---
 
@@ -133,7 +133,8 @@ Kurumi-Engine
 | **C# (.NET 8)** | Core engine development |
 | **SFML.NET** | Rendering, window management, and input handling |
 | **SQLite** | Structured game data storage |
-| **YAML / JSON** | Configuration files and dynamic save data |
+| **YAML** | Configuration files |
+| **JSON** | Dynamic save data and scripts |
 | **Git** | Version control and development workflow |
 | **Xunit** | Unit tests |
 
@@ -142,6 +143,7 @@ Kurumi-Engine
 ## Project Goals
 
 - Build a **modular RPG engine architecture** with clear system boundaries and clean and readable code.
+- Implement actors, scripts and enemy formations such that they act in tandem to create dynamic gameplay with no adjustments to code.
 - Build an engine that is both simple to use and allows for complex situations.
 
 ---

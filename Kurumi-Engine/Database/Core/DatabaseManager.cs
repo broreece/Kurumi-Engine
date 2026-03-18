@@ -8,6 +8,7 @@ using Game.Entities.Status;
 using Game.Items;
 using Game.Map.Actors.Base;
 using Game.Map.Tiles;
+using Registry.Actors;
 using Registry.Items;
 using Registry.Skills;
 using Save.Interfaces;
@@ -99,9 +100,9 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     /// <summary>
     /// Function that loads all equipment in the database.
     /// </summary>
-    /// <param name="itemRegistry">The item data that is passed.</param>
-    /// <param name="skillRegistry">The skill data that is passed.</param>
-    /// <param name="abilityRegistry">The ability data that is passed.</param>
+    /// <param name="itemRegistry">The item registry object.</param>
+    /// <param name="skillRegistry">The skill registry object.</param>
+    /// <param name="abilityRegistry">The ability registry object.</param>
     /// <returns>The equipment stored in the database.</returns>
     public Equipment[] LoadEquipment(ItemRegistry itemRegistry, SkillRegistry skillRegistry, AbilityRegistry abilityRegistry) {
         object[,] data = Load("equipment");
@@ -170,8 +171,8 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     /// <summary>
     /// Function that loads all statuses in the database.
     /// </summary>
-    /// <param name="skillRegistry">The skill data that is passed.</param>
-    /// <param name="abilityRegistry">The ability data that is passed.</param>
+    /// <param name="skillRegistry">The skill registry object.</param>
+    /// <param name="abilityRegistry">The ability registry object.</param>
     /// <returns>The statuses stored in the database.</returns>
     public Status[] LoadStatuses(SkillRegistry skillRegistry, AbilityRegistry abilityRegistry) {
         object[,] data = Load("statuses");
@@ -273,7 +274,7 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     /// <summary>
     /// Function that loads all enemies in the database.
     /// </summary>
-    /// <param name="abilityRegistry">The ability data that is passed.</param>
+    /// <param name="abilityRegistry">The ability registry object.</param>
     /// <returns>The enemies stored in the database.</returns>
     public Enemy[] LoadEnemies(AbilityRegistry abilityRegistry) {
         Ability[] allAbilities = abilityRegistry.GetAbilities();
@@ -377,6 +378,35 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             actorSprites[row] = new(spriteId, width, height);
         }
         return actorSprites;
+    }
+
+    /// <summary>
+    /// Function that loads all actors information in the database.
+    /// </summary>
+    /// <param name="actorSpriteRegistry">The actor sprite registry object.</param>
+    /// <returns>The actor information stored in the database.</returns>
+    public ActorInfo[] LoadActorInfo(ActorSpriteRegistry actorSpriteRegistry) {
+        object[,] data = Load("actors");
+        int results = data.GetLength(0);
+        ActorInfo[] actors = new ActorInfo[results];
+        for (int row = 0; row < results; row ++) {
+            int id = (int) (long) data[row, 0];
+            int behaviour = (int) data[row, 1];
+            int spriteId = (int) (long) data[row, 2];
+            int movementSpeed = (int) data[row, 3];
+            int trackingRange = (int) (long) data[row, 4];
+            bool belowParty = Convert.ToInt32((long) data[row, 5]) == 1;
+            bool passable = Convert.ToInt32((long) data[row, 6]) == 1;
+            bool onTouch = Convert.ToInt32((long) data[row, 7]) == 1;
+            bool auto = Convert.ToInt32((long) data[row, 8]) == 1;
+            bool onAction = Convert.ToInt32((long) data[row, 9]) == 1;
+            bool onFind = Convert.ToInt32((long) data[row, 10]) == 1;
+            int scriptId = (int) (long) data[row, 11];
+            // TODO: (CSAF) Check behaviour is pathed, if so load the path from the other database.
+            actors[row] = new ActorInfo(behaviour, actorSpriteRegistry.GetActorSprite(spriteId), movementSpeed, trackingRange, belowParty, passable, onTouch, auto,
+                onAction, onFind, scriptId);
+        }
+        return actors;
     }
 
     /// <summary>

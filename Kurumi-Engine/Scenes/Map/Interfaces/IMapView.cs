@@ -1,6 +1,6 @@
 namespace Scenes.Map.Interfaces;
 
-using Game.Map.Actors.Base;
+using Game.Map.Actors.Core;
 using Game.Map.Elements;
 using Game.Map.Tiles;
 
@@ -48,13 +48,13 @@ public interface IMapView {
     /// Getter for the map's actors.
     /// </summary>
     /// <returns>The map's actors.</returns>
-    public IActorHandler?[,] GetActors();
+    public Actor?[,] GetActors();
 
     /// <summary>
     /// Getter for the map's actors in the form of a list.
     /// </summary>
     /// <returns>The map's actors in the form of a list.</returns>
-    public List<IActorHandlerView> GetListActorViews();
+    public List<IActorView> GetListActorViews();
 
     /// <summary>
     /// Getter for the map's width.
@@ -86,10 +86,22 @@ public interface IMapView {
     /// <returns>The current animation frame of the party.</returns>
     public int GetPartyCurrentAnimationFrame();
 
+    /// <summary>
+    /// Gets the parties X location.
+    /// </summary>
+    /// <returns>The parties X coordinate.</returns>
     public int GetPartyXLocation();
 
+    /// <summary>
+    /// Gets the parties Y location.
+    /// </summary>
+    /// <returns>The parties Y coordinate.</returns>
     public int GetPartyYLocation();
 
+    /// <summary>
+    /// Getter for the parties direction.
+    /// </summary>
+    /// <returns>The direction the party is facing.</returns>
     public int GetPartyDirection();
 
     /// <summary>

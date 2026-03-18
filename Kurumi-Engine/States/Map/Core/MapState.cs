@@ -4,6 +4,7 @@ using Config.Runtime.Map;
 using Engine.Runtime;
 using Game.Map.ActorControllers;
 using Game.Map.Actors.Base;
+using Game.Map.Actors.Core;
 using Game.Map.Core;
 using Game.Map.Elements;
 using Scripts.Base;
@@ -45,7 +46,8 @@ public sealed class MapState : StateBase, IMapInputController {
         currentForceMoveStep = null;
 
         // Acctivate all auto actors.
-        foreach (IActorHandler autoActor in map.GetAutoActors()) {
+        foreach (Actor autoActor in map.GetAutoActors()) {
+            // TODO: (CSAF) Interface actor here.
             ActivateScript(new MapScript(autoActor.GetScript()));
         }
     }
@@ -95,7 +97,8 @@ public sealed class MapState : StateBase, IMapInputController {
 
         // Check actors and if they should move.
         int index = 0;
-        foreach (IActorHandler currentHandler in map.GetListActors()) {
+        foreach (Actor currentHandler in map.GetListActors()) {
+            // TODO: (CSAF) Interface actor here.
             int timePassed = mapSceneView.TickActorControllerClock(index);
             currentHandler.Update(timePassed);
             if (currentHandler.CanMove()) {
@@ -128,7 +131,8 @@ public sealed class MapState : StateBase, IMapInputController {
         int yDirection = facing % 2 == 1 ? 0 : (facing == 0 ? -1 : 1);
 
         // Check each scene actor in the map scene and check if the position matches with the parties facing place.
-        foreach (IActorHandler currentActor in map.GetListActors()) {
+        foreach (Actor currentActor in map.GetListActors()) {
+            // TODO: (CSAF) Interface actor here.
             int xLocation = currentActor.GetXLocation();
             int yLocation = currentActor.GetYLocation();
             if (xLocation == partyXLocation + xDirection && yLocation == partyYLocation + yDirection) {
@@ -199,7 +203,8 @@ public sealed class MapState : StateBase, IMapInputController {
             // Set animation to start playing.
             party.SetCurrentAnimationFrame(1);
             // Activates any touch actors on the location.
-            IActorHandler? potentialActor = map.GetActorAt(xLocation + rightMovement, yLocation + downMovement);
+            Actor? potentialActor = map.GetActorAt(xLocation + rightMovement, yLocation + downMovement);
+            // TODO: (CSAF) Interface actor here.
             if (potentialActor != null && potentialActor.ActivatesOnTouch()) {
                 ActivateScript(new MapScript(potentialActor.GetScript()));
             }
@@ -244,7 +249,8 @@ public sealed class MapState : StateBase, IMapInputController {
     /// <param name="keepDirection">If the actor's direction is maintained.</param>
     public bool MoveActor(int actorIndex, int direction, bool keepDirection) {
         bool couldMove = false;
-        List<IActorHandler> actorsList = map.GetListActors();
+        List<Actor> actorsList = map.GetListActors();
+        // TODO: (CSAF) Interface actor here.
         actorsList[actorIndex].SetDirection((Direction) direction);
         int xLocation = actorsList[actorIndex].GetXLocation();
         int yLocation = actorsList[actorIndex].GetYLocation();
@@ -281,7 +287,8 @@ public sealed class MapState : StateBase, IMapInputController {
     /// Function that checks all in range actors and activates any that are in range.
     /// </summary>
     public void ActivateInRangeActors() {
-        foreach (IActorHandler currentActor in map.GetOnFoundActors()) {
+        foreach (Actor currentActor in map.GetOnFoundActors()) {
+            // TODO: Interface actor here into interface that can load script and location.
             int actorX = currentActor.GetXLocation();
             int actorY = currentActor.GetYLocation();
             int halfWidth = (int) Math.Floor(mapMaxTilesWide / (decimal) 2.0);
@@ -315,7 +322,7 @@ public sealed class MapState : StateBase, IMapInputController {
     public void ForceMoveActor(bool keepsDirection, bool lockMovement, bool instant, int actorX, int actorY,
         List<int> path, IContinuableScript continuableScript, ScriptStep currentStep) {
         // Load chosen actor or throw exception.
-        IActorHandler? currentActor = map.GetActorAt(actorX, actorY) ??
+        Actor? currentActor = map.GetActorAt(actorX, actorY) ??
             throw new ActorMissingException($"Error found on map: {map.GetMapName()} At X: {actorX} And Y: {actorY}");
 
         // If movement needs to be locked activate freeze timer in scene and freeze controls.
@@ -366,7 +373,8 @@ public sealed class MapState : StateBase, IMapInputController {
     /// <exception cref="ActorMissingException">Error thrown if no actor is found at the index specified.</exception>
     public int GetActorAtLocation(int xLocation, int yLocation) {
         int index = 0;
-        foreach (IActorHandler actor in map.GetListActors()) {
+        // TODO: Interface actor here into posistion provider.
+        foreach (Actor actor in map.GetListActors()) {
             if (actor.GetXLocation() == xLocation && actor.GetYLocation() == yLocation) {
                 return index;
             }
@@ -429,7 +437,8 @@ public sealed class MapState : StateBase, IMapInputController {
     /// <param name="yLocation">The y location being checked.</param>
     /// <returns>True: The actor is passable, False otherwise.</returns>
     private bool ActorIsPassable(int xLocation, int yLocation) {
-        IActorHandler? potentialActor = map.GetActorAt(xLocation, yLocation);
+        // TODO: (CSAF) Interface actor here.
+        Actor? potentialActor = map.GetActorAt(xLocation, yLocation);
         if (potentialActor != null) {
             return potentialActor.IsPassable();
         }
@@ -441,7 +450,8 @@ public sealed class MapState : StateBase, IMapInputController {
     /// </summary>
     /// <param name="actor">The actor being checked.</param>
     /// <returns>If the party is in range of the specified actor.</returns>
-    private bool InRangeActor(IActorHandler actor) {
+    private bool InRangeActor(Actor actor) {
+        // TODO: (CSAF) Inteface actor here. 
         // Load inital variables.
         int partyX = party.GetXLocation();
         int partyY = party.GetYLocation();

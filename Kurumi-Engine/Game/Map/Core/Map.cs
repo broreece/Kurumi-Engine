@@ -1,6 +1,6 @@
 namespace Game.Map.Core;
 
-using Game.Map.Actors.Base;
+using Game.Map.Actors.Core;
 using Game.Map.Elements;
 using Game.Map.Pathfinding;
 using Game.Map.Tiles;
@@ -37,7 +37,7 @@ public sealed class Map : INavigationGrid, IMapView {
         actorForcedMove = new bool[width, height];
 
         // Assign null actor values.
-        actors = new IActorHandler[0, 0];
+        actors = new Actor[0, 0];
         listActors = [];
         autoActors = [];
         onFoundActors = [];
@@ -48,7 +48,7 @@ public sealed class Map : INavigationGrid, IMapView {
     /// </summary>
     /// <param name="actors">2D array of actors.</param>
     /// <param name="listActors">List of actors.</param>
-    public void AssignActors(IActorHandler[,] actors, List<IActorHandler> listActors) {
+    public void AssignActors(Actor[,] actors, List<Actor> listActors) {
         this.actors = actors;
         this.listActors = listActors;
 
@@ -56,8 +56,9 @@ public sealed class Map : INavigationGrid, IMapView {
         onFoundActors = [];
         autoActors = [];
 
-        foreach (IActorHandler actor in listActors) {
+        foreach (Actor actor in listActors) {
             // Add the actor to lists based on when it's activated.
+            // TODO: (CSAF) Change these lists to interfaces.
             if (actor.ActivatesAutomatically()) {
                 autoActors.Add(actor);
             }
@@ -84,7 +85,7 @@ public sealed class Map : INavigationGrid, IMapView {
     /// <param name="xLocation">The x location of the actor being checked.</param>
     /// <param name="yLocation">The y location of the actor being checked.</param>
     /// <param name="actor">The new actor value.</param>
-    public void SetActorAt(int xLocation, int yLocation, IActorHandler? actor) {
+    public void SetActorAt(int xLocation, int yLocation, Actor? actor) {
         actors[xLocation, yLocation] = actor;
     }
 
@@ -122,7 +123,7 @@ public sealed class Map : INavigationGrid, IMapView {
     /// <param name="xLocation">The x location of the actor being checked.</param>
     /// <param name="yLocation">The y location of the actor being checked.</param>
     /// <returns>The actor at a given point.</returns>
-    public IActorHandler ? GetActorAt(int xLocation, int yLocation) {
+    public Actor ? GetActorAt(int xLocation, int yLocation) {
         return actors[xLocation, yLocation];
     }
 
@@ -166,7 +167,7 @@ public sealed class Map : INavigationGrid, IMapView {
     /// Getter for the map's actors.
     /// </summary>
     /// <returns>The map's actors.</returns>
-    public IActorHandler?[,] GetActors() {
+    public Actor?[,] GetActors() {
         return actors;
     }
     
@@ -174,7 +175,7 @@ public sealed class Map : INavigationGrid, IMapView {
     /// Function used to return a list of actor handler views for the map scene.
     /// </summary>
     /// <returns>A list of actor handlers with restrictions to data for the map scene.</returns>
-    public List<IActorHandlerView> GetListActorViews() {
+    public List<IActorView> GetListActorViews() {
         return [.. listActors];
     }
 
@@ -182,7 +183,7 @@ public sealed class Map : INavigationGrid, IMapView {
     /// Getter for the map's actors in the form of a list.
     /// </summary>
     /// <returns>The map's actors in the form of a list.</returns>
-    public List<IActorHandler> GetListActors() {
+    public List<Actor> GetListActors() {
         return listActors;
     }
     
@@ -270,7 +271,8 @@ public sealed class Map : INavigationGrid, IMapView {
     /// Getter for the map's actors that activate automatically.
     /// </summary>
     /// <returns>The list of actors that activate automatically.</returns>
-    public List<IActorHandler> GetAutoActors() {
+    /// // TODO: (CSAF) Interface actor here.
+    public List<Actor> GetAutoActors() {
         return autoActors;
     }
 
@@ -278,7 +280,8 @@ public sealed class Map : INavigationGrid, IMapView {
     /// Getter for the map's actors that activate when they find the party.
     /// </summary>
     /// <returns>The list of actors that activate when they find the party.</returns>
-    public List<IActorHandler> GetOnFoundActors() {
+    /// // TODO: (CSAF) Interface actor here.
+    public List<Actor> GetOnFoundActors() {
         return onFoundActors;
     }
 
@@ -292,8 +295,8 @@ public sealed class Map : INavigationGrid, IMapView {
 
     // Tiles and actors.
     private readonly Tile[,] tiles;
-    private IActorHandler?[,] actors;
-    private List<IActorHandler> listActors;
+    private Actor?[,] actors;
+    private List<Actor> listActors;
 
     // Boolean grids.
     private readonly bool[,] animatedTiles;
@@ -304,7 +307,8 @@ public sealed class Map : INavigationGrid, IMapView {
     private readonly int width, height, tileSheetId, backgroundArtId;
 
     // Map actor variables.
-    private List<IActorHandler> autoActors, onFoundActors;
+    // TODO: (CSAF) We can actually make these into activatable interfaces as we don't need any additional info from these actors.
+    private List<Actor> autoActors, onFoundActors;
 
     // Stored party currently loaded on the map.
     private readonly Party party;

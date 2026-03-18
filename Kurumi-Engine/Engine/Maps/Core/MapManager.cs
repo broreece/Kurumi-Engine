@@ -1,7 +1,7 @@
 namespace Engine.Maps.Core;
 
 using Engine.Maps.Serialization;
-using Game.Map.Actors.ActorTypes;
+using Game.Map.Actors.Core;
 using Game.Map.Actors.Base;
 using Game.Map.Core;
 using Game.Party;
@@ -63,8 +63,8 @@ public sealed class MapManager {
 
         // Set tiles and actors.
         Tile[,] tiles = new Tile[width, height];
-        IActorHandler[,] actors = new IActorHandler[width, height];
-        List<IActorHandler> listActors = [];
+        Actor[,] actors = new Actor[width, height];
+        List<Actor> listActors = [];
         bool[,] animatedTiles = new bool[width, height];
         int size = mapData.Tiles.Count;
 
@@ -89,11 +89,13 @@ public sealed class MapManager {
             animatedTiles[tileData.XIndex, tileData.YIndex] = tiles[tileData.XIndex, tileData.YIndex].IsAnimated();
             // Check here if an actor exists.
             if (tileData.Actor.Contains(',')) {
+                // TODO: (CSAF) Change logic here.
                 Actor actor = new(tileData.XIndex, tileData.YIndex, actorSpriteRegistry, tileData.Actor);
                 actors[tileData.XIndex, tileData.YIndex] = actor;
                 switch (actor.GetBehaviour()) {
                     case Behaviour.FollowsPath:
-                        PathedActor pathedActor = new(actor);
+                        // TODO: (CSAF) Change logic here.
+                        PathedActor pathedActor = new();
                         actors[tileData.XIndex, tileData.YIndex] = pathedActor;
                         break;
 
@@ -117,11 +119,11 @@ public sealed class MapManager {
 
         // Create grided actors.
         foreach (Actor actor in storedGridedActors) {
+            // TODO: (CSAF) Change logic here.
             GridedActor gridedActor = new(actor, party, map);
             actors[actor.GetXLocation(), actor.GetYLocation()] = gridedActor;
             listActors.Add(gridedActor);
         }
-
         map.AssignActors(actors, listActors);
         return map;
     }

@@ -20,15 +20,6 @@ public abstract class MapElement : PositionProvider {
     }
 
     /// <summary>
-    /// A more limited constructor used for the map element class, mainly by actors.
-    /// </summary>
-    /// <param name="xLocation">X location of the party.</param>
-    /// <param name="yLocation">Y location of the party.</param>
-    public MapElement(int xLocation, int yLocation) : base(xLocation, yLocation) {
-        currentAnimationFrame = 0;
-    }
-
-    /// <summary>
     /// Gets the map element's current animation frame.
     /// </summary>
     /// <returns>The map element's current animation frame.</returns>
@@ -110,6 +101,6 @@ public abstract class MapElement : PositionProvider {
     }
 
     private int currentAnimationFrame, oldXLocation, oldYLocation;
-    private Direction direction;
-    private bool visible;
+    protected Direction direction;
+    protected bool visible;
 }

@@ -1,9 +1,9 @@
 namespace Scenes.Map.Interfaces;
 
 /// <summary>
-/// The public actor handler scene interface, used to restrict access to the actors methods used in state and objects.
+/// The public actor scene interface, used to restrict access to the actors methods used in the map scene.
 /// </summary>
-public interface IActorHandlerView {
+public interface IActorView {
     /// <summary>
     /// Sets the map element's current animation frame.
     /// </summary>

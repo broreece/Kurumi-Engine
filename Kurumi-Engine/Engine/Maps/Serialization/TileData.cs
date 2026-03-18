@@ -7,5 +7,5 @@ public sealed class TileData {
     public int XIndex { get; set; } 
     public int YIndex { get; set; }
     public string Objects { get; set; } = string.Empty;
-    public string Actor { get; set; } = string.Empty;
+    public int Actor { get; set; }
 }

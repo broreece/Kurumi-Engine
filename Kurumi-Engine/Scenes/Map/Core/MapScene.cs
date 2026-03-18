@@ -90,7 +90,7 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         characterFieldSheetTexture = new Texture(characterFieldSheetPath);
         
         // Store list of actors.
-        List<IActorHandlerView> mapActors = mapView.GetListActorViews();
+        List<IActorView> mapActors = mapView.GetListActorViews();
 
         // Create actor textures array.
         actorTextures = new Texture[mapActors.Count];
@@ -268,10 +268,11 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         }
 
         // Load all actors above and below the party.
-        List<IActorHandlerView> mapActors = mapView.GetListActorViews();
-        List<IActorHandlerView> actorsBelowParty = [];
-        List<IActorHandlerView> actorsAboveParty = [];
-        foreach (IActorHandlerView mapActor in mapActors) {
+        // TODO: Create custom interface just for below party and adder here.
+        List<IActorView> mapActors = mapView.GetListActorViews();
+        List<IActorView> actorsBelowParty = [];
+        List<IActorView> actorsAboveParty = [];
+        foreach (IActorView mapActor in mapActors) {
             if (mapActor.IsBelowParty()) {
                 actorsBelowParty.Add(mapActor);
             }
@@ -428,10 +429,10 @@ public sealed class MapScene : SceneBase, IMapSceneView {
     /// <param name="extraTileLeft">The extra tile left camera variable.</param>
     /// <param name="extraTileDown">The extra tile down camera variable.</param>
     /// <param name="extraTileUp">The extra tile up camera variable.</param>
-    private void DrawActors(List<IActorHandlerView> actors, bool xScrolled, bool yScrolled, int extraTileRight, 
+    private void DrawActors(List<IActorView> actors, bool xScrolled, bool yScrolled, int extraTileRight, 
         int extraTileLeft, int extraTileDown, int extraTileUp) {
         for (int mapActorIndex = 0; mapActorIndex < actors.Count; mapActorIndex++) {
-            IActorHandlerView actor = actors[mapActorIndex];
+            IActorView actor = actors[mapActorIndex];
 
             int xLocation = actor.GetXLocation();
             int yLocation = actor.GetYLocation();
@@ -471,7 +472,7 @@ public sealed class MapScene : SceneBase, IMapSceneView {
     /// <param name="xScrolled">If the camera was scrolling on the x location.</param>
     /// <param name="yScrolled">If the camera was scrolling on the y location.</param>
     /// <returns></returns>
-    private Sprite LoadActorSprite(IActorHandlerView currentActor, int actorIndex, float scrollingCamera,
+    private Sprite LoadActorSprite(IActorView currentActor, int actorIndex, float scrollingCamera,
         bool xScrolled, bool yScrolled) {
         // Load variables used for drawing actors.
         float widthScale = window.GetWidthScale();

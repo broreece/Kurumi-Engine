@@ -66,14 +66,10 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 **Steps:**
 (CSAF-01):
-- Create a new table in the database called "actors" and "pathed_actors_path"
-    - Create fields in the actors table representing how we currently store just actors no scripts.
-    - In "pathed_actors_path" store a foreign key representing the actor, an id representing the move index and the move.
-- Create an "ActorRegistry" and update the actor constructor to take these new actor fields instead of a string.
 - Load these fields in the database in a "LoadActors" function:
     - If the enum value for behaviour is a path check the "pathed_actors_path" to load a path.
-- We can completely remove the "ActorHandler" and "IActorHandler" class as a result of this change:
-    - Make pathed actor inherit from actor not actor handler and pass a path as an additional param.
+- Change "IActorHandler" class as a result of this change:
+    - Use interfaces in places we used to use actor handler.
 (CSAF-02):
 - Scripts should be stored in json formats.
 - Each script variable stored with a string key for higher readability.

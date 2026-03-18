@@ -1,56 +1,33 @@
-namespace Game.Map.Actors.ActorTypes;
+namespace Game.Map.Actors.Core;
 
 using Game.Map.ActorControllers;
 using Game.Map.Actors.Base;
 using Game.Map.Elements;
 using Registry.Actors;
+using Scenes.Map.Interfaces;
 
 /// <summary>
 /// Actors are map elements that contain a list of possible scripts as well as information surronding it's appearence and how it's activated.
 /// </summary>
-public class Actor : MapElement, IActorHandler {
+public class Actor : MapElement, IActorView {
     /// <summary>
     /// Constructor for the actor class.
     /// </summary>
     /// <param name="xLocation">The x coordinate of the actor.</param>
     /// <param name="yLocation">The y coordinate of the actor.</param>
-    /// <param name="actorSpriteRegistry">The actor sprite registry.</param>
-    /// <param name="scriptText">The text representing the script.</param>
-    /// TODO: (CSAF) Change params here to be equal to the script text values, the real script param will be an integer reference.
-    public Actor(int xLocation, int yLocation, ActorSpriteRegistry actorSpriteRegistry, string scriptText) : base(xLocation, yLocation) {
-        behaviour = (Behaviour) int.Parse(scriptText[..scriptText.IndexOf(',')]);
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        actorSprite = actorSpriteRegistry.GetActorSprite(int.Parse(scriptText[..scriptText.IndexOf(',')]));
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        movementSpeed = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        trackingRange = int.Parse(scriptText[..scriptText.IndexOf(',')]);
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        SetDirection((Direction) int.Parse(scriptText[..scriptText.IndexOf(',')]));
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        SetVisible(int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1);
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        belowParty = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        passable = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        onTouch = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        auto = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        onAction = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-        onFind = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
-        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
+    /// <param name="actorInfoId">The actor sprite ID of the actor.</param>
+    /// <param name="direction">The direction of the actor.</param>
+    /// <param name="visible">If the actor is visible.</param>
+    /// <param name="actorInfoRegistry">The actor info registry object.</param>
+    public Actor(int xLocation, int yLocation, int actorInfoId, int direction, bool visible, ActorInfoRegistry actorInfoRegistry) 
+        : base(xLocation, yLocation, direction, visible) {
+        actorInfo = actorInfoRegistry.GetActorInfo(actorInfoId);
 
         // Check the behaviour of the actor.
         actorControllers = new Stack<ActorController>();
-        if (behaviour == Behaviour.RandomMovement) {
-            actorControllers.Push(new RandomActorController(movementSpeed, xLocation, yLocation));
+        if ((Behaviour) actorInfo.GetBehaviour() == Behaviour.RandomMovement) {
+            actorControllers.Push(new RandomActorController(actorInfo.GetMovementSpeed(), xLocation, yLocation));
         }
-
-        // Assign script text.
-        script = scriptText;
     }
 
     /// <summary>
@@ -100,7 +77,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <param name="newMovementSpeed">The new movement speed of the actor.</param>
     public void SetMovementSpeed(int newMovementSpeed) {
-        movementSpeed = newMovementSpeed;
+        actorInfo.SetMovementSpeed(newMovementSpeed);
     }
 
     /// <summary>
@@ -108,7 +85,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <param name="newTrackingRange">The new tracking range of the actor.</param>
     public void SetTrackingRange(int newTrackingRange) {
-        trackingRange = newTrackingRange;
+        actorInfo.SetTrackingRange(newTrackingRange);
     }
 
     /// <summary>
@@ -116,7 +93,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <param name="newBelowParty">Sets if the field sprite id of the actor appears below the party.</param>
     public void SetBelowParty(bool newBelowParty) {
-        belowParty = newBelowParty;
+        actorInfo.SetBelowParty(newBelowParty);
     }
 
     /// <summary>
@@ -124,7 +101,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <param name="newPassable">The new passability of the actor.</param>
     public void SetPassable(bool newPassable) {
-        passable = newPassable;
+        actorInfo.SetPassable(newPassable);
     }
 
     /// <summary>
@@ -132,15 +109,15 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <param name="newOnTouch">The new setting for if the actor can be activated on touch.</param>
     public void SetOnTouch(bool newOnTouch) {
-        onTouch = newOnTouch;
+        actorInfo.SetOnTouch(newOnTouch);
     }
 
     /// <summary>
     /// Sets if the actor will activate on find.
     /// </summary>
-    /// <param name="newRandomMovement">The new setting for if the actor can activate when player walks into found range.</param>
+    /// <param name="newOnFind">The new setting for if the actor can activate when player walks into found range.</param>
     public void SetOnFind(bool newOnFind) {
-        onFind = newOnFind;
+        actorInfo.SetOnFind(newOnFind);
     }
 
     /// <summary>
@@ -148,7 +125,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <param name="newAuto">The new setting for if the actor can be activated automatically.</param>
     public void SetAuto(bool newAuto) {
-        auto = newAuto;
+        actorInfo.SetAuto(newAuto);
     }
 
     /// <summary>
@@ -156,7 +133,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <param name="newOnAction">The new setting for if the actor can be activated when the party interacts with it.</param>
     public void SetOnAction(bool newOnAction) {
-        onAction = newOnAction;
+        actorInfo.SetOnAction(newOnAction);
     }
 
     /// <summary>
@@ -164,7 +141,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <returns>The field sprite ID of the actor.</returns>
     public int GetFieldSpriteId() {
-        return actorSprite.GetSpriteId();
+        return actorInfo.GetFieldSpriteId();
     }
 
     /// <summary>
@@ -172,7 +149,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <returns>The field sprite width of the actor.</returns>
     public int GetWidth() {
-        return actorSprite.GetWidth();
+        return actorInfo.GetWidth();
     }
 
     /// <summary>
@@ -180,7 +157,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <returns>The field sprite height of the actor.</returns>
     public int GetHeight() {
-        return actorSprite.GetHeight();
+        return actorInfo.GetHeight();
     }
     
     /// <summary>
@@ -188,7 +165,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <returns>The movement speed of the actor.</returns>
     public int GetMovementSpeed() {
-        return movementSpeed;
+        return actorInfo.GetMovementSpeed();
     }
     
     /// <summary>
@@ -218,7 +195,7 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <returns>The tracking range of the actor.</returns>
     public int GetTrackingRange() {
-        return trackingRange;
+        return actorInfo.GetTrackingRange();
     }
 
     /// <summary>
@@ -238,7 +215,7 @@ public class Actor : MapElement, IActorHandler {
     /// <returns>True: The field sprite will be drawn on the map scene before the party.
     /// False: The field sprite is drawn after the party, will appear above.</returns>
     public bool IsBelowParty() {
-        return belowParty;
+        return actorInfo.IsBelowParty();
     }
 
     /// <summary>
@@ -247,7 +224,7 @@ public class Actor : MapElement, IActorHandler {
     /// <returns>True: The actor can be walked over.
     /// False: The actor is not passable.</returns>
     public bool IsPassable() {
-        return passable;
+        return actorInfo.IsPassable();
     }
 
     /// <summary>
@@ -256,7 +233,7 @@ public class Actor : MapElement, IActorHandler {
     /// <returns>True: The actor activates when the party makes contact with it.
     /// False: The actor does not react when the party touches it.</returns>
     public bool ActivatesOnTouch() {
-        return onTouch;
+        return actorInfo.ActivatesOnTouch();
     }
 
     /// <summary>
@@ -265,7 +242,7 @@ public class Actor : MapElement, IActorHandler {
     /// <returns>True: The actor activates as soon as the map loads.
     /// False: The actor does not activate automatically.</returns>
     public bool ActivatesAutomatically() {
-        return auto;
+        return actorInfo.ActivatesAutomatically();
     }
 
     /// <summary>
@@ -274,7 +251,7 @@ public class Actor : MapElement, IActorHandler {
     /// <returns>True: The actor activates when the party interacts with the actor.
     /// False: The actor does not activate when the party interacts with the actor.</returns>
     public bool ActivatesOnAction() {
-        return onAction;
+        return actorInfo.ActivatesOnAction();
     }
     
     /// <summary>
@@ -283,7 +260,7 @@ public class Actor : MapElement, IActorHandler {
     /// <returns>True: The actor activates when it finds the player.
     /// False: The actor does not activate when it finds the player.</returns>
     public bool ActivatesOnFind() {
-        return onFind;
+        return actorInfo.ActivatesOnFind();
     }
 
     /// <summary>
@@ -291,26 +268,10 @@ public class Actor : MapElement, IActorHandler {
     /// </summary>
     /// <returns>The behaviour of the actor.</returns>
     public Behaviour GetBehaviour() {
-        return behaviour;
+        return (Behaviour) actorInfo.GetBehaviour();
     }
 
-    /// <summary>
-    /// Gets the actor's script.
-    /// </summary>
-    /// <returns>The script that the actor stores.</returns>
-    public string GetScript() {
-        return script;
-    }
-
-    // Behaviour and controller stack.
-    private readonly Behaviour behaviour;
+    // Info and controller stack.
+    private readonly ActorInfo actorInfo;
     private readonly Stack<ActorController> actorControllers;
-
-    // Actor Variables.
-    private ActorSprite actorSprite;
-    private int movementSpeed, trackingRange;
-    private bool belowParty, passable, onTouch, auto, onAction, onFind;
-
-    // Actor script.
-    private readonly string script;
 }
