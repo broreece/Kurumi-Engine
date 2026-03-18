@@ -48,7 +48,7 @@ public sealed class MapState : StateBase, IMapInputController {
         // Acctivate all auto actors.
         foreach (Actor autoActor in map.GetAutoActors()) {
             // TODO: (CSAF) Interface actor here.
-            ActivateScript(new MapScript(autoActor.GetScript()));
+            ActivateScript(autoActor.GetScript());
         }
     }
 
@@ -141,7 +141,7 @@ public sealed class MapState : StateBase, IMapInputController {
                     currentActor.SetDirection((Direction) ((facing + 2) % 4));
                 }
                 if (currentActor.ActivatesOnAction()) {
-                    ActivateScript(new MapScript(currentActor.GetScript()));
+                    ActivateScript(currentActor.GetScript());
                 }
             }
         }
@@ -206,7 +206,7 @@ public sealed class MapState : StateBase, IMapInputController {
             Actor? potentialActor = map.GetActorAt(xLocation + rightMovement, yLocation + downMovement);
             // TODO: (CSAF) Interface actor here.
             if (potentialActor != null && potentialActor.ActivatesOnTouch()) {
-                ActivateScript(new MapScript(potentialActor.GetScript()));
+                ActivateScript(potentialActor.GetScript());
             }
         }
         // Update direction if not keeping direction.
@@ -274,11 +274,11 @@ public sealed class MapState : StateBase, IMapInputController {
             else if (xLocation + rightMovement == party.GetXLocation()
                 && yLocation + downMovement == party.GetYLocation()
                 && actorsList[actorIndex].ActivatesOnTouch()) {
-                ActivateScript(new MapScript(actorsList[actorIndex].GetScript()));
+                ActivateScript(actorsList[actorIndex].GetScript());
             }
         }
         if (actorsList[actorIndex].ActivatesOnFind() && InRangeActor(actorsList[actorIndex])) {
-           ActivateScript(new MapScript(actorsList[actorIndex].GetScript()));
+           ActivateScript(actorsList[actorIndex].GetScript());
         }
         return couldMove;
     }
@@ -303,7 +303,7 @@ public sealed class MapState : StateBase, IMapInputController {
             insideX = insideX || (actorX >= tilesRight - 1 && actorX <= tilesRight + mapMaxTilesWide);
             insideY = insideY || (actorY >= tilesDown - 1 && actorY <= tilesDown + mapMaxTilesHigh);
             if (insideX && insideY && InRangeActor(currentActor)) {
-                ActivateScript(new MapScript(currentActor.GetScript()));
+                ActivateScript(currentActor.GetScript());
             }
         }
     }

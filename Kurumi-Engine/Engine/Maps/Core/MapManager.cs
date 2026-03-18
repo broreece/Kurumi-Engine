@@ -35,10 +35,10 @@ public sealed class MapManager {
     /// Deseralizes a specified map id and then returns that map object.
     /// </summary>
     /// <param name="party">The game's party.</param>
-    /// <param name="actorRegistry">The actor registry.</param>
+    /// <param name="actorInfoRegistry">The actor info registry.</param>
     /// <param name="tileObjectRegistry">The tile objects registry.</param>
     /// <exception cref="MissingJsonFileException">Error thrown if a .json data file is missing.</exception>
-    public Map LoadMap(Party party, ActorSpriteRegistry actorSpriteRegistry, TileObjectRegistry tileObjectRegistry) {
+    public Map LoadMap(Party party, ActorInfoRegistry actorInfoRegistry, TileObjectRegistry tileObjectRegistry) {
         // Load from passed file.
         MapData mapData;
         try {
@@ -69,11 +69,13 @@ public sealed class MapManager {
         int size = mapData.Tiles.Count;
 
         // Create a list of position providers as keys and grided actors as values.
-        List<Actor> storedGridedActors = [];
+        List<StoredActor> storedGridedActors = [];
 
+        // Loop over all tile objects.
         for (int index = 0; index < size; index ++) {
             List<TileObject> objects = [];
             TileData tileData = mapData.Tiles.ElementAt(index);
+            ActorData? actorData = tileData.Actor;
             string tileObjects = tileData.Objects;
             // Loop over every character in the string getting the tile object ID.
             while (tileObjects.Contains(',')) {
@@ -85,32 +87,28 @@ public sealed class MapManager {
                 objects.Add(tileObjectRegistry.GetTileObject(int.Parse(tileObjects) - 1));
             }
 
+            // Store the tile and set if the tile is animated on the boolean grid.
             tiles[tileData.XIndex, tileData.YIndex] = new Tile(objects);
             animatedTiles[tileData.XIndex, tileData.YIndex] = tiles[tileData.XIndex, tileData.YIndex].IsAnimated();
+            
             // Check here if an actor exists.
-            if (tileData.Actor.Contains(',')) {
-                // TODO: (CSAF) Change logic here.
-                Actor actor = new(tileData.XIndex, tileData.YIndex, actorSpriteRegistry, tileData.Actor);
-                actors[tileData.XIndex, tileData.YIndex] = actor;
-                switch (actor.GetBehaviour()) {
-                    case Behaviour.FollowsPath:
-                        // TODO: (CSAF) Change logic here.
-                        PathedActor pathedActor = new();
-                        actors[tileData.XIndex, tileData.YIndex] = pathedActor;
-                        break;
-
+            if (actorData != null) {
+                ActorInfo actorInfo = actorInfoRegistry.GetActorInfo(actorData.Actor);
+                switch ((Behaviour) actorInfo.GetBehaviour()) {
                     case Behaviour.DumbTracking:
-                        storedGridedActors.Add(actor);
+                        storedGridedActors.Add(new StoredActor(tileData.XIndex, tileData.YIndex, actorInfo, actorData.Facing, actorData.Visible == 1));
                         break;
 
                     case Behaviour.SmartTracking:
-                        storedGridedActors.Add(actor);
+                        storedGridedActors.Add(new StoredActor(tileData.XIndex, tileData.YIndex, actorInfo, actorData.Facing, actorData.Visible == 1));
                         break;
 
                     default:
+                        Actor actor = new(tileData.XIndex, tileData.YIndex, actorInfo, actorData.Facing, actorData.Visible == 1);
+                        actors[tileData.XIndex, tileData.YIndex] = actor;
+                        listActors.Add(actors[tileData.XIndex, tileData.YIndex]);
                         break;
                 }
-                listActors.Add(actors[tileData.XIndex, tileData.YIndex]);
             }
         }
 
@@ -118,9 +116,9 @@ public sealed class MapManager {
         Map map = new(width, height, tileSheetId, backgroundArtId, mapName, animatedTiles, tiles, party);
 
         // Create grided actors.
-        foreach (Actor actor in storedGridedActors) {
-            // TODO: (CSAF) Change logic here.
-            GridedActor gridedActor = new(actor, party, map);
+        foreach (StoredActor actor in storedGridedActors) {
+            GridedActor gridedActor = new(actor.GetXLocation(), actor.GetYLocation(), actor.GetActorInfo(), actor.GetDirection(), actor.IsVisible(),
+                party, map);
             actors[actor.GetXLocation(), actor.GetYLocation()] = gridedActor;
             listActors.Add(gridedActor);
         }

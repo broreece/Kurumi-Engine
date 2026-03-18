@@ -1,4 +1,4 @@
-The purpose of this document is to outline the changes made since the anvil release, "Crucible" was mostly focused on cleaning up post refractor
+The purpose of this document is to outline the changes made since the 'anvil' release, 'crucible' was mostly focused on cleaning up post refractor
 and making developer tasks easier by introducing a logger, exception handler and unit testing:
 
 ------------------------------------------------------------------------------------------------

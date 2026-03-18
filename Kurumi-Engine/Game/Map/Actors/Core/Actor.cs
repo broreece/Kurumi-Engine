@@ -3,8 +3,8 @@ namespace Game.Map.Actors.Core;
 using Game.Map.ActorControllers;
 using Game.Map.Actors.Base;
 using Game.Map.Elements;
-using Registry.Actors;
 using Scenes.Map.Interfaces;
+using Scripts.MapScripts.Base;
 
 /// <summary>
 /// Actors are map elements that contain a list of possible scripts as well as information surronding it's appearence and how it's activated.
@@ -15,18 +15,27 @@ public class Actor : MapElement, IActorView {
     /// </summary>
     /// <param name="xLocation">The x coordinate of the actor.</param>
     /// <param name="yLocation">The y coordinate of the actor.</param>
-    /// <param name="actorInfoId">The actor sprite ID of the actor.</param>
+    /// <param name="actorInfo">The actor info of the actor.</param>
     /// <param name="direction">The direction of the actor.</param>
     /// <param name="visible">If the actor is visible.</param>
-    /// <param name="actorInfoRegistry">The actor info registry object.</param>
-    public Actor(int xLocation, int yLocation, int actorInfoId, int direction, bool visible, ActorInfoRegistry actorInfoRegistry) 
+    public Actor(int xLocation, int yLocation, ActorInfo actorInfo, int direction, bool visible) 
         : base(xLocation, yLocation, direction, visible) {
-        actorInfo = actorInfoRegistry.GetActorInfo(actorInfoId);
+        this.actorInfo = actorInfo;
 
         // Check the behaviour of the actor.
         actorControllers = new Stack<ActorController>();
-        if ((Behaviour) actorInfo.GetBehaviour() == Behaviour.RandomMovement) {
-            actorControllers.Push(new RandomActorController(actorInfo.GetMovementSpeed(), xLocation, yLocation));
+        switch ((Behaviour) actorInfo.GetBehaviour()) {
+            case Behaviour.RandomMovement:
+                actorControllers.Push(new RandomActorController(actorInfo.GetMovementSpeed(), xLocation, yLocation));
+                break;
+
+            case Behaviour.FollowsPath:
+                actorControllers.Push(new PathedActorController(GetMovementSpeed(), xLocation, yLocation, 
+                    forcedMovement: false, actorInfo.GetPath()));
+                break;
+
+            default:
+                break;
         }
     }
 
@@ -269,6 +278,14 @@ public class Actor : MapElement, IActorView {
     /// <returns>The behaviour of the actor.</returns>
     public Behaviour GetBehaviour() {
         return (Behaviour) actorInfo.GetBehaviour();
+    }
+
+    /// <summary>
+    /// Getter for the actor's linked script.
+    /// </summary>
+    /// <returns>A script (if any) that is linked to the actor.</returns>
+    public MapScript GetScript() {
+        // TODO: (CSAF) Implement script formatting and then get the script here using the registry.
     }
 
     // Info and controller stack.

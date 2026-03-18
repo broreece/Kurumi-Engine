@@ -66,8 +66,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 **Steps:**
 (CSAF-01):
-- Load these fields in the database in a "LoadActors" function:
-    - If the enum value for behaviour is a path check the "pathed_actors_path" to load a path.
 - Change "IActorHandler" class as a result of this change:
     - Use interfaces in places we used to use actor handler.
 (CSAF-02):
@@ -77,7 +75,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 - Because it's json each script step can have different parameters which is better then database.
 - Store these scripts in "/Assets/Scripts" then create a registry file like the maps registry json file.
 (CSAF-03):
-- To link actors and scripts "actors" database should have a field for a linked script.
 - If the script value isn't empty or -1 load the script from the script registry.
 - We might need a file to deserealize scripts from json into our format.
 

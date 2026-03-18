@@ -1,4 +1,4 @@
-The purpose of this document is to outline the changes made since the Birth release, Update Anvil was a huge refractoring of the entire codebase with
+The purpose of this document is to outline the changes made since the 'birth' release, Update 'anvil' was a huge refractoring of the entire codebase with
 many changes to the engines performance and structure. Below is a detailed list of the changes:
 
 ------------------------------------------------------------------------------------------------

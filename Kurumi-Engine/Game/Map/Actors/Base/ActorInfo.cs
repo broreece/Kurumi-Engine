@@ -17,10 +17,10 @@ public class ActorInfo {
     /// <param name="auto">If the actor's script activates automatically.</param>
     /// <param name="onAction">If the actor's script activates on action.</param>
     /// <param name="onFind">If the actor's script activates on find.</param>
+    /// <param name="path">The path of the actor.</param>
     /// <param name="scriptId">The linked script to the actor.</param>
-    /// <param name="actorSpriteRegistry">The actor sprite registry.</param>
     public ActorInfo(int behaviour, ActorSprite actorSprite, int movementSpeed, int trackingRange, bool belowParty, bool passable, bool onTouch, 
-        bool auto, bool onAction, bool onFind, int scriptId) {
+        bool auto, bool onAction, bool onFind, List<int> path, int scriptId) {
         this.behaviour = behaviour;
         this.actorSprite = actorSprite;
         this.movementSpeed = movementSpeed;
@@ -31,6 +31,7 @@ public class ActorInfo {
         this.auto = auto;
         this.onAction = onAction;
         this.onFind = onFind;
+        this.path = path;
         this.scriptId = scriptId;
     }
         
@@ -147,6 +148,14 @@ public class ActorInfo {
     }
 
     /// <summary>
+    /// Getter for the actor's path.
+    /// </summary>
+    /// <returns>The path of the actor.</returns>
+    public List<int> GetPath() {
+        return path;
+    }
+
+    /// <summary>
     /// Getter for the actor's linked script.
     /// </summary>
     /// <returns>The script ID linked to the actor.</returns>
@@ -211,6 +220,7 @@ public class ActorInfo {
     // Actor Variables.
     private readonly ActorSprite actorSprite;
     private readonly int behaviour, scriptId;
+    private readonly List<int> path;
     private int movementSpeed, trackingRange;
     private bool belowParty, passable, onTouch, auto, onAction, onFind;
 }

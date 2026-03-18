@@ -100,6 +100,7 @@ public sealed class GameContext : IGameUIContext {
 
         // Database data.
         actorSpriteRegistry = new ActorSpriteRegistry(databaseManager.LoadActorSprites());
+        actorInfoRegistry = new ActorInfoRegistry(databaseManager.LoadActorInfo(actorSpriteRegistry));
         abilityRegistry = new AbilityRegistry(databaseManager.LoadAbilities());
         elementNameRegistry = new ElementNameRegistry(databaseManager.LoadElementNames());
         enemyRegistry = new EnemyRegistry(databaseManager.LoadEnemies(abilityRegistry));
@@ -151,7 +152,7 @@ public sealed class GameContext : IGameUIContext {
     /// Function used to load a new map scene / state and map object.
     /// </summary>
     public void LoadNewMap() {
-        Map map = mapManager.LoadMap(party, actorSpriteRegistry, tileObjectRegistry);
+        Map map = mapManager.LoadMap(party, actorInfoRegistry, tileObjectRegistry);
         mapName = map.GetMapName();
         MapScene mapScene = new(gameWindow, assetManager, animatedTileSheetConfig, characterFieldSpriteConfig, 
             mapBackgroundSpriteConfig, mapConfig, tileSheetConfig, map);
@@ -753,6 +754,7 @@ public sealed class GameContext : IGameUIContext {
 
     // Data registry objects.
     // Data that will not change.
+    private readonly ActorInfoRegistry actorInfoRegistry;
     private readonly ActorSpriteRegistry actorSpriteRegistry;
     private readonly AbilityRegistry abilityRegistry;
     private readonly ElementNameRegistry elementNameRegistry;

@@ -1,7 +1,7 @@
 namespace Engine.Maps.Serialization;
 
 /// <summary>
-/// Map data struct used to deseralize map's from the map's json file.
+/// Map data used to deseralize map's from the map's json file.
 /// </summary>
 public sealed class MapData {
     public string MachineName { get; set; } = string.Empty;

@@ -390,6 +390,8 @@ public sealed class DatabaseManager : ICharacterDataLoader {
         int results = data.GetLength(0);
         ActorInfo[] actors = new ActorInfo[results];
         for (int row = 0; row < results; row ++) {
+            // Create empty path.
+            int[] path = [];
             int id = (int) (long) data[row, 0];
             int behaviour = (int) data[row, 1];
             int spriteId = (int) (long) data[row, 2];
@@ -402,9 +404,17 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             bool onAction = Convert.ToInt32((long) data[row, 9]) == 1;
             bool onFind = Convert.ToInt32((long) data[row, 10]) == 1;
             int scriptId = (int) (long) data[row, 11];
-            // TODO: (CSAF) Check behaviour is pathed, if so load the path from the other database.
+            if ((Behaviour) behaviour == Behaviour.FollowsPath) {
+                object[,] pathData = Load("actor_paths", ["actor_id"], [id.ToString()], "path_index");
+                int pathResults = pathData.GetLength(0);
+                path = new int[pathResults];
+                for (int pathRow = 0; pathRow < pathResults; pathRow ++) {
+                    path[pathRow] = Convert.ToInt32((long)pathData[row, 2]);
+                }
+            }
+
             actors[row] = new ActorInfo(behaviour, actorSpriteRegistry.GetActorSprite(spriteId), movementSpeed, trackingRange, belowParty, passable, onTouch, auto,
-                onAction, onFind, scriptId);
+                onAction, onFind, path, scriptId);
         }
         return actors;
     }

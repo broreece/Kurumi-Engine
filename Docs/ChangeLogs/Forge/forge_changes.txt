@@ -1,0 +1,27 @@
+The purpose of this document is to outline the changes made since the 'crucible' release, 'forge' was mostly focused on creating 
+permanent changes to the engine that both enables the core gameplay loop (by adding enemy formations to the map, expanding battle
+scene and map scene actor enhancements) and creating custom data formats for actors and scripts:
+
+------------------------------------------------------------------------------------------------
+
+Actors on maps can now both appear above and below the party allowing dynamic map's with not just tiles under the player.
+
+------------------------------------------------------------------------------------------------
+
+Actors and the party can now be larger then the size of tiles and are correctly centered on the tile regardless of with and height.
+
+------------------------------------------------------------------------------------------------
+
+Database has been expanded to include actors, actor sprites. The data format of scripts have also been changes to be in JSON format
+instead of our previous string format. This improves the readbility of the map files hugely, as well as making the actors easier
+to read in the SQL file and scripts in JSON as we don't use magic numbers anymore.
+
+------------------------------------------------------------------------------------------------
+
+Smart tracking events no longer have an unlimited range causing the game to break when party is out of range of them.
+
+------------------------------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------------------------------------
