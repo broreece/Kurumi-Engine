@@ -93,7 +93,7 @@ public sealed class MapManager {
             
             // Check here if an actor exists.
             if (actorData != null) {
-                ActorInfo actorInfo = actorInfoRegistry.GetActorInfo(actorData.Actor);
+                ActorInfo actorInfo = actorInfoRegistry.GetActorInfo(actorData.ActorID - 1);
                 switch ((Behaviour) actorInfo.GetBehaviour()) {
                     case Behaviour.DumbTracking:
                         storedGridedActors.Add(new StoredActor(tileData.XIndex, tileData.YIndex, actorInfo, actorData.Facing, actorData.Visible == 1));

@@ -1,5 +1,8 @@
 namespace Game.Maps.Actors.Base;
 
+using Game.Maps.Actors.Exceptions;
+using Scripts.MapScripts.Base;
+
 /// <summary>
 /// The actor info class, contains actor static information stored in the game database.
 /// </summary>
@@ -18,9 +21,9 @@ public class ActorInfo {
     /// <param name="onAction">If the actor's script activates on action.</param>
     /// <param name="onFind">If the actor's script activates on find.</param>
     /// <param name="path">The path of the actor.</param>
-    /// <param name="scriptId">The linked script to the actor.</param>
+    /// <param name="script">The linked script to the actor.</param>
     public ActorInfo(int behaviour, ActorSprite actorSprite, int movementSpeed, int trackingRange, bool belowParty, bool passable, bool onTouch, 
-        bool auto, bool onAction, bool onFind, List<int> path, int scriptId) {
+        bool auto, bool onAction, bool onFind, List<int> path, MapScript? script) {
         this.behaviour = behaviour;
         this.actorSprite = actorSprite;
         this.movementSpeed = movementSpeed;
@@ -32,7 +35,7 @@ public class ActorInfo {
         this.onAction = onAction;
         this.onFind = onFind;
         this.path = path;
-        this.scriptId = scriptId;
+        this.script = script;
     }
         
     /// <summary>
@@ -158,9 +161,10 @@ public class ActorInfo {
     /// <summary>
     /// Getter for the actor's linked script.
     /// </summary>
-    /// <returns>The script ID linked to the actor.</returns>
-    public int GetScriptId() {
-        return scriptId;
+    /// <returns>The script linked to the actor.</returns>
+    /// <exception cref="NullScriptException">Exception thrown if the script does not exist.</exception>
+    public MapScript GetScript() {
+        return script ?? throw new NullScriptException("Attempted to get a script from actor but no script exists.");
     }
 
     /// <summary>
@@ -219,8 +223,9 @@ public class ActorInfo {
 
     // Actor Variables.
     private readonly ActorSprite actorSprite;
-    private readonly int behaviour, scriptId;
+    private readonly int behaviour;
     private readonly List<int> path;
     private int movementSpeed, trackingRange;
     private bool belowParty, passable, onTouch, auto, onAction, onFind;
+    private readonly MapScript? script;
 }

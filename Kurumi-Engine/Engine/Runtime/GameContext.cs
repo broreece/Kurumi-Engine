@@ -13,6 +13,7 @@ using Engine.Input.Core;
 using Engine.Input.Scenes;
 using Engine.MapManager.Core;
 using Engine.Rendering;
+using Engine.ScriptManager.Core;
 using Engine.Systems;
 using Game.Battle;
 using Game.Entities.PlayableCharacter;
@@ -52,6 +53,7 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="saveManager">The save manager object that directly interacts with .json save data.</param>
     /// <param name="assetManager">The asset manager object that directly interacts with the file assets.</param>
     /// <param name="mapManager">The map manager object that directly interacts with the map assets.</param>
+    /// <param name="mapScriptManager">The map script manager object that directly interacts with the map script assets.</param>
     /// <param name="animatedTileSheetConfig">The animated tile sheet config object.</param>
     /// <param name="battleBackgroundSpriteConfig">The battle background config object.</param>
     /// <param name="battleSceneConfig">The battle scene config object.</param>
@@ -71,8 +73,8 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="globalMessageDefaults">The global message defaults object.</param>
     /// <param name="nameBoxDefaults">The name box defaults object.</param>
     /// <param name="textWindowDefaults">The text window defaults object.</param>
-    public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, MapManager mapManager,
-        AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
+    public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, MapManager mapManager, 
+        MapScriptManager mapScriptManager, AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
         BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, CharacterFieldSpriteConfig characterFieldSpriteConfig, 
         FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, InventoryConfig inventoryConfig, 
         MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, MainMenuConfig mainMenuConfig, PartyChoicesConfig partyChoicesConfig,  
@@ -100,7 +102,7 @@ public sealed class GameContext : IGameUIContext {
 
         // Database data.
         actorSpriteRegistry = new ActorSpriteRegistry(databaseManager.LoadActorSprites());
-        actorInfoRegistry = new ActorInfoRegistry(databaseManager.LoadActorInfo(actorSpriteRegistry));
+        actorInfoRegistry = new ActorInfoRegistry(databaseManager.LoadActorInfo(actorSpriteRegistry, mapScriptManager));
         abilityRegistry = new AbilityRegistry(databaseManager.LoadAbilities());
         elementNameRegistry = new ElementNameRegistry(databaseManager.LoadElementNames());
         enemyRegistry = new EnemyRegistry(databaseManager.LoadEnemies(abilityRegistry));
@@ -123,6 +125,7 @@ public sealed class GameContext : IGameUIContext {
         // Managers.
         this.assetManager = assetManager;
         this.mapManager = mapManager;
+        this.mapScriptManager = mapScriptManager;
 
         // Game variables.
         gameVariables = new GameVariables(saveManager);
@@ -775,6 +778,7 @@ public sealed class GameContext : IGameUIContext {
     private readonly SaveManager saveManager;
     private readonly AssetManager assetManager;
     private readonly MapManager mapManager;
+    private readonly MapScriptManager mapScriptManager;
 
     // In game variables.
     private readonly GameVariables gameVariables;

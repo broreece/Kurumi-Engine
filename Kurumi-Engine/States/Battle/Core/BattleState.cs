@@ -6,7 +6,9 @@ using Game.Entities.Base;
 using Game.Entities.PlayableCharacter;
 using Save.Serialization.EnemyFormationData;
 using Scenes.Battle.Interfaces;
+using Scripts.Base;
 using Scripts.BattleScripts.Base;
+using Scripts.BattleScripts.BattleScriptSteps;
 using Scripts.EntityScripts.Base;
 using States.Base;
 using States.Battle.Exceptions;
@@ -43,9 +45,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
     /// <summary>
     /// Overriden update function for the battle state.
     /// </summary>
-    public override void Update() {
-        // TODO: (BSE) This might not neccesarily have to be empty.
-    }
+    public override void Update() {}
 
     /// <summary>
     /// The select function. Attempts to perform an action based on the current choice/screen on.
@@ -61,9 +61,12 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         if (inEnemySelector) {
             isSpriteSelected = new bool[characterSprites + battle.GetEnemiesLength()];
             inEnemySelector = false;
+            // Create a battle script for the use ability.
+            ScriptStep head = new UseAbility(currentChoice);
+            BattleScript battleScript = new("Ability in battle", head);
             actions.Add(new Action(currentCharacterIndex, currentTargetIndex, 
                 party.GetPartyMember(currentCharacterIndex).GetStat(gameContext.GetAgilityStatIndex()),
-                "UseAbility," + currentChoice.ToString() + ",", enemy: false));
+                battleScript, enemy: false));
             battleSceneView.SetCurrentChoice(0);
             // Check if it's enemies turn now.
             if (currentCharacterIndex >= characterSprites - 1) {
@@ -230,7 +233,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                 if (currentTurn == startTurn || (currentTurn > startTurn && (currentTurn + 1) % frequency == 0)) {
                     int speed = battle.GetEnemyStat(enemyFormationData.Id, gameContext.GetAgilityStatIndex());
                     int target = enemyScript.Target;
-                    actions.Add(new Action(characterId, target, speed, enemyScript.Script, true));
+                    // TODO: (EESA) Change enemy formations to reference battle scripts stored in registry.
+                    //actions.Add(new Action(characterId, target, speed, enemyScript.Script, true));
                 }
             }
             characterId ++;
@@ -241,7 +245,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
     /// Performs all queued actions and empties the queue.
     /// </summary>
     private void ExecuteActions() {
-        List<Action> sortedList = actions.OrderByDescending(x => x.GetSpeed()).ToList();
+        List<Action> sortedList = [.. actions.OrderByDescending(x => x.GetSpeed())];
         foreach (Action action in sortedList) {
             actionCharacterId = action.GetCharacterId();
             actionEnemy = action.IsEnemy();
@@ -280,7 +284,7 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                         actionTargetId = selectedCharacterId;
                     }
                 }
-                BattleScript battleScript = new(action.GetBattleScript());
+                BattleScript battleScript = action.GetBattleScript();
                 battleScript.Activate(gameContext);
 
                 // Check if any enemy main enemy body part died and if so kill all attached parts.
@@ -293,8 +297,9 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                         enemyDataIndex ++;
                     }
                     // Activate on kill scripts.
-                    BattleScript onKillScript = new(battle.GetEnemyFormationEnemyData(enemyIndex).OnKillScript);
-                    onKillScript.Activate(gameContext);
+                    // TODO: (EESA) Change enemy formations to reference battle scripts stored in registry.
+                    //BattleScript onKillScript = battle.GetEnemyFormationEnemyData(enemyIndex).OnKillScript;
+                    //onKillScript.Activate(gameContext);
                 }
 
                 // Make any neccesary changes to the party info window and update all sprites.
@@ -364,8 +369,9 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         // TODO: (BSE) We should add a check here for skills as well.
         // Calculate HP change alongside activating the effect.
         int oldHp = target.GetCurrentHp();
-        EntityScript entityScript = new(user.GetBaseAbility(abilityId).GetEffect());
-        entityScript.Activate(gameContext, user, target);
+        // TODO: (EESA) Change abilities to reference entity scripts.
+        //EntityScript entityScript = new(user.GetBaseAbility(abilityId).GetEffect());
+        //entityScript.Activate(gameContext, user, target);
         int hpChange = oldHp - target.GetCurrentHp();
 
         // Update sprite view to display damage.

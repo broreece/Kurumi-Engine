@@ -198,9 +198,9 @@ public static class Program {
         WindowConfig windowConfig = WindowConfigManager.Load(windowConfigPath);
 
         // Create game context with neccesary arguments.
-        GameContext gameContext = new(database, saveManager, assetManager, mapManager, animatedTileSheetConfig, battleBackgroundSpriteConfig, 
-            battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, gameWindowConfig, 
-            inventoryConfig, mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, partyChoicesConfig, tileSheetConfig, windowConfig,
-            choiceBoxDefaults, globalMessageDefaults, nameBoxDefaults, textWindowDefaults);
+        GameContext gameContext = new(database, saveManager, assetManager, mapManager, mapScriptManager, animatedTileSheetConfig, 
+            battleBackgroundSpriteConfig, battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, 
+            gameWindowConfig, inventoryConfig, mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, partyChoicesConfig, tileSheetConfig, 
+            windowConfig, choiceBoxDefaults, globalMessageDefaults, nameBoxDefaults, textWindowDefaults);
     }
 }

@@ -9,7 +9,9 @@ public abstract class SceneScript : Script {
     /// </summary>
     /// <param name="name">The name of the script.</param>
     /// <param name="head">The head of the script.</param>
-    protected SceneScript(string name, ScriptStep head) : base(name, head) {}
+    protected SceneScript(string name, ScriptStep head) : base(name, head) {
+        scriptStep = head;
+    }
 
     /// <summary>
     /// Getter for the map scene scripts current script step.

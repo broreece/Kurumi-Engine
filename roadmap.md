@@ -57,23 +57,31 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (CSAF) Custom script and actor format implementation ##
-### Complexity: 5 ###
-### Independent: 5 ###
+## (EESA) Entity and enemy script adjustments. ##
+### Complexity: 3 ###
+### Independent: 3 ###
 ### Momentum: 3 ###
-### Impact: 3 ###
+### Impact: 2 ###
+
+**Description:** During our work on CSAF we've created some issues now in the battle state class relating to abilities and enemy scripts having strings instead of script objects.
+
+**Steps:**
+- Change any of these old string storages to the correct script format, abilities use EntityScript and the enemy formations should just have integers representing a script id.
+- Create a new registry in the same style for battle scripts for enemies and entity scripts.
+- Change constructors for abilities and enemy formations to include the registry and load the scripts.
+
+---
+
+## (CSAF) Custom script and actor format implementation ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
 
 **Description:** Currently scripts and actors are stored in string format, we should create a custom format.
 
 **Steps:**
-(CSAF-02):
-- Be able to load the map scripts directly from the map script manager class by deseralizing the json data.
-- Change the script constructor to not use script text but direct parameters.
-(CSAF-03):
-- If the script value isn't empty or -1 load the script from the script registry.
-- We might need a file to deserealize scripts from json into our format.
-
-- Finally create a new document in info to explain scripts and actors.
+- Create a new document in info to explain scripts and actors.
 - Also create a document in templates for template actors and scripts.
 - Also a misc task is to create a file format for the registries and store it in the documentation, we currently have not documented how registry.json files should look.
 

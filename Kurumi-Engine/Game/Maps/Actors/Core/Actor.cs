@@ -286,7 +286,7 @@ public class Actor : MapElement, IActorView, IActionActorView, ITouchActorView, 
     /// </summary>
     /// <returns>A script (if any) that is linked to the actor.</returns>
     public MapScript GetScript() {
-        // TODO: (CSAF) Implement script formatting and then get the script here using the registry.
+        return actorInfo.GetScript();
     }
 
     // Info and controller stack.

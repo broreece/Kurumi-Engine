@@ -1,6 +1,7 @@
 namespace Database.Core;
 
 using Database.Exceptions;
+using Engine.ScriptManager.Core;
 using Game.Entities.Enemy;
 using Game.Entities.PlayableCharacter;
 using Game.Entities.Skills;
@@ -13,6 +14,7 @@ using Registry.Items;
 using Registry.Skills;
 using Save.Interfaces;
 using Microsoft.Data.Sqlite;
+using Scripts.MapScripts.Base;
 
 /// <summary>
 /// Database class, contains functions that allow querying from the database.
@@ -385,18 +387,19 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     /// </summary>
     /// <param name="actorSpriteRegistry">The actor sprite registry object.</param>
     /// <returns>The actor information stored in the database.</returns>
-    public ActorInfo[] LoadActorInfo(ActorSpriteRegistry actorSpriteRegistry) {
+    public ActorInfo[] LoadActorInfo(ActorSpriteRegistry actorSpriteRegistry, MapScriptManager mapScriptManager) {
         object[,] data = Load("actors");
         int results = data.GetLength(0);
         ActorInfo[] actors = new ActorInfo[results];
         for (int row = 0; row < results; row ++) {
             // Create empty path.
-            int[] path = [];
-            int id = (int) (long) data[row, 0];
-            int behaviour = (int) data[row, 1];
-            int spriteId = (int) (long) data[row, 2];
-            int movementSpeed = (int) data[row, 3];
-            int trackingRange = (int) (long) data[row, 4];
+            List<int> path = [];
+            MapScript? mapScript = null;
+            int id = Convert.ToInt32((long) data[row, 0]);
+            int behaviour = Convert.ToInt32((long) data[row, 1]);
+            int spriteId = Convert.ToInt32((long) data[row, 2]);
+            int movementSpeed = Convert.ToInt32((long) data[row, 3]);
+            int trackingRange = Convert.ToInt32((long) data[row, 4]);
             bool belowParty = Convert.ToInt32((long) data[row, 5]) == 1;
             bool passable = Convert.ToInt32((long) data[row, 6]) == 1;
             bool onTouch = Convert.ToInt32((long) data[row, 7]) == 1;
@@ -407,14 +410,17 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             if ((Behaviour) behaviour == Behaviour.FollowsPath) {
                 object[,] pathData = Load("actor_paths", ["actor_id"], [id.ToString()], "path_index");
                 int pathResults = pathData.GetLength(0);
-                path = new int[pathResults];
                 for (int pathRow = 0; pathRow < pathResults; pathRow ++) {
-                    path[pathRow] = Convert.ToInt32((long)pathData[row, 2]);
+                    path.Add(Convert.ToInt32((long)pathData[row, 2]));
                 }
             }
-
-            actors[row] = new ActorInfo(behaviour, actorSpriteRegistry.GetActorSprite(spriteId), movementSpeed, trackingRange, belowParty, passable, onTouch, auto,
-                onAction, onFind, path, scriptId);
+            // Load script if valid ID.
+            if (scriptId > 0) {
+                mapScript = mapScriptManager.LoadMapScript(scriptId - 1);
+            }
+            actors[row] = new ActorInfo(behaviour, actorSpriteRegistry.GetActorSprite(spriteId - 1), 
+                    movementSpeed, trackingRange, belowParty, passable, onTouch, auto, onAction, onFind, path, 
+                    mapScript);
         }
         return actors;
     }

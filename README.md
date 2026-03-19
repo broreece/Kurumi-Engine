@@ -71,9 +71,11 @@ Example:
     "Steps": [
         {
             "Type": "ChangeMap",
-            "MapID": 1,
-            "XLocation": 0,
-            "YLocation": 0
+            "Parameters": {
+                "MapID": 1,
+                "XLocation": 0,
+                "YLocation": 0
+            }
         }
     ]
 }

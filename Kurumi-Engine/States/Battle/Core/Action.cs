@@ -1,5 +1,7 @@
 namespace States.Battle.Core;
 
+using Scripts.BattleScripts.Base;
+
 /// <summary>
 /// The action class used to determine the list of actions executed in speed order.
 /// </summary>
@@ -12,7 +14,7 @@ public class Action {
     /// <param name="speed">The speed of the action.</param>
     /// <param name="battleScript">The battle script that is being executed.</param>
     /// <param name="enemy">If the action is being done by the enemy formation.</param>
-    public Action(int characterId, int targetId, int speed, string battleScript, bool enemy) {
+    public Action(int characterId, int targetId, int speed, BattleScript battleScript, bool enemy) {
         this.characterId = characterId;
         this.targetId = targetId;
         this.speed = speed;
@@ -49,7 +51,7 @@ public class Action {
     /// Getter for the battle script identifier.
     /// </summary>
     /// <returns>The battle script string identifier.</returns>
-    public string GetBattleScript() {
+    public BattleScript GetBattleScript() {
         return battleScript;
     }
 
@@ -62,6 +64,6 @@ public class Action {
     }
 
     private readonly int characterId, targetId, speed;
-    private readonly string battleScript;
     private readonly bool enemy;
+    private readonly BattleScript battleScript;
 }
