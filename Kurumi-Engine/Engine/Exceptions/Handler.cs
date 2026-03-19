@@ -17,7 +17,7 @@ public static class Handler {
     public static void HandleConfigException(Exception exception) {
         string message = $"{exception.Message}, {exception.StackTrace}";
         Logger.LogFatal(message);
-        DisplayErrorMessage(message);
+        DisplayErrorMessage(exception.Message);
     }
 
     /// <summary>
@@ -39,33 +39,34 @@ public static class Handler {
                 Scene: {gameContext.GetSceneType()}
                 Script: {gameContext.GetCurrentScriptName()}
                 UI Depth: {gameContext.GetUIStackDepth()}
-                Message: {exception.Message}
+                Message: {exception.Message}";
+            string stackText = $@"
                 Stack: {exception.StackTrace}";
             switch (engineException.GetSeverity()) {
                 case Severity.Fatal:
                     // TODO: (LI-01) Close game window here.
                     // TODO: (LI-01) Based on logging config output to console.
                     // TODO: (LI-01) Close game window here.
-                    Logger.LogFatal(message);
+                    Logger.LogFatal($"{message}{stackText}");
                     DisplayErrorMessage(message);
                     break;
 
                 case Severity.Error:
                     // TODO: (LI-01) Based on logging config output to console.
                     // TODO: (LI-01) Based on logging open a window here.
-                    Logger.LogError(message);
+                    Logger.LogError($"{message}{stackText}");
                     break;
 
                 case Severity.Warning:
                     // TODO: (LI-01) Based on logging config output to console.
                     // TODO: (LI-01) Based on logging open a window here.
-                    Logger.LogWarning(message);
+                    Logger.LogWarning($"{message}{stackText}");
                     break;
 
                 case Severity.Info:
                     // TODO: (LI-01) Based on logging config output to console.
                     // TODO: (LI-01) Based on logging open a window here.
-                    Logger.LogInfo(message);
+                    Logger.LogInfo($"{message}{stackText}");
                     break;
 
                 default:
@@ -73,9 +74,10 @@ public static class Handler {
             }
         }
         else {
-            string message = $@"[{exception.Message}]
-            Stack: {exception.StackTrace}";
-            Logger.LogFatal(message);
+            string message = $@"{exception.Message}";
+            string stackMessage = $@"
+                Stack: {exception.StackTrace}";
+            Logger.LogFatal($"{message}{stackMessage}");
             DisplayErrorMessage(message);
             // TODO: (LI-01) Close game window here.
         }

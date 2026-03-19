@@ -7,27 +7,11 @@ public abstract class Script {
     /// <summary>
     /// The constructor for scripts.
     /// </summary>
-    protected Script() {
-        name = "";
-        head = null;
-        tail = null;
-    }
-
-    /// <summary>
-    /// A new script step being added to the script.
-    /// </summary>
-    /// <param name="newStep">The next script step in the script.</param>
-    protected void AddStep(ScriptStep newStep) {
-        if (head == null) {
-            head = newStep;
-        } else if (tail == null) {
-            head.SetNext(newStep);
-            tail = newStep;
-        }
-        else {
-            tail.SetNext(newStep);
-            tail = newStep;
-        }
+    /// <param name="name">The name of the script.</param>
+    /// <param name="head">The head of the script.</param>
+    protected Script(string name, ScriptStep head) {
+        this.name = name;
+        this.head = head;
     }
 
     /// <summary>
@@ -54,22 +38,6 @@ public abstract class Script {
         head = newHead;
     }
 
-    /// <summary>
-    /// Getter for the scripts tail step.
-    /// </summary>
-    /// <returns>The last script step of the script.</returns>
-    public ScriptStep ? GetTail() {
-        return head;
-    }
-
-    /// <summary>
-    /// Setter for the scripts tail.
-    /// </summary>
-    /// <param name="newHead">The new tail of the script.</param>
-    public void SetTail(ScriptStep newHead) {
-        head = newHead;
-    }
-
     protected string name;
-    protected ScriptStep ? head, tail;
+    protected ScriptStep ? head;
 }

@@ -2,7 +2,6 @@ namespace Scripts.EntityScripts.Base;
 
 using Engine.Runtime;
 using Scripts.Base;
-using Scripts.EntityScripts.EntityScriptSteps;
 using Game.Entities.Base;
 
 /// <summary>
@@ -12,41 +11,16 @@ public class EntityScript : Script {
     /// <summary>
     /// Constructor for the Entity script.
     /// </summary>
-    /// <param name="scriptInformation">The string representing each script step in the script.</param>
-    public EntityScript(string scriptText) {
-        while (scriptText.Contains(',')) {
-            string scriptName = scriptText[..scriptText.IndexOf(',')];
-            scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-            switch (scriptName) {
-                case "ChangeHp":
-                    bool reduceHp = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    bool canKnockOut = int.Parse(scriptText[..scriptText.IndexOf(',')]) == 1;
-                    scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    string formula;
-                    // Check if end of script.
-                    if (scriptText.Contains(',')) {
-                        formula = scriptText[..scriptText.IndexOf(',')];
-                        scriptText = scriptText[(scriptText.IndexOf(',') + 1)..];
-                    }
-                    else {
-                        formula = scriptText;
-                    }
-                    AddStep(new ChangeHp(reduceHp, canKnockOut, formula));
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
+    /// <param name="name">The name of the script.</param>
+    /// <param name="head">The head of the script.</param>
+    public EntityScript(string name, ScriptStep head) : base(name, head) {}
 
     /// <summary>
-    /// Activates the scene script.
+    /// Activates the entity script.
     /// </summary>
     /// <param name="gameContext">The context of the game used by script steps.</param>
     /// <param name="user">The user entity.</param>
-    /// <param name="user">The target entity.</param>
+    /// <param name="target">The target entity.</param>
     public void Activate(GameContext gameContext, Entity user, Entity target) {
         ScriptStep ? scriptStep = head;
         EntityScriptContext entityScriptContext = new(gameContext, user, target);
@@ -54,6 +28,5 @@ public class EntityScript : Script {
             scriptStep.Activate(entityScriptContext);
             scriptStep = scriptStep.GetNextStep();
         }
-        scriptStep = head;
     }
 }

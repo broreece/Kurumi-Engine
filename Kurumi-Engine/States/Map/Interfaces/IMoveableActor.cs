@@ -1,6 +1,6 @@
 namespace States.Map.Interfaces;
 
-using Game.Map.Actors.Base;
+using Game.Maps.Actors.Base;
 using Utils.Interfaces;
 
 /// <summary>

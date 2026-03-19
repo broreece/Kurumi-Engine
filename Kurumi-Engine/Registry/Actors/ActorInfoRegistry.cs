@@ -1,6 +1,6 @@
 namespace Registry.Actors;
 
-using Game.Map.Actors.Base;
+using Game.Maps.Actors.Base;
 
 /// <summary>
 /// The actor info registry, contains data about the actors.

@@ -2,11 +2,11 @@ namespace States.Map.Core;
 
 using Config.Runtime.Map;
 using Engine.Runtime;
-using Game.Map.ActorControllers;
-using Game.Map.Actors.Base;
-using Game.Map.Actors.Core;
-using Game.Map.Core;
-using Game.Map.Elements;
+using Game.Maps.ActorControllers;
+using Game.Maps.Actors.Base;
+using Game.Maps.Actors.Core;
+using Game.Maps.Core;
+using Game.Maps.Elements;
 using Scripts.Base;
 using Scripts.MapScripts.Base;
 using States.Base;

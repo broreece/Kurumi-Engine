@@ -1,7 +1,7 @@
 namespace States.Map.Interfaces;
 
-using Game.Map.Actors.Base;
-using Game.Map.Elements;
+using Game.Maps.Actors.Base;
+using Game.Maps.Elements;
 using Utils.Interfaces;
 
 /// <summary>

@@ -1,8 +1,8 @@
 namespace Scenes.Map.Interfaces;
 
-using Game.Map.Actors.Core;
-using Game.Map.Elements;
-using Game.Map.Tiles;
+using Game.Maps.Actors.Core;
+using Game.Maps.Elements;
+using Game.Maps.Tiles;
 
 /// <summary>
 /// The public map view interface, used to control visibility of map functions required in the map scene.

@@ -19,7 +19,6 @@ Active Development
 First build worked focused on a large **core refactor** to improve engine architecture and maintainability, previous build 'crucible' focused on cleaning up up post refractor and creating tools to help development (Such as logging, unit tests).
 
 Current tasks include:
-- Custom data formats for scripts and actors
 - AI and enemy formation map data implementation
 - Battle scene implementation
 - Advanced saving implementation
@@ -67,12 +66,20 @@ Kurumi Engine uses **step-based scripts** to control events and gameplay flow.
 Example:
 
 ```
-"ChoiceBox,Yes-No,2,BasicTextWindow,You said no,StartBattle,0,0,0,"
+{
+    "Name": "Change map script",
+    "Steps": [
+        {
+            "Type": "ChangeMap",
+            "MapID": 1,
+            "XLocation": 0,
+            "YLocation": 0
+        }
+    ]
+}
 
 ```
-Where if you reply 'yes' a battle will start, and if you reply 'no' no battle will start.
-
-Plans to change from a string format to a custom format exist.
+This is a basic script that changes the current map to the map with ID 1 at coordinate (0,0).
 
 ---
 

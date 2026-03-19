@@ -67,14 +67,15 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 **Steps:**
 (CSAF-02):
-- Scripts should be stored in json formats.
-- Each script variable stored with a string key for higher readability.
-- Script steps should be indexed with the name of the type of script step so we'll maintain it's switch statement check.
-- Because it's json each script step can have different parameters which is better then database.
-- Store these scripts in "/Assets/Scripts" then create a registry file like the maps registry json file.
+- Be able to load the map scripts directly from the map script manager class by deseralizing the json data.
+- Change the script constructor to not use script text but direct parameters.
 (CSAF-03):
 - If the script value isn't empty or -1 load the script from the script registry.
 - We might need a file to deserealize scripts from json into our format.
+
+- Finally create a new document in info to explain scripts and actors.
+- Also create a document in templates for template actors and scripts.
+- Also a misc task is to create a file format for the registries and store it in the documentation, we currently have not documented how registry.json files should look.
 
 ---
 
@@ -232,7 +233,11 @@ Allow battle scenes to end either in victory of fail.
 
 ---
 
-## (FD-01) Forge Demonstration Build ##
+Forge build reached!
+
+---
+
+## (FD-01) Forge Build Demonstration ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
 ### Momentum: 3 ###
@@ -246,10 +251,6 @@ Create a small demonstration scenario showcasing key engine capabilities impleme
 continues with a speech, this should go directly into a cutscene.
 - The second video should demonstrate enemy formations, they chase the player for the player to escape. The game is then saved
 and when loaded the enemy formation persists on the map.
-
----
-
-Forge build reached!
 
 ---
 
@@ -459,5 +460,17 @@ Forge build reached!
 ### Impact: 2 ###
 
 **Description** Just a plan ticket, if we do thread actor AIs it might improve performance however we will need to carefully account for the current system and how we will implement threading here.
+
+**Steps:** N/A
+
+---
+
+## Check the scripts logics. Perhaps we can group all scripts together. ##
+### Complexity: 3 ###
+### Independent: 3 ###
+### Momentum: 2 ###
+### Impact: 2 ###
+
+**Description** Currently almost all scripts behave in the same way, perhaps we can just remove all the different kinds of scripts to keep logic the same and in one place?
 
 **Steps:** N/A

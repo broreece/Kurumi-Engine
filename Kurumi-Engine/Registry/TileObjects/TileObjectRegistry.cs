@@ -1,6 +1,6 @@
 namespace Registry.TileObjects;
 
-using Game.Map.Tiles;
+using Game.Maps.Tiles;
 
 /// <summary>
 /// The tile object data registry, contains data about the tile objects.

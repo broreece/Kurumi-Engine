@@ -14,8 +14,9 @@ using Config.Runtime.Menus;
 using Config.Runtime.Windows;
 using Database.Core;
 using Engine.Assets;
-using Engine.Maps.Core;
+using Engine.MapManager.Core;
 using Engine.Runtime;
+using Engine.ScriptManager.Core;
 using Save.Core;
 
 /// <summary>
@@ -46,6 +47,11 @@ public static class Program {
             "map_registry.json"
         );
         MapManager mapManager = new(mapRegistryPath);
+        string mapScriptsRegistryPath = Path.Combine(
+            registryBasePath,
+            "map_script_registry.json"
+        );
+        MapScriptManager mapScriptManager = new(mapScriptsRegistryPath);
 
         // Load config.
         string configBasePath = Path.Combine(

@@ -24,6 +24,7 @@ Kurumi-Engine/Assets/Fonts/*
 Kurumi-Engine/Assets/Licenses/*
 Kurumi-Engine/Assets/Maps/*
 Kurumi-Engine/Assets/Registry/*
+Kurumi-Engine/Assets/Scripts/*
 
 # - Ignore the game database.
 Kurumi-Engine/Database/Schema/game_data.db

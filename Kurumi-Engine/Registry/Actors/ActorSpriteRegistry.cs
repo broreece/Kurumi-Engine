@@ -1,6 +1,6 @@
 namespace Registry.Actors;
 
-using Game.Map.Actors.Base;
+using Game.Maps.Actors.Base;
 
 /// <summary>
 /// The actor sprites registry, contains data about the actor sprites.

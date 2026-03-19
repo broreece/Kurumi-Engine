@@ -4,7 +4,7 @@ using Config.Runtime.Menus;
 using Config.Runtime.Windows;
 using Engine.Input.Scenes;
 using Game.Entities.PlayableCharacter;
-using Game.Map.Elements;
+using Game.Maps.Elements;
 using Registry.Variables;
 using Save.Core;
 using Save.Interfaces;

@@ -2,7 +2,7 @@ namespace Game.Party;
 
 using Game.Entities.PlayableCharacter;
 using Game.Items;
-using Game.Map.Elements;
+using Game.Maps.Elements;
 using Save.Interfaces;
 using Scenes.Battle.Interfaces;
 using Utils.Exceptions;
