@@ -49,26 +49,10 @@ Tickets will also display a brief description, a set of planned steps for comple
 ### Forge
 **Focus areas:**
 
-- Custom script and actor data no longer use strings.
 - AI and enemy formation map data implementation
 - Battle scene implementation
 - Advanced saving implementation
 - Minor changes such as logger improvements and script enhancements
-
----
-
-## (EESA) Entity and enemy script adjustments. ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 2 ###
-
-**Description:** During our work on CSAF we've created some issues now in the battle state class relating to abilities and enemy scripts having strings instead of script objects.
-
-**Steps:**
-- Change any of these old string storages to the correct script format, abilities use EntityScript and the enemy formations should just have integers representing a script id.
-- Create a new registry in the same style for battle scripts for enemies and entity scripts.
-- Change constructors for abilities and enemy formations to include the registry and load the scripts.
 
 ---
 
@@ -84,6 +68,37 @@ Tickets will also display a brief description, a set of planned steps for comple
 - Create a new document in info to explain scripts and actors.
 - Also create a document in templates for template actors and scripts.
 - Also a misc task is to create a file format for the registries and store it in the documentation, we currently have not documented how registry.json files should look.
+
+---
+
+## Go through the code. Maybe we can decouple some instances of tightly coupled classes that shouldn't be together. ##
+### Complexity: 4 ###
+### Independent: 4 ###
+### Momentum: 3 ###
+### Impact: 2 ###
+
+**Description** It feels like I'm coupling too tightly recently. Technical debt is growing again yet's go through our code and look for refractors.
+
+**Steps:**
+IF WE DECIDE NOT TO DECOUPLE:
+    - Make a document explaining the decision, list pros and cons of each style.
+IF WE DECIDE TO DECOUPLE:
+    - In particular we are putting scripts into actors, items, abilities. It feels like every class has a using statement for scripts.
+    - Im aware of performance here vs coupling. It might not just be as simple as using int IDs instead as we'll need to pass around registries and loading these scripts all the time instead of just on container creation.
+
+---
+
+## Re-add deleted scene event steps ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 5 ###
+
+**Description:** During our work on CSAF we removed the traditional constructor for the scripts, we should now go back and re-add any deleted script steps.
+
+**Steps:**
+- https://github.com/broreece/Kurumi-Engine/commit/9e840b219cde144331093926bbff00a66e99d2c8#diff-f7e58fef3a0f6fc0677fa9b54340ad885e88bec3bdb9b3700dfa0c774618593bL15
+- The above commit contains where we deleted the steps. Re-add those steps.
 
 ---
 

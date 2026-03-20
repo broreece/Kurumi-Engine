@@ -1,5 +1,7 @@
 namespace Game.Entities.Skills;
 
+using Scripts.EntityScripts.Base;
+
 /// <summary>
 /// The ability class.
 /// </summary>
@@ -10,15 +12,15 @@ public class Ability : CapabilityDefinition {
     /// <param name="id">The name of the saveable element.</param>
     /// <param name="name">The name of the saveable element.</param>
     /// <param name="description">The abilities description.</param>
-    /// <param name="effect">The effect of the ability.</param>
+    /// <param name="script">The script of the ability.</param>
     /// <param name="element">The abilities element.</param>
     /// <param name="cost">The cost of the ability.</param>
     /// <param name="mpCost">If the ability reduces the users MP or HP.</param>
     /// <param name="spriteId">The sprite id of the ability when used in battle.</param>
-    public Ability(int id, string name, string description, string effect, int element, int cost,
+    public Ability(int id, string name, string description, EntityScript script, int element, int cost,
         bool mpCost, int spriteId) : base(id, name) {
         this.description = description;
-        this.effect = effect;
+        this.script = script;
         this.element = element;
         this.cost = cost;
         this.mpCost = mpCost;
@@ -31,14 +33,6 @@ public class Ability : CapabilityDefinition {
     /// <returns>The description of the ability.</returns>
     public string GetDescription() {
         return description;
-    }
-
-    /// <summary>
-    /// Getter for the abilities effect.
-    /// </summary>
-    /// <returns>The effect of the ability.</returns>
-    public string GetEffect() {
-        return effect;
     }
 
     /// <summary>
@@ -73,7 +67,16 @@ public class Ability : CapabilityDefinition {
         return mpCost;
     }
 
-    private readonly string description, effect;
+    /// <summary>
+    /// Getter for the abilities linked entity script.
+    /// </summary>
+    /// <returns>The entity script linked to the ability.</returns>
+    public EntityScript GetScript() {
+        return script;
+    }
+
+    private readonly string description;
     private readonly int element, cost, spriteId;
     private readonly bool mpCost;
+    private readonly EntityScript script;
 }

@@ -1,6 +1,7 @@
 namespace States.Battle.Core;
 
 using Engine.Runtime;
+using Engine.ScriptManager.Core;
 using Game.Battle;
 using Game.Entities.Base;
 using Game.Entities.PlayableCharacter;
@@ -25,10 +26,12 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
     /// <param name="battle">The battle object.</param>
     /// <param name="gameContext">The game context required to pass to scripts.</param>
     /// <param name="battleSceneView">The battle scene view object.</param>
-    public BattleState(Battle battle, GameContext gameContext, IBattleSceneView battleSceneView) : base(gameContext) {
-        // Store battle and battle scene view.
+    public BattleState(Battle battle, GameContext gameContext, IBattleSceneView battleSceneView, BattleScriptManager battleScriptManager) 
+        : base(gameContext) {
+        // Store battle, script manager and battle scene view.
         this.battle = battle;
         this.battleSceneView = battleSceneView;
+        this.battleScriptManager = battleScriptManager;
 
         // Set actions to empty.
         actions = [];
@@ -233,8 +236,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                 if (currentTurn == startTurn || (currentTurn > startTurn && (currentTurn + 1) % frequency == 0)) {
                     int speed = battle.GetEnemyStat(enemyFormationData.Id, gameContext.GetAgilityStatIndex());
                     int target = enemyScript.Target;
-                    // TODO: (EESA) Change enemy formations to reference battle scripts stored in registry.
-                    //actions.Add(new Action(characterId, target, speed, enemyScript.Script, true));
+                    actions.Add(new Action(characterId, target, speed, battleScriptManager.LoadBattleScript(enemyScript.Script - 1), 
+                        true));
                 }
             }
             characterId ++;
@@ -297,9 +300,11 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                         enemyDataIndex ++;
                     }
                     // Activate on kill scripts.
-                    // TODO: (EESA) Change enemy formations to reference battle scripts stored in registry.
-                    //BattleScript onKillScript = battle.GetEnemyFormationEnemyData(enemyIndex).OnKillScript;
-                    //onKillScript.Activate(gameContext);
+                    int onKillScriptId = battle.GetEnemyFormationEnemyData(enemyIndex).OnKillScript;
+                    if (onKillScriptId > 0) {
+                        BattleScript onKillScript = battleScriptManager.LoadBattleScript(onKillScriptId - 1);
+                        onKillScript.Activate(gameContext);
+                    }
                 }
 
                 // Make any neccesary changes to the party info window and update all sprites.
@@ -369,9 +374,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         // TODO: (BSE) We should add a check here for skills as well.
         // Calculate HP change alongside activating the effect.
         int oldHp = target.GetCurrentHp();
-        // TODO: (EESA) Change abilities to reference entity scripts.
-        //EntityScript entityScript = new(user.GetBaseAbility(abilityId).GetEffect());
-        //entityScript.Activate(gameContext, user, target);
+        EntityScript entityScript = user.GetBaseAbilityScript(abilityId);
+        entityScript.Activate(gameContext, user, target);
         int hpChange = oldHp - target.GetCurrentHp();
 
         // Update sprite view to display damage.
@@ -396,11 +400,10 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         return party.GetPartyMember(0).GetCurrentHp() == 0;
     }
 
-    // The battle object.
+    // The battle object, battle scene view and script manager.
     private readonly Battle battle;
-
-    // The assoicated battle scene view object.
     private readonly IBattleSceneView battleSceneView;
+    private readonly BattleScriptManager battleScriptManager;
 
     // Reused config and variables.
     private readonly int characterSprites;

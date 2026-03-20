@@ -3,6 +3,7 @@ namespace Game.Entities.Base;
 using Game.Core;
 using Game.Entities.Skills;
 using Game.Entities.Status;
+using Scripts.EntityScripts.Base;
 
 /// <summary>
 /// Abstract entity class, inherited by playable characters and enemies.
@@ -167,6 +168,15 @@ public abstract class Entity : PresentationData {
     /// <param name="index">The index of the base ability.</param>
     /// <returns>The specified base ability.</returns>
     public abstract Ability GetBaseAbility(int index);
+
+    /// <summary>
+    /// Function that loads a specific base abilities linked entity script.
+    /// </summary>
+    /// <param name="abilityIndex">The index of the ability being loaded.</param>
+    /// <returns>The linked entity script to the ability.</returns>
+    public EntityScript GetBaseAbilityScript(int abilityIndex) {
+        return baseAbilities[abilityIndex].GetScript();
+    }
 
     /// <summary>
     /// Getter for the entities statuses.

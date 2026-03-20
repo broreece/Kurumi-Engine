@@ -53,6 +53,8 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="saveManager">The save manager object that directly interacts with .json save data.</param>
     /// <param name="assetManager">The asset manager object that directly interacts with the file assets.</param>
     /// <param name="mapManager">The map manager object that directly interacts with the map assets.</param>
+    /// <param name="battleScriptManager">The battle script manager object that directly interacts with the battle script assets.</param>
+    /// <param name="entityScriptManager">The entity script manager object that directly interacts with the entity script assets.</param>
     /// <param name="mapScriptManager">The map script manager object that directly interacts with the map script assets.</param>
     /// <param name="animatedTileSheetConfig">The animated tile sheet config object.</param>
     /// <param name="battleBackgroundSpriteConfig">The battle background config object.</param>
@@ -74,7 +76,8 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="nameBoxDefaults">The name box defaults object.</param>
     /// <param name="textWindowDefaults">The text window defaults object.</param>
     public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, MapManager mapManager, 
-        MapScriptManager mapScriptManager, AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
+        BattleScriptManager battleScriptManager, EntityScriptManager entityScriptManager, MapScriptManager mapScriptManager, 
+        AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
         BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, CharacterFieldSpriteConfig characterFieldSpriteConfig, 
         FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, InventoryConfig inventoryConfig, 
         MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, MainMenuConfig mainMenuConfig, PartyChoicesConfig partyChoicesConfig,  
@@ -103,7 +106,7 @@ public sealed class GameContext : IGameUIContext {
         // Database data.
         actorSpriteRegistry = new ActorSpriteRegistry(databaseManager.LoadActorSprites());
         actorInfoRegistry = new ActorInfoRegistry(databaseManager.LoadActorInfo(actorSpriteRegistry, mapScriptManager));
-        abilityRegistry = new AbilityRegistry(databaseManager.LoadAbilities());
+        abilityRegistry = new AbilityRegistry(databaseManager.LoadAbilities(entityScriptManager));
         elementNameRegistry = new ElementNameRegistry(databaseManager.LoadElementNames());
         enemyRegistry = new EnemyRegistry(databaseManager.LoadEnemies(abilityRegistry));
         equipmentSlotNameRegistry = new EquipmentSlotNameRegistry(databaseManager.LoadEquipmentSlotNames());
@@ -125,6 +128,8 @@ public sealed class GameContext : IGameUIContext {
         // Managers.
         this.assetManager = assetManager;
         this.mapManager = mapManager;
+        this.battleScriptManager = battleScriptManager;
+        this.entityScriptManager = entityScriptManager;
         this.mapScriptManager = mapScriptManager;
 
         // Game variables.
@@ -183,7 +188,7 @@ public sealed class GameContext : IGameUIContext {
             enemyRegistry, battleBackgroundArtId, backgroundMusicId);
         currentScene = battleScene;
         Battle battle = new(enemyFormationRegistry, enemyRegistry, enemyFormationId);
-        BattleState battleState = new(battle, this, battleScene);
+        BattleState battleState = new(battle, this, battleScene, battleScriptManager);
         battleScene.SetBattleTargetingView(battleState);
 
         // Set the controls after creation.
@@ -778,6 +783,8 @@ public sealed class GameContext : IGameUIContext {
     private readonly SaveManager saveManager;
     private readonly AssetManager assetManager;
     private readonly MapManager mapManager;
+    private readonly BattleScriptManager battleScriptManager;
+    private readonly EntityScriptManager entityScriptManager;
     private readonly MapScriptManager mapScriptManager;
 
     // In game variables.

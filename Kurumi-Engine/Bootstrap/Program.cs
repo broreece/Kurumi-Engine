@@ -47,6 +47,16 @@ public static class Program {
             "map_registry.json"
         );
         MapManager mapManager = new(mapRegistryPath);
+        string entityScriptsRegistryPath = Path.Combine(
+            registryBasePath,
+            "entity_script_registry.json"
+        );
+        EntityScriptManager entityScriptManager = new(entityScriptsRegistryPath);
+        string battleScriptsRegistryPath = Path.Combine(
+            registryBasePath,
+            "battle_script_registry.json"
+        );
+        BattleScriptManager battleScriptManager = new(battleScriptsRegistryPath);
         string mapScriptsRegistryPath = Path.Combine(
             registryBasePath,
             "map_script_registry.json"
@@ -198,9 +208,9 @@ public static class Program {
         WindowConfig windowConfig = WindowConfigManager.Load(windowConfigPath);
 
         // Create game context with neccesary arguments.
-        GameContext gameContext = new(database, saveManager, assetManager, mapManager, mapScriptManager, animatedTileSheetConfig, 
-            battleBackgroundSpriteConfig, battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, 
-            gameWindowConfig, inventoryConfig, mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, partyChoicesConfig, tileSheetConfig, 
-            windowConfig, choiceBoxDefaults, globalMessageDefaults, nameBoxDefaults, textWindowDefaults);
+        new GameContext(database, saveManager, assetManager, mapManager, battleScriptManager, entityScriptManager, mapScriptManager, 
+            animatedTileSheetConfig, battleBackgroundSpriteConfig, battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, 
+            fileSelectorConfig, gameConfig, gameWindowConfig, inventoryConfig, mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, 
+            partyChoicesConfig, tileSheetConfig, windowConfig, choiceBoxDefaults, globalMessageDefaults, nameBoxDefaults, textWindowDefaults);
     }
 }

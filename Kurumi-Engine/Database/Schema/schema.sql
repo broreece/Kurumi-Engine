@@ -19,9 +19,9 @@ CREATE TABLE IF NOT EXISTS "enemy_elements" (
 	"enemy_id"	INTEGER NOT NULL,
 	"element_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
+	PRIMARY KEY("enemy_id","element_id"),
 	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
-	FOREIGN KEY("enemy_id") REFERENCES "enemies"("id"),
-	PRIMARY KEY("enemy_id","element_id")
+	FOREIGN KEY("enemy_id") REFERENCES "enemies"("id")
 );
 CREATE TABLE IF NOT EXISTS "statuses" (
 	"id"	INTEGER NOT NULL UNIQUE,
@@ -42,9 +42,9 @@ CREATE TABLE IF NOT EXISTS "statuses_stats" (
 	"status_id"	INTEGER NOT NULL,
 	"stat_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("stat_id") REFERENCES "stats"("id"),
+	PRIMARY KEY("status_id","stat_id"),
 	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
-	PRIMARY KEY("status_id","stat_id")
+	FOREIGN KEY("stat_id") REFERENCES "stats"("id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_types" (
 	"id"	INTEGER NOT NULL UNIQUE,
@@ -56,71 +56,59 @@ CREATE TABLE IF NOT EXISTS "equipment_slots" (
 	"slot_name"	TEXT NOT NULL UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-CREATE TABLE IF NOT EXISTS "abilities" (
-	"id"	INTEGER NOT NULL UNIQUE,
-	"name"	TEXT NOT NULL,
-	"description"	TEXT NOT NULL,
-	"effect"	TEXT NOT NULL,
-	"element_id"	INTEGER NOT NULL,
-	"cost"	INTEGER NOT NULL,
-	"mp_cost"	INTEGER NOT NULL,
-	"battle_sprite_id"	INTEGER NOT NULL,
-	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
 CREATE TABLE IF NOT EXISTS "enemy_statuses" (
 	"enemy_id"	INTEGER NOT NULL,
 	"status_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("enemy_id") REFERENCES "enemies"("id"),
+	PRIMARY KEY("enemy_id","status_id"),
 	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
-	PRIMARY KEY("enemy_id","status_id")
+	FOREIGN KEY("enemy_id") REFERENCES "enemies"("id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_skills" (
 	"equipment_id"	INTEGER NOT NULL,
 	"skill_id"	INTEGER NOT NULL,
+	PRIMARY KEY("equipment_id","skill_id"),
 	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
-	FOREIGN KEY("skill_id") REFERENCES "skills"("id"),
-	PRIMARY KEY("equipment_id","skill_id")
+	FOREIGN KEY("skill_id") REFERENCES "skills"("id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_abilities" (
 	"equipment_id"	INTEGER NOT NULL,
 	"ability_id"	INTEGER NOT NULL,
 	"sealed"	INTEGER NOT NULL,
+	PRIMARY KEY("equipment_id","ability_id"),
 	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
-	FOREIGN KEY("ability_id") REFERENCES "abilities"("id"),
-	PRIMARY KEY("equipment_id","ability_id")
+	FOREIGN KEY("ability_id") REFERENCES "abilities"("id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_elements" (
 	"equipment_id"	INTEGER NOT NULL,
 	"element_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
+	PRIMARY KEY("equipment_id","element_id"),
 	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
-	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
-	PRIMARY KEY("equipment_id","element_id")
+	FOREIGN KEY("element_id") REFERENCES "elements"("id")
 );
 CREATE TABLE IF NOT EXISTS "statuses_elements" (
 	"status_id"	INTEGER NOT NULL,
 	"element_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
+	PRIMARY KEY("status_id","element_id"),
 	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
-	PRIMARY KEY("status_id","element_id")
+	FOREIGN KEY("element_id") REFERENCES "elements"("id")
 );
 CREATE TABLE IF NOT EXISTS "statuses_abilities" (
 	"status_id"	INTEGER NOT NULL,
 	"ability_id"	INTEGER NOT NULL,
 	"sealed"	INTEGER NOT NULL,
-	FOREIGN KEY("ability_id") REFERENCES "abilities"("id"),
+	PRIMARY KEY("status_id","ability_id"),
 	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
-	PRIMARY KEY("status_id","ability_id")
+	FOREIGN KEY("ability_id") REFERENCES "abilities"("id")
 );
 CREATE TABLE IF NOT EXISTS "statuses_skills" (
 	"status_id"	INTEGER NOT NULL,
 	"skill_id"	INTEGER NOT NULL,
 	"sealed"	INTEGER NOT NULL,
-	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
 	PRIMARY KEY("status_id","skill_id"),
+	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
 	FOREIGN KEY("skill_id") REFERENCES "skills"("id")
 );
 CREATE TABLE IF NOT EXISTS "tile_objects" (
@@ -144,9 +132,9 @@ CREATE TABLE IF NOT EXISTS "equipment" (
 	"turn_effect"	TEXT,
 	"turn_effect_sprite_id"	INTEGER NOT NULL,
 	PRIMARY KEY("id","item_id"),
-	FOREIGN KEY("item_id") REFERENCES "items"("id"),
 	FOREIGN KEY("equipment_type") REFERENCES "equipment_types"("id"),
-	FOREIGN KEY("equipment_slot") REFERENCES "equipment_slots"("id")
+	FOREIGN KEY("equipment_slot") REFERENCES "equipment_slots"("id"),
+	FOREIGN KEY("item_id") REFERENCES "items"("id")
 );
 CREATE TABLE IF NOT EXISTS "enemies" (
 	"id"	INTEGER NOT NULL UNIQUE,
@@ -206,15 +194,15 @@ CREATE TABLE IF NOT EXISTS "item_pool_items" (
 	"item_pool_id"	INTEGER NOT NULL,
 	"item_id"	INTEGER NOT NULL,
 	PRIMARY KEY("item_id","item_pool_id"),
-	FOREIGN KEY("item_id") REFERENCES "items"("id"),
-	FOREIGN KEY("item_pool_id") REFERENCES "item_pools"("id")
+	FOREIGN KEY("item_pool_id") REFERENCES "item_pools"("id"),
+	FOREIGN KEY("item_id") REFERENCES "items"("id")
 );
 CREATE TABLE IF NOT EXISTS "enemy_abilities" (
 	"enemy_id"	INTEGER NOT NULL,
 	"ability_id"	INTEGER NOT NULL,
 	PRIMARY KEY("ability_id","enemy_id"),
-	FOREIGN KEY("enemy_id") REFERENCES "enemies"("id"),
-	FOREIGN KEY("ability_id") REFERENCES "abilities"("id")
+	FOREIGN KEY("ability_id") REFERENCES "abilities"("id"),
+	FOREIGN KEY("enemy_id") REFERENCES "enemies"("id")
 );
 CREATE TABLE IF NOT EXISTS "actor_sprites" (
 	"id"	INTEGER NOT NULL UNIQUE,
@@ -244,5 +232,17 @@ CREATE TABLE IF NOT EXISTS "actors" (
 	"script"	INTEGER NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("sprite_id") REFERENCES "actor_sprites"("id")
+);
+CREATE TABLE IF NOT EXISTS "abilities" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"name"	TEXT NOT NULL,
+	"description"	TEXT NOT NULL,
+	"script_id"	INTEGER NOT NULL,
+	"element_id"	INTEGER NOT NULL,
+	"cost"	INTEGER NOT NULL,
+	"mp_cost"	INTEGER NOT NULL,
+	"battle_sprite_id"	INTEGER NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("element_id") REFERENCES "elements"("id")
 );
 COMMIT;

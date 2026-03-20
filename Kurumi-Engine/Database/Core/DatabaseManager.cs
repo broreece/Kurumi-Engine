@@ -247,14 +247,14 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     /// Function that loads all abilities in the database.
     /// </summary>
     /// <returns>The abilities stored in the database.</returns>
-    public Ability[] LoadAbilities() {
+    public Ability[] LoadAbilities(EntityScriptManager entityScriptManager) {
         object[,] data = Load("abilities");
         int results = data.GetLength(0);
         Ability[] abilities = new Ability[results];
         for (int row = 0; row < results; row ++) {
             abilities[row] = new((int) (long) data[row, 0], (string) data[row, 1], (string) data[row, 2], 
-                (string) data[row, 3], (int) (long) data[row, 4], (int) (long) data[row, 5], 
-                (long) data[row, 6] == 1, (int) (long) data[row, 7]);
+                entityScriptManager.LoadEntityScript((int) (long) data[row, 3] - 1), (int) (long) data[row, 4], 
+                (int) (long) data[row, 5], (long) data[row, 6] == 1, (int) (long) data[row, 7]);
         }
         return abilities;
     }

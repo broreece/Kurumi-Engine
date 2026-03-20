@@ -4,8 +4,8 @@ namespace Save.Serialization.EnemyFormationData;
 /// The formation scripts data container.
 /// </summary>
 public class FormationScriptsData {
-    public string OnFoundActor { get; set; } = "";
-    public string MovementPatternActor { get; set; } = "";
-    public string OnLoseScript { get; set; } = "";
-    public string OnWinScript { get; set; } = "";
+    public int OnFoundActor { get; set; }
+    public int MovementPatternActor { get; set; }
+    public int OnLoseScript { get; set; }
+    public int OnWinScript { get; set; }
 }

@@ -256,7 +256,11 @@ public class BattleScene : SceneBase, IBattleSceneView {
         if (hpChange < 0) {
             color = Color.Green;
         }
-        Font font = new(assetManager.GetFontFileName(fontId));
+        string fontPath = Path.Combine(
+            AppContext.BaseDirectory,
+            assetManager.GetFontFileName(fontId)
+        );
+        Font font = new(fontPath);
         // TODO: (BSE-03) Magic number 32, change this into config please.
         damageText = new Text(hpChange.ToString(), font)
         {
