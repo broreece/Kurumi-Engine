@@ -57,10 +57,12 @@ public sealed class ChoiceBoxWithText : ConditionalScriptStep {
         sceneScriptContext.Pause();
 
         // Create the new dialogue with choice box UI state.
-        sceneScriptContext.AddUIState(new DialogueWithChoiceState(xPosition, yPosition, textWindowXPosition, textWindowYPosition, windowWidth, 
-            windowHeight, textWindowWidth, textWindowHeight, fontSize, fontFileName, windowFileName, sceneScriptContext.GetWindowConfig(), 
-            sceneScriptContext.GetGameWindow(), xPosition, yPosition, textWindowXPosition, textWindowYPosition, windowWidth, choiceBoxHeight, 
-            spacing, choiceBoxFileName, choices, PageGenerator.TurnTextIntoPages(text, sceneScriptContext.GetMaxLinesPerPage()), this, sceneScriptContext));
+        sceneScriptContext.AddUIState(new DialogueWithChoiceState(xPosition, yPosition, textWindowXPosition, 
+            textWindowYPosition, windowWidth, windowHeight, textWindowWidth, textWindowHeight, fontSize, fontFileName, 
+            windowFileName, sceneScriptContext.GetWindowConfig(), sceneScriptContext.GetGameWindow(), xPosition, 
+            yPosition, textWindowXPosition, textWindowYPosition, windowWidth, choiceBoxHeight, spacing, 
+            choiceBoxFileName, choices, PageGenerator.TurnTextIntoPages(text, sceneScriptContext.GetMaxLinesPerPage()), 
+            this, sceneScriptContext));
     }
 
     /// <summary>

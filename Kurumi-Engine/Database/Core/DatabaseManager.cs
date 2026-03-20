@@ -93,8 +93,8 @@ public sealed class DatabaseManager : ICharacterDataLoader {
             int spriteId = Convert.ToInt32((long) data[row, 10]);
             int price = Convert.ToInt32((long)data[row, 11]);
             int weight = Convert.ToInt32((long) data[row, 12]);
-            items[row] = new(id, name, desc, effect, usableInBattle, usableInMenu, targetsParty, targetsEnemies, targetsAll,
-                consumeOnUse, spriteId, price, weight);
+            items[row] = new(id, name, desc, effect, usableInBattle, usableInMenu, targetsParty, targetsEnemies, 
+                targetsAll, consumeOnUse, spriteId, price, weight);
         }
         return items;
     }
@@ -106,7 +106,8 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     /// <param name="skillRegistry">The skill registry object.</param>
     /// <param name="abilityRegistry">The ability registry object.</param>
     /// <returns>The equipment stored in the database.</returns>
-    public Equipment[] LoadEquipment(ItemRegistry itemRegistry, SkillRegistry skillRegistry, AbilityRegistry abilityRegistry) {
+    public Equipment[] LoadEquipment(ItemRegistry itemRegistry, SkillRegistry skillRegistry, 
+        AbilityRegistry abilityRegistry) {
         object[,] data = Load("equipment");
         int results = data.GetLength(0);
         Equipment[] equipment = new Equipment[results];
@@ -164,8 +165,9 @@ public sealed class DatabaseManager : ICharacterDataLoader {
                 int elementId = Convert.ToInt32((long) elementData[elementRow, 1]);
                 elements[elementId - 1] = Convert.ToInt32((long)elementData[elementRow, 2]);
             }
-            equipment[row] = new(id, turnEffectSpriteId, accuracy, evasion, equipmentSlot, equipmentType, attack, magicAttack,
-                defence, magicDefence, stats, elements, effect, sealedSkills, sealedAbilities, addedAbilities, item);
+            equipment[row] = new(id, turnEffectSpriteId, accuracy, evasion, equipmentSlot, equipmentType, attack, 
+                magicAttack, defence, magicDefence, stats, elements, effect, sealedSkills, sealedAbilities, 
+                addedAbilities, item);
         }
         return equipment;
     }
@@ -236,9 +238,9 @@ public sealed class DatabaseManager : ICharacterDataLoader {
                 elementModifiers[elementId - 1] = Convert.ToInt32((long)elementData[elementRow, 2]);
             }
 
-            statuses[row] = new Status(name, desc, spriteId, id, turnEffectSpriteId, maxTurns, priority, accuracyModifier,
-                evasionModifier, canAct, cureAtEnd, statModifiers, elementModifiers, turnScript, sealedSkills, sealedAbilities,
-                addedAbilities);
+            statuses[row] = new Status(name, desc, spriteId, id, turnEffectSpriteId, maxTurns, priority, 
+                accuracyModifier, evasionModifier, canAct, cureAtEnd, statModifiers, elementModifiers, turnScript, 
+                sealedSkills, sealedAbilities, addedAbilities);
         }
         return statuses;
     }
@@ -333,8 +335,8 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     }
 
     /// <summary>
-    /// Function that loads all playable characters in the database, does not load stats, equipment etc, that is to be adjusted
-    /// in save files.
+    /// Function that loads all playable characters in the database, does not load stats, equipment etc, that is to be 
+    /// adjusted in save files.
     /// </summary>
     /// <returns>The base of playable characters stored in the database.</returns>
     public PlayableCharacter[] LoadPlayableCharacters() {
@@ -450,7 +452,8 @@ public sealed class DatabaseManager : ICharacterDataLoader {
     /// <param name="value">The value of the conditions that is used when selecting from the database.</param>
     /// <param name="sortBy">The key to sort the results by.</param>
     /// <returns>A 2D array representing the sql table results of the condition passed.</returns>
-    /// <exception cref="MissingDatabaseTableException">Error thrown if a table that is trying to be loaded does not exist.</exception>
+    /// <exception cref="MissingDatabaseTableException">Error thrown if a table that is trying to be loaded does not 
+    /// exist.</exception>
     private object [,] Load(string tableName, string[] ? conditions = null, string[] ? values = null, 
         string ? sortBy = null) {
         // Load database elements using sqlite connection.

@@ -9,7 +9,8 @@ using Game.Maps.Pathfinding;
 /// </summary>
 public sealed class TrackedActorController : ActorController {
     /// <summary>
-    /// Constructor for the tracked actor controller. A actor controller that takes an additional position provider object.
+    /// Constructor for the tracked actor controller. A actor controller that takes an additional position provider 
+    /// object.
     /// </summary>
     /// <param name="interval">The interval at which the actor moves.</param>
     /// <param name="xLocation">The stored x location of the actor.</param>
@@ -53,8 +54,8 @@ public sealed class TrackedActorController : ActorController {
                 break;
 
             default:
-                direction = AStarSearch.LoadFastestPath(xLocation, yLocation, positionProvider.GetXLocation(), positionProvider.GetYLocation(),
-                    navigationGrid);
+                direction = AStarSearch.LoadFastestPath(xLocation, yLocation, positionProvider.GetXLocation(), 
+                    positionProvider.GetYLocation(), navigationGrid);
                 break;
         }
 

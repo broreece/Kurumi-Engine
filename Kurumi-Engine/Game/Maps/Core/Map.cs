@@ -8,7 +8,8 @@ using Game.Party;
 using Scenes.Map.Interfaces;
 
 /// <summary>
-/// Maps contain 2d arrays of tiles, actors, encounters and other information relating to the map scene such as background, if the map name is displayed and music.
+/// Maps contain 2d arrays of tiles, actors, encounters and other information relating to the map scene such as
+/// background, if the map name is displayed and music.
 /// </summary>
 public sealed class Map : INavigationGrid, IMapView {
     /// <summary>

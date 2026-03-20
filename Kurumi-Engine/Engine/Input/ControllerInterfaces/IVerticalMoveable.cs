@@ -1,7 +1,8 @@
 namespace Engine.Input.ControllerInterfaces;
 
 /// <summary>
-/// The vertical moveable input interface class, used to determine which input controllers can have a "MoveUp" and "MoveDown" button press.
+/// The vertical moveable input interface class, used to determine which input controllers can have a "MoveUp" 
+/// and "MoveDown" button press.
 /// </summary>
 public interface IVerticalMoveable {
     /// <summary>

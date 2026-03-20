@@ -29,9 +29,10 @@ public class Status : EntityElement, IIDAccessor {
     /// <param name="sealedSkills">The list of sealed skills of the entity element.</param>
     /// <param name="sealedAbilities">The list of sealed abilities of the entity element.</param>
     /// <param name="addedAbilities">The list of added abilities of the entity element.</param>
-    public Status(string name, string desc, int spriteId, int id, int turnEffectSpriteId, int maxTurns, int priority, int accuracyModifier, 
-        int evasionModifier, bool canAct, bool cureAtEnd, int[] statModifiers, int[] elementModifiers, string turnScript, 
-        List<Skill> sealedSkills, List<Ability> sealedAbilities, List<Ability> addedAbilities) 
+    public Status(string name, string desc, int spriteId, int id, int turnEffectSpriteId, int maxTurns, int priority, 
+        int accuracyModifier, int evasionModifier, bool canAct, bool cureAtEnd, int[] statModifiers, 
+        int[] elementModifiers, string turnScript, List<Skill> sealedSkills, List<Ability> sealedAbilities, 
+        List<Ability> addedAbilities) 
         : base(turnEffectSpriteId, accuracyModifier, evasionModifier, statModifiers, elementModifiers, turnScript, 
         sealedSkills, sealedAbilities, addedAbilities) {
         

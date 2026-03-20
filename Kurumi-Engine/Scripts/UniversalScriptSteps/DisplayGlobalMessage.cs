@@ -35,9 +35,10 @@ public sealed class DisplayGlobalMessage : ScriptStep {
         string fontFileName = sceneScriptContext.GetFontFileName(fontId);
 
         // Create the new global message UI state.
-        sceneScriptContext.AddUIState(new GlobalMessageState(xLocation, yLocation, globalMessageDefaults.GetGlobalMessageWidth(), 
-            globalMessageDefaults.GetGlobalMessageHeight(), timeLimit, windowFileName, sceneScriptContext.GetWindowConfig(), 
-            sceneScriptContext.GetGameWindow(), xLocation, yLocation, globalMessageDefaults.GetGlobalMessageFontSize(), fontFileName, 
+        sceneScriptContext.AddUIState(new GlobalMessageState(xLocation, yLocation, 
+            globalMessageDefaults.GetGlobalMessageWidth(), globalMessageDefaults.GetGlobalMessageHeight(), timeLimit, 
+            windowFileName, sceneScriptContext.GetWindowConfig(), sceneScriptContext.GetGameWindow(), xLocation, 
+            yLocation, globalMessageDefaults.GetGlobalMessageFontSize(), fontFileName, 
             PageGenerator.TurnTextIntoPages(message, sceneScriptContext.GetMaxLinesPerPage())));
     }
 

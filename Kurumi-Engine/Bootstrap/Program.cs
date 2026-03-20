@@ -75,7 +75,8 @@ public static class Program {
             "Battle",
             "battle_background_sprite_config.yaml"
         );
-        BattleBackgroundSpriteConfig battleBackgroundSpriteConfig = BattleBackgroundSpriteConfigManager.Load(battleBackgroundConfigPath);
+        BattleBackgroundSpriteConfig battleBackgroundSpriteConfig = 
+            BattleBackgroundSpriteConfigManager.Load(battleBackgroundConfigPath);
         string battleSceneConfigPath = Path.Combine(
             configBasePath,
             "Battle",
@@ -93,13 +94,15 @@ public static class Program {
             "Battle",
             "character_battle_sprite_config.yaml"
         );
-        CharacterBattleSpriteConfig characterBattleSpriteConfig = CharacterBattleSpriteConfigManager.Load(characterBattleSpriteConfigPath);
+        CharacterBattleSpriteConfig characterBattleSpriteConfig = 
+            CharacterBattleSpriteConfigManager.Load(characterBattleSpriteConfigPath);
         string enemyBattleSpriteConfigPath = Path.Combine(
             configBasePath,
             "Battle",
             "enemy_battle_sprite_config.yaml"
         );
-        EnemyBattleSpriteConfig enemyBattleSpriteConfig = EnemyBattleSpriteConfigManager.Load(enemyBattleSpriteConfigPath);
+        EnemyBattleSpriteConfig enemyBattleSpriteConfig = 
+            EnemyBattleSpriteConfigManager.Load(enemyBattleSpriteConfigPath);
         string partyChoicesConfigPath = Path.Combine(
             configBasePath,
             "Battle",
@@ -153,19 +156,22 @@ public static class Program {
             "Map",
             "animated_tilesheet_config.yaml"
         );
-        AnimatedTileSheetConfig animatedTileSheetConfig = AnimatedTileSheetConfigManager.Load(animatedTileSheetConfigPath);
+        AnimatedTileSheetConfig animatedTileSheetConfig = 
+            AnimatedTileSheetConfigManager.Load(animatedTileSheetConfigPath);
         string characterFieldSpriteConfigPath = Path.Combine(
             configBasePath,
             "Map",
             "character_field_sprite_config.yaml"
         );
-        CharacterFieldSpriteConfig characterFieldSpriteConfig = CharacterFieldSpriteConfigManager.Load(characterFieldSpriteConfigPath);
+        CharacterFieldSpriteConfig characterFieldSpriteConfig = 
+            CharacterFieldSpriteConfigManager.Load(characterFieldSpriteConfigPath);
         string mapBackgroundSpriteConfigPath = Path.Combine(
             configBasePath,
             "Map",
             "map_background_sprite_config.yaml"
         );
-        MapBackgroundSpriteConfig mapBackgroundSpriteConfig = MapBackgroundSpriteConfigManager.Load(mapBackgroundSpriteConfigPath);
+        MapBackgroundSpriteConfig mapBackgroundSpriteConfig = 
+            MapBackgroundSpriteConfigManager.Load(mapBackgroundSpriteConfigPath);
         string mapConfigPath = Path.Combine(
             configBasePath,
             "Map",
@@ -208,9 +214,10 @@ public static class Program {
         WindowConfig windowConfig = WindowConfigManager.Load(windowConfigPath);
 
         // Create game context with neccesary arguments.
-        new GameContext(database, saveManager, assetManager, mapManager, battleScriptManager, entityScriptManager, mapScriptManager, 
-            animatedTileSheetConfig, battleBackgroundSpriteConfig, battleSceneConfig, battleWindowConfig, characterFieldSpriteConfig, 
-            fileSelectorConfig, gameConfig, gameWindowConfig, inventoryConfig, mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, 
-            partyChoicesConfig, tileSheetConfig, windowConfig, choiceBoxDefaults, globalMessageDefaults, nameBoxDefaults, textWindowDefaults);
+        new GameContext(database, saveManager, assetManager, mapManager, battleScriptManager, entityScriptManager, 
+            mapScriptManager, animatedTileSheetConfig, battleBackgroundSpriteConfig, battleSceneConfig, 
+            battleWindowConfig, characterFieldSpriteConfig, fileSelectorConfig, gameConfig, gameWindowConfig, 
+            inventoryConfig, mapBackgroundSpriteConfig, mapConfig, mainMenuConfig, partyChoicesConfig, tileSheetConfig, 
+            windowConfig, choiceBoxDefaults, globalMessageDefaults, nameBoxDefaults, textWindowDefaults);
     }
 }

@@ -45,9 +45,10 @@ public static class FileSelectorConfigManager {
         string saveMessage = saveMessageNullable ?? "";
         string loadMessage = loadMessageNullable ?? "";
         string warningMessage = warningMessageNullable ?? "";
-        return new FileSelectorConfig(fileSelectorWindowId, fileSelectorChoiceBoxId, fontId, fontSize, maxFilesOneScreen, 
-            fileMessageWindowWidth, fileMessageWindowHeight, fileMessageWindowX, fileMessageWindowY, saveMessage, loadMessage, 
-            warningMessageWindowWidth, warningMessageWindowHeight, warningMessageWindowX, warningMessageWindowY, 
-            warningMessage, warningChoiceWindowWidth, warningChoiceWindowHeight, warningChoiceWindowX, warningChoiceWindowY);
+        return new FileSelectorConfig(fileSelectorWindowId, fileSelectorChoiceBoxId, fontId, fontSize, 
+            maxFilesOneScreen, fileMessageWindowWidth, fileMessageWindowHeight, fileMessageWindowX, fileMessageWindowY, 
+            saveMessage, loadMessage, warningMessageWindowWidth, warningMessageWindowHeight, warningMessageWindowX, 
+            warningMessageWindowY, warningMessage, warningChoiceWindowWidth, warningChoiceWindowHeight, 
+            warningChoiceWindowX, warningChoiceWindowY);
     }
 }

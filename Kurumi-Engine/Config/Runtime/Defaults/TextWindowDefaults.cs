@@ -14,7 +14,8 @@ public sealed class TextWindowDefaults {
     /// <param name="windowHeight">The default text window height.</param>
     /// <param name="windowX">The default text window X location.</param>
     /// <param name="windowY">The default text window Y location.</param>
-    public TextWindowDefaults(int windowId, int fontId, int fontSize, int windowWidth, int windowHeight, int windowX, int windowY) {
+    public TextWindowDefaults(int windowId, int fontId, int fontSize, int windowWidth, int windowHeight, int windowX, 
+        int windowY) {
         this.windowId = windowId;
         this.fontId = fontId;
         this.fontSize = fontSize;

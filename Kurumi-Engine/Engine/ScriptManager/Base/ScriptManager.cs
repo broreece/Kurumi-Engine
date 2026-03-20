@@ -13,7 +13,7 @@ public abstract class ScriptManager {
         Dictionary<string, string> data;
         try {
             json = File.ReadAllText(registryPath);
-            data = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? throw new Exception();;
+            data = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? throw new Exception();
         } 
         catch (Exception) {
             throw new MissingJsonFileException($"Registry path: {registryPath} not found or invalid format");

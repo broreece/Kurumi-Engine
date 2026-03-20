@@ -26,8 +26,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
     /// <param name="battle">The battle object.</param>
     /// <param name="gameContext">The game context required to pass to scripts.</param>
     /// <param name="battleSceneView">The battle scene view object.</param>
-    public BattleState(Battle battle, GameContext gameContext, IBattleSceneView battleSceneView, BattleScriptManager battleScriptManager) 
-        : base(gameContext) {
+    public BattleState(Battle battle, GameContext gameContext, IBattleSceneView battleSceneView, 
+        BattleScriptManager battleScriptManager) : base(gameContext) {
         // Store battle, script manager and battle scene view.
         this.battle = battle;
         this.battleSceneView = battleSceneView;
@@ -40,8 +40,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
         characterSprites = party.GetPartyMembers().Count(x => x != null);
         isSpriteSelected = new bool[characterSprites + battle.GetEnemiesLength()];
 
-        // Set current target index to the number of character sprites as 0-characterSprites.Length indicate targetting the party.
-        // Anything below characterSprites.Length will be the party members.
+        // Set current target index to the number of character sprites as 0 to characterSprites.Length indicate 
+        // targetting the party. Anything above characterSprites.Length will be the enemies.
         currentTargetIndex = characterSprites;
     }
 
@@ -236,8 +236,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                 if (currentTurn == startTurn || (currentTurn > startTurn && (currentTurn + 1) % frequency == 0)) {
                     int speed = battle.GetEnemyStat(enemyFormationData.Id, gameContext.GetAgilityStatIndex());
                     int target = enemyScript.Target;
-                    actions.Add(new Action(characterId, target, speed, battleScriptManager.LoadBattleScript(enemyScript.Script - 1), 
-                        true));
+                    actions.Add(new Action(characterId, target, speed, 
+                        battleScriptManager.LoadBattleScript(enemyScript.Script - 1), true));
                 }
             }
             characterId ++;
@@ -269,7 +269,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                         int selectedEnemyId = actionTargetId - characterSprites;
                         if (battle.GetEnemyHp(enemyIndex) == 0) {
                             // If the enemy is dead we try to load it's "Main part" aka the torso.
-                            selectedEnemyId = battle.GetEnemyFormationEnemyData(selectedEnemyId).MainPart + characterSprites;
+                            selectedEnemyId = battle.GetEnemyFormationEnemyData(selectedEnemyId).MainPart + 
+                                characterSprites;
                             // Incriment untill we find a main body part that is left over.
                             while (battle.GetEnemyHp(selectedEnemyId) == 0) {
                                 selectedEnemyId ++;
@@ -278,8 +279,8 @@ public class BattleState : StateBase, IBattleInputController, IBattleTargetingVi
                         }
                     }
                     else {
-                        // If the target is a party member but the party member is dead we check the first party member then increment by 1
-                        // untill new target is found.
+                        // If the target is a party member but the party member is dead we check the first party member 
+                        // then increment by 1 untill new target is found.
                         int selectedCharacterId = 0;
                         while (party.GetPartyMember(selectedCharacterId).GetCurrentHp() == 0) {
                             selectedCharacterId ++;

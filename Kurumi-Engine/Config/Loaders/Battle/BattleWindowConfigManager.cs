@@ -35,7 +35,8 @@ public static class BattleWindowConfigManager {
         int partyX = config["party_x_placement"];
         int partyY = config["party_y_placement"];
 
-        return new BattleWindowConfig(windowId, choiceBoxId, fontId, fontSize, infoWindowWidth, infoWindowHeight, infoWindowX, 
-            infoWindowY, selectionWindowWidth, selectionWindowHeight, selectionWindowX, selectionWindowY, partyX, partyY);
+        return new BattleWindowConfig(windowId, choiceBoxId, fontId, fontSize, infoWindowWidth, infoWindowHeight, 
+            infoWindowX, infoWindowY, selectionWindowWidth, selectionWindowHeight, selectionWindowX, selectionWindowY, 
+            partyX, partyY);
     }
 }

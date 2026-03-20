@@ -14,7 +14,8 @@ public sealed class GlobalMessageDefaults {
     /// <param name="height">The default global message height.</param>
     /// <param name="windowX">The default global message X location.</param>
     /// <param name="windowY">The default global message Y location.</param>
-    public GlobalMessageDefaults(int windowId, int fontId, int fontSize, int width, int height, int windowX, int windowY) {
+    public GlobalMessageDefaults(int windowId, int fontId, int fontSize, int width, int height, int windowX, 
+        int windowY) {
         this.windowId = windowId;
         this.fontId = fontId;
         this.fontSize = fontSize;

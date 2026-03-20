@@ -133,7 +133,7 @@ public sealed class AssetManager : ISaveAssetAccessor {
         return choiceSelectionFileNames[index];
     }
 
-    private readonly string[] actorSheetFileNames, battleBackgroundFileNames, characterBattleSpriteSheetFileNames, characterFieldSheetFileNames,
-        enemyBattleSpriteFileNames, fontFileNames, mapBackgroundFileNames, tileSheetFileNames, animatedTileSheetFileNames,
-        windowArtFileNames, choiceSelectionFileNames;
+    private readonly string[] actorSheetFileNames, battleBackgroundFileNames, characterBattleSpriteSheetFileNames, 
+        characterFieldSheetFileNames, enemyBattleSpriteFileNames, fontFileNames, mapBackgroundFileNames, 
+        tileSheetFileNames, animatedTileSheetFileNames, windowArtFileNames, choiceSelectionFileNames;
 }

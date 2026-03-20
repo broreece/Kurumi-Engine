@@ -27,11 +27,12 @@ public sealed class FileSelectorConfig {
     /// <param name="warningChoiceWindowHeight">The warning choice window height config.</param>
     /// <param name="warningChoiceWindowX">The warning choice window X config.</param>
     /// <param name="warningChoiceWindowY">The warning choice window Y config.</param>
-    public FileSelectorConfig(int fileSelectorWindowId, int fileSelectorChoiceBoxId, int fontId, int fontSize, int maxFilesOneScreen, 
-        int fileMessageWindowWidth, int fileMessageWindowHeight, int fileMessageWindowX, int fileMessageWindowY, string saveMessage, 
-        string loadMessage, int warningMessageWindowWidth, int warningMessageWindowHeight, int warningMessageWindowX, 
-        int warningMessageWindowY, string warningMessage, int warningChoiceWindowWidth, int warningChoiceWindowHeight, 
-        int warningChoiceWindowX, int warningChoiceWindowY) {
+    public FileSelectorConfig(int fileSelectorWindowId, int fileSelectorChoiceBoxId, int fontId, int fontSize, 
+        int maxFilesOneScreen, int fileMessageWindowWidth, int fileMessageWindowHeight, int fileMessageWindowX, 
+        int fileMessageWindowY, string saveMessage, string loadMessage, int warningMessageWindowWidth, 
+        int warningMessageWindowHeight, int warningMessageWindowX, int warningMessageWindowY, string warningMessage, 
+        int warningChoiceWindowWidth, int warningChoiceWindowHeight, int warningChoiceWindowX, 
+        int warningChoiceWindowY) {
         this.fileSelectorWindowId = fileSelectorWindowId;
         this.fileSelectorChoiceBoxId = fileSelectorChoiceBoxId;
         this.fontId = fontId;
@@ -214,9 +215,9 @@ public sealed class FileSelectorConfig {
         return warningChoiceWindowY;
     }
 
-    private readonly int fileSelectorWindowId, fileSelectorChoiceBoxId, fontId, fontSize, maxFilesOneScreen, fileMessageWindowWidth, 
-        fileMessageWindowHeight, fileMessageWindowX, fileMessageWindowY, warningMessageWindowWidth, warningMessageWindowHeight, 
-        warningMessageWindowX, warningMessageWindowY, warningChoiceWindowWidth, warningChoiceWindowHeight, warningChoiceWindowX, 
-        warningChoiceWindowY;
+    private readonly int fileSelectorWindowId, fileSelectorChoiceBoxId, fontId, fontSize, maxFilesOneScreen, 
+        fileMessageWindowWidth, fileMessageWindowHeight, fileMessageWindowX, fileMessageWindowY, 
+        warningMessageWindowWidth, warningMessageWindowHeight, warningMessageWindowX, warningMessageWindowY, 
+        warningChoiceWindowWidth, warningChoiceWindowHeight, warningChoiceWindowX, warningChoiceWindowY;
     private readonly string saveMessage, loadMessage, warningMessage;
 }

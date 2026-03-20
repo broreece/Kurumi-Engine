@@ -78,7 +78,8 @@ public static class Formula {
                     if (bracketCharacter == '(') {
                         numberOfBrackets ++;
                     }
-                    // If an internal bracket closes we can decrement the counter otherwsie we calculate the brackets value.
+                    // If an internal bracket closes we can decrement the counter otherwsie we calculate the brackets 
+                    // value.
                     else if (bracketCharacter == ')') {
                         if (numberOfBrackets > 0) {
                             numberOfBrackets --;
@@ -87,10 +88,12 @@ public static class Formula {
                             // Update the formula based on these values.
                             // Recursion used here as formulas can contain many internal brackets etc.
                             if (index > 1) {
-                                formula = formula[0.. index] + Calculate(formulaAfterBracket[1.. bracketIndex]) + formulaAfterBracket[(bracketIndex + 1)..];
+                                formula = formula[0.. index] + Calculate(formulaAfterBracket[1.. bracketIndex]) + 
+                                    formulaAfterBracket[(bracketIndex + 1)..];
                             }
                             else {
-                                formula = Calculate(formulaAfterBracket[1.. bracketIndex]) + formulaAfterBracket[(bracketIndex + 1)..];
+                                formula = Calculate(formulaAfterBracket[1.. bracketIndex]) + 
+                                    formulaAfterBracket[(bracketIndex + 1)..];
                             }
                             index = -1;
                             break;

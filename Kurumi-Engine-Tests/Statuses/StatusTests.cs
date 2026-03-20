@@ -15,10 +15,14 @@ public class StatusTests {
     [Fact]
     public void StatusApplicationTest() {
         Enemy testEntity = new("Test name", "Test description", 10, 0, [0], [0], [0], []);
-        Status testStatus = new("Test name", "Test description", 0, 0, 0, 0, 0, 0, 0, false, false, [0], [0], "", [], [], []);
-        Status higherPriorityStatus = new("Test name 2", "Test description", 0, 0, 0, 0, 1, 0, 0, false, false, [0], [0], "", [], [], []);
-        Status stackableStatus = new("Test name 3", "Test description", 0, 0, 0, 0, 1, 0, 0, false, false, [0], [0], "", [], [], []);
-        Status highestPriorityStatus = new("Test name 4", "Test description", 0, 0, 0, 0, 2, 0, 0, false, false, [0], [0], "", [], [], []);
+        Status testStatus = new("Test name", "Test description", 0, 0, 0, 0, 0, 0, 0, false, false, [0], [0], "", [], 
+            [], []);
+        Status higherPriorityStatus = new("Test name 2", "Test description", 0, 0, 0, 0, 1, 0, 0, false, false, [0], 
+            [0], "", [], [], []);
+        Status stackableStatus = new("Test name 3", "Test description", 0, 0, 0, 0, 1, 0, 0, false, false, [0], [0], 
+            "", [], [], []);
+        Status highestPriorityStatus = new("Test name 4", "Test description", 0, 0, 0, 0, 2, 0, 0, false, false, [0], 
+            [0], "", [], [], []);
         StatusResolver statusResolver = new();
         statusResolver.ApplyStatus(testEntity, testStatus);
         

@@ -4,7 +4,8 @@ using Game.Items;
 using Utils.Interfaces;
 
 /// <summary>
-/// Interface used to be able to access a character modifiers such as elemental resistances, equipment, stats and skills.
+/// Interface used to be able to access a character modifiers such as elemental resistances, equipment, stats and 
+/// skills.
 /// </summary>
 public interface ICharacterModifiersAccessor : ICharacterSkillsAccessor, ICharacterStatsAccessor, IIDAccessor {
     /// <summary>

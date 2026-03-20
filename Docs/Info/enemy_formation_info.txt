@@ -1,22 +1,24 @@
-The most complex logic and data in this project is the enemy formations. Enemy formations are sets of enemies stored in .json files
-that can be saved and exist in each save file. These .json files contains information about each formation.
+The most complex logic and data in this project is the enemy formations. Enemy formations are sets of enemies stored in 
+.json files that can be saved and exist in each save file. These .json files contains information about each formation.
 
 ------------------------
 
 File Format:
 The following fields represent the enemy formation on the map:
 "MapId" is what map the enemy formation is present on. "FieldArtId" is the actor art ID of the enemy formation.
-"X" is the enemy formations X location and "Y" is the Y location. "ReturnX" and "ReturnY" is the location that the enemy formation returns
-to if the search timer expires.
-"SearchTimer" is how long the enemy formation will try to find the player if the player moves out of the range of the enemy formation before
-returning to their old routine. "LootPool" is the group of items that the player can find by looting the dead corpse of the enemy formation.
-"Found" and "Dead" are indicators if the enemy formation has found the player or is dead.
+"X" is the enemy formations X location and "Y" is the Y location. "ReturnX" and "ReturnY" is the location that the 
+enemy formation returns to if the search timer expires.
+"SearchTimer" is how long the enemy formation will try to find the player if the player moves out of the range of the 
+enemy formation before returning to their old routine. "LootPool" is the group of items that the player can find by 
+looting the dead corpse of the enemy formation. "Found" and "Dead" are indicators if the enemy formation has found the 
+player or is dead.
 
 Enemies and their data:
-In the "Enemies" array we store all the enemies (Including parts of bodies) by the following data: "ID" represents which enemy in the 
-database the enemy is, "X" and "Y" represents the location where the enemy appears, "MainPart" is the body part which if killed kills
-all attached body parts but also determines where the target defaults to if the targeted part is killed. "Statuses" determines which
-statuses the enemy has and finally Battle scripts is an array that has the following:
+In the "Enemies" array we store all the enemies (Including parts of bodies) by the following data: "ID" represents 
+which enemy in the database the enemy is, "X" and "Y" represents the location where the enemy appears, "MainPart" is 
+the body part which if killed kills all attached body parts but also determines where the target defaults to if the 
+targeted part is killed. "Statuses" determines which statuses the enemy has and finally Battle scripts is an array that 
+has the following:
 - "Script" what script will execute.
 - "Target" the default target the action will target.
 - "StartTurn" and "Frequency" determine how often the script executes and when it starts. The first turn is 0.
@@ -32,27 +34,30 @@ After all enemies each formation has a set of scripts:
 ------------------------
 
 Map Data:
-Enemy formations can appear on maps. As a result these formations will have a Map ID, an art id, an x and a y location. On top of 
-these when an enemy is defeated they can be looted and have a linked loot pool, a location that they will try to return to if they lose
-the player and booleans checking if they have found the player or have been defeated.
+Enemy formations can appear on maps. As a result these formations will have a Map ID, an art id, an x and a y location. 
+On top of these when an enemy is defeated they can be looted and have a linked loot pool, a location that they will 
+try to return to if they lose the player and booleans checking if they have found the player or have been defeated.
 
 ------------------------
 
 Enemies:
-Enemy formations will after the map data contain a list of enemies, each enemy can have associated statuses (Including dead), it's draw
-location by x and y and then a list of battle scripts.
+Enemy formations will after the map data contain a list of enemies, each enemy can have associated statuses (Including 
+dead), it's draw location by x and y and then a list of battle scripts.
 
 ------------------------
 
 Battle scripts:
-Battle scripts are scripts that will activate in a set frequency letting each limb act according to the current state of the battle scene.
+Battle scripts are scripts that will activate in a set frequency letting each limb act according to the current state 
+of the battle scene.
 
 ------------------------
 
 Map scripts:
 The enemy formation have multiple scripts all used:
-The onFoundScript is the script that is used when the enemy has found the player.
-The movementPatternScript is the basic script that determines the movement of the enemy formation before finding the player.
-The autoEvent is an automatic script that some battle formations execute automatically (can be used for ressurection etc...).
+The onFoundActor is the actor that is used when the enemy has found the player.
+The movementPatternActor is the basic actor that determines the movement of the enemy formation before finding the 
+player.
+The autoEvent is an automatic script that some battle formations execute automatically (can be used for ressurection 
+etc...).
 The onLoseScript is an script that executes after the party loses the battle.
 The onWinScript is an script that executes after the party wins the battle.

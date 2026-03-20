@@ -16,7 +16,8 @@ public static class AStarSearch {
         /// <param name="distanceFromStart">The distance traveled from the start.</param>
         /// <param name="distanceFromGoal">The distance left from the goal.</param>
         /// <param name="parent">The parent (if the node has one).</param>
-        public AStarNode(int xLocation, int yLocation, int distanceFromStart, int distanceFromGoal, AStarNode ? parent) {
+        public AStarNode(int xLocation, int yLocation, int distanceFromStart, int distanceFromGoal, 
+            AStarNode ? parent) {
             XLocation = xLocation;
             YLocation = yLocation;
             DistanceFromStart = distanceFromStart;
@@ -29,7 +30,8 @@ public static class AStarSearch {
         public int DistanceFromStart { get; }
         private int DistanceFromGoal { get; }
 
-        // Total distance, an estimated total distance of a path based on it's distance from start and distance from goal.
+        // Total distance, an estimated total distance of a path based on it's distance from start and distance from 
+        // goal.
         public int TotalDistance => DistanceFromStart + DistanceFromGoal;
 
         public AStarNode ? parent;
@@ -43,12 +45,14 @@ public static class AStarSearch {
     /// <param name="targetX">The target X point.</param>
     /// <param name="targetY">The target Y point.</param>
     /// <returns>The next optimal direction to move in.</returns>
-    public static int LoadFastestPath(int originX, int originY, int targetX, int targetY, INavigationGrid navigationGrid) {
+    public static int LoadFastestPath(int originX, int originY, int targetX, int targetY, 
+        INavigationGrid navigationGrid) {
         PriorityQueue<AStarNode, int> openSet = new();
         HashSet<(int, int)> closedSet = [];
         
         // Create first node in queue.
-        AStarNode originTileNode = new(originX, originY, 0, FastestPathHeuristic(originX, originY, targetX, targetY), null);
+        AStarNode originTileNode = new(originX, originY, 0, FastestPathHeuristic(originX, originY, targetX, targetY), 
+            null);
         openSet.Enqueue(originTileNode, originTileNode.TotalDistance);
 
         // Loop untill queue is empty.
@@ -82,7 +86,8 @@ public static class AStarSearch {
                     int currentDistance = currentNode.DistanceFromStart + 1;
                     int newX = currentX + rightMovement;
                     int newY = currentY + downMovement;
-                    AStarNode newNode = new(newX, newY, currentDistance, FastestPathHeuristic(newX, newY, targetX, targetY), currentNode);
+                    AStarNode newNode = new(newX, newY, currentDistance, FastestPathHeuristic(newX, newY, targetX, 
+                        targetY), currentNode);
                     openSet.Enqueue(newNode, newNode.TotalDistance);
                 }
             }

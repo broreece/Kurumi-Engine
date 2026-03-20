@@ -48,10 +48,12 @@ public sealed class ShowWindowWithTextAndNamebox : ScriptStep {
         sceneScriptContext.Pause();
 
         // Create the new dialogue UI state.
-        sceneScriptContext.AddUIState(new DialogueWithNameState(xPosition, yPosition, nameBoxXPosition, nameBoxYPosition, 
-            width, height, nameBoxWidth, nameBoxHeight, windowFileName, sceneScriptContext.GetWindowConfig(), sceneScriptContext.GetGameWindow(), 
-            xPosition, yPosition, nameBoxXPosition, nameBoxYPosition, textWindowDefaults.GetFontSize(), fontFileName, 
-            PageGenerator.TurnTextIntoPages(text, sceneScriptContext.GetMaxLinesPerPage()), name, this, sceneScriptContext));
+        sceneScriptContext.AddUIState(new DialogueWithNameState(xPosition, yPosition, nameBoxXPosition, 
+            nameBoxYPosition, width, height, nameBoxWidth, nameBoxHeight, windowFileName, 
+            sceneScriptContext.GetWindowConfig(), sceneScriptContext.GetGameWindow(), xPosition, yPosition, 
+            nameBoxXPosition, nameBoxYPosition, textWindowDefaults.GetFontSize(), fontFileName, 
+            PageGenerator.TurnTextIntoPages(text, sceneScriptContext.GetMaxLinesPerPage()), name, this, 
+                sceneScriptContext));
     }
     
     /// <summary>

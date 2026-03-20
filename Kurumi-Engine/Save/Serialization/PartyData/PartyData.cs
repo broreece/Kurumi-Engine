@@ -10,5 +10,5 @@ public class PartyData {
     public int XLocation { get; set; }
     public int YLocation { get; set; }
     public int Facing { get; set; }
-    public List<int> PartyMembers { get; set; } = new();
+    public List<int> PartyMembers { get; set; } = [];
 }

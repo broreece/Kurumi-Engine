@@ -28,6 +28,7 @@ public static class ChoiceBoxDefaultsManager {
         int choiceBoxX = defaults["choice_box_x"];
         int choiceBoxY = defaults["choice_box_y"];
 
-        return new ChoiceBoxDefaults(windowId, selectionId, fontId, fontSize, choiceBoxWidth, choiceBoxHeight, choiceBoxX, choiceBoxY);
+        return new ChoiceBoxDefaults(windowId, selectionId, fontId, fontSize, choiceBoxWidth, choiceBoxHeight, 
+            choiceBoxX, choiceBoxY);
     }
 }

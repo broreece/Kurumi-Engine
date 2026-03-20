@@ -20,7 +20,8 @@ public abstract class EntityElement {
     /// <param name="sealedAbilities">The list of sealed abilities of the entity element.</param>
     /// <param name="addedAbilities">The list of added abilities of the entity element.</param>
     protected EntityElement(int turnEffectSpriteId, int accuracyModifier, int evasionModifier, int[] stats, 
-        int[] elements, string turnScript, List<Skill> sealedSkills, List<Ability> sealedAbilities, List<Ability> addedAbilities) {
+        int[] elements, string turnScript, List<Skill> sealedSkills, List<Ability> sealedAbilities, 
+        List<Ability> addedAbilities) {
         this.turnEffectSpriteId = turnEffectSpriteId;
         this.accuracyModifier = accuracyModifier;
         this.evasionModifier = evasionModifier;

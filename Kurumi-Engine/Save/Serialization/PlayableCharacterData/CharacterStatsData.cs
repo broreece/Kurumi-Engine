@@ -4,6 +4,6 @@ namespace Save.Serialization.PlayableCharacterRegistry;
 /// Character stat data used to load stats.
 /// </summary>
 public class CharacterStatsData {
-    public List<int> Characters { get; set; } = new();
-    public List<List<int>> Stats { get; set; } = new();
+    public List<int> Characters { get; set; } = [];
+    public List<List<int>> Stats { get; set; } = [];
 }

@@ -21,8 +21,9 @@ public sealed class BattleWindowConfig {
     /// <param name="selectionWindowY">The selection window Y location of the battle scene config.</param>
     /// <param name="partyX">The party X location of the battle scene config.</param>
     /// <param name="partyY">The party Y location pf the battle scene config.</param>
-    public BattleWindowConfig(int windowId, int choiceBoxId, int fontId, int fontSize, int infoWindowWidth, int infoWindowHeight, 
-        int infoWindowX, int infoWindowY, int selectionWindowWidth, int selectionWindowHeight, int selectionWindowX, int selectionWindowY,
+    public BattleWindowConfig(int windowId, int choiceBoxId, int fontId, int fontSize, int infoWindowWidth, 
+        int infoWindowHeight, int infoWindowX, int infoWindowY, int selectionWindowWidth, int selectionWindowHeight, 
+        int selectionWindowX, int selectionWindowY,
         int partyX, int partyY) {
         this.windowId = windowId;
         this.choiceBoxId = choiceBoxId;
@@ -152,6 +153,6 @@ public sealed class BattleWindowConfig {
         return partyY;
     }
 
-    private readonly int windowId, choiceBoxId, fontId, fontSize, infoWindowWidth, infoWindowHeight, infoWindowX, infoWindowY,
-        selectionWindowWidth, selectionWindowHeight, selectionWindowX, selectionWindowY, partyX, partyY;
+    private readonly int windowId, choiceBoxId, fontId, fontSize, infoWindowWidth, infoWindowHeight, infoWindowX, 
+        infoWindowY, selectionWindowWidth, selectionWindowHeight, selectionWindowX, selectionWindowY, partyX, partyY;
 }

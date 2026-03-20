@@ -24,9 +24,10 @@ public sealed class MainMenuConfig {
     /// <param name="partyWindowHeight">The party window height config.</param>
     /// <param name="partyWindowX">The party window X config.</param>
     /// <param name="partyWindowY">The party window Y config.</param>
-    public MainMenuConfig(int windowId, int choiceBoxId, int fontId, int fontSize, int selectionWindowWidth, int selectionWindowHeight, 
-        int selectionWindowX, int selectionWindowY, int selectionWindowSpacing, int infoWindowWidth, int infoWindowHeight, int infoWindowX, 
-        int infoWindowY, int partyWindowWidth, int partyWindowHeight, int partyWindowX, int partyWindowY) {
+    public MainMenuConfig(int windowId, int choiceBoxId, int fontId, int fontSize, int selectionWindowWidth, 
+        int selectionWindowHeight, int selectionWindowX, int selectionWindowY, int selectionWindowSpacing, 
+        int infoWindowWidth, int infoWindowHeight, int infoWindowX, int infoWindowY, int partyWindowWidth, 
+        int partyWindowHeight, int partyWindowX, int partyWindowY) {
         this.windowId = windowId;
         this.choiceBoxId = choiceBoxId;
         this.fontId = fontId;
@@ -182,7 +183,7 @@ public sealed class MainMenuConfig {
         return partyWindowY;
     }
 
-    private readonly int windowId, choiceBoxId, fontId, fontSize, selectionWindowWidth, selectionWindowHeight, selectionWindowX, 
-        selectionWindowY, selectionWindowSpacing, infoWindowWidth, infoWindowHeight, infoWindowX, infoWindowY, partyWindowWidth, 
-        partyWindowHeight, partyWindowX, partyWindowY;
+    private readonly int windowId, choiceBoxId, fontId, fontSize, selectionWindowWidth, selectionWindowHeight, 
+        selectionWindowX, selectionWindowY, selectionWindowSpacing, infoWindowWidth, infoWindowHeight, infoWindowX, 
+        infoWindowY, partyWindowWidth, partyWindowHeight, partyWindowX, partyWindowY;
 }

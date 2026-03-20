@@ -19,7 +19,8 @@ public interface IBattleSceneView {
     public void UpdateInfoWindow(ICharacterStatsAccessor[] characters);
 
     /// <summary>
-    /// Function used to update the damage display text based on if the damage is applied to a party member and the sprite index.
+    /// Function used to update the damage display text based on if the damage is applied to a party member and the 
+    /// sprite index.
     /// </summary>
     /// <param name="partyDamage">If the damage was applied to a party member.</param>
     /// <param name="spriteIndex">The index of the sprite within the correct sprite array.</param>

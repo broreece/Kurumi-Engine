@@ -35,7 +35,8 @@ public sealed class BattleScriptManager : ScriptManager {
                 throw new Exception();
         }
         catch (Exception) {
-            throw new MissingJsonFileException($"Script file: {scriptFileNames[index]} could not be found or contains an invalid format");
+            throw new MissingJsonFileException($"Script file: {scriptFileNames[index]} could not be found or contains " 
+                + "an invalid format");
         }
 
         // Load base values.

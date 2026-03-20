@@ -32,15 +32,16 @@ public class BattleScene : SceneBase, IBattleSceneView {
     /// <param name="windowConfig">The window config object.</param>
     /// <param name="assetManager">The game asset manager object, used to load textures, fonts etc.</param>
     /// <param name="partyAccessor">The party accessor object.</param>
-    /// <param name="enemyFormation">The enemy formation data object, the enemy formation of the current battle scene.</param>
+    /// <param name="enemyFormation">The enemy formation data object, the enemy formation of the current battle 
+    /// scene.</param>
     /// <param name="enemySpriteAccessor">The enemy sprite accessor object.</param>
     /// <param name="battleBackgroundId">The background art ID used in the battle scene.</param>
     /// <param name="backgroundMusicId">The background music played in the battle scene.</param>
-    public BattleScene(GameWindow window, GameConfig gameConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig, 
-        BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, PartyChoicesConfig partyChoicesConfig, 
-        WindowConfig windowConfig, AssetManager assetManager, IPartyAccessor partyAccessor, EnemyFormationData enemyFormation, 
-        IEnemySpriteAccessor enemySpriteAccessor, int battleBackgroundId, 
-        int backgroundMusicId)
+    public BattleScene(GameWindow window, GameConfig gameConfig, 
+        BattleBackgroundSpriteConfig battleBackgroundSpriteConfig, BattleSceneConfig battleSceneConfig, 
+        BattleWindowConfig battleWindowConfig, PartyChoicesConfig partyChoicesConfig, WindowConfig windowConfig, 
+        AssetManager assetManager, IPartyAccessor partyAccessor, EnemyFormationData enemyFormation, 
+        IEnemySpriteAccessor enemySpriteAccessor, int battleBackgroundId, int backgroundMusicId)
         : base(window, assetManager) {
         // Store reused config variables.
         this.partyChoicesConfig = partyChoicesConfig;
@@ -59,7 +60,8 @@ public class BattleScene : SceneBase, IBattleSceneView {
         
         // Calculate scale for full size art.
         Vector2f fullScreen = new(window.GetWidth(), window.GetHeight());
-        battleBackgroundScale = new(fullScreen.X / battleBackgroundSpriteConfig.GetWidth(), fullScreen.Y / battleBackgroundSpriteConfig.GetHeight());
+        battleBackgroundScale = new(fullScreen.X / battleBackgroundSpriteConfig.GetWidth(), fullScreen.Y / 
+            battleBackgroundSpriteConfig.GetHeight());
 
         // Calculate scale for other sprites.
         float widthScale = window.GetWidthScale();
@@ -86,16 +88,17 @@ public class BattleScene : SceneBase, IBattleSceneView {
         string[,] infoLines = LoadInfoText(partyAccessor.GetPartyMembers());
 
         // Create components.
-        infoWindow = new WindowComponent(statsWindowX, statsWindowY, statsWindowWidth, statsWindowHeight, windowFileName,
-            windowConfig, window);
-        infoText = new PageTextComponent(statsWindowX, statsWindowY, fontSize, fontFileName, infoLines);
-        choiceBoxWindow = new WindowComponent(choiceBoxWindowX, choiceBoxWindowY, choiceBoxWindowWidth, choiceBoxWindowHeight,
+        infoWindow = new WindowComponent(statsWindowX, statsWindowY, statsWindowWidth, statsWindowHeight, 
             windowFileName, windowConfig, window);
+        infoText = new PageTextComponent(statsWindowX, statsWindowY, fontSize, fontFileName, infoLines);
+        choiceBoxWindow = new WindowComponent(choiceBoxWindowX, choiceBoxWindowY, choiceBoxWindowWidth, 
+            choiceBoxWindowHeight, windowFileName, windowConfig, window);
         choiceBoxChoices = [];
         // TODO: (BSE-03) We should change the 0 to get the first healthy party member.
         UpdateChoiceBoxChoices(partyAccessor, 0);
-        choiceBox = new ChoiceBoxComponent(choiceBoxWindowX, choiceBoxWindowY, choiceBoxWindowWidth, choiceBoxWindowHeight / choiceBoxChoices.Count, 
-            fontSize, choiceBoxFileName, choiceBoxChoices.Count, windowConfig, window);
+        choiceBox = new ChoiceBoxComponent(choiceBoxWindowX, choiceBoxWindowY, choiceBoxWindowWidth, 
+            choiceBoxWindowHeight / choiceBoxChoices.Count, fontSize, choiceBoxFileName, choiceBoxChoices.Count, 
+            windowConfig, window);
 
         // Set in scene variables.
         damageDisplayed = false;
@@ -106,7 +109,9 @@ public class BattleScene : SceneBase, IBattleSceneView {
         for (int enemyIndex = 0; enemyIndex < enemyFormation.Enemies.Count; enemyIndex ++) {
             string enemyPath = Path.Combine(
                 AppContext.BaseDirectory,
-                assetManager.GetEnemyBattleSpriteFileName(enemySpriteAccessor.GetEnemySprite(enemyFormation.Enemies[enemyIndex].Id))
+                assetManager.GetEnemyBattleSpriteFileName(
+                    enemySpriteAccessor.GetEnemySprite(enemyFormation.Enemies[enemyIndex].Id)
+                )
             );
             enemyTextures[enemyIndex] = new Texture(enemyPath);
             enemySprites.Add(new Sprite(enemyTextures[enemyIndex]) {
@@ -148,7 +153,8 @@ public class BattleScene : SceneBase, IBattleSceneView {
         for (int characterIndex = 0; characterIndex < gameConfig.GetMaxPartySize(); characterIndex ++) {
             if (partySprites[characterIndex] != -1) {
                 int xShift = characterIndex * partyXPlacement;
-                characterSprites[characterIndex].Position = new(partyXPlacement + xShift, battleWindowConfig.GetPartyY());
+                characterSprites[characterIndex].Position = new(partyXPlacement + xShift, 
+                    battleWindowConfig.GetPartyY());
             }
         }
 
@@ -159,7 +165,8 @@ public class BattleScene : SceneBase, IBattleSceneView {
     /// <summary>
     /// Battle scenes update function, updates sprites used in the battle scene.
     /// </summary>
-    /// <exception cref="UnsetBattleTargetingViewException">Error thrown if no battle is set into the battle scene.</exception>
+    /// <exception cref="UnsetBattleTargetingViewException">Error thrown if no battle is set into the battle 
+    /// scene.</exception>
     public override void Update() {
         // Add background and component sprite.
         AddSprite(battleBackgroundSprite);
@@ -239,7 +246,8 @@ public class BattleScene : SceneBase, IBattleSceneView {
     }
 
     /// <summary>
-    /// Function used to update the damage display text based on if the damage is applied to a party member and the sprite index.
+    /// Function used to update the damage display text based on if the damage is applied to a party member and the 
+    /// sprite index.
     /// </summary>
     /// <param name="partyDamage">If the damage was applied to a party member.</param>
     /// <param name="spriteIndex">The index of the sprite within the correct sprite array.</param>
@@ -326,7 +334,8 @@ public class BattleScene : SceneBase, IBattleSceneView {
     /// </summary>
     /// <param name="partyMemberAccessor">The party member accessor object.</param>
     /// <param name="currentCharacterIndex">The character index being selected.</param>
-    /// <exception cref="NullBattleCharacterException">Error thrown if during a battle a new character index is passed.</exception>
+    /// <exception cref="NullBattleCharacterException">Error thrown if during a battle a new character index is 
+    /// passed.</exception>
     private void UpdateChoiceBoxChoices(IPartyMemberAccessor partyMemberAccessor, int currentCharacterIndex) {
         ICharacterSkillsNameAccessor ? character = partyMemberAccessor.GetPartyMember(currentCharacterIndex);
         choiceBoxChoices = [];
@@ -350,8 +359,8 @@ public class BattleScene : SceneBase, IBattleSceneView {
         // Loop over all options here.
         int index = 0;
         foreach (string option in options) {
-            choiceBoxChoices.Add(new ListTextComponent(choiceBoxWindowX, choiceBoxWindowY + (index * fontSize), fontSize, fontFileName, 
-                option));
+            choiceBoxChoices.Add(new ListTextComponent(choiceBoxWindowX, choiceBoxWindowY + (index * fontSize), 
+                fontSize, fontFileName, option));
             index ++;
         }
     }
@@ -366,8 +375,8 @@ public class BattleScene : SceneBase, IBattleSceneView {
         string[,] newText = new string[1, characters.Length];
         foreach (ICharacterStatsAccessor character in characters) {
             if (character != null) {
-                newText[0, characterIndex] = $"{character.GetName()} HP: {character.GetCurrentHp()} / {character.GetMaxHp()}" +
-                    $" MP: {character.GetCurrentMp()} / {character.GetMaxMp()}";
+                newText[0, characterIndex] = $"{character.GetName()} HP: {character.GetCurrentHp()} / " +
+                    $"{character.GetMaxHp()} MP: {character.GetCurrentMp()} / {character.GetMaxMp()}";
             }
             characterIndex ++;
         }

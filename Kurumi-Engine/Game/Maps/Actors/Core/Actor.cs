@@ -8,9 +8,11 @@ using Scripts.MapScripts.Base;
 using States.Map.Interfaces;
 
 /// <summary>
-/// Actors are map elements that contain a list of possible scripts as well as information surronding it's appearence and how it's activated.
+/// Actors are map elements that contain a list of possible scripts as well as information surronding it's appearence 
+/// and how it's activated.
 /// </summary>
-public class Actor : MapElement, IActorView, IActionActorView, ITouchActorView, ITrackingActorWithScriptView, IMoveableActor, IPassabilityAccessor {
+public class Actor : MapElement, IActorView, IActionActorView, ITouchActorView, ITrackingActorWithScriptView, 
+    IMoveableActor, IPassabilityAccessor {
     /// <summary>
     /// Constructor for the actor class.
     /// </summary>
@@ -125,7 +127,8 @@ public class Actor : MapElement, IActorView, IActionActorView, ITouchActorView, 
     /// <summary>
     /// Sets if the actor will activate on find.
     /// </summary>
-    /// <param name="newOnFind">The new setting for if the actor can activate when player walks into found range.</param>
+    /// <param name="newOnFind">The new setting for if the actor can activate when player walks into found 
+    /// range.</param>
     public void SetOnFind(bool newOnFind) {
         actorInfo.SetOnFind(newOnFind);
     }
@@ -141,7 +144,8 @@ public class Actor : MapElement, IActorView, IActionActorView, ITouchActorView, 
     /// <summary>
     /// Sets if the actor can be activated on interaction.
     /// </summary>
-    /// <param name="newOnAction">The new setting for if the actor can be activated when the party interacts with it.</param>
+    /// <param name="newOnAction">The new setting for if the actor can be activated when the party interacts with 
+    /// it.</param>
     public void SetOnAction(bool newOnAction) {
         actorInfo.SetOnAction(newOnAction);
     }

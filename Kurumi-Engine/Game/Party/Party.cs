@@ -25,8 +25,8 @@ public sealed class Party : MapElement, IPartyAccessor, IPartyDynamicDataAccesso
     /// <param name="yLocation">Y location of the party.</param>
     /// <param name="direction">The direction the party is facing.</param>
     /// <param name="visible">If the party is visible.</param>
-    public Party(int currentMapId, PlayableCharacter[] partyMembers, List<InventoryItem> inventory, int xLocation, int yLocation,
-        int direction, bool visible) : base(xLocation, yLocation, direction, visible) {
+    public Party(int currentMapId, PlayableCharacter[] partyMembers, List<InventoryItem> inventory, int xLocation, 
+        int yLocation, int direction, bool visible) : base(xLocation, yLocation, direction, visible) {
         this.currentMapId = currentMapId;
         this.partyMembers = partyMembers;
         this.inventory = inventory;

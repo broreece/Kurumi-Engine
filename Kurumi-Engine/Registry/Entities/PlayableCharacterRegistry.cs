@@ -20,9 +20,11 @@ public sealed class PlayableCharacterRegistry {
     /// <param name="equipmentRegistry">The equipment data that is passed.</param>
     /// <param name="equipmentSlotNameRegistry">The equipment slot name data that is passed.</param>
     /// <param name="saveManager">The save manager object that is passed.</param>
-    public PlayableCharacterRegistry(DatabaseManager databaseManager, SkillRegistry skillRegistry, AbilityRegistry abilityRegistry, 
-        EquipmentRegistry equipmentRegistry, EquipmentSlotNameRegistry equipmentSlotNameRegistry, SaveManager saveManager) {
-        playableCharacters = saveManager.LoadPlayableCharacters(databaseManager, skillRegistry, abilityRegistry, equipmentRegistry, equipmentSlotNameRegistry);
+    public PlayableCharacterRegistry(DatabaseManager databaseManager, SkillRegistry skillRegistry, 
+        AbilityRegistry abilityRegistry, EquipmentRegistry equipmentRegistry, 
+        EquipmentSlotNameRegistry equipmentSlotNameRegistry, SaveManager saveManager) {
+        playableCharacters = saveManager.LoadPlayableCharacters(databaseManager, skillRegistry, abilityRegistry, 
+            equipmentRegistry, equipmentSlotNameRegistry);
     }
 
     /// <summary>

@@ -1,7 +1,8 @@
 namespace Engine.Input.ControllerInterfaces;
 
 /// <summary>
-/// The horizontal moveable input interface class, used to determine which input controllers can have a "MoveRight" and "MoveLeft" button press.
+/// The horizontal moveable input interface class, used to determine which input controllers can have a "MoveRight" 
+/// and "MoveLeft" button press.
 /// </summary>
 public interface IHorizontalMoveable {
     /// <summary>

@@ -47,9 +47,10 @@ public sealed class ChoiceBox : ConditionalScriptStep {
         sceneScriptContext.Pause();
 
         // Create the new choice box UI state.
-        sceneScriptContext.AddUIState(new ChoiceState(xPosition, yPosition, windowWidth, windowHeight, fontSize, fontFileName, windowFileName,
-            sceneScriptContext.GetWindowConfig(), sceneScriptContext.GetGameWindow(), xPosition, yPosition, windowWidth, choiceBoxHeight, spacing, 
-            choiceBoxFileName, choices, this, sceneScriptContext));
+        sceneScriptContext.AddUIState(new ChoiceState(xPosition, yPosition, windowWidth, windowHeight, fontSize, 
+            fontFileName, windowFileName, sceneScriptContext.GetWindowConfig(), sceneScriptContext.GetGameWindow(), 
+            xPosition, yPosition, windowWidth, choiceBoxHeight, spacing, choiceBoxFileName, choices, this, 
+            sceneScriptContext));
     }
 
     /// <summary>

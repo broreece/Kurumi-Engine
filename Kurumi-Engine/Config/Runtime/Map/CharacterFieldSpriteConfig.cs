@@ -13,7 +13,8 @@ public sealed class CharacterFieldSpriteConfig : ICharacterDimensionsAccessor {
     /// <param name="characterHeight">The character field sprite height.</param>
     /// <param name="walkAnimationFrames">The character field sprite walk animation frames.</param>
     /// <param name="walkAnimationSpeed">The character field sprite walk animation speed.</param>
-    public CharacterFieldSpriteConfig(int characterWidth, int characterHeight, int walkAnimationFrames, int walkAnimationSpeed) {
+    public CharacterFieldSpriteConfig(int characterWidth, int characterHeight, int walkAnimationFrames, 
+        int walkAnimationSpeed) {
         this.characterWidth = characterWidth;
         this.characterHeight = characterHeight;
         this.walkAnimationFrames = walkAnimationFrames;

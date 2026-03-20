@@ -226,7 +226,8 @@ public sealed class PlayableCharacter : Entity, ICharacterFileAccessor, ICharact
             if (currentEquipment != null) {
                 // Add all added abilities and remove all sealed abilities.
                 finalAbilities.AddRange(currentEquipment.GetAddedAbilities());
-                finalAbilities.RemoveAll(removedAbility => currentEquipment.GetSealedAbilities().Contains(removedAbility));
+                finalAbilities.RemoveAll(removedAbility => 
+                    currentEquipment.GetSealedAbilities().Contains(removedAbility));
             }
         }
         return [.. finalAbilities.OrderByDescending(currentAbility => currentAbility.GetId())];

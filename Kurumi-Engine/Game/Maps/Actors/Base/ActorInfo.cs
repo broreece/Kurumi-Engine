@@ -22,8 +22,8 @@ public class ActorInfo {
     /// <param name="onFind">If the actor's script activates on find.</param>
     /// <param name="path">The path of the actor.</param>
     /// <param name="script">The linked script to the actor.</param>
-    public ActorInfo(int behaviour, ActorSprite actorSprite, int movementSpeed, int trackingRange, bool belowParty, bool passable, bool onTouch, 
-        bool auto, bool onAction, bool onFind, List<int> path, MapScript? script) {
+    public ActorInfo(int behaviour, ActorSprite actorSprite, int movementSpeed, int trackingRange, bool belowParty, 
+        bool passable, bool onTouch, bool auto, bool onAction, bool onFind, List<int> path, MapScript? script) {
         this.behaviour = behaviour;
         this.actorSprite = actorSprite;
         this.movementSpeed = movementSpeed;
@@ -81,7 +81,8 @@ public class ActorInfo {
     /// <summary>
     /// Sets if the actor will activate on find.
     /// </summary>
-    /// <param name="newRandomMovement">The new setting for if the actor can activate when player walks into found range.</param>
+    /// <param name="newRandomMovement">The new setting for if the actor can activate when player walks into found 
+    /// range.</param>
     public void SetOnFind(bool newOnFind) {
         onFind = newOnFind;
     }
@@ -97,7 +98,8 @@ public class ActorInfo {
     /// <summary>
     /// Sets if the actor can be activated on interaction.
     /// </summary>
-    /// <param name="newOnAction">The new setting for if the actor can be activated when the party interacts with it.</param>
+    /// <param name="newOnAction">The new setting for if the actor can be activated when the party interacts with 
+    /// it.</param>
     public void SetOnAction(bool newOnAction) {
         onAction = newOnAction;
     }

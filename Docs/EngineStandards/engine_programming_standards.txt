@@ -10,7 +10,8 @@ Cases:
 Namespaces and using:
 - Namespaces are stated before using statement, this is a personal choice and whilst Microsoft recommends the reverse:
     https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
-    this is for the most part a personal choice, always use the fully qualified name when using "using" inside the namespace.
+    this is for the most part a personal choice, always use the fully qualified name when using "using" inside the 
+    namespace.
 - External libraries are included underneath all internal namespaces.
 
 Comparison operators:
@@ -37,5 +38,8 @@ Strings:
 XML doc comments:
 - When commenting classes and functions XML style doc comments are used:
     https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags
-- Params, exceptions, return value are all included in these comments to allow easy reading of what each function does and
-    possible outcomes.
+- Params, exceptions, return value are all included in these comments to allow easy reading of what each function does 
+    and possible outcomes.
+
+Ruler (Margin) rules:
+- All code, comments and documentation has a margin set at 120 characters.

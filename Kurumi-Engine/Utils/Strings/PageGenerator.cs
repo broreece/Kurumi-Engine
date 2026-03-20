@@ -1,7 +1,8 @@
 namespace Utils.Strings;
 
 /// <summary>
-/// The page generator class, this is used to turn a string into pages changing '-' into ',' and using '/' as a new line indicator.
+/// The page generator class, this is used to turn a string into pages changing '-' into ',' and using '/' as a new 
+/// line indicator.
 /// </summary>
 public static class PageGenerator {
     /// <summary>

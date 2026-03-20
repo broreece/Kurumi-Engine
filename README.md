@@ -16,7 +16,9 @@ The engine is designed for building **RPGs** with scripted events, AI actors, an
 Forge 
 Active Development
 
-First build worked focused on a large **core refactor** to improve engine architecture and maintainability, previous build 'crucible' focused on cleaning up up post refractor and creating tools to help development (Such as logging, unit tests).
+First build worked focused on a large **core refactor** to improve engine architecture and maintainability, previous 
+build 'crucible' focused on cleaning up up post refractor and creating tools to help development (Such as logging, 
+unit tests).
 
 Current tasks include:
 - AI and enemy formation map data implementation
@@ -28,7 +30,8 @@ Current tasks include:
 
 ## Design Philosophy
 
-Kurumi Engine is heavily inspired by the design philosophy behind games like **Fear & Hunger** and other engines such as **RPG Maker**.
+Kurumi Engine is heavily inspired by the design philosophy behind games like **Fear & Hunger** and other engines such 
+as **RPG Maker**.
 
 Key ideas:
 
@@ -36,7 +39,8 @@ Key ideas:
 - **Deterministic step-based script logic in map and battle**
 - **Engine follows SOLID principles**
 
-The engine aims to keep any gameplay logic outside of scripts **explicit and readable**. If any licensed user wanted to edit the engine for their own purpose it should be straight-forward.
+The engine aims to keep any gameplay logic outside of scripts **explicit and readable**. If any licensed user wanted 
+to edit the engine for their own purpose it should be straight-forward.
 
 ---
 
@@ -152,7 +156,8 @@ Kurumi-Engine
 ## Project Goals
 
 - Build a **modular RPG engine architecture** with clear system boundaries and clean and readable code.
-- Implement actors, scripts and enemy formations such that they act in tandem to create dynamic gameplay with no adjustments to code.
+- Implement actors, scripts and enemy formations such that they act in tandem to create dynamic gameplay with no 
+adjustments to code.
 - Build an engine that is both simple to use and allows for complex situations.
 
 ---

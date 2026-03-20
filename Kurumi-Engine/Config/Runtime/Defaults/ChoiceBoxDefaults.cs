@@ -91,5 +91,6 @@ public sealed class ChoiceBoxDefaults {
         return choiceBoxY;
     }
 
-    private readonly int windowId, selectionArtId, fontId, fontSize, choiceBoxWidth, choiceBoxHeight, choiceBoxX, choiceBoxY;
+    private readonly int windowId, selectionArtId, fontId, fontSize, choiceBoxWidth, choiceBoxHeight, choiceBoxX, 
+        choiceBoxY;
 }

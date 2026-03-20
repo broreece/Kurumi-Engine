@@ -53,9 +53,12 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="saveManager">The save manager object that directly interacts with .json save data.</param>
     /// <param name="assetManager">The asset manager object that directly interacts with the file assets.</param>
     /// <param name="mapManager">The map manager object that directly interacts with the map assets.</param>
-    /// <param name="battleScriptManager">The battle script manager object that directly interacts with the battle script assets.</param>
-    /// <param name="entityScriptManager">The entity script manager object that directly interacts with the entity script assets.</param>
-    /// <param name="mapScriptManager">The map script manager object that directly interacts with the map script assets.</param>
+    /// <param name="battleScriptManager">The battle script manager object that directly interacts with the battle 
+    /// script assets.</param>
+    /// <param name="entityScriptManager">The entity script manager object that directly interacts with the entity 
+    /// script assets.</param>
+    /// <param name="mapScriptManager">The map script manager object that directly interacts with the map script 
+    /// assets.</param>
     /// <param name="animatedTileSheetConfig">The animated tile sheet config object.</param>
     /// <param name="battleBackgroundSpriteConfig">The battle background config object.</param>
     /// <param name="battleSceneConfig">The battle scene config object.</param>
@@ -75,13 +78,15 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="globalMessageDefaults">The global message defaults object.</param>
     /// <param name="nameBoxDefaults">The name box defaults object.</param>
     /// <param name="textWindowDefaults">The text window defaults object.</param>
-    public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, MapManager mapManager, 
-        BattleScriptManager battleScriptManager, EntityScriptManager entityScriptManager, MapScriptManager mapScriptManager, 
-        AnimatedTileSheetConfig animatedTileSheetConfig, BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
-        BattleSceneConfig battleSceneConfig, BattleWindowConfig battleWindowConfig, CharacterFieldSpriteConfig characterFieldSpriteConfig, 
-        FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, InventoryConfig inventoryConfig, 
-        MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, MainMenuConfig mainMenuConfig, PartyChoicesConfig partyChoicesConfig,  
-        TileSheetConfig tileSheetConfig, WindowConfig windowConfig, ChoiceBoxDefaults choiceBoxDefaults, GlobalMessageDefaults globalMessageDefaults, 
+    public GameContext(DatabaseManager databaseManager, SaveManager saveManager, AssetManager assetManager, 
+        MapManager mapManager, BattleScriptManager battleScriptManager, EntityScriptManager entityScriptManager, 
+        MapScriptManager mapScriptManager, AnimatedTileSheetConfig animatedTileSheetConfig, 
+        BattleBackgroundSpriteConfig battleBackgroundSpriteConfig, BattleSceneConfig battleSceneConfig, 
+        BattleWindowConfig battleWindowConfig, CharacterFieldSpriteConfig characterFieldSpriteConfig, 
+        FileSelectorConfig fileSelectorConfig, GameConfig gameConfig, GameWindowConfig gameWindowConfig, 
+        InventoryConfig inventoryConfig, MapBackgroundSpriteConfig mapBackgroundSpriteConfig, MapConfig mapConfig, 
+        MainMenuConfig mainMenuConfig, PartyChoicesConfig partyChoicesConfig, TileSheetConfig tileSheetConfig, 
+        WindowConfig windowConfig, ChoiceBoxDefaults choiceBoxDefaults, GlobalMessageDefaults globalMessageDefaults, 
         NameBoxDefaults nameBoxDefaults, TextWindowDefaults textWindowDefaults) {
         // Store config objects.
         this.animatedTileSheetConfig = animatedTileSheetConfig;
@@ -113,7 +118,8 @@ public sealed class GameContext : IGameUIContext {
         equipmentTypeNameRegistry = new EquipmentTypeNameRegistry(databaseManager.LoadEquipmentTypeNames());
         itemRegistry = new ItemRegistry(databaseManager.LoadItems());
         skillRegistry = new SkillRegistry(databaseManager.LoadSkills());
-        equipmentRegistry = new EquipmentRegistry(databaseManager.LoadEquipment(itemRegistry, skillRegistry, abilityRegistry));
+        equipmentRegistry = new EquipmentRegistry(databaseManager.LoadEquipment(itemRegistry, skillRegistry, 
+            abilityRegistry));
         statNameRegistry = new StatNameRegistry(databaseManager.LoadStatNames());
         statusRegistry = new StatusRegistry(databaseManager.LoadStatuses(skillRegistry, abilityRegistry));
         tileObjectRegistry = new TileObjectRegistry(databaseManager.LoadTileObjects());
@@ -136,7 +142,8 @@ public sealed class GameContext : IGameUIContext {
         gameVariables = new GameVariables(saveManager);
 
         // Party.
-        party = saveManager.LoadParty(playableCharacterRegistry.GetPlayableCharacters(), itemRegistry, statusRegistry, gameConfig.GetMaxPartySize());
+        party = saveManager.LoadParty(playableCharacterRegistry.GetPlayableCharacters(), itemRegistry, statusRegistry, 
+            gameConfig.GetMaxPartySize());
 
         // Game window.
         gameWindow = new(gameWindowConfig, mapConfig, tileSheetConfig);
@@ -183,9 +190,10 @@ public sealed class GameContext : IGameUIContext {
     /// <param name="battleBackgroundArtId">The battle background art ID.</param>
     /// <param name="enemyFormationId">The enemy formation used in the battle.</param>
     public void LoadNewBattle(int backgroundMusicId, int battleBackgroundArtId, int enemyFormationId) {
-        BattleScene battleScene = new(gameWindow, gameConfig, battleBackgroundSpriteConfig, battleSceneConfig, battleWindowConfig, 
-            partyChoicesConfig, windowConfig, assetManager, party, enemyFormationRegistry.GetEnemyFormation(enemyFormationId), 
-            enemyRegistry, battleBackgroundArtId, backgroundMusicId);
+        BattleScene battleScene = new(gameWindow, gameConfig, battleBackgroundSpriteConfig, battleSceneConfig, 
+            battleWindowConfig,  partyChoicesConfig, windowConfig, assetManager, party, 
+            enemyFormationRegistry.GetEnemyFormation(enemyFormationId), enemyRegistry, battleBackgroundArtId, 
+            backgroundMusicId);
         currentScene = battleScene;
         Battle battle = new(enemyFormationRegistry, enemyRegistry, enemyFormationId);
         BattleState battleState = new(battle, this, battleScene, battleScriptManager);

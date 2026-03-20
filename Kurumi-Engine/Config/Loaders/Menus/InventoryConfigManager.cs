@@ -33,7 +33,8 @@ public static class InventoryConfigManager {
         int descriptionWindowX = Convert.ToInt32(config["inventory_item_description_x"]);
         int descriptionWindowY = Convert.ToInt32(config["inventory_item_description_y"]);
 
-        return new InventoryConfig(inventoryWindowId, inventoryChoiceBoxId, fontId, fontSize, inventoryWindowWidth, inventoryWindowHeight, 
-            inventoryWindowX, inventoryWindowY, descriptionWindowWidth, descriptionWindowHeight, descriptionWindowX, descriptionWindowY);
+        return new InventoryConfig(inventoryWindowId, inventoryChoiceBoxId, fontId, fontSize, inventoryWindowWidth, 
+            inventoryWindowHeight, inventoryWindowX, inventoryWindowY, descriptionWindowWidth, descriptionWindowHeight, 
+            descriptionWindowX, descriptionWindowY);
     }
 }

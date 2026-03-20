@@ -34,7 +34,8 @@ public sealed class EntityScriptManager : ScriptManager {
                 throw new Exception();
         }
         catch (Exception) {
-            throw new MissingJsonFileException($"Script file: {scriptFileNames[index]} could not be found or contains an invalid format");
+            throw new MissingJsonFileException($"Script file: {scriptFileNames[index]} could not be found or contains "
+                + "an invalid format");
         }
 
         // Load base values.
@@ -66,8 +67,9 @@ public sealed class EntityScriptManager : ScriptManager {
         Dictionary<string, JsonElement> parameters = scriptStepData.Parameters;
         switch (scriptStepData.Type) {
             case "ChangeHP":
-                return new ChangeHp(parameters["ReduceHP"].GetInt32() == 1, parameters["CanKO"].GetInt32() == 1, parameters["Formula"].GetString()
-                    ?? throw new ScriptStepException("Change HP 'formula' parameter not found."));
+                return new ChangeHp(parameters["ReduceHP"].GetInt32() == 1, parameters["CanKO"].GetInt32() == 1, 
+                    parameters["Formula"].GetString() ?? throw new ScriptStepException("Change HP 'formula' parameter " 
+                    + "not found."));
 
             default:
                 throw new ScriptStepException($"Script step: {scriptStepData.Type} does not exist");

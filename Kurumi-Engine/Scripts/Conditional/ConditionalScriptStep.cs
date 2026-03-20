@@ -34,7 +34,8 @@ public abstract class ConditionalScriptStep : ScriptStep, IConditionalStepAccess
                     return currentStep;
                 }
                 else {
-                    throw new ConditionalException("ScriptStep, condition has been met but the current index has been corrupted.");
+                    throw new ConditionalException("ScriptStep, condition has been met but the current index has been " 
+                        + "corrupted.");
                 }
             }
             for (int currentStepIndex = 0; currentStepIndex < nextStep - 2; currentStepIndex++) {
@@ -42,11 +43,13 @@ public abstract class ConditionalScriptStep : ScriptStep, IConditionalStepAccess
                     currentStep = currentStep.GetNextStep();
                 } 
                 else {
-                    throw new ConditionalException("ScriptStep, condition has been met but the index for false is out of bounds.");
+                    throw new ConditionalException("ScriptStep, condition has been met but the index for false is out "
+                        + "of bounds.");
                 }
             }
             if (currentStep == null) {
-                throw new ConditionalException("ScriptStep, condition has been met but the index for false is out of bounds.");
+                throw new ConditionalException("ScriptStep, condition has been met but the index for false is out of "
+                    + "bounds.");
             }
             // We store the next is false only once.
             storedNextIfFalse ??= currentStep.GetNextStep();

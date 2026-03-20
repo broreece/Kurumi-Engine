@@ -21,7 +21,7 @@ public sealed class MapManager {
         Dictionary<string, string> data;
         try {
             json = File.ReadAllText(registryPath);
-            data = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? throw new Exception();;
+            data = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? throw new Exception();
         } 
         catch (Exception) {
             throw new MissingJsonFileException($"Registry path: {registryPath} not found or invalid format");
@@ -51,7 +51,8 @@ public sealed class MapManager {
                 throw new Exception();
         }
         catch (Exception) {
-            throw new MissingJsonFileException($"Map file: {mapFileNames[party.GetCurrentMapId()]} could not be found or contains an invalid format");
+            throw new MissingJsonFileException($"Map file: {mapFileNames[party.GetCurrentMapId()]} could not be found " 
+                + "or contains an invalid format");
         }
         
         // Load base values.
@@ -96,15 +97,18 @@ public sealed class MapManager {
                 ActorInfo actorInfo = actorInfoRegistry.GetActorInfo(actorData.ActorID - 1);
                 switch ((Behaviour) actorInfo.GetBehaviour()) {
                     case Behaviour.DumbTracking:
-                        storedGridedActors.Add(new StoredActor(tileData.XIndex, tileData.YIndex, actorInfo, actorData.Facing, actorData.Visible == 1));
+                        storedGridedActors.Add(new StoredActor(tileData.XIndex, tileData.YIndex, actorInfo, 
+                            actorData.Facing, actorData.Visible == 1));
                         break;
 
                     case Behaviour.SmartTracking:
-                        storedGridedActors.Add(new StoredActor(tileData.XIndex, tileData.YIndex, actorInfo, actorData.Facing, actorData.Visible == 1));
+                        storedGridedActors.Add(new StoredActor(tileData.XIndex, tileData.YIndex, actorInfo, 
+                            actorData.Facing, actorData.Visible == 1));
                         break;
 
                     default:
-                        Actor actor = new(tileData.XIndex, tileData.YIndex, actorInfo, actorData.Facing, actorData.Visible == 1);
+                        Actor actor = new(tileData.XIndex, tileData.YIndex, actorInfo, actorData.Facing, 
+                            actorData.Visible == 1);
                         actors[tileData.XIndex, tileData.YIndex] = actor;
                         listActors.Add(actors[tileData.XIndex, tileData.YIndex]);
                         break;
@@ -117,8 +121,8 @@ public sealed class MapManager {
 
         // Create grided actors.
         foreach (StoredActor actor in storedGridedActors) {
-            GridedActor gridedActor = new(actor.GetXLocation(), actor.GetYLocation(), actor.GetActorInfo(), actor.GetDirection(), actor.IsVisible(),
-                party, map);
+            GridedActor gridedActor = new(actor.GetXLocation(), actor.GetYLocation(), actor.GetActorInfo(), 
+                actor.GetDirection(), actor.IsVisible(), party, map);
             actors[actor.GetXLocation(), actor.GetYLocation()] = gridedActor;
             listActors.Add(gridedActor);
         }

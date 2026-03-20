@@ -22,6 +22,7 @@ public sealed class GridedActor : Actor {
     public GridedActor(int xLocation, int yLocation, ActorInfo actorInfo, int direction, bool visible,
         PositionProvider positionProvider, INavigationGrid navigationGrid) : 
         base(xLocation, yLocation, actorInfo, direction, visible) {
-        PushController(new TrackedActorController(GetMovementSpeed(), xLocation, yLocation, GetBehaviour(), positionProvider, navigationGrid));
+        PushController(new TrackedActorController(GetMovementSpeed(), xLocation, yLocation, GetBehaviour(), 
+            positionProvider, navigationGrid));
     }
 }

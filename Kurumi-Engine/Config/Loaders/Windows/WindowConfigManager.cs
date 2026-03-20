@@ -25,6 +25,7 @@ public static class WindowConfigManager {
         int choiceSelectionFileWidth = config["choice_selection_file_width"];
         int choiceSelectionFileHeight = config["choice_selection_file_height"];
 
-        return new WindowConfig(windowFileWidth, windowFileHeight, maxLinesPerWindow, choiceSelectionFileWidth, choiceSelectionFileHeight);
+        return new WindowConfig(windowFileWidth, windowFileHeight, maxLinesPerWindow, choiceSelectionFileWidth, 
+            choiceSelectionFileHeight);
     }
 }

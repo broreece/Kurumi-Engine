@@ -35,7 +35,8 @@ public sealed class MapScriptManager : ScriptManager {
                 throw new Exception();
         }
         catch (Exception) {
-            throw new MissingJsonFileException($"Script file: {scriptFileNames[index]} could not be found or contains an invalid format");
+            throw new MissingJsonFileException($"Script file: {scriptFileNames[index]} could not be found or contains "
+                + "an invalid format");
         }
 
         // Load base values.
@@ -71,7 +72,8 @@ public sealed class MapScriptManager : ScriptManager {
                     ?? throw new ScriptStepException("Basic text window 'text' parameter not found."));
 
             case "ChangeMap":
-                return new ChangeMap(parameters["MapID"].GetInt32(), parameters["XLocation"].GetInt32(), parameters["YLocation"].GetInt32());
+                return new ChangeMap(parameters["MapID"].GetInt32(), parameters["XLocation"].GetInt32(), 
+                    parameters["YLocation"].GetInt32());
 
             case "ForceMoveActor":
                 bool forceMoveActorKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
@@ -84,12 +86,12 @@ public sealed class MapScriptManager : ScriptManager {
                 foreach (var item in forceMoveActorStepsElement.EnumerateArray()) {
                     forceMoveActorSteps.Add(item.GetInt32());
                 }
-                return new ForceMoveActor(forceMoveActorKeepDirection, forceMoveActorLockMovement, forceMoveActorInstant, forceMoveActorX,
-                    forceMoveActorY, forceMoveActorSteps);
+                return new ForceMoveActor(forceMoveActorKeepDirection, forceMoveActorLockMovement, 
+                    forceMoveActorInstant, forceMoveActorX, forceMoveActorY, forceMoveActorSteps);
 
             case "StartBattle":
-                return new StartBattle(parameters["BackgroundMusicID"].GetInt32(), parameters["BackgroundArtID"].GetInt32(),
-                    parameters["EnemyFormationID"].GetInt32());
+                return new StartBattle(parameters["BackgroundMusicID"].GetInt32(), 
+                    parameters["BackgroundArtID"].GetInt32(), parameters["EnemyFormationID"].GetInt32());
 
             default:
                 throw new ScriptStepException($"Script step: {scriptStepData.Type} does not exist");

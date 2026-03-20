@@ -1,20 +1,23 @@
-The purpose of this document is to outline the changes made since the 'crucible' release, 'forge' was mostly focused on creating 
-permanent changes to the engine that both enables the core gameplay loop (by adding enemy formations to the map, expanding battle
-scene and map scene actor enhancements) and creating custom data formats for actors and scripts:
+The purpose of this document is to outline the changes made since the 'crucible' release, 'forge' was mostly focused 
+on creating  permanent changes to the engine that both enables the core gameplay loop (by adding enemy formations to 
+the map, expanding battle scene and map scene actor enhancements) and creating custom data formats for actors and 
+scripts:
 
 ------------------------------------------------------------------------------------------------
 
-Actors on maps can now both appear above and below the party allowing dynamic map's with not just tiles under the player.
+Actors on maps can now both appear above and below the party allowing dynamic map's with not just tiles under the 
+player.
 
 ------------------------------------------------------------------------------------------------
 
-Actors and the party can now be larger then the size of tiles and are correctly centered on the tile regardless of with and height.
+Actors and the party can now be larger then the size of tiles and are correctly centered on the tile regardless of 
+width and height.
 
 ------------------------------------------------------------------------------------------------
 
-Database has been expanded to include actors, actor sprites. The data format of scripts have also been changes to be in JSON format
-instead of our previous string format. This improves the readbility of the map files hugely, as well as making the actors easier
-to read in the SQL file and scripts in JSON as we don't use magic numbers anymore.
+Database has been expanded to include actors, actor sprites. The data format of scripts have also been changes to be in 
+JSON format instead of our previous string format. This improves the readbility of the map files hugely, as well as 
+making the actors easier to read in the SQL file.
 
 ------------------------------------------------------------------------------------------------
 
@@ -22,6 +25,12 @@ Smart tracking events no longer have an unlimited range causing the game to brea
 
 ------------------------------------------------------------------------------------------------
 
+Scripts now are in JSON format rather then strings. This is a huge performance improvement and we are no longer 
+passing around and performing string operations. Registries now store the script json files allowing scripts to be 
+referenced by IDs and they are now humanly readable.
 
+------------------------------------------------------------------------------------------------
+
+Introduced a ruler in the IDE set to a size of 120, this will improve consistency in the length of code and comments.
 
 ------------------------------------------------------------------------------------------------

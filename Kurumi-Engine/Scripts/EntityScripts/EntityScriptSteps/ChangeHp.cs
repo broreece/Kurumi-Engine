@@ -31,7 +31,8 @@ public sealed class ChangeHp : ScriptStep {
         // Reduce duplicate target calls.
         Entity target = entityScriptContext.GetTarget();
 
-        int result = Formula.GetEntityScriptResult(formula, entityScriptContext.GetUser(), target, entityScriptContext.GetStatShortNames());
+        int result = Formula.GetEntityScriptResult(formula, entityScriptContext.GetUser(), target, 
+            entityScriptContext.GetStatShortNames());
         int newHp;
         if (reduceHp) {
             if (!canKo && (target.GetCurrentHp() - result) < 0) {

@@ -503,7 +503,8 @@ public sealed class MapScene : SceneBase, IMapSceneView {
         int widthDifference = (width - tileWidth) / 2;
         int heightDifference = height - tileHeight;
         Sprite actorSprite = new(actorTextures[actorIndex],
-            new IntRect(currentActor.GetCurrentAnimationFrame() * width, currentActor.GetDirection() * height, width, height));
+            new IntRect(currentActor.GetCurrentAnimationFrame() * width, currentActor.GetDirection() * height, width, 
+                height));
         // Calculate float based on current animation frame and check if party is currently moving.
         float walkingDistance = currentWalkFrame == 0 ? 0 : (float) currentWalkFrame / (float) walkFrames;
         int movementAdjuster = currentWalkFrame == 0 ? 0 : 1;
@@ -544,8 +545,8 @@ public sealed class MapScene : SceneBase, IMapSceneView {
     private readonly IMapView mapView;
 
     // Reused config variables.
-    private readonly int walkLength, walkFrames, characterWidth, characterHeight, tileHeight, tileWidth, tileSheetMaxTilesWide, 
-        mapMaxTilesWide, mapMaxTilesHigh, tileAnimationInterval, tileAnimatedFrames;
+    private readonly int walkLength, walkFrames, characterWidth, characterHeight, tileHeight, tileWidth, 
+        tileSheetMaxTilesWide, mapMaxTilesWide, mapMaxTilesHigh, tileAnimationInterval, tileAnimatedFrames;
     private readonly float actorMoveVariance;
 
     // Map scene actor controller clocks.

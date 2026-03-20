@@ -49,7 +49,8 @@ public sealed class PathedActorController : ActorController {
     }
 
     /// <summary>
-    /// Function that returns if the actor controller has finished it's movements and should be popped from the actor controller stack.
+    /// Function that returns if the actor controller has finished it's movements and should be popped from the actor 
+    /// controller stack.
     /// </summary>
     /// <returns>True if the controller has finished it's action, false otherwise.</returns>
     public override bool IsFinished() {

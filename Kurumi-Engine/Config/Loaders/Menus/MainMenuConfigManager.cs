@@ -38,8 +38,8 @@ public static class MainMenuConfigManager {
         int partyWindowX = Convert.ToInt32(config["party_window_x"]);
         int partyWindowY = Convert.ToInt32(config["party_window_y"]);
 
-        return new MainMenuConfig(windowId, choiceBoxId, fontId, fontSize, selectionWindowWidth, selectionWindowHeight, selectionWindowX, 
-            selectionWindowY, selectionWindowSpacing, infoWindowWidth, infoWindowHeight, infoWindowX, infoWindowY, partyWindowWidth, 
-            partyWindowHeight, partyWindowX, partyWindowY);
+        return new MainMenuConfig(windowId, choiceBoxId, fontId, fontSize, selectionWindowWidth, selectionWindowHeight, 
+            selectionWindowX, selectionWindowY, selectionWindowSpacing, infoWindowWidth, infoWindowHeight, infoWindowX, 
+            infoWindowY, partyWindowWidth, partyWindowHeight, partyWindowX, partyWindowY);
     }
 }

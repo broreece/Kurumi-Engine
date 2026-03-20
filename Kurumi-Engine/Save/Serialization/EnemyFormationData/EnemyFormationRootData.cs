@@ -4,5 +4,5 @@ namespace Save.Serialization.EnemyFormationData;
 /// The enemy formation root class.
 /// </summary>
 public class EnemyFormationRootData {
-    public List<EnemyFormationData> Formations { get; set; } = new();
+    public List<EnemyFormationData> Formations { get; set; } = [];
 }

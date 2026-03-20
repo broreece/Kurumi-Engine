@@ -14,7 +14,8 @@ public sealed class WindowConfig : IWindowFileAccessors {
     /// <param name="maxLinesPerWindow">The max lines per window config.</param>
     /// <param name="choiceSelectionFileWidth">The choice selection file width config.</param>
     /// <param name="choiceSelectionFileHeight">The choice selection file height config.</param>
-    public WindowConfig(int windowFileWidth, int windowFileHeight, int maxLinesPerWindow, int choiceSelectionFileWidth, int choiceSelectionFileHeight) {
+    public WindowConfig(int windowFileWidth, int windowFileHeight, int maxLinesPerWindow, int choiceSelectionFileWidth, 
+        int choiceSelectionFileHeight) {
         this.windowFileWidth = windowFileWidth;
         this.windowFileHeight = windowFileHeight;
         this.maxLinesPerWindow = maxLinesPerWindow;
@@ -62,5 +63,6 @@ public sealed class WindowConfig : IWindowFileAccessors {
         return choiceSelectionFileHeight;
     }
 
-    private readonly int windowFileWidth, windowFileHeight, maxLinesPerWindow, choiceSelectionFileWidth, choiceSelectionFileHeight;
+    private readonly int windowFileWidth, windowFileHeight, maxLinesPerWindow, choiceSelectionFileWidth, 
+        choiceSelectionFileHeight;
 }

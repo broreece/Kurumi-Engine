@@ -61,7 +61,8 @@ public sealed class SaveManager {
         JsonSerializerOptions options = new() { WriteIndented = true };
         
         // Use threading to execute all saves at once.
-        Task nonCharacterTask = SaveAllExceptCharactersAsync(partyInfoAccessor, gameVariables, options, saveDirectory, mapName);
+        Task nonCharacterTask = SaveAllExceptCharactersAsync(partyInfoAccessor, gameVariables, options, saveDirectory, 
+            mapName);
         Task characterTask = SaveCharactersAsync(playableCharacters, saveDirectory);
         await Task.WhenAll(nonCharacterTask, characterTask);
         // TODO: (AS-01) Implement save enemy formations.
@@ -74,7 +75,8 @@ public sealed class SaveManager {
     /// <param name="maxPartySize">The max party size.</param>
     /// <param name="spriteIds">The sprite IDs array.</param>
     /// <returns>An array of ints representing the parties sprites.</returns>
-    /// <exception cref="SaveFileException">Error thrown if an issue occurs when trying to load party sprites.</exception>
+    /// <exception cref="SaveFileException">Error thrown if an issue occurs when trying to load party 
+    /// sprites.</exception>
     public int[] GetPartiesSprites(int saveIndex, int maxPartySize, int[] spriteIds) {
         int[] sprites = new int[maxPartySize];
         try {
@@ -105,8 +107,8 @@ public sealed class SaveManager {
     /// <param name="maxPartySize">The max party size, an indepedent config value required by savemanager.</param>
     /// <returns>The current save files party.</returns>
     /// <exception cref="MissingPartyDataException">Error thrown if a .json data file is missing.</exception>
-    public Party LoadParty(PlayableCharacter[] playableCharacters, ItemRegistry itemRegistry, StatusRegistry statusRegistry,
-        int maxPartySize) {
+    public Party LoadParty(PlayableCharacter[] playableCharacters, ItemRegistry itemRegistry, 
+        StatusRegistry statusRegistry, int maxPartySize) {
         string json, inventoryJson, saveInfoFile, saveInventoryFile;
         string ? statusesJson = null;
         if (activeSlot == 0) {
@@ -180,8 +182,8 @@ public sealed class SaveManager {
         }
 
         // Create and return party.
-        return new Party(partyData.CurrentMap, partyMembers, inventory, partyData.XLocation, partyData.YLocation, partyData.Facing,
-            partyData.Visible == 1);
+        return new Party(partyData.CurrentMap, partyMembers, inventory, partyData.XLocation, partyData.YLocation, 
+            partyData.Facing, partyData.Visible == 1);
     }
 
     /// <summary>
@@ -251,8 +253,9 @@ public sealed class SaveManager {
     /// <param name="skillRegistry">The skill data object, contains the skills.</param>
     /// <param name="abilityRegistry">The ability data object, contains the abilities.</param>
     /// <returns>The playable characters stored in the database.</returns>
-    public PlayableCharacter[] LoadPlayableCharacters(ICharacterDataLoader characterDataLoader, SkillRegistry skillRegistry, AbilityRegistry abilityRegistry, 
-        EquipmentRegistry equipmentRegistry, EquipmentSlotNameRegistry equipmentSlotNameRegistry) {
+    public PlayableCharacter[] LoadPlayableCharacters(ICharacterDataLoader characterDataLoader, 
+        SkillRegistry skillRegistry, AbilityRegistry abilityRegistry, EquipmentRegistry equipmentRegistry, 
+        EquipmentSlotNameRegistry equipmentSlotNameRegistry) {
         // Load json save files.
         string characterSkillSAbilitiesFile, characterAbilitiesFile, characterStatsFile, characterElementsFile,
             characterStatusesFile, characterEquipmentTypesFile, characterEquippedFile, characterHpFile;
@@ -332,7 +335,8 @@ public sealed class SaveManager {
                 "character_hp_mp.json"
             );
         }
-        CharacterSkillsAbilitiesData skillsAbilities = LoadJson<CharacterSkillsAbilitiesData>(characterSkillSAbilitiesFile);
+        CharacterSkillsAbilitiesData skillsAbilities = 
+            LoadJson<CharacterSkillsAbilitiesData>(characterSkillSAbilitiesFile);
         CharacterAbilitiesData baseAbilities = LoadJson<CharacterAbilitiesData>(characterAbilitiesFile);
         CharacterStatsData statsData = LoadJson<CharacterStatsData>(characterStatsFile);
         CharacterResistanceData elementRes = LoadJson<CharacterResistanceData>(characterElementsFile);
@@ -364,7 +368,8 @@ public sealed class SaveManager {
 
             // Load equipment.
             Equipment?[] characterEquipment = new Equipment[equipmentSlotNameRegistry.GetEquipmentSlotNames().Length];
-            for (int equipSlotIndex = 0; equipSlotIndex < equipmentSlotNameRegistry.GetEquipmentSlotNames().Length; equipSlotIndex ++) {
+            for (int equipSlotIndex = 0; equipSlotIndex < equipmentSlotNameRegistry.GetEquipmentSlotNames().Length; 
+                equipSlotIndex ++) {
                 int equipmentId = equippedData.Equipped[id][equipSlotIndex];
                 characterEquipment[equipSlotIndex] = equipmentId > 0 ? equipment[equipmentId - 1] : null;
             }
@@ -432,10 +437,12 @@ public sealed class SaveManager {
     /// <param name="options">The seralizer options of the json output.</param>
     /// <param name="saveDirectory">The save directory.</param>
     /// <param name="mapName">The map name.</param>
-    private async Task SaveAllExceptCharactersAsync(IPartyDynamicDataAccessor partyInfoAccessor, GameVariables gameVariables, 
+    private async Task SaveAllExceptCharactersAsync(IPartyDynamicDataAccessor partyInfoAccessor, 
+        GameVariables gameVariables, 
         JsonSerializerOptions options, string saveDirectory, string mapName) {
         Task saveStatuses = SaveStatuses(partyInfoAccessor.GetPartyMembers(), options, saveDirectory);
-        Task saveInfo = SaveInfo(partyInfoAccessor, partyInfoAccessor.GetPartyMembers(), options, saveDirectory, mapName);
+        Task saveInfo = SaveInfo(partyInfoAccessor, partyInfoAccessor.GetPartyMembers(), options, saveDirectory, 
+            mapName);
         Task saveInventory = SaveInventory(partyInfoAccessor.GetInventory(), options, saveDirectory);
         Task saveVariables = SaveVariables(gameVariables, options, saveDirectory);
 
@@ -486,7 +493,8 @@ public sealed class SaveManager {
             equippedData.Equipped.Add(equippedIds);
 
             // Base abilities.
-            List<int> abilityIds = [.. character.GetBaseAbilities().ToArray().ToList().Select(ability => ability.GetId())];
+            List<int> abilityIds = [.. character.GetBaseAbilities().ToArray().ToList().Select(ability => 
+                ability.GetId())];
             baseAbilitiesData.Abilities.Add(abilityIds);
 
             // Skills and their related abilities.
@@ -557,8 +565,8 @@ public sealed class SaveManager {
             "character_hp_mp.json"
         );
         Task saveHPAndMp = SaveJson(hpMpData, hpAndMpPath);
-        await Task.WhenAll(saveSkills, saveAbilities, saveStats, saveElementalResistances, saveStatusResistances, saveEquipmentTypes,
-            saveEquipment, saveHPAndMp);
+        await Task.WhenAll(saveSkills, saveAbilities, saveStats, saveElementalResistances, saveStatusResistances, 
+            saveEquipmentTypes, saveEquipment, saveHPAndMp);
     }
 
     /// <summary>
@@ -573,7 +581,7 @@ public sealed class SaveManager {
         List<int[]> statuses = [];
         foreach (IStatusAccessor character in partyMembers) {
             if (character != null) {
-                // I'm not really a fan of this code but C# doesen't like implicit casting of lists of a child to a parent class...
+                // C# Doesen't like implictly casting children to a parent class within a list.
                 List<Status> characterStatuses = character.GetStatuses();
                 if (characterStatuses.Count != 0) {
                     int[] statusIds = new int[characterStatuses.Count];

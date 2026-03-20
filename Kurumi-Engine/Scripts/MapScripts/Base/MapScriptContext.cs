@@ -41,7 +41,8 @@ public sealed class MapScriptContext : SceneScriptContext, IContinuableScript {
     /// <param name="currentStep">The current step that executed this force move.</param>
     public void ForceMoveParty(bool keepDirection, List<int> path, ScriptStep currentStep) {
         // TODO: (ASE-01) Add a new parameter in the function and in the script for the force move party script step.
-        GetMapState()?.StartForceMoveParty(keepDirection, path, gameContext.GetCharacterMovementSpeed(), this, currentStep);
+        GetMapState()?.StartForceMoveParty(keepDirection, path, gameContext.GetCharacterMovementSpeed(), this, 
+            currentStep);
     }
 
     /// <summary>

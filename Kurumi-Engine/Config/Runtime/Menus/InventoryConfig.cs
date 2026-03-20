@@ -19,9 +19,9 @@ public sealed class InventoryConfig {
     /// <param name="descriptionWindowHeight">The description window height config.</param>
     /// <param name="descriptionWindowX">The description window X config.</param>
     /// <param name="descriptionWindowY">The description window Y config.</param>
-    public InventoryConfig(int inventoryWindowId, int inventoryChoiceBoxId, int fontId, int fontSize, int inventoryWindowWidth, int inventoryWindowHeight, 
-        int inventoryWindowX, int inventoryWindowY, int descriptionWindowWidth, int descriptionWindowHeight, int descriptionWindowX, 
-        int descriptionWindowY) {
+    public InventoryConfig(int inventoryWindowId, int inventoryChoiceBoxId, int fontId, int fontSize, 
+        int inventoryWindowWidth, int inventoryWindowHeight, int inventoryWindowX, int inventoryWindowY, 
+        int descriptionWindowWidth, int descriptionWindowHeight, int descriptionWindowX, int descriptionWindowY) {
         this.inventoryWindowId = inventoryWindowId;
         this.inventoryChoiceBoxId = inventoryChoiceBoxId;
         this.fontId = fontId;
@@ -132,6 +132,7 @@ public sealed class InventoryConfig {
         return descriptionWindowY;
     }
 
-    private readonly int inventoryWindowId, inventoryChoiceBoxId, fontId, fontSize, inventoryWindowWidth, inventoryWindowHeight, 
-        inventoryWindowX, inventoryWindowY, descriptionWindowWidth, descriptionWindowHeight, descriptionWindowX, descriptionWindowY;
+    private readonly int inventoryWindowId, inventoryChoiceBoxId, fontId, fontSize, inventoryWindowWidth, 
+        inventoryWindowHeight, inventoryWindowX, inventoryWindowY, descriptionWindowWidth, descriptionWindowHeight, 
+        descriptionWindowX, descriptionWindowY;
 }

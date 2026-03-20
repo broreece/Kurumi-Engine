@@ -26,7 +26,8 @@ public sealed class MapState : StateBase, IMapInputController {
     /// <param name="mapSceneView">The map scene view object.</param>
     /// <param name="mapConfig">The map config object.</param>
     /// <param name="map">The map object.</param>
-    public MapState(GameContext gameContext, IMapSceneView mapSceneView, MapConfig mapConfig, Map map) : base(gameContext) {
+    public MapState(GameContext gameContext, IMapSceneView mapSceneView, MapConfig mapConfig, Map map) : 
+        base(gameContext) {
         // Load map state view and map.
         this.mapSceneView = mapSceneView;
         this.map = map;
@@ -69,7 +70,8 @@ public sealed class MapState : StateBase, IMapInputController {
                         isForcedMoving = false;
                         gameContext.ResumeInput();
                         if (currentForceMoveStep == null || forceMoveScript == null) {
-                            throw new ForceMoveScriptNullException("Script that forced party movement can not be found stored in map state.");
+                            throw new ForceMoveScriptNullException("Script that forced party movement can not be found"
+                                + " stored in map state.");
                         }
                         forceMoveScript.ContinueScript(currentForceMoveStep);
                     }
@@ -79,7 +81,8 @@ public sealed class MapState : StateBase, IMapInputController {
                     isForcedMoving = false;
                     gameContext.ResumeInput();
                     if (currentForceMoveStep == null || forceMoveScript == null) {
-                        throw new ForceMoveScriptNullException("Script that forced actor movement can not be found stored in map state");
+                        throw new ForceMoveScriptNullException("Script that forced actor movement can not be found " + 
+                            "stored in map state");
                     }
                     forceMoveScript.ContinueScript(currentForceMoveStep);
                 }
@@ -102,8 +105,8 @@ public sealed class MapState : StateBase, IMapInputController {
             if (currentHandler.CanMove()) {
                 int move = currentHandler.GetMove();
                 if (move != -1) {
-                    bool couldMove = MoveActor(GetActorAtLocation(currentHandler.GetXLocation(), currentHandler.GetYLocation()), move, 
-                        keepDirection: false);
+                    bool couldMove = MoveActor(GetActorAtLocation(currentHandler.GetXLocation(), 
+                        currentHandler.GetYLocation()), move, keepDirection: false);
                     if (couldMove) {
                         currentHandler.ExecuteMove(currentHandler.GetXLocation(), currentHandler.GetYLocation());
                     }
@@ -134,7 +137,8 @@ public sealed class MapState : StateBase, IMapInputController {
             int yLocation = currentActor.GetYLocation();
             if (xLocation == partyXLocation + xDirection && yLocation == partyYLocation + yDirection) {
                 if (currentActor.GetBehaviour() != Behaviour.StationaryDoesNotTurn) {
-                    // Set the new facing direction of the actor using a custom formula to flip parties facing direction.
+                    // Set the new facing direction of the actor using a custom formula to flip parties facing 
+                    // direction.
                     currentActor.SetDirection((Direction) ((facing + 2) % 4));
                 }
                 if (currentActor.ActivatesOnAction()) {
@@ -190,7 +194,8 @@ public sealed class MapState : StateBase, IMapInputController {
         int yLocation = party.GetYLocation();
         int rightMovement = (int) direction % 2 == 0 ? 0 : ((int) direction % 4 == 1 ? 1 : -1);
         int downMovement = (int) direction % 2 == 1 ? 0 : ((int) direction == 0 ? -1 : 1);
-        // Check that the new location is not off the map, is on a passable tile and is not occupied by impassable actor.
+        // Check that the new location is not off the map, is on a passable tile and is not occupied by impassable 
+        // actor.
         if (TileIsPassable(xLocation + rightMovement, yLocation + downMovement) &&
             ActorIsPassable(xLocation + rightMovement, yLocation + downMovement)) {
             party.SetOldXLocation(xLocation);
@@ -216,7 +221,8 @@ public sealed class MapState : StateBase, IMapInputController {
     }
 
     /// <summary>
-    /// Function used to start the force move party condition, forces a movement while potentially maintaining direction. 
+    /// Function used to start the force move party condition, forces a movement while potentially maintaining 
+    /// direction. 
     /// </summary>
     /// <param name="keepsDirection">If the parties direction is maintained.</param>
     /// <param name="path">The path the party follows.</param>
@@ -352,8 +358,8 @@ public sealed class MapState : StateBase, IMapInputController {
             PathedActorController forcedController = new(currentActor.GetMovementSpeed(), currentActor.GetXLocation(),
                 currentActor.GetYLocation(), forcedMovement: true, path);
             currentActor.PushController(forcedController);
-            // Add actors controller into our scripted actor controller list to be checked if it has finished in the update to 
-            // continue the script.
+            // Add actors controller into our scripted actor controller list to be checked if it has finished in the 
+            // update to continue the script.
             scriptedActorControllers.Add(new ScriptedActorController(forcedController, continuableScript, currentStep));
         }
     }
@@ -373,7 +379,8 @@ public sealed class MapState : StateBase, IMapInputController {
             }
             index ++;
         }
-        throw new ActorMissingException($"Actor at location X: {xLocation} Y: {yLocation} on map: {map.GetMapName()} was not found.");
+        throw new ActorMissingException($"Actor at location X: {xLocation} Y: {yLocation} on map: {map.GetMapName()} " 
+            + "was not found.");
     }
 
     /// <summary>

@@ -1,6 +1,7 @@
 # Roadmap
 
-This file outlines all future tickets alongside a set of fields that determine how complex, independent, the momentum a ticket carries and how big the impact is on the engine.
+This file outlines all future tickets alongside a set of fields that determine how complex, independent, the momentum 
+a ticket carries and how big the impact is on the engine.
 
 ### Complexity
 
@@ -67,24 +68,28 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Steps:**
 - Create a new document in info to explain scripts and actors.
 - Also create a document in templates for template actors and scripts.
-- Also a misc task is to create a file format for the registries and store it in the documentation, we currently have not documented how registry.json files should look.
+- Also a misc task is to create a file format for the registries and store it in the documentation, we currently have 
+not documented how registry.json files should look.
 
 ---
 
 ## Go through the code. Maybe we can decouple some instances of tightly coupled classes that shouldn't be together. ##
-### Complexity: 4 ###
-### Independent: 4 ###
-### Momentum: 3 ###
-### Impact: 2 ###
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
 
-**Description** It feels like I'm coupling too tightly recently. Technical debt is growing again yet's go through our code and look for refractors.
+**Description** It feels like I'm coupling too tightly recently. Technical debt is growing again yet's go through our 
+code and look for refractors.
 
 **Steps:**
 IF WE DECIDE NOT TO DECOUPLE:
     - Make a document explaining the decision, list pros and cons of each style.
 IF WE DECIDE TO DECOUPLE:
-    - In particular we are putting scripts into actors, items, abilities. It feels like every class has a using statement for scripts.
-    - Im aware of performance here vs coupling. It might not just be as simple as using int IDs instead as we'll need to pass around registries and loading these scripts all the time instead of just on container creation.
+    - In particular we are putting scripts into actors, items, abilities. It feels like every class has a using 
+    statement for scripts.
+    - Im aware of performance here vs coupling. It might not just be as simple as using int IDs instead as we'll need 
+    to pass around registries and loading these scripts all the time instead of just on container creation.
 
 ---
 
@@ -94,7 +99,8 @@ IF WE DECIDE TO DECOUPLE:
 ### Momentum: 1 ###
 ### Impact: 5 ###
 
-**Description:** During our work on CSAF we removed the traditional constructor for the scripts, we should now go back and re-add any deleted script steps.
+**Description:** During our work on CSAF we removed the traditional constructor for the scripts, we should now go back 
+and re-add any deleted script steps.
 
 **Steps:**
 - https://github.com/broreece/Kurumi-Engine/commit/9e840b219cde144331093926bbff00a66e99d2c8#diff-f7e58fef3a0f6fc0677fa9b54340ad885e88bec3bdb9b3700dfa0c774618593bL15
@@ -108,24 +114,31 @@ IF WE DECIDE TO DECOUPLE:
 ### Momentum: 3 ###
 ### Impact: 5 ###
 
-**Description:** This task is focused on finishing all implementation of enemy formations on the map. This will allow enemy formation interaction a core part of the gameplay loop.
+**Description:** This task is focused on finishing all implementation of enemy formations on the map. This will allow 
+enemy formation interaction a core part of the gameplay loop.
 
 **Steps:**
 - Implement a max limit on the smart tracking events:
     - For normal smart tracking events perhaps no limit is fine, hard code a value like 0 to reference infinite range.
     - If the distance is greater then the limit throw the error to not move.
 - Load enemy formations on new maps in map scene or in the map class: (High Priority)
-    - When loading a map into map scene loop through enemy formations file and place enemy formations in the map by creating them.
+    - When loading a map into map scene loop through enemy formations file and place enemy formations in the map by 
+    creating them.
 - Create clocks for each enemy formation on a map: (High Priority)
-    - Each enemy formation we create and place on the map create 2 clocks to control movement and determine when they give up chasing the party.
+    - Each enemy formation we create and place on the map create 2 clocks to control movement and determine when they 
+    give up chasing the party.
 - Implement the AI switching when found and check against the timer when to turn off the found flag: (High Priority)
-    - When we check each map event also check each enemy formation on the map in the "onFound" trigger, if found set found flag to true. 
-    - In the movement function we check each enemy formation, if the found flag is set to true we use it's other AI to determine movement.
-    - Each frame the party is in the on found events range we reset the chase clock, if the chase clock reaches the limit we turn found to false.
+    - When we check each map event also check each enemy formation on the map in the "onFound" trigger, if found set 
+    found flag to true. 
+    - In the movement function we check each enemy formation, if the found flag is set to true we use it's other AI to 
+    determine movement.
+    - Each frame the party is in the on found events range we reset the chase clock, if the chase clock reaches the 
+    limit we turn found to false.
 - Implement when battle formations die they can be found dead on map and appear under the player: (Mid Priority)
     - If party is victorous in battle set the enemy formations "dead" flag to true.
     - On the map scene when loading sprites for enemy formations check if dead use unique sprite.
-    - When checking if a tile is passable check if the tile is passable, if all events are passable and then if there is an enemy formation on the
+    - When checking if a tile is passable check if the tile is passable, if all events are passable and then if there 
+    is an enemy formation on the
     tile they are dead.
     - **NOTE** Rendering under the player might involve the work on ticket: (MSAC-02)
 
@@ -159,7 +172,8 @@ IF WE DECIDE TO DECOUPLE:
 ### Momentum: 2 ###
 ### Impact: 3 ###
 
-**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, font size for damage display and more dynamic enemy targetting.
+**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, font size for 
+damage display and more dynamic enemy targetting.
 
 **Steps:** 
 - Implement additional attack options: (Low Priority)
@@ -168,8 +182,10 @@ IF WE DECIDE TO DECOUPLE:
     - Implement random enemy hit attacks.
 - Implement new config for the damage text to have a font size:
     - Currently hard coded make sure it's in battle scene config.
-- Implement function to load the index of the first healthy party member when generating the first choices in a battle scene:
-    - Might have to check how this logic will work around the battle state ensure that the state and scene stay the same in both.
+- Implement function to load the index of the first healthy party member when generating the first choices in a 
+battle scene:
+    - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
+    same in both.
 
 ---
 
@@ -270,10 +286,10 @@ Forge build reached!
 Create a small demonstration scenario showcasing key engine capabilities implemented during the Forge build.
 
 **Steps:**
-- The first video should show two actors having forced movements, the player can still move during this time, then one actor
-continues with a speech, this should go directly into a cutscene.
-- The second video should demonstrate enemy formations, they chase the player for the player to escape. The game is then saved
-and when loaded the enemy formation persists on the map.
+- The first video should show two actors having forced movements, the player can still move during this time, then one 
+actor continues with a speech, this should go directly into a cutscene.
+- The second video should demonstrate enemy formations, they chase the player for the player to escape. The game is then 
+saved and when loaded the enemy formation persists on the map.
 
 ---
 
@@ -283,12 +299,14 @@ and when loaded the enemy formation persists on the map.
 ### Momentum: 3 ###
 ### Impact: 2 ###
 
-**Description:** Create the ability for statuses to block movement in battle, and testing creation of new statuses in the database.
+**Description:** Create the ability for statuses to block movement in battle, and testing creation of new statuses in 
+the database.
 
 **Steps:**
 - Add a stun status: (Extremely Low Priority)
     - Create status in database.
-    - Ensure that when checking if enemy/party commits action they are able to move by checking all their statuses and confirming they can move.
+    - Ensure that when checking if enemy/party commits action they are able to move by checking all their statuses and 
+    confirming they can move.
     - Add battle scene event step to inflict statuses to a specified enemy only (Used for body parts).
 - Add a new "Hidden" boolean to statuses: (Extremely Low Priority)
     - Add new field in table of database.
@@ -309,8 +327,8 @@ and when loaded the enemy formation persists on the map.
 - Load item pools in database: (Mid Priority)
     - We already have a database table representing item pools, We need to create an item pool 2D list of ints.
     - The 1st index is the item pool id, the second index is the item ids in the list.
-    - Create a map scene event step that adds a random item from an item pool to the inventory, display a text window displaying the name
-    of the item as well.
+    - Create a map scene event step that adds a random item from an item pool to the inventory, display a text window 
+    displaying the name of the item as well.
 
 ---
 
@@ -331,7 +349,8 @@ and when loaded the enemy formation persists on the map.
     - These meters should start at 100 then slowly reduce.
     - Add some food items in the item database, have the effect be "ReduceHunger".
     - Create a reduce hunger map scene event step.
-    - Create a "Sleep" Map scene event step that moves time forward and reduces the parties sleep meter by the time slept.
+    - Create a "Sleep" Map scene event step that moves time forward and reduces the parties sleep meter by the time 
+    slept.
 
 ---
 
@@ -434,7 +453,8 @@ and when loaded the enemy formation persists on the map.
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:** Currently we have a messy way to convert files using a python script. Yets just modify the tiled application to do the work for us.
+**Description:** Currently we have a messy way to convert files using a python script. Yets just modify the tiled 
+application to do the work for us.
 
 **Steps:** N/A
 
@@ -482,18 +502,7 @@ and when loaded the enemy formation persists on the map.
 ### Momentum: 3 ###
 ### Impact: 2 ###
 
-**Description** Just a plan ticket, if we do thread actor AIs it might improve performance however we will need to carefully account for the current system and how we will implement threading here.
-
-**Steps:** N/A
-
----
-
-## Check the scripts logics. Perhaps we can group all scripts together. ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 2 ###
-### Impact: 2 ###
-
-**Description** Currently almost all scripts behave in the same way, perhaps we can just remove all the different kinds of scripts to keep logic the same and in one place?
+**Description** Just a plan ticket, if we do thread actor AIs it might improve performance however we will need to 
+carefully account for the current system and how we will implement threading here.
 
 **Steps:** N/A

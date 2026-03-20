@@ -4,7 +4,7 @@ namespace Save.Serialization.PlayableCharacterRegistry;
 /// Character hp and mp values used to load and save changing values.
 /// </summary>
 public class CharacterHpMpData {
-    public List<int> Characters { get; set; } = new();
-    public List<List<int>> HP { get; set; } = new();
-    public List<List<int>> MP { get; set; } = new();
+    public List<int> Characters { get; set; } = [];
+    public List<List<int>> HP { get; set; } = [];
+    public List<List<int>> MP { get; set; } = [];
 }
