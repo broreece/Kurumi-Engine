@@ -1,0 +1,10 @@
+Actors are map elements that can take many forms, from talkable NPCs to enemies to invisible change map script holders
+or just a sprite that appears above the party on the map scene. Here is how an actor is stored in the database.
+
+ID  Behaviour   SpriteID    MovementSpeed   TrackingRange   BelowParty  Passable    OnTouch OnAction    OnFind  Script
+
+Where each fiel directly relates to the actors information. Additionally on the maps.json file that loads the actor
+based on the ID additional fields can be set to change the actors direction and inital visibility.
+
+The sprite ID is a direct reference to a table "actor_sprites" in the game database that contain information about a
+sprite.

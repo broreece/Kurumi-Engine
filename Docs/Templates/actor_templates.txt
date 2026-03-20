@@ -1,0 +1,3 @@
+An actor who moves every second smart tracking the party and whos script activates when it touches the party.
+ID  Behaviour   SpriteID    MovementSpeed   TrackingRange   BelowParty  Passable    OnTouch OnAction    OnFind  Script
+1   4           1           1000            5               0           0           1       1           0       1

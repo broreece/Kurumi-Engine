@@ -57,39 +57,22 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (CSAF) Custom script and actor format implementation ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
+## Changes based on feedback ##
+### Complexity: 4 ###
+### Independent: 4 ###
+### Momentum: 3 ###
+### Impact: 2 ###
 
-**Description:** Currently scripts and actors are stored in string format, we should create a custom format.
-
-**Steps:**
-- Create a new document in info to explain scripts and actors.
-- Also create a document in templates for template actors and scripts.
-- Also a misc task is to create a file format for the registries and store it in the documentation, we currently have 
-not documented how registry.json files should look.
-
----
-
-## Go through the code. Maybe we can decouple some instances of tightly coupled classes that shouldn't be together. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description** It feels like I'm coupling too tightly recently. Technical debt is growing again yet's go through our 
-code and look for refractors.
+**Description:** Based on feedback on the code we'll stop seperation of scripts as it just bloats the code a lot.
+Also we will use a general config loader instead of multiple boilerplate managers.
 
 **Steps:**
-IF WE DECIDE NOT TO DECOUPLE:
-    - Make a document explaining the decision, list pros and cons of each style.
-IF WE DECIDE TO DECOUPLE:
-    - In particular we are putting scripts into actors, items, abilities. It feels like every class has a using 
-    statement for scripts.
-    - Im aware of performance here vs coupling. It might not just be as simple as using int IDs instead as we'll need 
-    to pass around registries and loading these scripts all the time instead of just on container creation.
+- Remove config managers, create a config loader class in it's place instead.
+- Remove the custom script formats just use a generic script and script steps.
+- We should try to abstract more, currently we have presentation data in game.core and capability definition in skills
+but this feels really poor we should remove them and redo our abstraction.
+- Entity element as well reinvestigate our usage of this perhaps we can change this.
+- Decouple based on our engine_coupling_info.txt
 
 ---
 

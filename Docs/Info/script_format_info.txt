@@ -1,0 +1,22 @@
+Scripts are storedin JSON files in "/Assets/Scripts/'ScriptType' they are built by a set of script steps
+that can have dynamic parameters based on the type of step.
+
+An example script looks like:
+'''
+{
+    "Name": "Change map script",
+    "Steps": [
+        {
+            "Type": "ChangeMap",
+            "Parameters": {
+                "MapID": 1,
+                "XLocation": 0,
+                "YLocation": 0
+            }
+        }
+    ]
+}
+'''
+Where the "Name" would be "Change map script" and the only step is to change a map.
+
+The step here is: "ChangeMap" however other steps with different sets of paramets can exist.

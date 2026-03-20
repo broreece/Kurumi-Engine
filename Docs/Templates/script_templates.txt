@@ -1,0 +1,14 @@
+A change map script:
+{
+    "Name": "Change map script",
+    "Steps": [
+        {
+            "Type": "ChangeMap",
+            "Parameters": {
+                "MapID": 1,
+                "XLocation": 0,
+                "YLocation": 0
+            }
+        }
+    ]
+}

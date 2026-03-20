@@ -1,0 +1,68 @@
+Currently the engine has some tightly coupled classes we will work on decoupling these.
+Arrow points towards the dependency AKA A <-- B Means A is dependent to B.
+
+Coupling can help us in some cases as it prevents for example loading scripts from json formats multiple times however
+this can be resolved by loading all scripts and then storing them in our registry class effectively decoupling them.
+
+Here is a list of all couples and a description of them:
+
+(Remove!)
+Abilities + Items <-- Scripts
+Currently only implemented on Abilities, this should be changed to an int ID and have the scripts stored in our 
+registry as suggested above.
+By removing this we also remove databaseManager's dependency on scripts.
+
+(Remove!)
+Equipment <-- Item
+Currently equipment has a linked Item, not an inventory item. This should similarly be changed to an ID and use the
+item registry or a system to change to an item.
+By removing this we remove the databaseManager's dependency on item registry 
+
+(Remove!)
+Actors <-- ActorInfo <-- ActorSprite
+We can keep this as an int however Actor has functions that call references to it's actor info and to it's sprite.
+One possibility is implementing Systems in the engine to perform these functions.
+
+(Remove!)
+Map <-- Party
+Is this one still neccesary map state is a state base which always contains party?
+
+(Implement the actor map idea!)
+Map <-- Actor
+Implement an actor map, in the map manager create an actor map at same time as map we can return a custom object
+that holds both types of maps.
+
+(Remove!)
+Battle <-- Enemy + EnemyRegistry
+Again use an ID have a system to load the enemies from registries, battles can be independent.
+
+(Implement status instance and then keep in entity!)
+Entity <-- Status
+Implement status instance which has a status object and a turns passed. Change the status in entity to status instance.
+No need to decouple.
+
+(Remove!)
+Entity <-- Ability + Skills (Also script)
+We can change this to ints use a system to load from the registry.
+We also have a function in entity that returns a script, we should really remove this again use a system.
+
+(Remove!)
+EntityElement <-- Skills + Abilities
+We restrict access to skills and abilities from entity elements like equipment and statuses but this can be changed
+to an int ID.
+
+(Party should own playable characters and inventory items and move into custom systems so party
+doesn't directly change these objects.)
+Party <-- Items + PlayableCharacters
+Create custom systems to fullfill the party functions such as adding items, changing party etc. Remove functions
+from party object.
+
+(Remove map manager depending on anything)
+MapManager <-- Party + ActorInfoRegistry + TileObjectRegistry
+Map manager shouldn't have a dependency on any object rather it should be the objects it creates job 
+
+By decoupling we'll benefit in many ways:
+- Testing individual classes becomes significantly easier
+- Code doesen't require as much "using" or "importing" other classes.
+- It follows SOLID principles each class has one purpose.
+- Allows easier changes in future.
