@@ -15,12 +15,12 @@ Format: feature/<ticket-reference>-<short-description>
 E.G: feature/AMS-01-Adds-the-map-state
 
 Refractor branches:
-Format: refactor/<build-name> OR refractor/<area>
+Format: refractor/<build-name> OR refractor/<area>
 E.G: refractor/forge OR refractor/change-to-allman-brackets
 
 Bug fixes:
 Format: fix/<bug-description>
-E.G fix/actor-movement-not-rendering
+E.G: fix/actor-movement-not-rendering
 
 Workflow:
 Branch from dev when starting work on a new feature, use meaningful commit messages without vague wording like "fix"
