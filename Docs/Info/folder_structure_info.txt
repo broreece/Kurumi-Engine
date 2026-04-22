@@ -1,0 +1,232 @@
+Assets
+
+Contains all external, non-code resources used by the engine:
+
+- Art (images, sprites)
+- Audio (music, sound effects)
+- Fonts
+- Map files
+- Third-party licenses
+
+Registry/
+- Contains .json files mapping asset identifiers to file paths
+
+---------------------------------------------------------------------
+
+Bootstrap
+
+Contains the entry point of the application.
+
+- Initializes core systems
+- Wires dependencies
+- Starts the main game loop
+
+---------------------------------------------------------------------
+
+Config
+
+Contains configuration systems and external configuration data:
+
+- YAML configuration files
+- Config loaders
+- Runtime configuration objects
+
+Defines how the engine and game are configured at runtime.
+
+---------------------------------------------------------------------
+
+Data
+
+Contains structured data used by the game:
+
+- Definitions — Static data (from database)
+- Models — Serializable save data
+- Runtime — Combined definition + model objects
+
+Contains no gameplay logic.
+
+---------------------------------------------------------------------
+
+Engine
+
+Contains core runtime architecture and reusable systems.
+
+- Responsible for HOW the game runs
+- Contains NO game-specific logic
+
+---------------------------------------------------------------------
+
+Engine/Assets
+
+- Asset management systems
+- Asset loading and caching logic
+
+---------------------------------------------------------------------
+
+Engine/Context
+
+- Shared runtime context (e.g. StateContext)
+- Provides access to core systems
+
+---------------------------------------------------------------------
+
+Engine/Input
+
+- Input system (SFML integration)
+- Input mapping
+- Input state tracking
+- InputContextManager
+
+---------------------------------------------------------------------
+
+Engine/State
+
+- IGameState
+- StateManager
+
+Controls high-level game flow.
+
+States:
+- orchestrate systems
+- do NOT contain gameplay logic
+
+---------------------------------------------------------------------
+
+Engine/Systems
+
+- Engine-level systems only
+- Must be reusable and not game-specific
+
+---------------------------------------------------------------------
+
+Engine/UI
+
+UI framework layer only:
+
+- UIElement
+- Layout system
+- UI components
+- Base UIView
+
+Handles structure and rendering only.
+
+---------------------------------------------------------------------
+
+Game
+
+Contains all gameplay-specific logic and content.
+
+- Responsible for WHAT the game does
+- Depends on Engine
+
+---------------------------------------------------------------------
+
+Game/Input
+
+- Concrete input contexts
+- Examples:
+  - GameplayInputContext
+  - MenuInputContext
+
+---------------------------------------------------------------------
+
+Game/Maps
+
+- Map definitions
+- Map loaders
+- Map-related data structures
+
+Represents the game world.
+
+---------------------------------------------------------------------
+
+Game/Scripts
+
+- Script logic
+- Script steps
+- Script execution
+
+Defines gameplay behavior through scripting.
+
+---------------------------------------------------------------------
+
+Game/Systems
+
+- Gameplay systems (future)
+- Examples:
+  - Movement
+  - Combat
+  - AI
+
+---------------------------------------------------------------------
+
+Game/UI
+
+Game-specific UI layer:
+
+- States — UIState (source of truth)
+- Views — concrete UIViews (Dialogue, Menu, etc.)
+- Data — UI-specific data models
+
+Uses Engine/UI for rendering.
+
+---------------------------------------------------------------------
+
+Infrastructure
+
+Handles interaction with external systems and data sources.
+
+- Responsible for IO and external integrations
+- Does NOT contain gameplay logic
+
+---------------------------------------------------------------------
+
+Infrastructure/Database
+
+Handles all database-related functionality:
+
+- Schema
+- Loaders
+- Repositories
+- Row objects
+
+Provides definition data.
+
+---------------------------------------------------------------------
+
+Infrastructure/Persistence
+
+Handles saving and loading game state:
+
+- SaveService
+- Serialization
+- Save data structures
+
+---------------------------------------------------------------------
+
+Infrastructure/Rendering
+
+Handles rendering backend:
+
+- GameWindow
+- RenderSystem
+
+Wraps SFML rendering.
+
+---------------------------------------------------------------------
+
+Infrastructure/Logging
+
+- Logging systems
+- Debug output
+
+---------------------------------------------------------------------
+
+Utils
+
+General-purpose helper utilities.
+
+- Must be stateless
+- Must not contain game logic
+
+---------------------------------------------------------------------

@@ -1,0 +1,77 @@
+{
+  "Formations": [
+    {
+      "MapId": 1,
+      "FieldArtId": 1,
+      "X": 1,
+      "Y": 1,
+      "ReturnX": 1,
+      "ReturnY": 1,
+      "SearchTimer": 2000,
+      "LootPool": 0,
+      "Found": 0,
+      "Dead": 0,
+      "Enemies": [
+        {
+          "Id": 0,
+          "X": 300,
+          "Y": 50,
+          "MainPart": 0,
+          "Statuses": [],
+          "BattleScripts": [],
+          "OnKillScript": SCRIPTTID
+        },
+        {
+          "Id": 1,
+          "X": 300,
+          "Y": 16,
+          "MainPart": 0,
+          "Statuses": [],
+          "BattleScripts": [],
+          "OnKillScript": SCRIPTTID
+        },
+        {
+          "Id": 2,
+          "X": 345,
+          "Y": 28,
+          "MainPart": 0,
+          "Statuses": [],
+          "BattleScripts": [
+            {
+              "Script": SCRIPTTID
+              "Target": -1,
+              "StartTurn": 1,
+              "Frequency": 2
+            }
+          ],
+          "OnKillScript": SCRIPTTID
+        },
+        {
+          "Id": 3,
+          "X": 255,
+          "Y": 45,
+          "MainPart": 0,
+          "Statuses": [],
+          "BattleScripts": [],
+          "OnKillScript": SCRIPTTID
+        },
+        {
+          "Id": 4,
+          "X": 311,
+          "Y": 87,
+          "MainPart": 0,
+          "Statuses": [],
+          "BattleScripts": [],
+          "OnKillScript": SCRIPTTID
+        }
+      ],
+
+      "Scripts": {
+        "OnFoundActor": ACTORID,
+        "MovementPatternActor": ACTORID,
+        "OnLoseScript": SCRIPTTID,
+        "OnWinScript": SCRIPTTID
+      }
+    }
+  ]
+}

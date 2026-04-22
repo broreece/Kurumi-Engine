@@ -1,0 +1,29 @@
+Coupling
+
+Coupling refers to the degree to which objects depend on one another.
+When systems are tightly coupled, components rely heavily on specific implementations, making the codebase harder to 
+test, maintain, and extend.
+
+Our goal is to maintain a loosely coupled architecture, where components interact through well-defined interfaces and
+abstractions. However, complete decoupling is not always practical or desirable.
+
+Acceptable Cases for Coupling
+Certain scenarios inherently require tighter coupling:
+- Runtime-owned objects
+- Objects that are not data-driven (e.g. not loaded from JSON/YAML) and are directly managed by other objects (e.g. 
+    Entity Modifiers, Controllers).
+- State-driven runtime logic
+- Systems that operate on live models and require direct access to both definitions and runtime data.
+- Service dependencies on runtime data
+- Services that must interact with concrete runtime objects to perform their responsibilities.
+
+Benefits of Decoupling
+Maintaining a decoupled system provides several key advantages:
+- Improved testability
+- Individual components can be tested in isolation without complex setup.
+- Reduced dependencies
+- Less reliance on imports and concrete implementations simplifies the codebase.
+- Clear separation of concerns
+- Aligns with SOLID principles, ensuring each class has a focused responsibility.
+- Greater flexibility
+- Systems can evolve, be replaced, or extended with minimal impact on existing code.

@@ -1,0 +1,111 @@
+Engine vs Infrastructure vs Game
+
+This document defines the responsibilities of the Engine, Infrastructure, and Game layers, and provides clear rules 
+for determining where new functionality should be placed.
+
+---------------------------------------------------------------------
+
+ARCHITECTURE OVERVIEW
+The project is divided into three primary layers:
+
+Infrastructure → External systems and data handling
+Engine         → Core runtime architecture and reusable systems
+Game           → Gameplay logic and content
+
+Dependency Flow:
+Game → Engine → Infrastructure
+
+- Engine must NEVER depend on Game
+- Infrastructure must NEVER depend on Engine or Game logic
+
+---------------------------------------------------------------------
+
+Infrastructure
+Infrastructure is responsible for handling external systems and raw data.
+
+Characteristics:
+- Does NOT understand game-specific objects
+- Contains NO gameplay logic
+- Does NOT participate in game behavior
+- Interacts with external resources (files, databases, rendering APIs)
+
+Responsibilities:
+- Loading and saving data
+- File IO (YAML, JSON, etc.)
+- Database interaction (SQLite)
+- Serialization / deserialization
+- Rendering backend (SFML wrapper)
+- Logging
+
+Examples:
+- Database systems
+- Persistence (save/load)
+- Config file loading
+- RenderWindow / RenderSystem
+
+Important:
+Infrastructure may prepare and transport data, but it must NEVER influence gameplay behavior.
+
+---------------------------------------------------------------------
+
+Engine
+Engine contains the core runtime architecture and reusable systems.
+
+Characteristics:
+- Does NOT contain gameplay logic
+- Does NOT define game-specific behavior
+- Provides systems used by the Game layer
+- Participates in the game loop
+
+Responsibilities:
+- Input system
+- State system
+- UI framework
+- Asset management
+- Core system orchestration
+
+Engine defines HOW the game runs, not WHAT the game does.
+
+Examples:
+- InputSystem
+- InputContextManager
+- StateManager
+- UIElement / UI framework
+- Asset systems
+
+---------------------------------------------------------------------
+
+Game
+Game contains all gameplay-specific logic and content.
+
+Characteristics:
+- Defines WHAT the game does
+- Contains all game rules and interactions
+- Understands game-specific objects (maps, actors, combat, etc.)
+- Uses Engine systems to execute behavior
+
+Responsibilities:
+- Game states (GameplayState, MenuState, etc.)
+- Gameplay systems (movement, combat, AI)
+- Scripts and scripted events
+- UI states and views
+- Map systems and world logic
+
+Examples:
+- GameplayState
+- Dialogue systems
+- Combat systems
+- Map systems
+- Script execution logic
+- Game-specific UI
+
+---------------------------------------------------------------------
+
+DECISION RULES
+Use these rules when placing new functionality:
+
+1. Does it interact with external systems (files, DB, rendering API)? → Infrastructure
+
+2. Is it a reusable runtime system (input, state, UI framework)? → Engine
+
+3. Does it define gameplay behavior or game content? → Game

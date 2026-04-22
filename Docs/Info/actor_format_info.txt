@@ -1,0 +1,44 @@
+Actors represent interactive and visual elements on the map. They are a flexible abstraction used to model a wide range 
+of in-game entities, including:
+- Talkable NPCs
+- Enemies
+- Invisible script triggers (e.g. map transitions)
+- Decorative or UI-related sprites (e.g. indicators above the party)
+
+Actor Data Structure
+Actors are defined in the database using the following schema:
+ID | Behaviour | SpriteID | MovementSpeed | TrackingRange | BelowParty | Passable | OnTouch | OnAction | OnFind | Script
+Each field directly maps to a specific aspect of the actor’s configuration and behavior.
+
+Field Overview:
+ID - Unique identifier for the actor.
+Behaviour - Defines how the actor behaves (e.g. idle, patrol, aggressive).
+SpriteID - Reference to the actor’s visual representation.
+MovementSpeed - Controls how fast the actor moves on the map.
+TrackingRange - Distance at which the actor begins tracking or reacting to the player.
+BelowParty - Determines render layering relative to the player.
+Passable - Indicates whether the player can move through the actor.
+OnTouch / OnAction / OnFind - Script triggers for different interaction types:
+    - OnTouch: Triggered when the player collides with the actor
+    - OnAction: Triggered via player interaction (e.g. button press)
+    - OnFind: Triggered when the actor detects the player
+Script - The primary script associated with the actor.
+
+Map-Level Overrides
+Within maps.json, actors are instantiated by their ID, with additional per-instance configuration:
+- Initial Direction
+- Initial Visibility
+This allows reuse of the same actor definition across multiple maps with different runtime models.
+
+Sprite Reference
+The SpriteID field maps directly to the actor_sprites table in the game database.
+This table defines the visual and animation data associated with each actor sprite.
+
+Design Intent
+Actors are designed to be:
+- Data-driven — Fully defined via database and map configuration
+- Reusable — The same actor definition can be instantiated in multiple contexts
+- Script-integrated — Behavior is driven through script hooks rather than hardcoded logic
+
+Guiding Principle
+Actors define what an entity is, while scripts and systems define what it does.

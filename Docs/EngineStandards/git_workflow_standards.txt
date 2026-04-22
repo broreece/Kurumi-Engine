@@ -1,0 +1,28 @@
+Branch structure:
+Key branches
+    - Main:
+        - Always stable
+        - Always executable
+        - Should represent the previous build
+
+    - Dev:
+        - Contains integration of current build tickets
+        - Features are merged before build release
+        - Does not have to be stable as long as tickets are completed.
+
+Feature branches:
+Format: feature/<ticket-reference>-<short-description>
+E.G: feature/AMS-01-Adds-the-map-state
+
+Refractor branches:
+Format: refactor/<build-name> OR refractor/<area>
+E.G: refractor/forge OR refractor/change-to-allman-brackets
+
+Bug fixes:
+Format: fix/<bug-description>
+E.G fix/actor-movement-not-rendering
+
+Workflow:
+Branch from dev when starting work on a new feature, use meaningful commit messages without vague wording like "fix"
+or "update". When feature is deemed to be completed merge into dev, for releases merge dev into master then tag the
+release with the build name.

@@ -1,0 +1,4 @@
+max_party_size: 4
+max_enemy_formation_size: 6
+save_files: 5
+agility_stat_index: 2

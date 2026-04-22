@@ -1,0 +1,241 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Forge (Post-Crucible)
+Status: In Progress
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Crucible' release.
+
+The 'Forge' phase initially focused on introducing structured data formats for actors and scripts, alongside minor map 
+scene improvements. However, this quickly evolved into a deeper refactor targeting:
+
+- Configuration loading
+- Script system architecture
+- Database structure
+- Engine-wide decoupling
+
+This refactor occurred shortly after the 'Anvil' phase, highlighting a key lesson: best practices must be applied 
+proactively, not reactively.
+
+---------------------------------------------------------------------
+
+CORE ARCHITECTURAL CHANGES
+
+- Shifted toward strict decoupling across the engine.
+- Moved logic out of objects and into dedicated systems.
+- Reduced reliance on inheritance in favor of composition and interfaces.
+- Standardized use of loaders, repositories, and converters.
+- Eliminated unnecessary abstractions and custom data structures.
+- Follow microsoft conventions for namespaces, using statements and now field name cases starting with an underscore.
+- Ordering of fields, auto-properties, constructors and functions has been decided.
+- Swap to allman brace style again for microsoft conventions.
+
+---------------------------------------------------------------------
+
+MAP & ACTOR SYSTEMS
+
+- Actors can now render both above and below the party, enabling more dynamic maps.
+- Actors and party entities are no longer constrained to tile size:
+  - Proper centering is maintained regardless of width/height.
+- Map data structure redesigned:
+  - Now uses a dictionary keyed by combined (X, Y) indices.
+  - Each entry stores both tile model and actor model.
+- Multiple actors can now occupy the same tile as long as they don't block the tile.
+
+---------------------------------------------------------------------
+
+SCRIPT SYSTEM REFACTOR
+
+- Scripts converted from string-based format to JSON.
+- Registries now store JSON script definitions referenced by ID.
+- Eliminated string parsing and manipulation overhead.
+- Introduced a pipeline:
+  - Repository → Loader → Converter
+- Removed sub-script types (previously redundant context wrappers).
+- Replaced custom data structures with standard dictionary-based storage.
+
+RESULT:
+- Improved performance
+- Increased readability
+- Reduced overengineering
+
+---------------------------------------------------------------------
+
+DATABASE SYSTEM REDESIGN
+
+- Expanded database to include:
+  - Actors
+  - Actor sprites
+  - Enemy formations (static components)
+- Introduced structured pipeline:
+  - Loaders → Repositories → Rows
+- Replaced object arrays with SQL readers.
+- Standardized dictionary-based data access instead of array conversions.
+
+---------------------------------------------------------------------
+
+CONFIG SYSTEM CHANGES
+
+- Removed config managers entirely.
+- Introduced a global loader system.
+- Significantly reduced code duplication and size.
+
+---------------------------------------------------------------------
+
+ENTITY & GAMEPLAY STRUCTURES
+
+- Removed Enemy class (no meaningful extension over Entity).
+- Replaced entity element inheritance:
+  - Now uses interfaces + composable element lists.
+  - Supports stat, elemental, status, and ability modifiers.
+- Deleted Battle object:
+  - Logic redistributed into systems.
+- Renamed:
+  - Skills → AbilitySets
+  - InventoryItem → InventoryEntry
+
+---------------------------------------------------------------------
+
+DATA STRUCTURE SIMPLIFICATION
+
+- Removed:
+  - Party object
+  - Tile object
+  - Map object
+- Replaced with:
+  - Serializable data formats
+  - Read-only primitive representations (e.g., tile int lists)
+- Moved all behavior into systems.
+
+---------------------------------------------------------------------
+
+SAVE & PERSISTENCE SYSTEM
+
+- Renamed "Save" folder → "Persistence".
+- Unified dynamic model into a single save file.
+- Eliminated fragmented save folder structure.
+
+---------------------------------------------------------------------
+
+RUNTIME & DATA ORGANIZATION
+
+- Renamed "Game" folder → "Data".
+- Separated data into:
+  - Static (database)
+  - Dynamic (save data)
+  - Runtime (hybrid objects)
+- Moved enemy formations into runtime layer:
+  - Static definitions in database
+  - Dynamic model in save files
+
+---------------------------------------------------------------------
+
+FACTORY & OBJECT CREATION
+
+- Removed need for multiple actor subclasses.
+- Introduced specialized factories:
+  - Responsible for behavior validation and controller assignment.
+
+---------------------------------------------------------------------
+
+ENGINE CLEANUP
+
+- Reduced GameContext from a “god object”:
+  - Now holds only core game elements.
+- Removed some utils classes:
+  - Migrated valid logic into services.
+  - Eliminated non-generic or unused utilities.
+
+---------------------------------------------------------------------
+
+SCRIPT CONTEXT IMPROVEMENTS
+
+- Introduced capability-based design:
+  - Contexts expose a dictionary of capability interfaces.
+- Each script step accesses only required functionality.
+- Eliminates:
+  - Overexposed interfaces
+  - God-context risks
+
+---------------------------------------------------------------------
+
+INPUT SYSTEM REDESIGN
+
+- Introduced unified input pipeline: InputSystem → InputMapper → InputState → InputContext.
+- Abstracted all inputs into InputActions (no raw keys outside InputSystem).
+- Implemented InputContextManager with single active context (e.g. Gameplay, UI).
+- Decoupled input detection from behavior; contexts interpret inputs without global execution.
+- Removed all input handling from gameplay and UI layers.
+
+---------------------------------------------------------------------
+
+UI SYSTEM REDESIGN
+
+- Built hierarchical UI structure: UIElement + components (UILayout, IUIComponent, offsets).
+- Enforced separation: UI handles structure/rendering only (no logic, no input).
+- Introduced UIState (data) and UIView (visual translation layer).
+- Standardized flow: InputContext → UIState → UIView → UIElement → Render.
+- Established UIState as source of truth; TextData as render buffer.
+- Eliminated duplicated UI logic and implicit behavior.
+
+---------------------------------------------------------------------
+
+RENDERER SYSTEM REDESIGN
+
+- Introduced centralized RenderSystem to handle all drawing operations.
+- Replaced direct GameWindow.Draw() calls with command-based submission (RenderCommand).
+- Implemented layered rendering pipeline (e.g. World, UI) with ordered draw execution.
+- Established push-based model: systems submit render data, RenderSystem executes.
+- Refactored GameWindow into a pure render surface (removed input handling and event logic).
+- Decoupled rendering from gameplay, UI, and input systems.
+- Standardized render flow: Systems → RenderSystem → GameWindow.
+
+---------------------------------------------------------------------
+
+CAMERA SYSTEM REFACTOR
+
+- Replaced manual screen-centering logic with SFML View-based camera.
+- Eliminated need for manual scaling calculations across systems; scaling now handled implicitly by View.
+
+---------------------------------------------------------------------
+
+STATE AND SCENE SYSTEM REDESIGN
+
+- Completely redesigned the states and scenes to provide better decoupling from other systems.
+- Scenes have been removed, instead replaced with rendering systems.
+
+---------------------------------------------------------------------
+
+DEVELOPER TOOLING
+
+- Introduced IDE ruler at 120 characters:
+  - Enforces consistent formatting and readability.
+
+---------------------------------------------------------------------
+
+DOCUMENTATION
+
+- Expanded internal documentation to include:
+  - Coupling principles
+  - System design philosophy (Engine and infrastructure)
+  - Factory usage guidelines
+
+---------------------------------------------------------------------
+
+BOILER PLATE CODE REMOVAL
+
+- Boiler plate code has been removed and replace with C# auto properties.
+- This removed 2400 lines of code and comments that were previously just getters, constructors or setters.
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+- Reactive refactoring is costly; proactive design is required.
+- Simplicity (JSON, dictionaries, lists) outperforms custom abstractions.
+- Systems-driven architecture provides better scalability and clarity.
+- Decoupling must be enforced as a core engineering principle.
+
+---------------------------------------------------------------------

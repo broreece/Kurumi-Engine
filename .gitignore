@@ -1,0 +1,36 @@
+# - Ignore binary files and visual studio code files.
+bin/
+.vscode
+obj
+Kurumi-Engine.sln
+
+# - Ignore tracking file
+.VSCodeCounter
+
+# - Ignore assets
+Kurumi-Engine/Assets/Art/ActorSpriteSheets/*
+Kurumi-Engine/Assets/Art/AnimatedTileSpriteSheets/*
+Kurumi-Engine/Assets/Art/AnimationSpriteSheets/*
+Kurumi-Engine/Assets/Art/BattleBackgroundArt/*
+Kurumi-Engine/Assets/Art/CharacterBattleSpriteSheets/*
+Kurumi-Engine/Assets/Art/CharacterFieldSpriteSheets/*
+Kurumi-Engine/Assets/Art/CharacterMenuSpriteSheets/*
+Kurumi-Engine/Assets/Art/EnemyBattleSprites/*
+Kurumi-Engine/Assets/Art/MapBackgroundArt/*
+Kurumi-Engine/Assets/Art/TileSpriteSheets/*
+Kurumi-Engine/Assets/Art/Windows/ChoiceSelectionArt/*
+Kurumi-Engine/Assets/Art/Windows/WindowArt/*
+Kurumi-Engine/Assets/Fonts/*
+Kurumi-Engine/Assets/Licenses/*
+Kurumi-Engine/Assets/Maps/*
+Kurumi-Engine/Assets/Registry/*
+Kurumi-Engine/Assets/Scripts/*
+
+# - Ignore the game database.
+Kurumi-Engine/Infrastructure/Database/Database/game_data.db
+
+# - Ignore save files.
+Kurumi-Engine/Saves
+
+# - Ignore logs.
+Kurumi-Engine/logs/*

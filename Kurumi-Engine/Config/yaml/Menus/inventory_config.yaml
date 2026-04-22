@@ -1,0 +1,14 @@
+window_id: 1
+choice_box_id: 0
+font_id: 0
+font_size: 25
+
+inventory_items_width: 80
+inventory_items_height: 65
+inventory_items_x: 100
+inventory_items_y: 175
+
+inventory_item_description_width: 80
+inventory_item_description_height: 15
+inventory_item_description_x: 100
+inventory_item_description_y: 50

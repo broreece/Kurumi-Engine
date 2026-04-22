@@ -1,0 +1,88 @@
+Coding Standards
+The following standards define the conventions used throughout the engine. These guidelines ensure consistency, 
+readability, and maintainability across the codebase.
+
+C# Version
+    The engine is built using C# 10.0 (.NET 8).
+    Upgrading to newer versions is not expected to require significant structural changes.
+
+Naming Conventions
+    Classes, methods, and constructors use PascalCase
+    Example: MyClass, CalculateDamage()
+    Variables and parameters use camelCase
+    Example: currentHp, damageValue
+    Fields use camel case starting with an '_'
+    Example _filePath
+    Reference:
+    https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+
+Namespaces and Imports
+    Namespace declarations appear after using statements
+    This is the same as Microsoft’s recommended style.
+    When using using directives inside a namespace, prefer fully qualified names.
+    External libraries should be listed after all internal namespaces. and system imports should appear first.
+    Seperate libraries with new lines for each type of library.
+    Reference:
+    https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+
+Logical Operators
+    Use short-circuit operators:
+    && instead of &
+    || instead of |
+    This follows standard C# conventions and avoids unintended evaluations.
+    Reference:
+    https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+
+Bracing Style
+    Follow the newman style for braces:
+    if (condition) 
+    {
+        // code
+    }
+    Reference:
+    https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
+
+Strings
+    Use string interpolation for all formatted strings:
+    var message = $"Damage dealt: {damage}";
+    Reference:
+    https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/tokens/interpolated
+
+Documentation (XML Comments)
+    Use XML documentation comments for public classes and methods that might require explanation.
+    Include:
+    <summary>
+    <param>
+    <returns>
+    <exception> (where applicable)
+    This ensures clear documentation and improves IDE support.
+    Reference:
+    https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/xmldoc/recommended-tags
+
+Line Length (Ruler Rule)
+    Maximum line length: 120 characters
+    Applies to:
+    Code
+    Comments
+    Documentation
+    Reference:
+
+Class ordering details:
+    Classes are ordered by the following:
+        - Fields:
+            - Consts
+            - Static readonly
+            - Instance readonly
+            - mutable fields.
+        - Auto-Properties:
+            - Public
+            - Protected (Or internal)
+            - Private
+        - Constructors
+        - Public methods
+        - Protected or internal methods
+        - Private methods
+        - Internal classes.
+
+Internal classes:
+    Use only if the internal class is never referenced elsewhere.

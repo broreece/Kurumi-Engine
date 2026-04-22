@@ -1,0 +1,7 @@
+window_file_width: 48
+window_file_height: 48
+
+choice_selection_file_width: 40
+choice_selection_file_height: 10
+
+max_lines_per_window: 4

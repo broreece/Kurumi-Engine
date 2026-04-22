@@ -1,0 +1,92 @@
+Enemy formations represent one of the most complex systems in the project. They define groups of enemies, their 
+behavior, persistence, and interaction across both map and battle systems.
+
+Enemy formations are composed of:
+- Saveable runtime data stored in JSON (e.g. position, state)
+- Static definitions stored in the database (e.g. structure, behavior)
+
+------------------------
+
+File Format
+
+JSON Data:
+The following fields define the runtime model of an enemy formation:
+- X / Y: The formation’s position on the map.
+- Found: Indicates whether the formation has detected the player.
+- Dead: Indicates whether the formation has been defeated.
+
+Database Data:
+Additional formation data is defined in the database, including:
+
+- ReturnX / ReturnY: The position the formation returns to if it loses the player.
+
+- SpriteID: Reference to the formation’s visual representation.
+
+- Enemy Layout (Relational Table): Defines the enemies within the formation and their positions in battle.
+
+------------------------
+
+Enemies and Their Data
+
+Each formation contains an "Enemies" array. This includes all enemies and body parts within the formation.
+
+Per Enemy:
+- Statuses: The current statuses applied to the enemy.
+
+Database-Defined Properties:
+- Available actions
+- Parent or connected body part
+- Additional relational data defining structure and behavior
+
+Battle Scripts Table:
+Each enemy (or body part) can define scripted behavior using:
+
+- Script: The script executed during battle.
+- Target: The default target for the action.
+- StartTurn: The turn number when the script begins execution (first turn is 0).
+- Frequency: How often the script executes after starting.
+
+OnKillScript:
+- Each body part may define a script that executes when it is destroyed.
+
+------------------------
+
+Formation Scripts
+
+Each enemy formation defines a set of scripts:
+- OnFoundScript: Executes when the formation detects the player.
+- MovementPatternScript: Controls movement behavior before the player is detected.
+- OnLoseScript: Executes when the player loses the battle.
+- OnWinScript: Executes when the player wins the battle.
+
+------------------------
+
+Map Data
+
+Enemy formations can appear on maps and include the following:
+- MapID
+- ArtID
+- X / Y position
+
+Additional properties:
+- Loot Pool: Defines rewards granted upon looting the corpse.
+- Return Location: Position the formation returns to after losing the player.
+- Found / Dead flags: Runtime state indicators.
+
+------------------------
+
+Battle Scripts
+
+Battle scripts define behavior during combat. They execute at defined intervals and allow each enemy or body part to 
+act based on the current battle state.
+
+------------------------
+
+Map Scripts
+
+Enemy formations use several map-level scripts:
+- OnFoundActor: Actor used when the formation detects the player.
+- MovementPatternActor: Actor controlling movement before detection.
+- AutoEvent: Automatically executed script (e.g. resurrection or passive effects).
+- OnLoseScript: Executes after the player loses the battle.
+- OnWinScript: Executes after the player wins the battle.

@@ -1,0 +1,44 @@
+As of the “Forge” phase, the engine adopts a factory-based construction model for creating game objects.
+
+Factories are used in conjunction with private constructors to control and centralize object creation. This ensures 
+that objects are only instantiated through defined pathways, enforcing consistency and preventing invalid states.
+
+When to Use a Factory
+A factory should be used if any of the following conditions apply:
+- Data-driven construction
+- The object is created from external data sources (e.g. database files, JSON, YAML).
+- Non-trivial construction logic
+- The constructor performs logic beyond simple assignment, including validation or the possibility of throwing 
+    exceptions.
+- Core game data objects
+- The object represents core game data and is not:
+    - A transient/runtime-only object
+    - Owned directly by another object (e.g. EntityModifier, Controller)
+    - A service or logic class
+
+When a Factory is NOT Required
+Factories are generally unnecessary for:
+- Lightweight runtime objects
+- Objects fully owned and managed by another class
+- Services or logic-focused classes
+- Simple data containers with no validation or logic
+
+Benefits of Using Factories
+Factories support clean architecture and SOLID principles by:
+- Controlling object creation
+- Prevents invalid or inconsistent instantiation across the codebase
+- Centralizing construction logic
+- Ensures all initialization, validation, and setup occur in one place
+- Enforcing proper ownership boundaries
+- Objects are only created where they logically belong
+- Improving maintainability
+- Changes to construction logic are isolated and easier to manage
+
+
+Data Flow Model
+Factories are part of a standardized data pipeline:
+Data → Loader → Factory → Registry
+Data: Raw external data (JSON, YAML, etc.)
+Loader: Parses and structures raw data
+Factory: Constructs validated runtime objects
+Registry: Stores and provides access to constructed objects
