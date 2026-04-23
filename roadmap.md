@@ -48,14 +48,14 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Next milestone:
-### Re-Forge
+## Milestone: Re-Forge
 **Focus areas:**
 
 - Re-implement battle state
 - Re-implement battle rendering
 - Re-implement removed script steps
-- Re-implement UI elements such that battle state and removed script steps function as before.
+- Re-implement UI elements such that battle state and removed script steps function as before
+- Ensure scripts freeze when activating freezing steps such as opening a text box
 
 ---
 
@@ -134,7 +134,26 @@ and re-add any deleted script steps.
 
 ---
 
-Re-forge reached.
+## Map state background is not being rendered. ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 3 ###
+
+**Description:** When we are rendering the map the background is not rendering.
+
+**Steps:**
+- In map renderer change just passing tiles to instead pass an interface which can access tiles and the map background
+texture.
+- Render the map background texture scaled to the full screen size.
+
+---
+
+## Milestone: Quench
+**Focus areas:**
+
+- Focused primarily on minor clean up
+- Allows non-passable tiles to be see-through
 
 ---
 
@@ -216,6 +235,36 @@ dictionary.
 - Edit the index variables to be strings called "ActorKey".
 - Edit the way the maps store actors from a list to a string dictionary initally:
     - We will need to change how we convert the list to a dictionary of int coordinates.
+
+---
+
+## Cache factories currently being made in game state. ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Currently in the battle state and map state we are creating factories. This should all be done in
+bootstrap and stored in game context to improve performance.
+
+**Steps:**
+- Go through map state and battle state removing factory initalization and store them in game context instead.
+
+---
+
+## Clean up the roadmap, make release plan for all tickets. ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Current roadmap is a bit messy and needs to be cleaned up.
+
+**Steps:**
+- Go through the roadmap and clean it all up.
+- Ensure all tickets are planned and grouped in releases.
+
+---
 
 ---
 
@@ -358,7 +407,7 @@ Allow battle scenes to end either in victory of fail.
 ### Momentum: 3 ###
 ### Impact: 1 ###
 
-**Description:** Make the error message look more like a windows error message.
+**Description:** Make the error message look unique.
 
 **Steps:**
 - Make a icon for the error windows.
@@ -368,11 +417,11 @@ Allow battle scenes to end either in victory of fail.
 
 ---
 
-## (FD-01) Forge Build Demonstration ##
+## Create demonstration video ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
 ### Momentum: 4.5 ###
-### Impact: 1 ###
+### Impact: 3 ###
 
 **Description:**
 Create a small demonstration scenario showcasing key engine capabilities implemented during the Forge build.
@@ -683,19 +732,6 @@ a modifier that activates an effect when they attack, when they get attacked etc
 
 **Description** In the map loader we can create a custom exception to specify the issue. Also exists in asset registry
 and script registry.
-
-**Steps:** N/A
-
----
-
-## (MLE-01) In the database we might be able to interface in some instances. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description** The main example I found was in the enemy formation loader we only access the ID from the enemy rows,
-perhaps we can interface this? We'll need to check how neccesary doing that would be.
 
 **Steps:** N/A
 

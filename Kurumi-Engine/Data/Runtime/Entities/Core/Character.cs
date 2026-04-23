@@ -16,6 +16,8 @@ public sealed class Character : IStats, IHasStatuses
         _model = model;
     }
 
+    public string GetBattleSpriteName() => _definition.BattleSprite;
+
     public int CurrentHP 
     {
         get => _model.CurrentHP;

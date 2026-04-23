@@ -31,9 +31,7 @@ public sealed class MapRendererFactory
         _tileSheetConfig = tileSheetConfig;
     }
 
-    public MapRenderer Create(
-        IReadOnlyList<TileModel> tiles, 
-        string tileSheetTextureName) 
+    public MapRenderer Create(IReadOnlyList<TileModel> tiles, string tileSheetTextureName) 
     {
         var tileSheetTexture = _assetRegistry.GetTexture(
             AssetType.TileSpriteSheets, 

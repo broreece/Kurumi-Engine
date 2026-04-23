@@ -15,7 +15,7 @@ public sealed class MovementActions : IMovementActions
 
     public void ForceMoveActor(bool keepDirection, bool lockMovement, bool instant, int actorIndex, List<int> path) 
     {
-        var actor = _map.GetActors()[actorIndex];
+        var actor = _map.Actors[actorIndex];
         actor.MaintainFacing = keepDirection;
         actor.AddController(new PathedController(canFinish: true, path) { Interval = actor.ActorInfo.MovementSpeed });
     }

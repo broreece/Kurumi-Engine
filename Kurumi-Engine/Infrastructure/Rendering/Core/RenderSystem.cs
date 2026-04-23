@@ -17,7 +17,8 @@ public sealed class RenderSystem
     /// <summary>
     /// Loops through all render commands and draws them.
     /// </summary>
-    public void Render() {
+    public void Render() 
+    {
         _window.Clear();
         foreach (var command in _commands) 
         {

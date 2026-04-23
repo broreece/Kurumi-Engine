@@ -9,7 +9,7 @@ using Infrastructure.Rendering.Core;
 
 namespace Engine.Systems.Rendering.Factories;
 
-public sealed class PartyRendererFactory
+public sealed class PartyMapRendererFactory
 {
     private readonly AssetRegistry _assetRegistry;
 
@@ -21,7 +21,7 @@ public sealed class PartyRendererFactory
     private readonly int _tileWidth;
     private readonly int _tileHeight;
 
-    public PartyRendererFactory(
+    public PartyMapRendererFactory(
         AssetRegistry assetRegistry,
         RenderSystem renderSystem,
         Registry<CharacterDefinition> characterRegistry,
@@ -37,12 +37,12 @@ public sealed class PartyRendererFactory
         _tileHeight = tileHeight;
     }
 
-    public PartyRenderer Create(Party party)
+    public PartyMapRenderer Create(Party party)
     {
         string partySpriteFilePath = _characterRegistry.Get(party.PartyModel.PartyMembers[0]).FieldSprite;
         var partyTexture = _assetRegistry.GetTexture(AssetType.CharacterFieldSpriteSheets, partySpriteFilePath);
 
-        return new PartyRenderer(
+        return new PartyMapRenderer(
             _renderSystem,
             _characterFieldSpriteConfig,
             party,
