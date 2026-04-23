@@ -11,6 +11,16 @@ public sealed class Map
     private Dictionary<(int, int), List<Actor>>? _actorDictionary;
     private IReadOnlyList<Actor>? _actors;
 
+    public int Width => _mapModel.Width;
+
+    public int Height => _mapModel.Height;
+
+    public IReadOnlyList<Actor> Actors => _actors!;
+
+    public IReadOnlyList<TileModel> Tiles => _mapModel.Tiles;
+
+    public string TileSheetName => _mapModel.TileSheetName;
+
     internal Map(MapModel mapModel, IReadOnlyDictionary<(int, int), TileModel> tileDictionary) 
     {
         _mapModel = mapModel;
@@ -62,14 +72,4 @@ public sealed class Map
         }
         return [];
     }
-
-    public int GetWidth() => _mapModel.Width;
-
-    public int GetHeight() => _mapModel.Height;
-
-    public IReadOnlyList<Actor> GetActors() => _actors!;
-
-    public IReadOnlyList<TileModel> GetTiles() => _mapModel.Tiles;
-
-    public string GetTileSheetName() => _mapModel.TileSheetName;
 }

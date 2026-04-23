@@ -34,7 +34,7 @@ public sealed class NavigationGrid
 
     private bool InMapRange(int xLocation, int yLocation) 
     {
-        return xLocation >= 0 && xLocation < _map.GetWidth() && yLocation >= 0 && yLocation < _map.GetHeight();
+        return xLocation >= 0 && xLocation < _map.Width && yLocation >= 0 && yLocation < _map.Height;
     }
 
     private bool IsTilePassable(IReadOnlyList<int> tileObjects) 

@@ -11,6 +11,8 @@ public sealed class PathedController : Controller
     private int _currentPathStepIndex = 0;
     private bool _finished = false;
 
+    public override bool IsFinished => _finished;
+
     public PathedController(bool canFinish, IReadOnlyList<int> actorPath) 
     {
         _canFinish = canFinish;
@@ -40,6 +42,4 @@ public sealed class PathedController : Controller
         var nextStep = _actorPath[_currentPathStepIndex];
         return nextStep;
     }
-
-    public override bool IsFinished() => _finished;
 }

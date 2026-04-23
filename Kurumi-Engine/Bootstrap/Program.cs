@@ -1,8 +1,11 @@
+// Engine classes.
 using Config.Core;
+
 using Data.Runtime.Actors.Factories;
 using Data.Runtime.Maps.Factories;
 using Data.Runtime.Party.Core;
 using Data.Runtime.Party.Factory;
+
 using Engine.Assets.Core;
 using Engine.Context.Containers;
 using Engine.Context.Core;
@@ -11,16 +14,21 @@ using Engine.Input.Mapper;
 using Engine.Input.System;
 using Engine.State.Base;
 using Engine.State.Core;
-using Engine.State.States;
+using Engine.State.States.Maps.Core;
+
 using Game.Maps.Loader;
 using Game.Maps.Registry;
 using Game.Maps.Services;
 using Game.Scripts.Library;
+
 using Infrastructure.Database.Database;
 using Infrastructure.Persistance.Base;
 using Infrastructure.Persistance.Services;
 using Infrastructure.Rendering.Base;
+using Infrastructure.Rendering.Core;
 
+
+// External libraries.
 using SFML.System;
 
 namespace Bootstrap;
@@ -32,13 +40,18 @@ public static class Program
         var paths = BuildPaths();
 
         var gameData = BuildGameData(paths);
+        var window = BuildWindow(gameData);
         var input = BuildInput();
 
         var saveService = new SaveService(paths.SavePath);
         var saveData = saveService.LoadNewSaveData();
-        var partyFactory = new PartyFactory();
+        var partyFactory = new PartyFactory(
+            saveData.Characters, 
+            gameData.GameDatabase.CharacterRegistry, 
+            gameData.ConfigProvider.GameConfig.MaxPartySize
+        );
         var party = partyFactory.Create(saveData.Party, saveData.Inventory);
-        var gameServices = BuildGameServices(paths, input, gameData, saveService, party);
+        var gameServices = BuildGameServices(paths, input, gameData, saveService, party, window);
 
         var gameObjects = BuildGameObjects(gameServices, saveData, party);
 
@@ -49,7 +62,6 @@ public static class Program
             GameServices = gameServices
         };
 
-        var window = BuildWindow(gameData);
 
         var stateContext = new StateContext() 
         {
@@ -115,11 +127,13 @@ public static class Program
         };
     }
 
-    private static GameServices BuildGameServices(Paths paths, 
+    private static GameServices BuildGameServices(
+        Paths paths, 
         InputBundle input, 
         GameData gameData, 
         SaveService saveService, 
-        Party party) 
+        Party party,
+        GameWindow gameWindow) 
     {
         var mapRegistryPath = Path.Combine(paths.RegistryRoot, "map_registry.json");
         MapService mapService = new(
@@ -134,8 +148,14 @@ public static class Program
             new SmartTrackingActorFactory(), 
             party));
 
-        return new GameServices{ScriptLibrary = new ScriptLibrary(paths.RegistryRoot), MapService = mapService, 
-            SaveService = saveService, InputMapper = input.Mapper};
+        return new GameServices() 
+        {
+            MapService = mapService, 
+            SaveService = saveService, 
+            ScriptLibrary = new ScriptLibrary(paths.RegistryRoot), 
+            InputMapper = input.Mapper,
+            RenderSystem = new RenderSystem(gameWindow)
+        };
     }
 
     private static GameObjects BuildGameObjects(GameServices services, SaveData saveData, Party party) 
@@ -156,7 +176,7 @@ public static class Program
     {
         var clock = new Clock();
 
-        while (window.IsOpen()) 
+        while (window.IsOpen) 
         {
             window.DispatchEvents();
 

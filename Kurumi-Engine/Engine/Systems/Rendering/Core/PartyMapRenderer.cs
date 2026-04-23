@@ -10,9 +10,9 @@ using SFML.System;
 namespace Engine.Systems.Rendering.Core;
 
 /// <summary>
-/// System that renders the party state.
+/// System that renders the party map state.
 /// </summary>
-public sealed class PartyRenderer 
+public sealed class PartyMapRenderer 
 {
     private readonly RenderSystem _renderSystem;
 
@@ -24,7 +24,7 @@ public sealed class PartyRenderer
     private readonly Party _party;
     private readonly Texture _partyTexture;
 
-    internal PartyRenderer(
+    internal PartyMapRenderer(
         RenderSystem renderSystem, 
         CharacterFieldSpriteConfig characterFieldSpriteConfig, 
         Party party, 

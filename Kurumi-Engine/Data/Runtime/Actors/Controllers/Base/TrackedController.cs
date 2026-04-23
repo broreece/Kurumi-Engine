@@ -10,10 +10,10 @@ public abstract class TrackedController : Controller
 {
     protected readonly IPositionProvider _targetLocation;
 
+    public override bool IsTrackedController => true;
+
     protected TrackedController(IPositionProvider targetLocation) 
     {
         _targetLocation = targetLocation;
     }
-
-    public override bool IsTrackedController() => true;
 }

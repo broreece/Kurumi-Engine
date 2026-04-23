@@ -1,4 +1,3 @@
-using Data.Runtime.Actors.Core;
 using Engine.Systems.Rendering.Base;
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
@@ -19,8 +18,12 @@ public sealed class ActorRenderer
     private readonly int tileWidth;
     private readonly int tileHeight;
 
-    internal ActorRenderer(RenderSystem renderSystem, IReadOnlyList<ActorRenderData> actorRenderData, int tileWidth, 
-        int tileHeight) {
+    internal ActorRenderer(
+        RenderSystem renderSystem, 
+        IReadOnlyList<ActorRenderData> actorRenderData, 
+        int tileWidth, 
+        int tileHeight) 
+    {
 
         this.renderSystem = renderSystem;
         this.actorRenderData = actorRenderData;
@@ -60,7 +63,7 @@ public sealed class ActorRenderer
                 )
             };
 
-            renderSystem.Submit(new RenderCommand() {Layer = layer, Drawable = sprite, States = RenderStates.Default});
+            renderSystem.Submit(new RenderCommand() { Layer = layer, Drawable = sprite, States = RenderStates.Default });
         }
     }
 }
