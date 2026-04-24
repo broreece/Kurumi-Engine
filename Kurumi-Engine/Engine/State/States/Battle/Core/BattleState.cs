@@ -9,6 +9,13 @@ using Engine.State.States.Battle.Base;
 using Engine.Systems.Camera;
 using Engine.Systems.Rendering.Core;
 using Engine.Systems.Rendering.Factories;
+using Engine.UI.Data.Style;
+using Engine.UI.Elements;
+using Engine.UI.Layout.Core;
+using Engine.UI.Render;
+
+using Game.UI.Views;
+using Infrastructure.Rendering.Core;
 
 namespace Engine.State.States.Battle.Core;
 
@@ -31,11 +38,22 @@ public sealed class BattleState : IGameState
     // Battle variable.
     private readonly BattleStartRequest _battle;
 
+    // UI elements.
+    private readonly UIElement _uiRoot;
+    private readonly BattleView _view;
+
+    // UI renderer.
+    private readonly UIRenderSystem _uiRenderSystem;
+
+    // Render system.
+    private RenderSystem? _renderSystem;
+
     // Renderers.
     private BattleRenderer? _battleRenderer;
     private EnemyRenderer? _enemyRenderer;
     private PartyBattleRenderer? _partyBattleRenderer;
 
+    // Camera.
     private Camera? _camera;
 
     // List of actions to be executed in order.
@@ -61,6 +79,15 @@ public sealed class BattleState : IGameState
         var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
 
         _formation = formationFactory.Create(formationDefinition, formationModel);
+
+        var battleWindowName = _gameContext.GameData.ConfigProvider.BattleWindowConfig.WindowArtName;
+        var windowStyle = new WindowStyle() { WindowArt = battleWindowName };
+        var textStyle = new TextStyle() { FontSize = 12, FontArt = "Font doesn't work right now "};
+
+        _view = new BattleView(windowStyle, textStyle, _gameContext.GameData.AssetRegistry);
+        _uiRoot = _view.Build();
+
+        _uiRenderSystem = new UIRenderSystem(new UILayoutSystem());
     }
 
     public void OnEnter()
@@ -83,7 +110,11 @@ public sealed class BattleState : IGameState
         _battleRenderer!.Update();
         _enemyRenderer!.Update();
         _partyBattleRenderer!.Update();
-        _gameContext.GameServices.RenderSystem.Render();
+
+        // Render the UI.
+        _uiRenderSystem.Render(_uiRoot, _renderSystem!, _stateContext.GameWindow.Size);
+
+        _renderSystem!.Render();
     }
 
     private void CacheDependencies() 
@@ -116,6 +147,9 @@ public sealed class BattleState : IGameState
             configProvider.CharacterBattleSpriteConfig
         );
         _partyBattleRenderer = partyBattleRendererFactory.Create(_party);
+
+        // Renderer.
+        _renderSystem = _gameContext.GameServices.RenderSystem;
     }
 
     private void HandleInput() 

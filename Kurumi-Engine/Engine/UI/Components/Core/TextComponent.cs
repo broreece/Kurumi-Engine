@@ -22,7 +22,7 @@ public sealed class TextComponent : IUIComponent
         _text.Scale = transform.Scale;
     }
 
-    public void Draw(RenderTarget target) => target.Draw(_text);
+    public Drawable? GetDrawable() => _text;
 
     public Vector2u GetContentSize() 
     {

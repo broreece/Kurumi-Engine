@@ -13,7 +13,7 @@ public sealed class EmptyComponent : IUIComponent
 {
     public void Apply(UITransform transform) {}
 
-    public void Draw(RenderTarget target) {}
+    public Drawable? GetDrawable() => null;
 
     public Vector2u GetContentSize() => new(0, 0);
 

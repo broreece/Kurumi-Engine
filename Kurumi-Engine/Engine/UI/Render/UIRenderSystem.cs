@@ -1,12 +1,17 @@
+using Engine.Systems.Rendering.Base;
 using Engine.UI.Elements;
 using Engine.UI.Layout.Base;
 using Engine.UI.Layout.Core;
+
+using Infrastructure.Rendering.Base;
+using Infrastructure.Rendering.Core;
+
 using Utils.Maths;
 
 using SFML.Graphics;
 using SFML.System;
 
-namespace Enigne.UI.Render;
+namespace Engine.UI.Render;
 
 public sealed class UIRenderSystem 
 {
@@ -21,11 +26,11 @@ public sealed class UIRenderSystem
     /// Renders the UI element on the provided render target, starts recursive render element function.
     /// </summary>
     /// <param name="root">The UI element root object.</param>
-    /// <param name="target">The render target being rendered on.</param>
+    /// <param name="renderSystem">The render system.</param>
     /// <param name="windowSize">The size of the game window.</param>
-    public void Render(UIElement root, RenderTarget target, Vector2u windowSize) 
+    public void Render(UIElement root, RenderSystem renderSystem, Vector2u windowSize) 
     {
-        RenderElement(root, target, windowSize, new Vector2f(0, 0), new Vector2f(1, 1));
+        RenderElement(root, renderSystem, windowSize, new Vector2f(0, 0), new Vector2f(1, 1));
     }
 
     /// <summary>
@@ -33,14 +38,14 @@ public sealed class UIRenderSystem
     /// element's location to ensure correct placement.
     /// </summary>
     /// <param name="element">The UI element being rendered.</param>
-    /// <param name="target">The render target being rendered on.</param>
+    /// <param name="renderSystem">The render system.</param>
     /// <param name="windowSize">The size of the game window.</param>
     /// <param name="parentPosition">The recursively changing parent position of the UI element updates based on
     /// local offset.</param>
     /// <param name="parentScale">The scale applied from the parent UI element.</param>
     private void RenderElement(
         UIElement element, 
-        RenderTarget target, 
+        RenderSystem renderSystem, 
         Vector2u windowSize, 
         Vector2f parentPosition,
         Vector2f parentScale) 
@@ -58,15 +63,23 @@ public sealed class UIRenderSystem
             ? layoutTransform.Scale
             : VectorMultiplication.Multiple(parentScale, layoutTransform.Scale);
 
-
         // Apply the final tansform and draw.
         UITransform finalTransform = new() { Position = finalPosition, Scale = finalScale };
         element.UIComponent.Apply(finalTransform);
-        element.UIComponent.Draw(target);
+        
+        var drawable = element.UIComponent.GetDrawable();
+        if (drawable != null) {
+            renderSystem.Submit(new RenderCommand() 
+            { 
+                Layer = (int) RenderLayer.UI, 
+                States = RenderStates.Default, 
+                Drawable = drawable
+            });
+        }
 
         // Recurse into children.
         foreach (var child in element.Children) {
-            RenderElement(child, target, windowSize, finalPosition, finalScale);
+            RenderElement(child, renderSystem, windowSize, finalPosition, finalScale);
         }
     }
 }

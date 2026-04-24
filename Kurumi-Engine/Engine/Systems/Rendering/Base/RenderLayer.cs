@@ -16,5 +16,7 @@ public enum RenderLayer
     PartyBattleLayer = 6,
     AbovePartyBattleLayer = 8,
     BaseEnemyLayer = 9,
-    EnemyBodyPartsLayer = 10
+    EnemyBodyPartsLayer = 10,
+
+    UI = 11
 }

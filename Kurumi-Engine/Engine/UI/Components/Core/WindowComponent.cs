@@ -10,9 +10,9 @@ public sealed class WindowComponent : IUIComponent
 {
     private readonly Sprite _sprite;
 
-    internal WindowComponent(Sprite sprite) 
+    internal WindowComponent(Texture texture) 
     {
-        _sprite = sprite;
+        _sprite = new Sprite(texture);
     }
 
     public void Apply(UITransform transform) 
@@ -21,7 +21,7 @@ public sealed class WindowComponent : IUIComponent
         _sprite.Scale = transform.Scale;
     }
 
-    public void Draw(RenderTarget target) => target.Draw(_sprite);
+    public Drawable? GetDrawable() => _sprite;
 
     public Vector2u GetContentSize() => _sprite.Texture.Size;
 

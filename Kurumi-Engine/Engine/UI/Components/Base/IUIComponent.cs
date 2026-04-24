@@ -17,10 +17,9 @@ public interface IUIComponent
     public void Apply(UITransform transform);
 
     /// <summary>
-    /// Draws the UI component on the render target provided.
+    /// Returns the component in a drawable form, or null if none exists.
     /// </summary>
-    /// <param name="target">The render target provided.</param>
-    public void Draw(RenderTarget target);
+    public Drawable? GetDrawable();
 
     public Vector2u GetContentSize();
 
