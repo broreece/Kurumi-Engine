@@ -4,6 +4,7 @@ using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
 using SFML.Graphics;
+using SFML.System;
 
 namespace Engine.Systems.Rendering.Core;
 
@@ -41,9 +42,15 @@ public sealed class PartyBattleRenderer
                         0,
                         _characterBattleSpriteConfig.Width,
                         _characterBattleSpriteConfig.Height
+                    ),
+                    Position = new Vector2f(
+                        // TODO: Swap to scaled width here.
+                        _characterBattleSpriteConfig.PartyXPlacement 
+                            + (_characterBattleSpriteConfig.Width * partyMemberRender.Index),
+                        _characterBattleSpriteConfig.PartyYPlacement
                     )
                 };
-                // TODO: (SPBS-01) Create and set positioning here utilizing the party member render data.
+
                 // Send to render list.
                 _renderSystem.Submit(
                     new RenderCommand() 

@@ -59,9 +59,13 @@ public sealed class UIRenderSystem
         Vector2f finalPosition = parentPosition + layoutTransform.Position + element.LocalOffset;
 
         // If the element ignores the parent scaling do not apply parent scale.
+        Vector2f safeScale = new(
+            float.IsFinite(layoutTransform.Scale.X) ? layoutTransform.Scale.X : 1f,
+            float.IsFinite(layoutTransform.Scale.Y) ? layoutTransform.Scale.Y : 1f
+        );
         Vector2f finalScale = element.UIComponent.IgnoreParentScale()
-            ? layoutTransform.Scale
-            : VectorMultiplication.Multiple(parentScale, layoutTransform.Scale);
+            ? safeScale
+            : VectorMultiplication.Multiple(parentScale, safeScale);
 
         // Apply the final tansform and draw.
         UITransform finalTransform = new() { Position = finalPosition, Scale = finalScale };

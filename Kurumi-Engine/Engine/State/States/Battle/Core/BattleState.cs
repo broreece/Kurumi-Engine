@@ -9,12 +9,12 @@ using Engine.State.States.Battle.Base;
 using Engine.Systems.Camera;
 using Engine.Systems.Rendering.Core;
 using Engine.Systems.Rendering.Factories;
-using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
 using Game.UI.Views;
+
 using Infrastructure.Rendering.Core;
 
 namespace Engine.State.States.Battle.Core;
@@ -80,11 +80,8 @@ public sealed class BattleState : IGameState
 
         _formation = formationFactory.Create(formationDefinition, formationModel);
 
-        var battleWindowName = _gameContext.GameData.ConfigProvider.BattleWindowConfig.WindowArtName;
-        var windowStyle = new WindowStyle() { WindowArt = battleWindowName };
-        var textStyle = new TextStyle() { FontSize = 12, FontArt = "Font doesn't work right now "};
-
-        _view = new BattleView(windowStyle, textStyle, _gameContext.GameData.AssetRegistry);
+        var configProvider = _gameContext.GameData.ConfigProvider;
+        _view = new BattleView(configProvider.BattleWindowConfig, _gameContext.GameData.AssetRegistry);
         _uiRoot = _view.Build();
 
         _uiRenderSystem = new UIRenderSystem(new UILayoutSystem());
