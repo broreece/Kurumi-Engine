@@ -2,6 +2,7 @@ using Data.Definitions.Entities.Core;
 using Data.Definitions.Formations.Core;
 using Data.Models.Formations;
 using Data.Runtime.Entities.Core;
+using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
 
 using Infrastructure.Database.Base;
@@ -23,21 +24,34 @@ public sealed class FormationFactory
         _entityDefinitionRegistry = entityDefinitionRegistry;
     }
 
+    /// <summary>
+    /// Create list of runtime entities by cross referencing the enemies, from the definition, then the 'EnemyID' 
+    /// field from the enemy registry. Stores in the same list the coordinates of where to draw each enemy as well.
+    /// </summary>
+    /// <param name="definition">The enemy formation definition.</param>
+    /// <param name="model">The enemy formation model.</param>
+    /// <returns>A new enemy formation runtime object.</returns>
     public Formation Create(FormationDefinition definition, FormationModel model) 
     {
-        // Create list of runtime entities by cross referencing the enemies, from the definition, then the 'EnemyID' 
-        // field from the enemy registry.
         // TODO: (DKE-01) Exception here if model and definition have different numbers of enemies.
-        var entities = new List<Entity>();
+        var storedEntityData = new List<StoredEntityData>();
         for (var enemyIndex = 0; enemyIndex < model.Enemies.Count; enemyIndex ++) 
         {
             var enemyId = definition.Enemies[enemyIndex];
             var enemyDefinition = _enemyDefinitionRegistry.Get(enemyId);
+
+            // Load and store entity.
             var entityId = enemyDefinition.Id;
-            var entity = _entityDefinitionRegistry.Get(entityId);
-            entities.Add(new Entity(entity, model.Enemies[enemyIndex]) { CurrentHP = entity.MaxHp });
+            var entityDefinition = _entityDefinitionRegistry.Get(entityId);
+            var entity = new Entity(entityDefinition, model.Enemies[enemyIndex]) { CurrentHP = entityDefinition.MaxHp };
+            storedEntityData.Add(new StoredEntityData() 
+            { 
+                Entity = entity, 
+                XLocation = enemyDefinition.XLocation, 
+                YLocation = enemyDefinition.YLocation
+            });
         }
         
-        return new Formation(definition, model, entities);
+        return new Formation(definition, model) { StoredEntityData = storedEntityData };
     }
 }

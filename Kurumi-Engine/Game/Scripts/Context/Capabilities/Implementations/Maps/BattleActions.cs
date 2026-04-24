@@ -1,11 +1,20 @@
+using Data.Runtime.Formations.Base;
+using Engine.Context.Containers;
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Maps;
 
 public sealed class BattleActions : IBattleActions 
 {
-    public void StartBattle(string backgroundMusicName, string battleBackgroundArtName, int enemyFormationId) 
+    private readonly GameObjects _gameObjects;
+
+    public BattleActions(GameObjects gameObjects) 
     {
-        // TODO: Implement here.
+        _gameObjects = gameObjects;
+    }
+
+    public void StartBattle(BattleStartRequest battleStartRequest) 
+    {
+        _gameObjects.BattleStartRequest = battleStartRequest;
     }
 }
