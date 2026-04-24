@@ -1,0 +1,23 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Re-forge
+Status: In progress
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Forge' release.
+
+'Re-forge' mostly focused on adding elements we temporarily removed during the work on the 'Forge' build, some
+examples include:
+
+- Implementing the battle state including:
+    - Rendering all elements.
+    - Displaying UI and allowing UI functionality.
+    - Reinstating the existing battle logic pre-forge build.
+- Re-adding removed script steps.
+- Adding back the UI elements into our new UI system.
+- Ensuring scripts paused during execution if a pause is neccesary (Such as UI or force movement).
+
+---------------------------------------------------------------------
+

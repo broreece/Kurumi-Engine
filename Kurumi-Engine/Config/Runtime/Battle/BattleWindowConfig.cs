@@ -2,9 +2,9 @@ namespace Config.Runtime.Battle;
 
 public sealed class BattleWindowConfig 
 {
-    public required int WindowId { get; init; }
-    public required int ChoiceBoxId { get; init; }
-    public required int FontId { get; init; }
+    public required string WindowArtName { get; init; }
+    public required string ChoiceBoxArtName { get; init; }
+    public required string FontName { get; init; }
     public required int FontSize { get; init; }
 
     public required int InfoWindowWidth { get; init; }

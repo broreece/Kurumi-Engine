@@ -53,7 +53,7 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 - Re-implement battle state
 - Re-implement removed script steps
-- Re-implement UI elements such that battle state and removed script steps function as before
+- Re-implement UI elements such that removed script steps function as before
 - Ensure scripts freeze when activating freezing steps such as opening a text box
 
 ---
@@ -81,11 +81,10 @@ in config like items and run away.
 ### Momentum: 3 ###
 ### Impact: 5 ###
 
-**Description:** During our work on the forge build we removed the battle scene, re-implement it with our new UI system.
+**Description:** During our work on the forge build we removed the UI script steps, re-implement it with our new UI system.
 
 **Steps:**
-- Crate the missing UI elements and ensure they work with both the script steps and battle.
-- Ensure scripts pause as well when UI opens.
+- Crate the missing UI elements and ensure they work with the script steps.
 
 ---
 

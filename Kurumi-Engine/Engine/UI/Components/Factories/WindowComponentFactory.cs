@@ -1,22 +1,21 @@
+using Engine.Assets.Base;
+using Engine.Assets.Core;
 using Engine.UI.Components.Core;
 using Engine.UI.Data.Style;
-using SFML.Graphics;
 
 namespace Engine.UI.Components.Factories;
 
 public sealed class WindowComponentFactory
 {
-    private readonly IReadOnlyDictionary<string, string> _windowFileNames;
+    private readonly AssetRegistry _assetRegistry;
 
-    public WindowComponentFactory(IReadOnlyDictionary<string, string> windowFileNames)
+    public WindowComponentFactory(AssetRegistry assetRegistry)
     {
-        _windowFileNames = windowFileNames;
+        _assetRegistry = assetRegistry;
     }
 
     public WindowComponent Create(WindowStyle windowStyle)
     {
-        var sprite = new Sprite(new Texture(_windowFileNames[windowStyle.WindowArt]));
-
-        return new WindowComponent(sprite);
+        return new WindowComponent(_assetRegistry.GetTexture(AssetType.Windows, windowStyle.WindowArt));
     }
 }

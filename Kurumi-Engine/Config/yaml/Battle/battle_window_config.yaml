@@ -1,6 +1,6 @@
-window_id: 1
-choice_box_id: 0
-font_id: 0
+window_art_name: "template"
+choice_box_art_name: 0
+font_name: 0
 font_size: 25
 
 info_window_width: 60
