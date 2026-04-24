@@ -1,4 +1,8 @@
+using Engine.Systems.Rendering.Base;
+using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
+
+using SFML.Graphics;
 
 namespace Engine.Systems.Rendering.Core;
 
@@ -9,13 +13,24 @@ public sealed class BattleRenderer
 {
     private readonly RenderSystem _renderSystem;
 
-    internal BattleRenderer(RenderSystem renderSystem)
+    private readonly Sprite _backgroundSprite;
+
+    internal BattleRenderer(RenderSystem renderSystem, Sprite backgroundSprite)
     {
         _renderSystem = renderSystem;
+        _backgroundSprite = backgroundSprite;
     }
 
     public void Update()
     {
-        
+        // Send to render list.
+        _renderSystem.Submit(
+            new RenderCommand() 
+            {
+                Layer = (int) RenderLayer.BackgroundLayer, 
+                Drawable = _backgroundSprite, 
+                States = RenderStates.Default
+            }
+        );
     }
 }

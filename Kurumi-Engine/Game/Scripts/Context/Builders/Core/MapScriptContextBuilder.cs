@@ -23,16 +23,17 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
     {
         var capabilityContainer = new CapabilityContainer();
         var variableTable = new VariableTable();
+        var gameObjects = _gameContext.GameObjects;
 
         // Construct capability container.
-        capabilityContainer.SetCapability(typeof(IBattleActions), new BattleActions());
+        capabilityContainer.SetCapability(typeof(IBattleActions), new BattleActions(gameObjects));
         capabilityContainer.SetCapability(
             typeof(IMapNavigationActions), 
-            new MapNavigationActions(_gameContext.GameObjects)
+            new MapNavigationActions(gameObjects)
         );
         capabilityContainer.SetCapability(
             typeof(IMovementActions), 
-            new MovementActions(_gameContext.GameObjects.CurrentMap)
+            new MovementActions(gameObjects.CurrentMap)
         );
         capabilityContainer.SetCapability(typeof(IGameStateActions), new GameStateActions());
         capabilityContainer.SetCapability(typeof(IPartyStatusActions), new PartyStatusActions());

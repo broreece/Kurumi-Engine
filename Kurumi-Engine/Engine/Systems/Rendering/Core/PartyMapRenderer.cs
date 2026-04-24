@@ -67,7 +67,7 @@ public sealed class PartyMapRenderer
         _renderSystem.Submit(
             new RenderCommand() 
             {
-                Layer = (int) RenderLayer.Party, 
+                Layer = (int) RenderLayer.PartyMapLayer, 
                 Drawable = sprite, 
                 States = RenderStates.Default
             }

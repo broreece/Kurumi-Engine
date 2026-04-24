@@ -1,3 +1,4 @@
+using Config.Runtime.Battle;
 using Data.Runtime.Party.Core;
 using Engine.Assets.Base;
 using Engine.Assets.Core;
@@ -15,10 +16,17 @@ public sealed class PartyBattleRendererFactory
 
     private readonly RenderSystem _renderSystem;
 
-    public PartyBattleRendererFactory(AssetRegistry assetRegistry, RenderSystem renderSystem)
+    private readonly CharacterBattleSpriteConfig _characterBattleSpriteConfig;
+
+    public PartyBattleRendererFactory(
+        AssetRegistry assetRegistry, 
+        RenderSystem renderSystem,
+        CharacterBattleSpriteConfig characterBattleSpriteConfig
+        )
     {
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;
+        _characterBattleSpriteConfig = characterBattleSpriteConfig;
     }
 
     public PartyBattleRenderer Create(Party party) 
@@ -43,6 +51,6 @@ public sealed class PartyBattleRendererFactory
             index ++;
         }
 
-        return new PartyBattleRenderer(_renderSystem, partyRenderData);
+        return new PartyBattleRenderer(_renderSystem, partyRenderData, _characterBattleSpriteConfig);
     }
 }

@@ -1,9 +1,12 @@
+using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
+using Data.Runtime.Formations.Factories;
 using Data.Runtime.Party.Core;
 
 using Engine.Context.Core;
 using Engine.State.Base;
 using Engine.State.States.Battle.Base;
+using Engine.Systems.Camera;
 using Engine.Systems.Rendering.Core;
 using Engine.Systems.Rendering.Factories;
 
@@ -25,10 +28,15 @@ public sealed class BattleState : IGameState
     // Enemy formation.
     private readonly Formation _formation;
 
+    // Battle variable.
+    private readonly BattleStartRequest _battle;
+
     // Renderers.
     private BattleRenderer? _battleRenderer;
     private EnemyRenderer? _enemyRenderer;
     private PartyBattleRenderer? _partyBattleRenderer;
+
+    private Camera? _camera;
 
     // List of actions to be executed in order.
     private PriorityQueue<BattleAction, int> _actions = new(Comparer<int>.Create((x, y) => y.CompareTo(x)));
@@ -37,12 +45,22 @@ public sealed class BattleState : IGameState
 
     private bool LostBattle => _party.GetLeadersHp() == 0;
 
-    public BattleState(GameContext gameContext, StateContext stateContext, Party party, Formation formation) 
+    public BattleState(GameContext gameContext, StateContext stateContext, Party party, BattleStartRequest battle) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
         _party = party;
-        _formation = formation;
+        _battle = battle;
+
+        var database = gameContext.GameData.GameDatabase;
+        var formationRegistry = database.FormationRegistry;
+        var saveData = gameContext.GameObjects.SaveData;
+
+        var formationFactory = new FormationFactory(database.EnemyDefinitionRegistry, database.EntityDefinitionRegistry);
+        var formationModel = saveData.Formations[battle.EnemyFormationId];
+        var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
+
+        _formation = formationFactory.Create(formationDefinition, formationModel);
     }
 
     public void OnEnter()
@@ -65,20 +83,38 @@ public sealed class BattleState : IGameState
         _battleRenderer!.Update();
         _enemyRenderer!.Update();
         _partyBattleRenderer!.Update();
+        _gameContext.GameServices.RenderSystem.Render();
     }
 
     private void CacheDependencies() 
     {
         var assetRegistry = _gameContext.GameData.AssetRegistry;
         var renderSystem = _gameContext.GameServices.RenderSystem;
+        var configProvider = _gameContext.GameData.ConfigProvider;
+        var gameWindow = _stateContext.GameWindow;
+        var windowSize = gameWindow.Size;
 
-        var battleRendererFactory = new BattleRendererFactory(assetRegistry, renderSystem);
-        _battleRenderer = battleRendererFactory.Create();
+        _camera = new Camera(windowSize.X, windowSize.Y);
+        gameWindow.SetView(_camera.View);
 
-        var enemyRendererFactory = new EnemyRendererFactory(assetRegistry, renderSystem);
-        _enemyRenderer = enemyRendererFactory.Create();
+        var battleRendererFactory = new BattleRendererFactory(
+            assetRegistry, 
+            renderSystem, 
+            configProvider.BattleBackgroundSpriteConfig,
+            windowSize);
+        _battleRenderer = battleRendererFactory.Create(_battle.BattleBackgroundArtName);
 
-        var partyBattleRendererFactory = new PartyBattleRendererFactory(assetRegistry, renderSystem);
+        var enemyRendererFactory = new EnemyRendererFactory(
+            assetRegistry, 
+            renderSystem, 
+            configProvider.EnemyBattleSpriteConfig);
+        _enemyRenderer = enemyRendererFactory.Create(_formation);
+
+        var partyBattleRendererFactory = new PartyBattleRendererFactory(
+            assetRegistry, 
+            renderSystem,
+            configProvider.CharacterBattleSpriteConfig
+        );
         _partyBattleRenderer = partyBattleRendererFactory.Create(_party);
     }
 

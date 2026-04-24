@@ -6,8 +6,15 @@ namespace Engine.Systems.Rendering.Base;
 public enum RenderLayer 
 {
     BackgroundLayer = 0,
+
     TileLayer = 1,
     BelowPartyActor = 2,
-    Party = 3,
-    AbovePartyActor = 4
+    PartyMapLayer = 3,
+    AbovePartyActor = 4,
+
+    BelowPartyBattleLayer = 7,
+    PartyBattleLayer = 6,
+    AbovePartyBattleLayer = 8,
+    BaseEnemyLayer = 9,
+    EnemyBodyPartsLayer = 10
 }

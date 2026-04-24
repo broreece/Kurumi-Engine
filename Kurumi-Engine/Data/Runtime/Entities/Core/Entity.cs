@@ -12,6 +12,8 @@ public sealed class Entity : IStats, IHasStatuses
 
     public required int CurrentHP { get; set; }
 
+    public string SpriteName => _definition.SpriteName;
+
     internal Entity(EntityDefinition definition, EnemyModel model) 
     {
         _definition = definition;

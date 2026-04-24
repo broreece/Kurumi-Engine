@@ -14,6 +14,7 @@ using Engine.Input.Mapper;
 using Engine.Input.System;
 using Engine.State.Base;
 using Engine.State.Core;
+using Engine.State.States.Battle.Core;
 using Engine.State.States.Maps.Core;
 
 using Game.Maps.Loader;
@@ -70,7 +71,7 @@ public static class Program
         };
         var stateManager = new StateManager(new MapState(gameContext, stateContext, party));
 
-        RunGameLoop(window, input.System, stateManager);
+        RunGameLoop(window, input.System, stateManager, gameContext, stateContext, party);
     }
 
     private static Paths BuildPaths() 
@@ -172,12 +173,30 @@ public static class Program
         return new GameWindow(config);
     }
 
-    private static void RunGameLoop(GameWindow window, InputSystem inputSystem, StateManager stateManager) 
+    private static void RunGameLoop(
+        GameWindow window, 
+        InputSystem inputSystem, 
+        StateManager stateManager, 
+        GameContext gameContext,
+        StateContext stateContext,
+        Party party) 
     {
         var clock = new Clock();
+        var gameObjects = gameContext.GameObjects;
 
         while (window.IsOpen) 
         {
+            // Process state changes if requested.
+            if (gameObjects.BattleStartRequest != null)
+            {
+                stateManager.ChangeState(new BattleState(
+                    gameContext, 
+                    stateContext, 
+                    party, 
+                    gameObjects.BattleStartRequest
+                ));
+            }
+
             window.DispatchEvents();
 
             var deltaTime = clock.Restart().AsSeconds();

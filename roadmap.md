@@ -52,7 +52,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - Re-implement battle state
-- Re-implement battle rendering
 - Re-implement removed script steps
 - Re-implement UI elements such that battle state and removed script steps function as before
 - Ensure scripts freeze when activating freezing steps such as opening a text box
@@ -68,25 +67,11 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Description:** During our work on the forge build we removed the battle state, re-implement it with our new state system.
 
 **Steps:**
-- Check the existing map state and start implementing features required for battle state.
+- Implement UI into the battle state such that we can now select character abilities/skills/hardcoded options set
+in config like items and run away.
 
 **Blockers:**
-- DSS-01
-- BR-01
 - UI-01
-
----
-
-## (BR-01) Implement battle renderer ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the battle scene, re-implement it with our new render system.
-
-**Steps:**
-- Create new renderers in the System/Rendering for battle background, enemy sprites and party sprites.
 
 ---
 
@@ -265,6 +250,19 @@ bootstrap and stored in game context to improve performance.
 - Ensure all tickets are planned and grouped in releases.
 
 ---
+
+## (SPBS-01) Determine scaling and position of sprites on battle state. ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** The sprites on the battle state are not scaled, we should determine how we scale with config.
+
+**Steps:**
+- Create new config in battle config.
+- Update scaling on party battle renderer and enemy renderer.
+- Also create position in config.
 
 ---
 
