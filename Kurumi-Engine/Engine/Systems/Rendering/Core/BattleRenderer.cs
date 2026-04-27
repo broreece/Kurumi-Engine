@@ -27,7 +27,7 @@ public sealed class BattleRenderer
         _renderSystem.Submit(
             new RenderCommand() 
             {
-                Layer = (int) RenderLayer.BackgroundLayer, 
+                Layer = RenderLayer.BackgroundLayer, 
                 Drawable = _backgroundSprite, 
                 States = RenderStates.Default
             }

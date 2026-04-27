@@ -46,7 +46,7 @@ public sealed class EnemyRenderer
             _renderSystem.Submit(
                 new RenderCommand() 
                 {
-                    Layer = (int) RenderLayer.BaseEnemyLayer, 
+                    Layer = RenderLayer.BaseEnemyLayer, 
                     Drawable = enemySprite, 
                     States = RenderStates.Default
                 }

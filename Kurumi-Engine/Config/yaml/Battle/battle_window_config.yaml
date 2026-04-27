@@ -1,6 +1,6 @@
 window_art_name: "template"
 choice_box_art_name: 0
-font_name: 0
+font_name: "template"
 font_size: 25
 
 info_window_width: 60

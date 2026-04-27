@@ -19,7 +19,8 @@ public sealed class TextComponent : IUIComponent
     public void Apply(UITransform transform) 
     {
         _text.Position = transform.Position;
-        _text.Scale = transform.Scale;
+        // Text is unaffected by scale but instead only by font size.
+        _text.Scale = new Vector2f(1, 1);
     }
 
     public Drawable? GetDrawable() => _text;

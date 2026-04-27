@@ -156,21 +156,6 @@ change it'll result in us having to change a lot of lines. Removing the full pat
 
 ---
 
-## (ATSC-01) Edit animated tile sheet config to allow multiple animated tiles per row. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Animated tile sheets are currently very tall but not wide, we can edit to include multiple animations
-in one row.
-
-**Steps:**
-- Edit the config for animated tile sheets to include a new "animated_tiles_per_row"
-- In map renderer mod/div the art id by this config to get it's row value and column.
-
----
-
 ## (VE-01) Allow non-passable tiles to be see through. ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
@@ -250,18 +235,16 @@ bootstrap and stored in game context to improve performance.
 
 ---
 
-## (SPBS-01) Determine scaling and position of sprites on battle state. ##
+## (SBS-01) Determine scaling of sprites on battle state. ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
 ### Momentum: 1 ###
 ### Impact: 1 ###
 
-**Description:** The sprites on the battle state are not scaled, we should determine how we scale with config.
+**Description:** The sprites on the battle state are not scaled, we should determine how we scale.
 
 **Steps:**
-- Create new config in battle config.
 - Update scaling on party battle renderer and enemy renderer.
-- Also create position in config.
 
 ---
 

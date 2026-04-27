@@ -18,5 +18,6 @@ public enum RenderLayer
     BaseEnemyLayer = 9,
     EnemyBodyPartsLayer = 10,
 
-    UI = 11
+    UIWindow = 11,
+    UIText = 12
 }

@@ -55,7 +55,7 @@ public sealed class PartyBattleRenderer
                 _renderSystem.Submit(
                     new RenderCommand() 
                     {
-                        Layer = (int) RenderLayer.PartyBattleLayer, 
+                        Layer = RenderLayer.PartyBattleLayer, 
                         Drawable = sprite, 
                         States = RenderStates.Default
                     }

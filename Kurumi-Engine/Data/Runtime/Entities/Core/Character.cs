@@ -16,13 +16,21 @@ public sealed class Character : IStats, IHasStatuses
         _model = model;
     }
 
-    public string GetBattleSpriteName() => _definition.BattleSprite;
+    public string Name => _definition.Name;
+
+    public string BattleSpriteName => _definition.BattleSprite;
+
+    public int MaxHP => _model.MaxHP;
+
+    public int MaxMP => _model.MaxMP;
 
     public int CurrentHP 
     {
         get => _model.CurrentHP;
         set => _model.CurrentHP = value;
     }
+
+    public int CurrentMP => _model.CurrentMP;
 
     public IReadOnlyList<int> GetStats() => _model.Stats;
 

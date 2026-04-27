@@ -44,7 +44,7 @@ public sealed class PartyBattleRendererFactory
                     Texture = new Texture(
                         _assetRegistry.GetTexture(
                         AssetType.CharacterBattleSpriteSheets, 
-                        character.GetBattleSpriteName())
+                        character.BattleSpriteName)
                     )
                 };
             }

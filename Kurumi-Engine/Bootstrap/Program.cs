@@ -104,12 +104,16 @@ public static class Program
             paths.RegistryRoot, 
             "asset_registry.json"
         );
+        var fontRegistryPath  = Path.Combine(
+            paths.RegistryRoot, 
+            "font_registry.json"
+        );
 
         return new GameData
         {
             ConfigProvider = configProvider, 
             GameDatabase = new GameDatabase(), 
-            AssetRegistry = new AssetRegistry(assetRegistryPath), 
+            AssetRegistry = new AssetRegistry(assetRegistryPath, fontRegistryPath), 
             ScriptLibrary = new ScriptLibrary(paths.RegistryRoot)
         };
     }

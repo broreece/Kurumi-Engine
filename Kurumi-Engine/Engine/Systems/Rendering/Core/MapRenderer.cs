@@ -81,7 +81,7 @@ public sealed class MapRenderer
                     _renderSystem.Submit(
                         new RenderCommand() 
                         {
-                            Layer = (int) RenderLayer.TileLayer, 
+                            Layer = RenderLayer.TileLayer, 
                             Drawable = sprite, 
                             States = RenderStates.Default
                         }
@@ -124,7 +124,7 @@ public sealed class MapRenderer
                     _renderSystem.Submit(
                         new RenderCommand() 
                         {
-                            Layer = (int) RenderLayer.TileLayer, 
+                            Layer = RenderLayer.TileLayer, 
                             Drawable = sprite, 
                             States = RenderStates.Default
                         }

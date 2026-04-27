@@ -1,3 +1,4 @@
+using Engine.Systems.Rendering.Base;
 using Engine.UI.Components.Base;
 using Engine.UI.Data.Content.Layout;
 
@@ -16,4 +17,6 @@ public readonly struct UIElement {
     public required Vector2f LocalOffset { get; init; }
 
     public required IReadOnlyList<UIElement> Children { get; init; }
+
+    public required RenderLayer RenderLayer  { get; init; }
 }

@@ -75,7 +75,7 @@ public sealed class UIRenderSystem
         if (drawable != null) {
             renderSystem.Submit(new RenderCommand() 
             { 
-                Layer = (int) RenderLayer.UI, 
+                Layer = element.RenderLayer, 
                 States = RenderStates.Default, 
                 Drawable = drawable
             });

@@ -1,8 +1,10 @@
 using Config.Runtime.Battle;
-
+using Data.Runtime.Entities.Core;
 using Engine.Assets.Core;
+using Engine.Systems.Rendering.Base;
 using Engine.UI.Components.Core;
 using Engine.UI.Components.Factories;
+using Engine.UI.Data.Content;
 using Engine.UI.Data.Content.Layout;
 using Engine.UI.Data.Style;
 using Engine.UI.Elements;
@@ -13,12 +15,18 @@ namespace Game.UI.Views;
 
 public sealed class BattleView
 {
+    // Styles.
     private readonly WindowStyle _windowStyle;
     private readonly TextStyle _textStyle;
 
+    // Config.
     private readonly BattleWindowConfig _battleWindowConfig;
 
+    // Asset registry.
     private readonly AssetRegistry _assetRegistry;
+
+    // Components.
+    private readonly List<TextComponent> _partyTextComponents = [];
 
     public BattleView(BattleWindowConfig battleWindowConfig, AssetRegistry assetRegistry)
     {
@@ -33,9 +41,11 @@ public sealed class BattleView
         _assetRegistry = assetRegistry;
     }
 
-    public UIElement Build()
+    public UIElement Build(int partySize)
     {
+        // Component factories.
         var windowComponentFactory = new WindowComponentFactory(_assetRegistry);
+        var textComponentFactory = new TextComponentFactory(_assetRegistry);
 
         // Info window variables.
         // Config.
@@ -50,13 +60,61 @@ public sealed class BattleView
             Position = new Vector2f(infoXLocation, infoYLocation), 
             Size = new Vector2f(infoWidth, infoHeight) 
         };
+
+        // Info window text.
+        var childrenElements = new List<UIElement>();
+        for (int partyIndex = 0; partyIndex < partySize; partyIndex ++)
+        {
+            // Create and store components in array to be updated later.
+            var infoTextData = new TextData() { Text = "" };
+            var component = textComponentFactory.Create(infoTextData, _textStyle);
+            _partyTextComponents.Add(component);
+
+            // Place UI element children.
+            childrenElements.Add(new UIElement()
+            {
+                UIComponent = component,
+                Layout = new UILayout() 
+                {
+                    // TODO: Update position based on index here.
+                    Position = new Vector2f(0, 0),
+                    Size = new Vector2f(1, 1)
+                },
+
+                LocalOffset = new Vector2f(0, 0),
+                Children =  [],
+
+                RenderLayer = RenderLayer.UIText
+            });
+        }
+
+        var infoTextContainerElement = new UIElement()
+        {
+            UIComponent = new EmptyComponent(),
+            Layout = new UILayout() 
+            {
+                Position = new Vector2f(0, 0),
+                Size = new Vector2f(1, 1)
+            },
+
+            LocalOffset = new Vector2f(0, 0),
+            Children =  childrenElements,
+
+            RenderLayer = RenderLayer.UIText
+        };
+
         var infoWindowElement = new UIElement()
         {
             UIComponent = infoWindowComponent,
             Layout = infoLayout,
             
             LocalOffset = new Vector2f(0, 0),
-            Children = []
+            Children = 
+            [
+                infoTextContainerElement
+            ],
+
+            RenderLayer = RenderLayer.UIWindow
         };
 
         // Selection window variables.
@@ -78,7 +136,9 @@ public sealed class BattleView
             Layout = selectionWindowLayout,
 
             LocalOffset = new Vector2f(0, 0),
-            Children = []
+            Children = [],
+
+            RenderLayer = RenderLayer.UIWindow
         };
 
         return new UIElement()
@@ -91,19 +151,26 @@ public sealed class BattleView
             [
                 infoWindowElement,
                 selectionWindowElement
-            ]
+            ],
+
+            RenderLayer = RenderLayer.UIWindow
         };
     }
 
-    // private UIElement CreateOption(string text, int index)
-    // {
-    //     return new UIElement
-    //     {
-    //         UIComponent = ,
-    //         Layout = ,
-
-    //         LocalOffset = new Vector2f(0, 0),
-    //         Children = []
-    //     };
-    // }
+    /// <summary>
+    /// Updates the battle UI view based on the state of the party members.
+    /// </summary>
+    /// <param name="partyMembers">The array of playable characters in the party.</param>
+    public void Update(Character[] partyMembers)
+    {
+        for (int partyIndex = 0; partyIndex < partyMembers.Length; partyIndex ++)
+        {
+            if (partyMembers[partyIndex] != null)
+            {
+                var character = partyMembers[partyIndex];
+                _partyTextComponents[partyIndex].SetText($"{character.Name} HP: {character.CurrentHP} / " +
+                    $"{character.MaxHP}, MP: {character.CurrentMP}: {character.MaxMP}");
+            }
+        }
+    }
 }

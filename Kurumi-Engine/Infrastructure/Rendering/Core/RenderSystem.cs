@@ -19,6 +19,9 @@ public sealed class RenderSystem
     /// </summary>
     public void Render() 
     {
+        // Sort queued commands.
+        _commands.Sort((a, b) => a.Layer.CompareTo(b.Layer));
+
         _window.Clear();
         foreach (var command in _commands) 
         {

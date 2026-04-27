@@ -82,7 +82,7 @@ public sealed class BattleState : IGameState
 
         var configProvider = _gameContext.GameData.ConfigProvider;
         _view = new BattleView(configProvider.BattleWindowConfig, _gameContext.GameData.AssetRegistry);
-        _uiRoot = _view.Build();
+        _uiRoot = _view.Build(party.Characters.Length);
 
         _uiRenderSystem = new UIRenderSystem(new UILayoutSystem());
     }
@@ -108,7 +108,8 @@ public sealed class BattleState : IGameState
         _enemyRenderer!.Update();
         _partyBattleRenderer!.Update();
 
-        // Render the UI.
+        // Update the UI then render the UI.
+        _view.Update(_party.Characters);
         _uiRenderSystem.Render(_uiRoot, _renderSystem!, _stateContext.GameWindow.Size);
 
         _renderSystem!.Render();
