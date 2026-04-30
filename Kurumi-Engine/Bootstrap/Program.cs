@@ -69,7 +69,11 @@ public static class Program
             GameWindow = window, 
             InputContextManager = input.ContextManager
         };
-        var stateManager = new StateManager(new MapState(gameContext, stateContext, party));
+        var stateManager = new StateManager(
+            new MapState(gameContext, stateContext, party), 
+            stateContext, 
+            gameServices.RenderSystem
+        );
 
         RunGameLoop(window, input.System, stateManager, gameContext, stateContext, party);
     }

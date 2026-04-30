@@ -40,7 +40,7 @@ public sealed class PartyMapRenderer
         _tileHeight = tileHeight;
     }
 
-    public void Update() 
+    public void Update(View view) 
     {
         // Cache common variables.
         var characterWidth = _characterFieldSpriteConfig.Width;
@@ -69,7 +69,8 @@ public sealed class PartyMapRenderer
             {
                 Layer = RenderLayer.PartyMapLayer, 
                 Drawable = sprite, 
-                States = RenderStates.Default
+                States = RenderStates.Default,
+                View = view
             }
         );
     }

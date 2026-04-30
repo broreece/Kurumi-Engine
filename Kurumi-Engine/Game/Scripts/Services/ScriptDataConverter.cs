@@ -80,9 +80,13 @@ public sealed class ScriptDataConverter
 
             // Universal steps:
             case "BasicTextWindow":
-                return new BasicTextWindow(parameters["Text"].GetString() 
-                    ?? throw new ScriptStepException("Basic text window 'Text' parameter not found.")) { NextStep 
-                    = nextStep};
+                JsonElement basicTextWindowPagesElement = parameters["Pages"];
+                var basicTextWindowPages = new List<string>();
+                foreach (var item in basicTextWindowPagesElement.EnumerateArray()) {
+                    basicTextWindowPages.Add(item.GetString() 
+                    ?? throw new ScriptStepException("Basic text window 'Pages' parameter not found."));
+                }
+                return new BasicTextWindow(basicTextWindowPages) { NextStep = nextStep };
 
             case "DisplayGlobalMessage":
                 return new DisplayGlobalMessage(parameters["TimeLimit"].GetInt32(), parameters["Text"].GetString() 

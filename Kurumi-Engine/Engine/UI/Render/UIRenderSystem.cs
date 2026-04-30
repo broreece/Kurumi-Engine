@@ -1,4 +1,3 @@
-using Engine.Systems.Rendering.Base;
 using Engine.UI.Elements;
 using Engine.UI.Layout.Base;
 using Engine.UI.Layout.Core;
@@ -77,7 +76,8 @@ public sealed class UIRenderSystem
             { 
                 Layer = element.RenderLayer, 
                 States = RenderStates.Default, 
-                Drawable = drawable
+                Drawable = drawable,
+                View = new View(new FloatRect(0, 0, windowSize.X, windowSize.Y))
             });
         }
 

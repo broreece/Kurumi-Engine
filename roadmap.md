@@ -53,7 +53,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 - Re-implement battle state
 - Re-implement removed script steps
-- Re-implement UI elements such that removed script steps function as before
 - Ensure scripts freeze when activating freezing steps such as opening a text box
 
 ---
@@ -69,22 +68,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Steps:**
 - Implement UI into the battle state such that we can now select character abilities/skills/hardcoded options set
 in config like items and run away.
-
-**Blockers:**
-- UI-01
-
----
-
-## (UI-01) Implement UI ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the UI script steps, re-implement it with our new UI system.
-
-**Steps:**
-- Crate the missing UI elements and ensure they work with the script steps.
 
 ---
 
@@ -138,6 +121,7 @@ texture.
 
 - Focused primarily on minor clean up
 - Allows non-passable tiles to be see-through
+- Update windows and UI to have locations work regardless of window size.
 
 ---
 
@@ -218,6 +202,8 @@ bootstrap and stored in game context to improve performance.
 
 **Steps:**
 - Go through map state and battle state removing factory initalization and store them in game context instead.
+- Also store the UIRenderSystem reused in the state manager and battle state in state context or somewhere else. It's
+currently being created twice.
 
 ---
 
@@ -245,6 +231,21 @@ bootstrap and stored in game context to improve performance.
 
 **Steps:**
 - Update scaling on party battle renderer and enemy renderer.
+
+---
+
+## Windows and UI elements should appear based on the screen's width and height. ##
+### Complexity: 4 ###
+### Independent: 3 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Currently I believe UI elements will render in the same place regardless of window size,
+this should be fixed to be based on percents of the window size.
+
+**Steps:**
+- We can divide the intended window screen sizes by the real size to determine the new position or perhaps use a
+SFML camera object to adjust placement and zoom.
 
 ---
 

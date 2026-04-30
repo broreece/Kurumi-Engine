@@ -8,12 +8,13 @@ public enum RenderLayer
     BackgroundLayer = 0,
 
     TileLayer = 1,
-    BelowPartyActor = 2,
-    PartyMapLayer = 3,
-    AbovePartyActor = 4,
+    AnimatedTileLayer = 2,
+    BelowPartyActor = 3,
+    PartyMapLayer = 4,
+    AbovePartyActor = 5,
 
-    BelowPartyBattleLayer = 7,
-    PartyBattleLayer = 6,
+    BelowPartyBattleLayer = 6,
+    PartyBattleLayer = 7,
     AbovePartyBattleLayer = 8,
     BaseEnemyLayer = 9,
     EnemyBodyPartsLayer = 10,

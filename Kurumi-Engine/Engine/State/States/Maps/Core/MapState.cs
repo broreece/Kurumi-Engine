@@ -196,10 +196,9 @@ public sealed class MapState : IGameState
         _stateContext.GameWindow.SetView(_camera.View);
 
         // Update the renderers and render.
-        _mapRenderer!.Update(_mapAnimationManager);
-        _actorRenderer!.Update();
-        _partyMapRenderer!.Update();
-        _gameServices!.RenderSystem.Render();
+        _mapRenderer!.Update(_mapAnimationManager, _camera.View);
+        _actorRenderer!.Update(_camera.View);
+        _partyMapRenderer!.Update(_camera.View);
 
         if (_gameObjects!.MapChangeRequest != null) 
         {
@@ -226,7 +225,7 @@ public sealed class MapState : IGameState
         _tileHeight = _tileConfig.Height;
 
         // Map script context.
-        var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext);
+        var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext, _stateContext);
         _mapScriptContext = mapScriptContextBuilder.BuildScriptContext();
     }
 

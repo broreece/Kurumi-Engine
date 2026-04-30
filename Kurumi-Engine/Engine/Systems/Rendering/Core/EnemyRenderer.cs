@@ -29,7 +29,7 @@ public sealed class EnemyRenderer
         _enemyBattleSpriteConfig = enemyBattleSpriteConfig;
     }
 
-    public void Update()
+    public void Update(View view)
     {
         foreach (var enemyRenderData in _enemyRenderData)
         {
@@ -48,7 +48,8 @@ public sealed class EnemyRenderer
                 {
                     Layer = RenderLayer.BaseEnemyLayer, 
                     Drawable = enemySprite, 
-                    States = RenderStates.Default
+                    States = RenderStates.Default,
+                    View = view
                 }
             );
         }

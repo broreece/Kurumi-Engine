@@ -29,7 +29,7 @@ public sealed class PartyBattleRenderer
         _characterBattleSpriteConfig = characterBattleSpriteConfig;
     }
     
-    public void Update()
+    public void Update(View view)
     {
         foreach (var partyMemberRender in _partyMemberBattleRenderData) 
         {
@@ -57,7 +57,8 @@ public sealed class PartyBattleRenderer
                     {
                         Layer = RenderLayer.PartyBattleLayer, 
                         Drawable = sprite, 
-                        States = RenderStates.Default
+                        States = RenderStates.Default,
+                        View = view
                     }
                 );
             }

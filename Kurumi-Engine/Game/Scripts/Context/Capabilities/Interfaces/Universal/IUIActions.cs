@@ -4,7 +4,7 @@ namespace Game.Scripts.Context.Capabilities.Interfaces.Universal;
 
 public interface IUIActions : ICapability 
 {
-    public void OpenBasicTextWindow(string text);
+    public void OpenBasicTextWindow(IReadOnlyList<string> pages);
 
     public void OpenGlobalMessage(int timeLimit, string text);
 

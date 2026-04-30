@@ -6,15 +6,15 @@ namespace Game.Scripts.Steps.Universal;
 
 public sealed class BasicTextWindow : ScriptStep 
 {
-    private readonly string _text;
+    private readonly IReadOnlyList<string> _pages;
 
-    public BasicTextWindow(string text) : base() {
-        _text = text;
+    public BasicTextWindow(IReadOnlyList<string> pages) : base() {
+        _pages = pages;
     }
 
     public override void Activate(ScriptContext scriptContext) 
     {
         IUIActions uiActions = scriptContext.GetCapability<IUIActions>();
-        uiActions.OpenBasicTextWindow(_text);
+        uiActions.OpenBasicTextWindow(_pages);
     }
 }

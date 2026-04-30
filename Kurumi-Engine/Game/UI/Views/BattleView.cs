@@ -28,7 +28,7 @@ public sealed class BattleView
     // Components.
     private readonly List<TextComponent> _partyTextComponents = [];
 
-    public BattleView(BattleWindowConfig battleWindowConfig, AssetRegistry assetRegistry)
+    public BattleView(AssetRegistry assetRegistry, BattleWindowConfig battleWindowConfig)
     {
         // Style config.
         var battleWindowName = battleWindowConfig.WindowArtName;

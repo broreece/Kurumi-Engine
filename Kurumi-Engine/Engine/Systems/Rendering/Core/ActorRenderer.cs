@@ -31,7 +31,7 @@ public sealed class ActorRenderer
         this.tileHeight = tileHeight;
     }
 
-    public void Update() 
+    public void Update(View view) 
     {
         foreach (var currentActorRenderData in actorRenderData) 
         {
@@ -62,7 +62,12 @@ public sealed class ActorRenderer
                 )
             };
 
-            renderSystem.Submit(new RenderCommand() { Layer = layer, Drawable = sprite, States = RenderStates.Default });
+            renderSystem.Submit(new RenderCommand() { 
+                Layer = layer, 
+                Drawable = sprite, 
+                States = RenderStates.Default, 
+                View = view
+            });
         }
     }
 }

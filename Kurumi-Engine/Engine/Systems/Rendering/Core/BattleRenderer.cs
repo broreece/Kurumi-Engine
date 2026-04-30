@@ -21,7 +21,7 @@ public sealed class BattleRenderer
         _backgroundSprite = backgroundSprite;
     }
 
-    public void Update()
+    public void Update(View view)
     {
         // Send to render list.
         _renderSystem.Submit(
@@ -29,7 +29,8 @@ public sealed class BattleRenderer
             {
                 Layer = RenderLayer.BackgroundLayer, 
                 Drawable = _backgroundSprite, 
-                States = RenderStates.Default
+                States = RenderStates.Default,
+                View = view
             }
         );
     }

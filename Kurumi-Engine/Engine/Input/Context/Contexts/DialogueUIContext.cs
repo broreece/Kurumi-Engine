@@ -1,23 +1,23 @@
 using Engine.Input.Base;
 using Engine.Input.Context.Base;
-using Game.UI.States;
+using Game.UI.Overlays.Core;
 
 namespace Engine.Input.Context.Contexts;
 
 public class DialogueUIContext : IInputContext 
 {
-    private readonly DialogueState _state;
+    private readonly DialogueOverlay _overlay;
 
-    public DialogueUIContext(DialogueState state) 
+    public DialogueUIContext(DialogueOverlay state) 
     {
-        _state = state;
+        _overlay = state;
     }
 
     public void Handle(InputState input) 
     {
         if (input.IsPressed(InputAction.Confirm)) 
         {
-            _state.Advance();
+            _overlay.Advance();
         }
     }
 }

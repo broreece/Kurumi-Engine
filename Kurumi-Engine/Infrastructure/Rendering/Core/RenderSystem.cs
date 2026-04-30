@@ -25,9 +25,11 @@ public sealed class RenderSystem
         _window.Clear();
         foreach (var command in _commands) 
         {
+            _window.SetView(command.View);
             _window.Draw(command.Drawable, command.States);
         }
         _window.Display();
-        _commands.Clear();
     }
+
+    public void Clear() => _commands.Clear();
 }

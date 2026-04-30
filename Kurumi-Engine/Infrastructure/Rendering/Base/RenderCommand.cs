@@ -14,4 +14,6 @@ public readonly struct RenderCommand
     public required Drawable Drawable { get; init; }
     
     public required RenderStates States { get; init; }
+
+    public required View View { get; init; }
 }
