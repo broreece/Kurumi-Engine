@@ -96,12 +96,10 @@ public sealed class BattleState : IGameState
 
     public void Update(float deltaTime)
     {
-        HandleInput();
-
         // Handle requested interactions.
         if (_stateContext.InputContextManager.GetGameplayContext()!.InteractRequested) 
         {
-            
+            _stateContext.InputContextManager.GetGameplayContext()!.InteractRequested = false;
         }
 
         _battleRenderer!.Update(_camera!.View);
@@ -146,11 +144,5 @@ public sealed class BattleState : IGameState
 
         // Renderer.
         _renderSystem = _gameContext.GameServices.RenderSystem;
-    }
-
-    private void HandleInput() 
-    {
-        var inputState = _gameContext.GameServices.InputMapper.BuildState();
-        _stateContext.InputContextManager.Update(inputState);
     }
 }

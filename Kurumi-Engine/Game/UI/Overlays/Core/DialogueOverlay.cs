@@ -2,6 +2,7 @@ using Config.Runtime.Defaults;
 
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+using Engine.Input.Base;
 using Engine.Systems.Rendering.Base;
 using Engine.UI.Components.Core;
 using Engine.UI.Data.Content.Layout;
@@ -16,12 +17,20 @@ namespace Game.UI.Overlays.Core;
 
 public sealed class DialogueOverlay : IUIOverlay
 {
+    // Components.
     private readonly TextComponent _textComponent;
-    private readonly WindowComponent _windowComponent;
 
+    // Elements.
+    private readonly UIElement _uiElement;
+
+    // Pages.
     private readonly IReadOnlyList<string> _pages;
 
+    // Coordinate variables.
     private readonly int _width, _height, _xLocation, _yLocation;
+
+    // Default variables.
+    private bool _isFinished = false;
     private int _currentPage = 0;
 
     public DialogueOverlay(
@@ -29,7 +38,7 @@ public sealed class DialogueOverlay : IUIOverlay
         TextWindowDefaults textWindowDefaults, 
         IReadOnlyList<string> pages) 
     {
-        _windowComponent = new WindowComponent(assetRegistry.GetTexture(
+        var windowComponent = new WindowComponent(assetRegistry.GetTexture(
             AssetType.Windows, 
             textWindowDefaults.WindowName
         ));
@@ -43,12 +52,8 @@ public sealed class DialogueOverlay : IUIOverlay
         _yLocation = textWindowDefaults.Y;
 
         _pages = pages;
-    }
 
-    public void Update(float deltaTime) {}
-
-    public UIElement Build()
-    {
+        // Create Element.
         var textUIElement = new UIElement()
         {
             UIComponent = _textComponent,
@@ -60,9 +65,9 @@ public sealed class DialogueOverlay : IUIOverlay
             RenderLayer = RenderLayer.UIText
         };
 
-        return new UIElement()
+        _uiElement = new UIElement()
         {
-            UIComponent = _windowComponent,
+            UIComponent = windowComponent,
             Layout = new UILayout() 
             { 
                 Position = new Vector2f(_xLocation, _yLocation), 
@@ -79,6 +84,17 @@ public sealed class DialogueOverlay : IUIOverlay
         };
     }
 
+    public void Update(float deltaTime) {}
+
+    public void HandleInput(InputState inputState)
+    {
+        bool confirmPressed = inputState.IsPressed(InputAction.Confirm);
+        if (confirmPressed)
+        {
+            Advance();
+        }
+    }
+
     public void Advance() 
     {
         if (_currentPage < _pages.Count - 1) {
@@ -86,8 +102,13 @@ public sealed class DialogueOverlay : IUIOverlay
             _textComponent.SetText(_pages[_currentPage]);
         }
         else {
-            // TODO: End here.
+            _isFinished = true;
         }
     }
 
+    public UIElement GetUIElement() => _uiElement;
+
+    public bool IsFinished() => _isFinished;
+
+    public bool TakesControl() => true;
 }

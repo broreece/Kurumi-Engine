@@ -8,7 +8,7 @@ namespace Engine.Input.Context.Contexts;
 /// </summary>
 public class BattleInputContext : IGameplayInputContext 
 {
-    public bool InteractRequested { get; private set; } = false;
+    public bool InteractRequested { get; set; } = false;
 
     public void Handle(InputState input)
     {

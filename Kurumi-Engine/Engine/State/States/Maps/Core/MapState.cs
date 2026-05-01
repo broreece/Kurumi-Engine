@@ -111,11 +111,10 @@ public sealed class MapState : IGameState
 
     public void Update(float deltaTime) 
     {
-        HandleInput();
-
         // Handle requested interactions.
         if (_stateContext.InputContextManager.GetGameplayContext()!.InteractRequested) 
         {
+            _stateContext.InputContextManager.GetGameplayContext()!.InteractRequested = false;
             // Get location of party.
             var partyX = _party.XLocation;
             var partyY = _party.YLocation;
@@ -297,12 +296,6 @@ public sealed class MapState : IGameState
 
         _camera = new Camera(viewWidth, viewHeight);
         _stateContext.GameWindow.SetView(_camera.View);
-    }
-
-    private void HandleInput() 
-    {
-        var inputState = _gameServices!.InputMapper.BuildState();
-        _stateContext.InputContextManager.Update(inputState);
     }
 
     private void MoveAllActors(float deltaTime) {

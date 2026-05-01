@@ -72,6 +72,7 @@ public static class Program
         var stateManager = new StateManager(
             new MapState(gameContext, stateContext, party), 
             stateContext, 
+            gameServices.InputMapper,
             gameServices.RenderSystem
         );
 
