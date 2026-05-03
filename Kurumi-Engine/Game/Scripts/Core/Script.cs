@@ -10,15 +10,16 @@ namespace Game.Scripts.Core;
 /// </summary>
 public sealed class Script 
 {
-    private readonly ScriptData _scriptData;
-    private readonly ScriptDataConverter _scriptDataConverter;
+    private readonly Dictionary<string, ScriptStep> _scriptSteps = [];
 
     private string? _currentKey;
 
     internal Script(ScriptData scriptData, ScriptDataConverter scriptDataConverter) 
     {
-        _scriptData = scriptData;
-        _scriptDataConverter = scriptDataConverter;
+        foreach (var keyPair in scriptData.Steps)
+        {
+            _scriptSteps.Add(keyPair.Key, scriptDataConverter.Convert(keyPair.Value));
+        }
         _currentKey = scriptData.FirstStep;
     }
 
@@ -30,7 +31,7 @@ public sealed class Script
     {
         while (_currentKey != null) 
         {
-            ScriptStep currentStep = _scriptDataConverter.Convert(_scriptData.Steps[_currentKey]);
+            ScriptStep currentStep = _scriptSteps[_currentKey];
             currentStep.Activate(scriptContext);
             _currentKey = currentStep.GetNextStep();
         }

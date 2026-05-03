@@ -6,18 +6,18 @@ namespace Game.Scripts.Steps.Universal;
 
 public sealed class ChoiceBoxWithText : ConditionalScriptStep 
 {
+    private readonly IReadOnlyList<string> _choices;
     private readonly string _text;
-    private readonly string[] _choices;
 
-    public ChoiceBoxWithText(string text, string[] choices, string? nextIfFalse) : base(nextIfFalse) 
+    public ChoiceBoxWithText(IReadOnlyList<string> choices, string text, string? nextIfFalse) : base(nextIfFalse) 
     {
-        _text = text;
         _choices = choices;
+        _text = text;
     }
     
     public override void Activate(ScriptContext scriptContext) 
     {
         IUIActions uiActions = scriptContext.GetCapability<IUIActions>();
-        uiActions.OpenTextWindowWithChoice(_text, _choices);
+        uiActions.OpenTextWindowWithChoice(_choices, _text);
     }
 }

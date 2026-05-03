@@ -143,12 +143,7 @@ public sealed class MapState : IGameState
                 // Load potential script and activate.
                 if (actor.ActorInfo.OnAction) 
                 {
-                    var scriptKey = actor.ActorInfo.ScriptName;
-                    if (scriptKey != null) 
-                    {
-                        var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                        script.Activate(_mapScriptContext!);
-                    }
+                    actor.Script?.Activate(_mapScriptContext!);
                 }
             }
         }
@@ -164,12 +159,7 @@ public sealed class MapState : IGameState
             {
                 if (actor.ActorInfo.OnTouch) 
                 {
-                    var scriptKey = actor.ActorInfo.ScriptName;
-                    if (scriptKey != null) 
-                    {
-                        var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                        script.Activate(_mapScriptContext!);
-                    }
+                    actor.Script?.Activate(_mapScriptContext!);
                 }
             }
 
@@ -342,12 +332,7 @@ public sealed class MapState : IGameState
     {
         if (actor.ActorInfo.OnFind && _visionResolver!.CanSee(actor, _party, actor.ActorInfo.TrackingRange)) 
         {
-            var scriptKey = actor.ActorInfo.ScriptName;
-            if (scriptKey != null) 
-            {
-                var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                script.Activate(_mapScriptContext!);
-            }
+            actor.Script?.Activate(_mapScriptContext!);
         }
     }
 

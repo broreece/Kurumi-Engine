@@ -21,3 +21,9 @@ examples include:
 
 ---------------------------------------------------------------------
 
+Peformance enhancements of scripts.
+
+- Scripts are now all cached on map creation meaning we no longer convert at execution point.
+- Script steps are also all cached on script execution also meaning we no longer need to convert at execution point.
+
+---------------------------------------------------------------------

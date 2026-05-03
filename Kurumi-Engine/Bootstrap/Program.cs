@@ -146,16 +146,17 @@ public static class Program
         GameWindow gameWindow) 
     {
         var mapRegistryPath = Path.Combine(paths.RegistryRoot, "map_registry.json");
+        var scriptLibrary = gameData.ScriptLibrary;
         MapService mapService = new(
             new MapRegistry(mapRegistryPath), 
             new MapLoader(), 
             new MapFactory(gameData.GameDatabase.ActorInfoRegistry, 
             gameData.GameDatabase.TileRegistry, 
-            new ActorFactory(), 
-            new DumbTrackingActorFactory(), 
-            new PathedActorFactory(),
-            new RandomActorFactory(), 
-            new SmartTrackingActorFactory(), 
+            new ActorFactory(scriptLibrary), 
+            new DumbTrackingActorFactory(scriptLibrary), 
+            new PathedActorFactory(scriptLibrary),
+            new RandomActorFactory(scriptLibrary), 
+            new SmartTrackingActorFactory(scriptLibrary), 
             party));
 
         return new GameServices() 

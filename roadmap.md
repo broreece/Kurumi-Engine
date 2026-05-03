@@ -87,20 +87,6 @@ and re-add any deleted script steps.
 
 ---
 
-## (SP-01) Script pausing ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the pausing ability of scripts, re-implement it.
-
-**Steps:**
-- When UI elements open or actors start a forced movement the next step will execute immediately again.
-- Ensure this behaviour is reverted.
-
----
-
 ## Map state background is not being rendered. ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
