@@ -1,12 +1,14 @@
 using Data.Runtime.Spatials;
 
+using Utils.Interfaces;
+
 namespace Data.Runtime.Actors.Controllers.Base;
 
 /// <summary>
 /// Base class for actor controllers, responsible for handling movement timing and execution.
 /// Derived controllers implement specific movement behaviors.
 /// </summary>
-public abstract class Controller 
+public abstract class Controller : IFinishable
 {
     private float _elapsedTime = 0;
 
@@ -15,7 +17,7 @@ public abstract class Controller
     public bool CanMove => _elapsedTime >= Interval;
 
     // Overriden by pathed controllers which can allow finishing of movements.
-    public virtual bool IsFinished => false;
+    public virtual bool IsFinished() => false;
 
     // Overriden by tracked controllers which return true.
     public virtual bool IsTrackedController => false;

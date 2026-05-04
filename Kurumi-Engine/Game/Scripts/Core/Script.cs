@@ -12,7 +12,12 @@ public sealed class Script
 {
     private readonly Dictionary<string, ScriptStep> _scriptSteps = [];
 
-    private string? _currentKey;
+    public string StartingKey { get; }
+    public string CurrentKey { get; private set; }
+
+    public bool Waiting => _scriptSteps[CurrentKey].Waiting();
+
+    public string? NextKey => _scriptSteps[CurrentKey].GetNextStep();
 
     internal Script(ScriptData scriptData, ScriptDataConverter scriptDataConverter) 
     {
@@ -20,20 +25,19 @@ public sealed class Script
         {
             _scriptSteps.Add(keyPair.Key, scriptDataConverter.Convert(keyPair.Value));
         }
-        _currentKey = scriptData.FirstStep;
+        StartingKey = scriptData.FirstStep;
+        CurrentKey = StartingKey;
     }
 
     /// <summary>
-    /// Used to navigate the script steps activating in logical order.
+    /// Used to activate a specific step and activate it.
     /// </summary>
     /// <param name="scriptContext">The script context required when activating scripts.</param>
-    public void Activate(ScriptContext scriptContext) 
+    /// <param name="stepKey">The key of the desired script step.</param>
+    public void Activate(ScriptContext scriptContext, string stepKey) 
     {
-        while (_currentKey != null) 
-        {
-            ScriptStep currentStep = _scriptSteps[_currentKey];
-            currentStep.Activate(scriptContext);
-            _currentKey = currentStep.GetNextStep();
-        }
+        CurrentKey = stepKey;
+        ScriptStep currentStep = _scriptSteps[CurrentKey];
+        currentStep.Activate(scriptContext);
     }
 }

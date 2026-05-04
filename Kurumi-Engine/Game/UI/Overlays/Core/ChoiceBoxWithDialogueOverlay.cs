@@ -27,6 +27,8 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
     private bool _isFinished = false;
     private int _currentChoice = 0;
 
+    public bool YesSelected => _currentChoice == 0;
+
     public ChoiceBoxWithDialogueOverlay(
         AssetRegistry assetRegistry, 
         TextWindowDefaults textWindowDefaults, 
@@ -96,6 +98,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
 
         // Choice box window.
         var choiceTextElements = new List<UIElement>();
+        var choiceIndex = 0;
         foreach (TextComponent choiceTextComponent in choiceTextComponents)
         {
             choiceTextElements.Add(new UIElement()
@@ -107,11 +110,12 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
                 Size = new Vector2f(1, 1) 
             },
             
-            LocalOffset = new Vector2f(0, 0),
+            LocalOffset = new Vector2f(0, (textWindowHeight / _numberOfChoices) * choiceIndex),
             Children = [],
 
             RenderLayer = RenderLayer.UIText
             });
+            choiceIndex ++;
         }
         var choiceWindowElement = new UIElement()
         {
@@ -134,8 +138,8 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
             UIComponent = new EmptyComponent(),
             Layout = new UILayout() 
             { 
-                Position = new Vector2f(choiceWindowXLocation, choiceWindowYLocation), 
-                Size = new Vector2f(choiceWindowWidth, choiceWindowHeight) 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(1, 1) 
             },
             
             LocalOffset = new Vector2f(0, 0),
@@ -153,7 +157,30 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
 
     public void HandleInput(InputState inputState)
     {
-        // TODO: Input here.
+        bool confirmPressed = inputState.IsPressed(InputAction.Confirm);
+        bool downPressed = inputState.IsPressed(InputAction.MoveDown);
+        bool upPressed = inputState.IsPressed(InputAction.MoveUp);
+        if (confirmPressed)
+        {
+            _isFinished = true;
+        }
+        // Wrap choice around if it goes out of bounds.
+        else if (downPressed)
+        {
+            _currentChoice ++;
+            if (_currentChoice >= _numberOfChoices)
+            {
+                _currentChoice = 0;
+            }
+        }
+        else if (upPressed)
+        {
+            _currentChoice --;
+            if (_currentChoice < 0)
+            {
+                _currentChoice = _numberOfChoices - 1;
+            }
+        }
     }
 
     public UIElement GetUIElement() => _uiElement;

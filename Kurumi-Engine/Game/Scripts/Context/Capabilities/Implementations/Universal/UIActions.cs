@@ -49,7 +49,7 @@ public sealed class UIActions : IUIActions
         // TODO: Implement here.
     }
 
-    public void OpenTextWindowWithChoice(IReadOnlyList<string> choices, string text) 
+    public ChoiceBoxWithDialogueOverlay OpenTextWindowWithChoice(IReadOnlyList<string> choices, string text) 
     {
         var choiceBoxWithDialogueOverlay = new ChoiceBoxWithDialogueOverlay(
             _assetRegistry, 
@@ -59,6 +59,7 @@ public sealed class UIActions : IUIActions
             text
         );
         _stateContext.PushUIOverlay(choiceBoxWithDialogueOverlay);
+        return choiceBoxWithDialogueOverlay;
     }
 
     public void OpenTextWindowWithNameBox(string text, string name) 

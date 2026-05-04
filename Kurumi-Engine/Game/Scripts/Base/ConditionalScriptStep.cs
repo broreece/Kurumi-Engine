@@ -7,14 +7,12 @@ public abstract class ConditionalScriptStep : ScriptStep
 {
     private readonly string? _nextIfFalse;
 
-    protected bool _conditionMet = false;
+    protected abstract bool IsConditionMet();
 
     protected ConditionalScriptStep(string? nextIfFalse)
     {
         _nextIfFalse = nextIfFalse;
     }
-
-    public void SetConditionMet(bool conditionMet) => _conditionMet = conditionMet;
 
     /// <summary>
     /// Overrides the default script step get next step for conditionals, check if condition was met to return
@@ -23,7 +21,7 @@ public abstract class ConditionalScriptStep : ScriptStep
     /// <returns>The next script step to execute.</returns>
     public override string? GetNextStep() 
     {
-        if (_conditionMet) 
+        if (IsConditionMet()) 
         {
             return base.GetNextStep();
         }

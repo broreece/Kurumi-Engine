@@ -1,3 +1,5 @@
+using Data.Runtime.Scripts;
+
 using Engine.Input.Context.Core;
 
 using Game.UI.Overlays.Base;
@@ -14,7 +16,13 @@ public sealed class StateContext
     public required GameWindow GameWindow { get; init; }
     public required InputContextManager InputContextManager { get; init; }
 
+    public List<ScriptExecution> Scripts { get; } = [];
+
     public Stack<IUIOverlay> UIOverlays { get; } = [];
+
+    public void AddExecutingScript(ScriptExecution executingScript) => Scripts.Add(executingScript);
+
+    public void RemoveExecutingScript(ScriptExecution finishedScript) => Scripts.Remove(finishedScript);
 
     public void PushUIOverlay(IUIOverlay newUIOverlay) => UIOverlays.Push(newUIOverlay);
 

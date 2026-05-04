@@ -11,13 +11,13 @@ public sealed class PathedController : Controller
     private int _currentPathStepIndex = 0;
     private bool _finished = false;
 
-    public override bool IsFinished => _finished;
-
     public PathedController(bool canFinish, IReadOnlyList<int> actorPath) 
     {
         _canFinish = canFinish;
         _actorPath = actorPath;
     }
+
+    public override bool IsFinished() => _finished;
 
     /// <summary>
     /// When pathed controllers execute a move increment their current path step index.

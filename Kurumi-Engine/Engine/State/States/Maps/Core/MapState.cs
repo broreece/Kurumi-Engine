@@ -8,6 +8,7 @@ using Data.Runtime.Actors.Core;
 using Data.Runtime.Maps.Base;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
+using Data.Runtime.Scripts;
 
 using Engine.Assets.Core;
 using Engine.Context.Containers;
@@ -141,9 +142,9 @@ public sealed class MapState : IGameState
                 }
 
                 // Load potential script and activate.
-                if (actor.ActorInfo.OnAction) 
+                if (actor.ActorInfo.OnAction && actor.Script != null) 
                 {
-                    actor.Script?.Activate(_mapScriptContext!);
+                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
             }
         }
@@ -157,9 +158,9 @@ public sealed class MapState : IGameState
             var actors = _currentMap!.GetActorsAt(_party.XLocation, _party.YLocation);
             foreach (var actor in actors) 
             {
-                if (actor.ActorInfo.OnTouch) 
+                if (actor.ActorInfo.OnTouch && actor.Script != null) 
                 {
-                    actor.Script?.Activate(_mapScriptContext!);
+                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
             }
 
@@ -195,6 +196,8 @@ public sealed class MapState : IGameState
             _gameObjects.MapChangeRequest = null;
         }
     }
+
+    public ScriptContext GetScriptContext() => _mapScriptContext!;
 
     private void CacheDependencies() 
     {
@@ -297,7 +300,7 @@ public sealed class MapState : IGameState
             {
                 var currentController = controllers.Peek();
                 // Pop controller if it's finished, otherwise continue updating.
-                if (currentController.IsFinished) 
+                if (currentController.IsFinished()) 
                 {
                     actor.PopController();
                     actor.MaintainFacing = false;
@@ -330,9 +333,12 @@ public sealed class MapState : IGameState
 
     private void ExecuteOnFindScript(Actor actor) 
     {
-        if (actor.ActorInfo.OnFind && _visionResolver!.CanSee(actor, _party, actor.ActorInfo.TrackingRange)) 
+        if (
+            actor.ActorInfo.OnFind && 
+            actor.Script != null && 
+            _visionResolver!.CanSee(actor, _party, actor.ActorInfo.TrackingRange)) 
         {
-            actor.Script?.Activate(_mapScriptContext!);
+            _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
         }
     }
 
