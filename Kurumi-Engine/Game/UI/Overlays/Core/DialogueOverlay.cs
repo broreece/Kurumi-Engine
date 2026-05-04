@@ -26,9 +26,6 @@ public sealed class DialogueOverlay : IUIOverlay
     // Pages.
     private readonly IReadOnlyList<string> _pages;
 
-    // Coordinate variables.
-    private readonly int _width, _height, _xLocation, _yLocation;
-
     // Default variables.
     private bool _isFinished = false;
     private int _currentPage = 0;
@@ -38,20 +35,20 @@ public sealed class DialogueOverlay : IUIOverlay
         TextWindowDefaults textWindowDefaults, 
         IReadOnlyList<string> pages) 
     {
+        var textObject = new Text(pages[0], assetRegistry.GetFont(textWindowDefaults.FontName));
+        _textComponent = new TextComponent(textObject);
+
+        _pages = pages;
+
         var windowComponent = new WindowComponent(assetRegistry.GetTexture(
             AssetType.Windows, 
             textWindowDefaults.WindowName
         ));
 
-        var textObject = new Text(pages[0], assetRegistry.GetFont(textWindowDefaults.FontName));
-        _textComponent = new TextComponent(textObject);
-
-        _width = textWindowDefaults.Width;
-        _height = textWindowDefaults.Height;
-        _xLocation = textWindowDefaults.X;
-        _yLocation = textWindowDefaults.Y;
-
-        _pages = pages;
+        var width = textWindowDefaults.Width;
+        var height = textWindowDefaults.Height;
+        var xLocation = textWindowDefaults.X;
+        var yLocation = textWindowDefaults.Y;
 
         // Create Element.
         var textUIElement = new UIElement()
@@ -70,8 +67,8 @@ public sealed class DialogueOverlay : IUIOverlay
             UIComponent = windowComponent,
             Layout = new UILayout() 
             { 
-                Position = new Vector2f(_xLocation, _yLocation), 
-                Size = new Vector2f(_width, _height) 
+                Position = new Vector2f(xLocation, yLocation), 
+                Size = new Vector2f(width, height) 
             },
             
             LocalOffset = new Vector2f(0, 0),

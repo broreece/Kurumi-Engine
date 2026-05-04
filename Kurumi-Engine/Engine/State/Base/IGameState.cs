@@ -1,3 +1,5 @@
+using Game.Scripts.Context.Core;
+
 namespace Engine.State.Base;
 
 /// <summary>
@@ -10,4 +12,6 @@ public interface IGameState
     public void OnExit();
 
     public void Update(float deltaTime);
+
+    public ScriptContext GetScriptContext();
 }

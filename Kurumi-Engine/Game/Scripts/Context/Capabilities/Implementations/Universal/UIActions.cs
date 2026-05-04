@@ -49,9 +49,17 @@ public sealed class UIActions : IUIActions
         // TODO: Implement here.
     }
 
-    public void OpenTextWindowWithChoice(string text, string[] choices) 
+    public ChoiceBoxWithDialogueOverlay OpenTextWindowWithChoice(IReadOnlyList<string> choices, string text) 
     {
-        // TODO: Implement here.
+        var choiceBoxWithDialogueOverlay = new ChoiceBoxWithDialogueOverlay(
+            _assetRegistry, 
+            _textWindowDefaults, 
+            _choiceBoxDefaults, 
+            choices, 
+            text
+        );
+        _stateContext.PushUIOverlay(choiceBoxWithDialogueOverlay);
+        return choiceBoxWithDialogueOverlay;
     }
 
     public void OpenTextWindowWithNameBox(string text, string name) 

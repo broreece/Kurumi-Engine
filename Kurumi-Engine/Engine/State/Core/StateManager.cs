@@ -83,6 +83,13 @@ public sealed class StateManager
             }
         }
 
+        // Loop through executing scripts, remove any that have finished.
+        var executingScripts = _stateContext.Scripts;
+        foreach (var script in executingScripts)
+        {
+            script.Update(_currentState.GetScriptContext());
+        }
+
         if (stateInputValid) {
             _stateContext.InputContextManager.Update(inputState);
         }

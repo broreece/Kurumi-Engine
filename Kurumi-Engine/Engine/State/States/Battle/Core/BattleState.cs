@@ -12,7 +12,7 @@ using Engine.Systems.Rendering.Factories;
 using Engine.UI.Elements;
 using Engine.UI.Layout.Core;
 using Engine.UI.Render;
-
+using Game.Scripts.Context.Core;
 using Game.UI.Views;
 
 using Infrastructure.Rendering.Core;
@@ -144,5 +144,11 @@ public sealed class BattleState : IGameState
 
         // Renderer.
         _renderSystem = _gameContext.GameServices.RenderSystem;
+    }
+
+    public ScriptContext GetScriptContext()
+    {
+        // TODO: Implement here.
+        throw new NotImplementedException();
     }
 }
