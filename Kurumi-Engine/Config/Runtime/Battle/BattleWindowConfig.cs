@@ -16,4 +16,6 @@ public sealed class BattleWindowConfig
     public required int SelectionWindowHeight { get; init; }
     public required int SelectionWindowX { get; init; }
     public required int SelectionWindowY { get; init; }
+
+    public required int SelectionWindowSpacing { get; init; }
 }

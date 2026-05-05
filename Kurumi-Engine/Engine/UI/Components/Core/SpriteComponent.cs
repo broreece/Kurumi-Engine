@@ -6,11 +6,11 @@ using SFML.System;
 
 namespace Engine.UI.Components.Core;
 
-public sealed class WindowComponent : IUIComponent 
+public sealed class SpriteComponent : IUIComponent 
 {
     private readonly Sprite _sprite;
 
-    internal WindowComponent(Texture texture) 
+    internal SpriteComponent(Texture texture) 
     {
         _sprite = new Sprite(texture);
     }

@@ -19,6 +19,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
 {
     // Elements.
     private readonly UIElement _uiElement;
+    private UIElement _selectionElement;
 
     // Number of choices.
     private readonly int _numberOfChoices;
@@ -26,6 +27,10 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
     // Default variables.
     private bool _isFinished = false;
     private int _currentChoice = 0;
+    private int _choiceChange = 0;
+
+    // Stored config.
+    private int _choiceSpacing;
 
     public bool YesSelected => _currentChoice == 0;
 
@@ -48,23 +53,30 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
 
         _numberOfChoices = choices.Count;
 
-        var windowComponent = new WindowComponent(assetRegistry.GetTexture(
+        var windowComponent = new SpriteComponent(assetRegistry.GetTexture(
             AssetType.Windows, 
             textWindowDefaults.WindowName
         ));
-        var choiceWindowComponent = new WindowComponent(assetRegistry.GetTexture(
+        var choiceWindowComponent = new SpriteComponent(assetRegistry.GetTexture(
             AssetType.Windows, 
             choiceBoxDefaults.WindowName
+        ));
+        var selectionComponent = new SpriteComponent(assetRegistry.GetTexture(
+            AssetType.ChoiceSelectionArt,
+            choiceBoxDefaults.ChoiceBoxName
         ));
 
         var textWindowWidth = textWindowDefaults.Width;
         var textWindowHeight = textWindowDefaults.Height;
         var textWindowXLocation = textWindowDefaults.X;
         var textWindowYLocation = textWindowDefaults.Y;
+        
         var choiceWindowWidth = choiceBoxDefaults.Width;
         var choiceWindowHeight = choiceBoxDefaults.Height;
+        var selectionHeight = choiceBoxDefaults.Height / _numberOfChoices;
         var choiceWindowXLocation = choiceBoxDefaults.X;
         var choiceWindowYLocation = choiceBoxDefaults.Y;
+        _choiceSpacing = choiceBoxDefaults.Spacing;
 
         // Create Elements.
         // Text window.
@@ -110,13 +122,27 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
                 Size = new Vector2f(1, 1) 
             },
             
-            LocalOffset = new Vector2f(0, (textWindowHeight / _numberOfChoices) * choiceIndex),
+            LocalOffset = new Vector2f(0, _choiceSpacing * choiceIndex),
             Children = [],
 
-            RenderLayer = RenderLayer.UIText
+            RenderLayer = RenderLayer.UISelectionBox
             });
             choiceIndex ++;
         }
+        _selectionElement = new UIElement()
+        {
+            UIComponent = selectionComponent,
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(choiceWindowWidth, selectionHeight) 
+            },
+            
+            LocalOffset = new Vector2f(0, 0),
+            Children = [],
+
+            RenderLayer = RenderLayer.UIWindow
+        };
         var choiceWindowElement = new UIElement()
         {
             UIComponent = choiceWindowComponent,
@@ -127,12 +153,12 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
             },
             
             LocalOffset = new Vector2f(0, 0),
-            Children = choiceTextElements,
+            Children = [.. choiceTextElements, _selectionElement],
 
             RenderLayer = RenderLayer.UIWindow
         };
 
-        // The final choice box UI with dialogue UI element.
+        // The parent UI element of the choice window and text window.
         _uiElement = new UIElement()
         {
             UIComponent = new EmptyComponent(),
@@ -153,7 +179,19 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         };
     }
 
-    public void Update(float deltaTime) {}
+    public void Update(float deltaTime)
+    {
+        // Update the position of the selection element based on the new current choice.
+        var width = _selectionElement.Layout.Size.X;
+        var height = _selectionElement.Layout.Size.Y;
+        var xLocation = _selectionElement.Layout.Position.X;
+        var yLocation = _selectionElement.Layout.Position.Y;
+        _selectionElement.Layout = new UILayout() {
+            Position = new Vector2f(xLocation, yLocation + (_choiceChange * _choiceSpacing)),
+            Size = new Vector2f(width, height)
+        };
+        _choiceChange = 0;
+    }
 
     public void HandleInput(InputState inputState)
     {
@@ -167,19 +205,23 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         // Wrap choice around if it goes out of bounds.
         else if (downPressed)
         {
+            var oldChoice = _currentChoice;
             _currentChoice ++;
             if (_currentChoice >= _numberOfChoices)
             {
                 _currentChoice = 0;
             }
+            _choiceChange = (_currentChoice + 1) - (oldChoice + 1);
         }
         else if (upPressed)
         {
+            var oldChoice = _currentChoice;
             _currentChoice --;
             if (_currentChoice < 0)
             {
                 _currentChoice = _numberOfChoices - 1;
             }
+            _choiceChange = (_currentChoice + 1) - (oldChoice + 1);
         }
     }
 

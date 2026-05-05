@@ -12,4 +12,6 @@ public sealed class ChoiceBoxDefaults
     public required int Height { get; init; }
     public required int X { get; init; }
     public required int Y { get; init; }
+
+    public required int Spacing { get; init; }
 }

@@ -27,3 +27,7 @@ Peformance enhancements of scripts.
 - Script steps are also all cached on script execution also meaning we no longer need to convert at execution point.
 
 ---------------------------------------------------------------------
+
+Re-implemented missing features.
+
+- UI elements have been re-added to the engine, same format as pre-forge build (Dialogue, Choice boxes, battle UI)

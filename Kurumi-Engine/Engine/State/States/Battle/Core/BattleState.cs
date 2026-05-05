@@ -12,6 +12,8 @@ using Engine.Systems.Rendering.Factories;
 using Engine.UI.Elements;
 using Engine.UI.Layout.Core;
 using Engine.UI.Render;
+
+using Game.Scripts.Context.Builder.Core;
 using Game.Scripts.Context.Core;
 using Game.UI.Views;
 
@@ -45,6 +47,9 @@ public sealed class BattleState : IGameState
     // UI renderer.
     private readonly UIRenderSystem _uiRenderSystem;
 
+    // Current character index.
+    private int _currentCharacterIndex = 0;
+
     // Render system.
     private RenderSystem? _renderSystem;
 
@@ -55,6 +60,9 @@ public sealed class BattleState : IGameState
 
     // Camera.
     private Camera? _camera;
+
+    // Script context.
+    private ScriptContext? _battleScriptContext;
 
     // List of actions to be executed in order.
     private PriorityQueue<BattleAction, int> _actions = new(Comparer<int>.Create((x, y) => y.CompareTo(x)));
@@ -81,8 +89,12 @@ public sealed class BattleState : IGameState
         _formation = formationFactory.Create(formationDefinition, formationModel);
 
         var configProvider = _gameContext.GameData.ConfigProvider;
-        _view = new BattleView(_gameContext.GameData.AssetRegistry, configProvider.BattleWindowConfig);
-        _uiRoot = _view.Build(party.Characters.Length);
+        _view = new BattleView(
+            _gameContext.GameData.AssetRegistry, 
+            configProvider.BattleWindowConfig, 
+            party.Characters.Length
+        );
+        _uiRoot = _view.UIElement;
 
         _uiRenderSystem = new UIRenderSystem(new UILayoutSystem());
     }
@@ -107,9 +119,11 @@ public sealed class BattleState : IGameState
         _partyBattleRenderer!.Update(_camera.View);
 
         // Update the UI then render the UI.
-        _view.Update(_party.Characters);
+        _view.Update(_party.Characters, _currentCharacterIndex);
         _uiRenderSystem.Render(_uiRoot, _renderSystem!, _stateContext.GameWindow.Size);
     }
+
+    public ScriptContext GetScriptContext() => _battleScriptContext!;
 
     private void CacheDependencies() 
     {
@@ -144,11 +158,9 @@ public sealed class BattleState : IGameState
 
         // Renderer.
         _renderSystem = _gameContext.GameServices.RenderSystem;
-    }
 
-    public ScriptContext GetScriptContext()
-    {
-        // TODO: Implement here.
-        throw new NotImplementedException();
+        // Battle script context.
+        var battleScriptContextBuilder = new BattleScriptContextBuilder(_gameContext, _stateContext);
+        _battleScriptContext = battleScriptContextBuilder.BuildScriptContext();
     }
 }

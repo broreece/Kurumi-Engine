@@ -1,11 +1,13 @@
 using Game.Scripts.Context.Capabilities.Base;
 using Game.UI.Overlays.Core;
 
+using Utils.Interfaces;
+
 namespace Game.Scripts.Context.Capabilities.Interfaces.Universal;
 
 public interface IUIActions : ICapability 
 {
-    public void OpenBasicTextWindow(IReadOnlyList<string> pages);
+    public IFinishable OpenBasicTextWindow(IReadOnlyList<string> pages);
 
     public void OpenGlobalMessage(int timeLimit, string text);
 

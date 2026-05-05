@@ -1,5 +1,5 @@
 window_art_name: "template"
-choice_box_art_name: 0
+choice_box_art_name: "template"
 font_name: "template"
 font_size: 25
 
@@ -12,3 +12,5 @@ selection_window_width: 40
 selection_window_height: 30
 selection_window_x: 610
 selection_window_y: 450
+
+selection_window_spacing: 25

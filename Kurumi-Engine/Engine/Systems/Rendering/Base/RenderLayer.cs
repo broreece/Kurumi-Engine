@@ -20,5 +20,6 @@ public enum RenderLayer
     EnemyBodyPartsLayer = 10,
 
     UIWindow = 11,
-    UIText = 12
+    UISelectionBox = 12,
+    UIText = 13
 }

@@ -34,5 +34,9 @@ public sealed class Character : IStats, IHasStatuses
 
     public IReadOnlyList<int> GetStats() => _model.Stats;
 
+    public List<int> GetAbilityIDs() => _model.Abilities;
+
+    public Dictionary<int, List<int>> GetAbilitySetIDs() => _model.AbilitySets;
+
     public List<int> GetStatuses() => _model.Statuses;
 }

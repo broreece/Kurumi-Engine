@@ -53,7 +53,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 - Re-implement battle state
 - Re-implement removed script steps
-- Ensure scripts freeze when activating freezing steps such as opening a text box
 
 ---
 

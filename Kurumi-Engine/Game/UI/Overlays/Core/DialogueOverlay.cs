@@ -40,7 +40,7 @@ public sealed class DialogueOverlay : IUIOverlay
 
         _pages = pages;
 
-        var windowComponent = new WindowComponent(assetRegistry.GetTexture(
+        var windowComponent = new SpriteComponent(assetRegistry.GetTexture(
             AssetType.Windows, 
             textWindowDefaults.WindowName
         ));

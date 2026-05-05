@@ -8,6 +8,8 @@ using Engine.State.Base;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 using Game.UI.Overlays.Core;
 
+using Utils.Interfaces;
+
 namespace Game.Scripts.Context.Capabilities.Implementations.Universal;
 
 public sealed class UIActions : IUIActions 
@@ -38,10 +40,11 @@ public sealed class UIActions : IUIActions
         _textWindowDefaults = configProvider.TextWindowDefaults;
     }
 
-    public void OpenBasicTextWindow(IReadOnlyList<string> pages) 
+    public IFinishable OpenBasicTextWindow(IReadOnlyList<string> pages) 
     {
         var dialogueOverlay = new DialogueOverlay(_assetRegistry, _textWindowDefaults, pages);
         _stateContext.PushUIOverlay(dialogueOverlay);
+        return dialogueOverlay;
     }
 
     public void OpenGlobalMessage(int timeLimit, string text) 
