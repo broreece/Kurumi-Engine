@@ -205,6 +205,7 @@ public static class Program
                     party, 
                     gameObjects.BattleStartRequest
                 ));
+                gameObjects.BattleStartRequest = null;
             }
 
             window.DispatchEvents();

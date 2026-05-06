@@ -22,10 +22,4 @@ public interface IUIComponent
     public Drawable? GetDrawable();
 
     public Vector2u GetContentSize();
-
-    /// <summary>
-    /// If the UI component should ignore the parent UI components scale.
-    /// </summary>
-    /// <returns>If the UI component should ignore the parent UI components scale.</returns>
-    public bool IgnoreParentScale();
 }

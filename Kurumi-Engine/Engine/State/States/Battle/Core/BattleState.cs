@@ -4,6 +4,7 @@ using Data.Runtime.Formations.Factories;
 using Data.Runtime.Party.Core;
 
 using Engine.Context.Core;
+using Engine.Input.Context.Contexts;
 using Engine.State.Base;
 using Engine.State.States.Battle.Base;
 using Engine.Systems.Camera;
@@ -25,7 +26,7 @@ namespace Engine.State.States.Battle.Core;
 /// Renders the enemy formation, parties and attacking animations. 
 /// Contains input handler and systems relating to the battle state menus.
 /// </summary>
-public sealed class BattleState : IGameState 
+public sealed class BattleState : IGameState, IBattleMenu 
 {
     // Context.
     private readonly GameContext _gameContext;
@@ -47,8 +48,12 @@ public sealed class BattleState : IGameState
     // UI renderer.
     private readonly UIRenderSystem _uiRenderSystem;
 
-    // Current character index.
+    // Cached config.
+    private readonly int _maxChoicesPerPage;
+
+    // Current selection indexes.
     private int _currentCharacterIndex = 0;
+    private int _currentSelectionIndex = 0;
 
     // Render system.
     private RenderSystem? _renderSystem;
@@ -78,7 +83,8 @@ public sealed class BattleState : IGameState
         _party = party;
         _battle = battle;
 
-        var database = gameContext.GameData.GameDatabase;
+        var gameData = _gameContext.GameData;
+        var database = gameData.GameDatabase;
         var formationRegistry = database.FormationRegistry;
         var saveData = gameContext.GameObjects.SaveData;
 
@@ -88,11 +94,15 @@ public sealed class BattleState : IGameState
 
         _formation = formationFactory.Create(formationDefinition, formationModel);
 
-        var configProvider = _gameContext.GameData.ConfigProvider;
+        var battleWindowConfig = gameContext.GameData.ConfigProvider.BattleWindowConfig;
+        _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
+
         _view = new BattleView(
-            _gameContext.GameData.AssetRegistry, 
-            configProvider.BattleWindowConfig, 
-            party.Characters.Length
+            gameData.AssetRegistry, 
+            database.AbilityRegistry,
+            database.AbilitySetRegistry,
+            battleWindowConfig,
+            party.Characters
         );
         _uiRoot = _view.UIElement;
 
@@ -102,6 +112,7 @@ public sealed class BattleState : IGameState
     public void OnEnter()
     {
         CacheDependencies();
+        InitializeInput();
     }
 
     public void OnExit() {}
@@ -112,6 +123,7 @@ public sealed class BattleState : IGameState
         if (_stateContext.InputContextManager.GetGameplayContext()!.InteractRequested) 
         {
             _stateContext.InputContextManager.GetGameplayContext()!.InteractRequested = false;
+            // TODO: Implement select here.
         }
 
         _battleRenderer!.Update(_camera!.View);
@@ -119,11 +131,39 @@ public sealed class BattleState : IGameState
         _partyBattleRenderer!.Update(_camera.View);
 
         // Update the UI then render the UI.
-        _view.Update(_party.Characters, _currentCharacterIndex);
+        _view.Update(_currentCharacterIndex, _currentSelectionIndex);
         _uiRenderSystem.Render(_uiRoot, _renderSystem!, _stateContext.GameWindow.Size);
     }
 
     public ScriptContext GetScriptContext() => _battleScriptContext!;
+
+    public void MoveUp()
+    {
+        _currentSelectionIndex = _currentSelectionIndex == 0 ? _maxChoicesPerPage - 1: _currentSelectionIndex - 1;
+    }
+
+    public void MoveDown()
+    {
+        _currentSelectionIndex = _currentSelectionIndex == _maxChoicesPerPage - 1 ? 0 : _currentSelectionIndex + 1;
+    }
+
+    public void MoveRight()
+    {
+        // TODO: Implement here.
+        throw new NotImplementedException();
+    }
+
+    public void MoveLeft()
+    {
+        // TODO: Implement here.
+        throw new NotImplementedException();
+    }
+
+    public void Cancel()
+    {
+        // TODO: Implement here.
+        throw new NotImplementedException();
+    }
 
     private void CacheDependencies() 
     {
@@ -162,5 +202,10 @@ public sealed class BattleState : IGameState
         // Battle script context.
         var battleScriptContextBuilder = new BattleScriptContextBuilder(_gameContext, _stateContext);
         _battleScriptContext = battleScriptContextBuilder.BuildScriptContext();
+    }
+
+    private void InitializeInput()
+    {
+         _stateContext.InputContextManager.SetContext(new BattleInputContext(this));
     }
 }

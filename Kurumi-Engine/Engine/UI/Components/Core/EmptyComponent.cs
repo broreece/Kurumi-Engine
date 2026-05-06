@@ -16,6 +16,4 @@ public sealed class EmptyComponent : IUIComponent
     public Drawable? GetDrawable() => null;
 
     public Vector2u GetContentSize() => new(0, 0);
-
-    public bool IgnoreParentScale() => true;
 }

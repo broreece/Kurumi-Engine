@@ -1,5 +1,6 @@
 using Config.Runtime.Battle;
 
+using Data.Definitions.Entities.Abilities.Core;
 using Data.Runtime.Entities.Core;
 
 using Engine.Assets.Base;
@@ -12,32 +13,68 @@ using Engine.UI.Data.Content.Layout;
 using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 
+using Infrastructure.Database.Base;
+
 using SFML.System;
 
 namespace Game.UI.Views;
 
 public sealed class BattleView
 {
-    // Components.
+    // Registries for abilities and skills to access names.
+    private readonly Registry<AbilityDefinition> _abilityRegistry;
+    private readonly Registry<NamedData> _abilitySetRegistry;
+
+    // Party members.
+    private readonly Character[] _partyMembers;
+
+    // Cached config.
+    private readonly int _maxChoicesPerPage;
+    private readonly int _spacing;
+
+    // Component factories.
+    private readonly SpriteComponentFactory _spriteComponentFactory;
+    private readonly TextComponentFactory _textComponentFactory;
+
+    // Cached styles.
+    private readonly TextStyle _textStyle;
+
+    // Components and children elements.
+    private readonly UIElement _selectionWindowElement;
+    private readonly UIElement _selectionElement;
     private readonly List<TextComponent> _partyTextComponents = [];
-    private List<TextComponent> _choiceTextComponents = [];
+
+    // Choice selection location variables.
+    private int _currentChoice = 0;
 
     // Elements.
     public UIElement UIElement { get; }
 
-    public BattleView(AssetRegistry assetRegistry, BattleWindowConfig battleWindowConfig, int partySize)
+    public BattleView(
+        AssetRegistry assetRegistry, 
+        Registry<AbilityDefinition> abilityRegistry, 
+        Registry<NamedData> abilitySetRegistry,
+        BattleWindowConfig battleWindowConfig, 
+        Character[] partyMembers
+    )
     {
+        _abilityRegistry = abilityRegistry;
+        _abilitySetRegistry = abilitySetRegistry;
+        _partyMembers = partyMembers;
+
         // Style config.
         var battleWindowName = battleWindowConfig.WindowArtName;
+        var selectionName = battleWindowConfig.ChoiceBoxArtName;
         var fontSize = (uint) battleWindowConfig.FontSize;
         var fontArt = battleWindowConfig.FontName;
 
         var windowStyle = new SpriteStyle() { SpriteArt = battleWindowName };
-        var textStyle = new TextStyle() { FontSize = fontSize, FontArt = fontArt};
+        var selectionStyle = new SpriteStyle() { SpriteArt = selectionName };
+        _textStyle = new TextStyle() { FontSize = fontSize, FontArt = fontArt};
 
         // Component factories.
-        var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
-        var textComponentFactory = new TextComponentFactory(assetRegistry);
+        _spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
+        _textComponentFactory = new TextComponentFactory(assetRegistry);
 
         // Info window variables.
         // Config.
@@ -45,31 +82,25 @@ public sealed class BattleView
         var infoYLocation = battleWindowConfig.InfoWindowY;
         var infoWidth = battleWindowConfig.InfoWindowWidth;
         var infoHeight = battleWindowConfig.InfoWindowHeight;
-        var spacing = battleWindowConfig.SelectionWindowSpacing;
 
-        var infoWindowComponent = spriteComponentFactory.Create(AssetType.Windows, windowStyle);
-        var infoLayout = new UILayout() 
-        { 
-            Position = new Vector2f(infoXLocation, infoYLocation), 
-            Size = new Vector2f(infoWidth, infoHeight) 
-        };
+        _spacing = battleWindowConfig.SelectionWindowSpacing;
 
         // Info window text.
-        var childrenElements = new List<UIElement>();
-        for (int partyIndex = 0; partyIndex < partySize; partyIndex ++)
+        var infoChildrenElements = new List<UIElement>();
+        for (int partyIndex = 0; partyIndex < _partyMembers.Length; partyIndex ++)
         {
             // Create and store components in array to be updated later.
             var infoTextData = new TextData() { Text = "" };
-            var component = textComponentFactory.Create(infoTextData, textStyle);
+            var component = _textComponentFactory.Create(infoTextData, _textStyle);
             _partyTextComponents.Add(component);
 
             // Place UI element children.
-            childrenElements.Add(new UIElement()
+            infoChildrenElements.Add(new UIElement()
             {
                 UIComponent = component,
                 Layout = new UILayout() 
                 {
-                    Position = new Vector2f(0, partyIndex * spacing),
+                    Position = new Vector2f(0, partyIndex * _spacing),
                     Size = new Vector2f(1, 1)
                 },
 
@@ -82,11 +113,15 @@ public sealed class BattleView
 
         var infoWindowElement = new UIElement()
         {
-            UIComponent = infoWindowComponent,
-            Layout = infoLayout,
+            UIComponent = _spriteComponentFactory.Create(AssetType.Windows, windowStyle),
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(infoXLocation, infoYLocation), 
+                Size = new Vector2f(infoWidth, infoHeight) 
+            },
             
             LocalOffset = new Vector2f(0, 0),
-            Children = childrenElements,
+            Children = infoChildrenElements,
 
             RenderLayer = RenderLayer.UIWindow
         };
@@ -98,16 +133,33 @@ public sealed class BattleView
         var selectionWindowWidth = battleWindowConfig.SelectionWindowWidth;
         var selectionWindowHeight = battleWindowConfig.SelectionWindowHeight;
 
-        var selectionWindowComponent = spriteComponentFactory.Create(AssetType.Windows, windowStyle);
-        var selectionWindowLayout = new UILayout() 
-        { 
-            Position = new Vector2f(selectionWindowXLocation, selectionWindowYLocation), 
-            Size = new Vector2f(selectionWindowWidth, selectionWindowHeight) 
+        _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
+
+        var selectionWindowComponent = _spriteComponentFactory.Create(AssetType.Windows, windowStyle);
+        var selectionComponent = _spriteComponentFactory.Create(AssetType.ChoiceSelectionArt, selectionStyle);
+
+        _selectionElement = new UIElement()
+        {
+            UIComponent = selectionComponent, 
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(selectionWindowWidth, selectionWindowHeight / _maxChoicesPerPage) 
+            },
+
+            LocalOffset = new Vector2f(0, 0),
+            Children = [],
+
+            RenderLayer = RenderLayer.UISelectionBox
         };
-        var selectionWindowElement = new UIElement() 
+        _selectionWindowElement = new UIElement() 
         { 
             UIComponent = selectionWindowComponent, 
-            Layout = selectionWindowLayout,
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(selectionWindowXLocation, selectionWindowYLocation), 
+                Size = new Vector2f(selectionWindowWidth, selectionWindowHeight) 
+            },
 
             LocalOffset = new Vector2f(0, 0),
             Children = [],
@@ -118,13 +170,17 @@ public sealed class BattleView
         UIElement = new UIElement()
         {
             UIComponent = new EmptyComponent(),
-            Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(100, 100) },
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(1, 1) 
+            },
             
             LocalOffset = new Vector2f(0, 0),
             Children =
             [
                 infoWindowElement,
-                selectionWindowElement
+                _selectionWindowElement
             ],
 
             RenderLayer = RenderLayer.UIWindow
@@ -134,34 +190,91 @@ public sealed class BattleView
     /// <summary>
     /// Updates the battle UI view based on the state of the party members.
     /// </summary>
-    /// <param name="partyMembers">The array of playable characters in the party.</param>
     /// <param name="currentCharacterIndex">The index of the current character.</param>
-    public void Update(Character[] partyMembers, int currentCharacterIndex)
+    /// <param name="currentSelectionIndex">The index of the currently selected option.</param>
+    public void Update(int currentCharacterIndex, int currentSelectionIndex)
     {
-        // Party information.
-        for (int partyIndex = 0; partyIndex < partyMembers.Length; partyIndex ++)
+        // Update selection element location.
+        var oldChoice = _currentChoice;
+        _currentChoice = currentSelectionIndex;
+        var choiceChange = (_currentChoice + 1) - (oldChoice + 1);
+
+        var xLocation = _selectionElement.Layout.Position.X;
+        var yLocation = _selectionElement.Layout.Position.Y;
+
+        _selectionElement.Layout = new UILayout()
         {
-            if (partyMembers[partyIndex] != null)
+            Position = new Vector2f(xLocation, yLocation + (choiceChange * _spacing)),
+            Size = _selectionElement.Layout.Size
+        };
+
+        // Party information.
+        for (int partyIndex = 0; partyIndex < _partyMembers.Length; partyIndex ++)
+        {
+            if (_partyMembers[partyIndex] != null)
             {
-                var character = partyMembers[partyIndex];
+                var character = _partyMembers[partyIndex];
                 _partyTextComponents[partyIndex].SetText($"{character.Name} HP: {character.CurrentHP} / " +
                     $"{character.MaxHP}, MP: {character.CurrentMP}: {character.MaxMP}");
             }
         }
 
         // Choices.
-        _choiceTextComponents = [];
-        var currentCharacter = partyMembers[currentCharacterIndex];
+        var choiceTextElements = new List<UIElement>();
+        var currentCharacter = _partyMembers[currentCharacterIndex];
+
+        // Current choice index.
+        var choiceIndex = 0;
+
         // Base abilities.
         foreach (var id in currentCharacter.GetAbilityIDs())
         {
-            
+            TextData textData = new() { Text = _abilityRegistry.Get(id).Name };
+            var textComponent = _textComponentFactory.Create(textData, _textStyle);
+            choiceTextElements.Add(new UIElement()
+            {
+                UIComponent = textComponent,
+                Layout = new UILayout()
+                {
+                    Position = new Vector2f(0, 0), 
+                    Size = new Vector2f(1, 1),
+                },
+
+                LocalOffset = new Vector2f(0, _spacing * choiceIndex),
+                Children = [],
+
+                RenderLayer = RenderLayer.UIText
+            });
+            choiceIndex ++;
         }
+
         // Ability sets.
-        foreach (var keyPair in currentCharacter.GetAbilitySetIDs())
+        foreach (var keyValuePair in currentCharacter.GetAbilitySetIDs())
         {
-            
+            var abilitySetId = keyValuePair.Key;
+            TextData textData = new() { Text = _abilitySetRegistry.Get(abilitySetId).Name };
+            var textComponent = _textComponentFactory.Create(textData, _textStyle);
+            choiceTextElements.Add(new UIElement()
+            {
+                UIComponent = textComponent,
+                Layout = new UILayout()
+                {
+                    Position = new Vector2f(0, 0), 
+                    Size = new Vector2f(1, 1),
+                },
+
+                LocalOffset = new Vector2f(0, _spacing * choiceIndex),
+                Children = [],
+
+                RenderLayer = RenderLayer.UIText
+            });
+            choiceIndex ++;
         }
+
         // Additional battle options.
+        // TODO: Implement run away and items here.
+
+        // Assign the choice text elements as children of the selection element.
+        _selectionWindowElement.Children = [.. choiceTextElements, _selectionElement];
     }
 }

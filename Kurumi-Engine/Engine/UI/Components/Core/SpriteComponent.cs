@@ -24,6 +24,4 @@ public sealed class SpriteComponent : IUIComponent
     public Drawable? GetDrawable() => _sprite;
 
     public Vector2u GetContentSize() => _sprite.Texture.Size;
-
-    public bool IgnoreParentScale() => false;
 }

@@ -18,4 +18,6 @@ public sealed class BattleWindowConfig
     public required int SelectionWindowY { get; init; }
 
     public required int SelectionWindowSpacing { get; init; }
+
+    public required int MaxChoicesPerPage { get; init; }
 }

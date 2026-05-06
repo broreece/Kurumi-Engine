@@ -31,3 +31,11 @@ Peformance enhancements of scripts.
 Re-implemented missing features.
 
 - UI elements have been re-added to the engine, same format as pre-forge build (Dialogue, Choice boxes, battle UI)
+
+---------------------------------------------------------------------
+
+UI Scaling.
+
+- UI Scaling is no longer based on parent scales but 100% based on window size, meaning no more children elements
+being scaled based on parents.
+- Positioning is still based on hierarchy however ensuring UI views are consistently placed.

@@ -5,7 +5,10 @@ using Engine.Assets.Core;
 using Engine.Input.Base;
 using Engine.Systems.Rendering.Base;
 using Engine.UI.Components.Core;
+using Engine.UI.Components.Factories;
+using Engine.UI.Data.Content;
 using Engine.UI.Data.Content.Layout;
+using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 
 using Game.UI.Overlays.Base;
@@ -30,7 +33,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
     private int _choiceChange = 0;
 
     // Stored config.
-    private int _choiceSpacing;
+    private int _spacing;
 
     public bool YesSelected => _currentChoice == 0;
 
@@ -41,30 +44,40 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         IReadOnlyList<string> choices,
         string text)
     {
+        // Component factories.
+        var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
+        var textComponentFactory = new TextComponentFactory(assetRegistry);
+
+        // Text style.
+        var textStyle = new TextStyle() 
+        { 
+            FontSize = (uint) choiceBoxDefaults.FontSize, 
+            FontArt = choiceBoxDefaults.FontName 
+        };
+
         var textObject = new Text(text, assetRegistry.GetFont(textWindowDefaults.FontName));
         var textComponent = new TextComponent(textObject);
 
         var choiceTextComponents = new List<TextComponent>();
         foreach (var choice in choices)
         {
-            var choiceTextObject = new Text(choice, assetRegistry.GetFont(choiceBoxDefaults.FontName));
-            choiceTextComponents.Add(new TextComponent(choiceTextObject));
+            choiceTextComponents.Add(textComponentFactory.Create(new TextData() { Text = choice }, textStyle));
         }
 
         _numberOfChoices = choices.Count;
 
-        var windowComponent = new SpriteComponent(assetRegistry.GetTexture(
+        var windowComponent = spriteComponentFactory.Create(
+            AssetType.Windows,
+            new SpriteStyle() { SpriteArt = textWindowDefaults.WindowName }
+        );
+        var choiceWindowComponent = spriteComponentFactory.Create(
             AssetType.Windows, 
-            textWindowDefaults.WindowName
-        ));
-        var choiceWindowComponent = new SpriteComponent(assetRegistry.GetTexture(
-            AssetType.Windows, 
-            choiceBoxDefaults.WindowName
-        ));
-        var selectionComponent = new SpriteComponent(assetRegistry.GetTexture(
+            new SpriteStyle() { SpriteArt = choiceBoxDefaults.WindowName }
+        );
+        var selectionComponent = spriteComponentFactory.Create(
             AssetType.ChoiceSelectionArt,
-            choiceBoxDefaults.ChoiceBoxName
-        ));
+            new SpriteStyle() { SpriteArt = choiceBoxDefaults.ChoiceBoxName }
+        );
 
         var textWindowWidth = textWindowDefaults.Width;
         var textWindowHeight = textWindowDefaults.Height;
@@ -76,14 +89,18 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         var selectionHeight = choiceBoxDefaults.Height / _numberOfChoices;
         var choiceWindowXLocation = choiceBoxDefaults.X;
         var choiceWindowYLocation = choiceBoxDefaults.Y;
-        _choiceSpacing = choiceBoxDefaults.Spacing;
+        _spacing = choiceBoxDefaults.Spacing;
 
         // Create Elements.
         // Text window.
         var textUIElement = new UIElement()
         {
             UIComponent = textComponent,
-            Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(1, 1) 
+            },
             
             LocalOffset = new Vector2f(0, 0),
             Children = [],
@@ -122,7 +139,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
                 Size = new Vector2f(1, 1) 
             },
             
-            LocalOffset = new Vector2f(0, _choiceSpacing * choiceIndex),
+            LocalOffset = new Vector2f(0, _spacing * choiceIndex),
             Children = [],
 
             RenderLayer = RenderLayer.UISelectionBox
@@ -141,7 +158,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
             LocalOffset = new Vector2f(0, 0),
             Children = [],
 
-            RenderLayer = RenderLayer.UIWindow
+            RenderLayer = RenderLayer.UISelectionBox
         };
         var choiceWindowElement = new UIElement()
         {
@@ -187,7 +204,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         var xLocation = _selectionElement.Layout.Position.X;
         var yLocation = _selectionElement.Layout.Position.Y;
         _selectionElement.Layout = new UILayout() {
-            Position = new Vector2f(xLocation, yLocation + (_choiceChange * _choiceSpacing)),
+            Position = new Vector2f(xLocation, yLocation + (_choiceChange * _spacing)),
             Size = new Vector2f(width, height)
         };
         _choiceChange = 0;
