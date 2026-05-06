@@ -4,6 +4,7 @@ using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
 using SFML.Graphics;
+using SFML.System;
 
 namespace Engine.Systems.Rendering.Core;
 
@@ -28,7 +29,7 @@ public sealed class PartyBattleRenderer
         _characterBattleSpriteConfig = characterBattleSpriteConfig;
     }
     
-    public void Update()
+    public void Update(View view)
     {
         foreach (var partyMemberRender in _partyMemberBattleRenderData) 
         {
@@ -41,16 +42,23 @@ public sealed class PartyBattleRenderer
                         0,
                         _characterBattleSpriteConfig.Width,
                         _characterBattleSpriteConfig.Height
+                    ),
+                    Position = new Vector2f(
+                        // TODO: Swap to scaled width here.
+                        _characterBattleSpriteConfig.PartyXPlacement 
+                            + (_characterBattleSpriteConfig.Width * partyMemberRender.Index),
+                        _characterBattleSpriteConfig.PartyYPlacement
                     )
                 };
-                // TODO: (SPBS-01) Create and set positioning here utilizing the party member render data.
+
                 // Send to render list.
                 _renderSystem.Submit(
                     new RenderCommand() 
                     {
-                        Layer = (int) RenderLayer.PartyBattleLayer, 
+                        Layer = RenderLayer.PartyBattleLayer, 
                         Drawable = sprite, 
-                        States = RenderStates.Default
+                        States = RenderStates.Default,
+                        View = view
                     }
                 );
             }

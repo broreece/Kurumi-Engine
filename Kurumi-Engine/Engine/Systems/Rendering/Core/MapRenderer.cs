@@ -43,7 +43,7 @@ public sealed class MapRenderer
         _animatedTileSheetTexture = animatedTileSheetTexture;
     }
 
-    public void Update(ITileFrameAccessor tileFrameAccessor) 
+    public void Update(ITileFrameAccessor tileFrameAccessor, View view) 
     {
         // Cache the tile config variables.
         var tilesWide = _tileSheetConfig.TileSheetMaxTilesWide;
@@ -81,9 +81,10 @@ public sealed class MapRenderer
                     _renderSystem.Submit(
                         new RenderCommand() 
                         {
-                            Layer = (int) RenderLayer.TileLayer, 
+                            Layer = RenderLayer.TileLayer, 
                             Drawable = sprite, 
-                            States = RenderStates.Default
+                            States = RenderStates.Default,
+                            View = view
                         }
                     );
                 }
@@ -124,9 +125,10 @@ public sealed class MapRenderer
                     _renderSystem.Submit(
                         new RenderCommand() 
                         {
-                            Layer = (int) RenderLayer.TileLayer, 
+                            Layer = RenderLayer.AnimatedTileLayer, 
                             Drawable = sprite, 
-                            States = RenderStates.Default
+                            States = RenderStates.Default,
+                            View = view
                         }
                     );
                 }

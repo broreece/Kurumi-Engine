@@ -1,3 +1,4 @@
+using Engine.Assets.Core;
 using Engine.UI.Components.Core;
 using Engine.UI.Data.Content;
 using Engine.UI.Data.Style;
@@ -8,16 +9,16 @@ namespace Engine.UI.Components.Factories;
 
 public sealed class TextComponentFactory
 {
-    private readonly IReadOnlyDictionary<string, string> _fontFileNames;
+    private readonly AssetRegistry _assetRegistry;
 
-    public TextComponentFactory(IReadOnlyDictionary<string, string> fontFileNames)
+    public TextComponentFactory(AssetRegistry assetRegistry)
     {
-        _fontFileNames = fontFileNames;
+        _assetRegistry = assetRegistry;
     }
 
     public TextComponent Create(TextData textData, TextStyle textStyle)
     {
-        var font = new Font(_fontFileNames[textStyle.FontArt]);
+        var font = _assetRegistry.GetFont(textStyle.FontArt);
         var text = new Text(textData.Text, font, textStyle.FontSize);
 
         return new TextComponent(text);

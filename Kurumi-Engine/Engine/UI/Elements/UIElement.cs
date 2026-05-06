@@ -1,3 +1,4 @@
+using Engine.Systems.Rendering.Base;
 using Engine.UI.Components.Base;
 using Engine.UI.Data.Content.Layout;
 
@@ -8,12 +9,14 @@ namespace Engine.UI.Elements;
 /// <summary>
 /// Contains the component, layout, local offset provided by parent and children of the UI element.
 /// </summary>
-public readonly struct UIElement {
+public sealed class UIElement {
     public required IUIComponent UIComponent { get; init; }
 
-    public required UILayout Layout { get; init; }
+    public required UILayout Layout { get; set; }
 
     public required Vector2f LocalOffset { get; init; }
 
-    public required IReadOnlyList<UIElement> Children { get; init; }
+    public required IReadOnlyList<UIElement> Children { get; set; }
+
+    public required RenderLayer RenderLayer  { get; init; }
 }

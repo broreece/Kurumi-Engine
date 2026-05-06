@@ -69,7 +69,12 @@ public static class Program
             GameWindow = window, 
             InputContextManager = input.ContextManager
         };
-        var stateManager = new StateManager(new MapState(gameContext, stateContext, party));
+        var stateManager = new StateManager(
+            new MapState(gameContext, stateContext, party), 
+            stateContext, 
+            gameServices.InputMapper,
+            gameServices.RenderSystem
+        );
 
         RunGameLoop(window, input.System, stateManager, gameContext, stateContext, party);
     }
@@ -104,12 +109,16 @@ public static class Program
             paths.RegistryRoot, 
             "asset_registry.json"
         );
+        var fontRegistryPath  = Path.Combine(
+            paths.RegistryRoot, 
+            "font_registry.json"
+        );
 
         return new GameData
         {
             ConfigProvider = configProvider, 
             GameDatabase = new GameDatabase(), 
-            AssetRegistry = new AssetRegistry(assetRegistryPath), 
+            AssetRegistry = new AssetRegistry(assetRegistryPath, fontRegistryPath), 
             ScriptLibrary = new ScriptLibrary(paths.RegistryRoot)
         };
     }
@@ -137,16 +146,17 @@ public static class Program
         GameWindow gameWindow) 
     {
         var mapRegistryPath = Path.Combine(paths.RegistryRoot, "map_registry.json");
+        var scriptLibrary = gameData.ScriptLibrary;
         MapService mapService = new(
             new MapRegistry(mapRegistryPath), 
             new MapLoader(), 
             new MapFactory(gameData.GameDatabase.ActorInfoRegistry, 
             gameData.GameDatabase.TileRegistry, 
-            new ActorFactory(), 
-            new DumbTrackingActorFactory(), 
-            new PathedActorFactory(),
-            new RandomActorFactory(), 
-            new SmartTrackingActorFactory(), 
+            new ActorFactory(scriptLibrary), 
+            new DumbTrackingActorFactory(scriptLibrary), 
+            new PathedActorFactory(scriptLibrary),
+            new RandomActorFactory(scriptLibrary), 
+            new SmartTrackingActorFactory(scriptLibrary), 
             party));
 
         return new GameServices() 
@@ -195,6 +205,7 @@ public static class Program
                     party, 
                     gameObjects.BattleStartRequest
                 ));
+                gameObjects.BattleStartRequest = null;
             }
 
             window.DispatchEvents();

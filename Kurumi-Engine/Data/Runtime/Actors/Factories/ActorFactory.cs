@@ -3,6 +3,8 @@ using Data.Models.Maps;
 using Data.Runtime.Actors.Controllers.Base;
 using Data.Runtime.Actors.Core;
 
+using Game.Scripts.Library;
+
 namespace Data.Runtime.Actors.Factories;
 
 /// <summary>
@@ -10,9 +12,32 @@ namespace Data.Runtime.Actors.Factories;
 /// </summary>
 public sealed class ActorFactory 
 {
+    private readonly ScriptLibrary _scriptLibrary;
+
+    public ActorFactory(ScriptLibrary scriptLibrary)
+    {
+        _scriptLibrary = scriptLibrary;
+    }
+
     public Actor Create(ActorInfo actorInfo, ActorModel actorModel) 
     {
         var controllers = new Stack<Controller>();
-        return new Actor{ActorInfo = actorInfo, ActorModel = actorModel, Controllers = controllers};
+        if (actorInfo.ScriptName == null) 
+        {
+            return new Actor() 
+            {
+                ActorInfo = actorInfo, 
+                ActorModel = actorModel, 
+                Controllers = controllers,
+                Script = null
+            };
+        }
+        return new Actor() 
+        {
+            ActorInfo = actorInfo, 
+            ActorModel = actorModel, 
+            Controllers = controllers,
+            Script = _scriptLibrary.GetMapScript(actorInfo.ScriptName)
+        };
     }
 }
