@@ -29,6 +29,7 @@ public sealed class BattleView
     private readonly Character[] _partyMembers;
 
     // Cached config.
+    private readonly PartyChoicesConfig _partyChoicesConfig;
     private readonly int _maxChoicesPerPage;
     private readonly int _spacing;
 
@@ -55,6 +56,7 @@ public sealed class BattleView
         Registry<AbilityDefinition> abilityRegistry, 
         Registry<NamedData> abilitySetRegistry,
         BattleWindowConfig battleWindowConfig, 
+        PartyChoicesConfig partyChoicesConfig,
         Character[] partyMembers
     )
     {
@@ -78,6 +80,7 @@ public sealed class BattleView
 
         // Info window variables.
         // Config.
+        _partyChoicesConfig = partyChoicesConfig;
         var infoXLocation = battleWindowConfig.InfoWindowX;
         var infoYLocation = battleWindowConfig.InfoWindowY;
         var infoWidth = battleWindowConfig.InfoWindowWidth;
@@ -272,7 +275,49 @@ public sealed class BattleView
         }
 
         // Additional battle options.
-        // TODO: Implement run away and items here.
+        if (_partyChoicesConfig.ItemsEnabled)
+        {
+            TextData textData = new() { Text = _partyChoicesConfig.ItemsText };
+            var textComponent = _textComponentFactory.Create(textData, _textStyle);
+            choiceTextElements.Add(new UIElement()
+            {
+                UIComponent = textComponent,
+                Layout = new UILayout()
+                {
+                    Position = new Vector2f(0, 0), 
+                    Size = new Vector2f(1, 1),
+                },
+
+                LocalOffset = new Vector2f(0, _spacing * choiceIndex),
+                Children = [],
+
+                RenderLayer = RenderLayer.UIText
+            });
+            choiceIndex ++;
+        }
+        {
+            
+        }
+        if (_partyChoicesConfig.RunAwayEnabled)
+        {
+            TextData textData = new() { Text = _partyChoicesConfig.RunAwayText };
+            var textComponent = _textComponentFactory.Create(textData, _textStyle);
+            choiceTextElements.Add(new UIElement()
+            {
+                UIComponent = textComponent,
+                Layout = new UILayout()
+                {
+                    Position = new Vector2f(0, 0), 
+                    Size = new Vector2f(1, 1),
+                },
+
+                LocalOffset = new Vector2f(0, _spacing * choiceIndex),
+                Children = [],
+
+                RenderLayer = RenderLayer.UIText
+            });
+            choiceIndex ++;
+        }
 
         // Assign the choice text elements as children of the selection element.
         _selectionWindowElement.Children = [.. choiceTextElements, _selectionElement];

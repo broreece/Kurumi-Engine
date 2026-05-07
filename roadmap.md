@@ -65,8 +65,9 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Description:** During our work on the forge build we removed the battle state, re-implement it with our new state system.
 
 **Steps:**
-- Implement UI into the battle state such that we can now select character abilities/skills/hardcoded options set
-in config like items and run away.
+- Add hard coded options like run away and items into the choice box.
+- Add enemy targetting after a base ability is selected.
+- We don't need to implement sub menus yet, this was not in the engine pre-forge.
 
 ---
 
@@ -216,6 +217,7 @@ currently being created twice.
 
 **Steps:**
 - Update scaling on party battle renderer and enemy renderer.
+- We should also wrap around the selection based on the number of options instead of max number of options.
 
 ---
 

@@ -94,7 +94,8 @@ public sealed class BattleState : IGameState, IBattleMenu
 
         _formation = formationFactory.Create(formationDefinition, formationModel);
 
-        var battleWindowConfig = gameContext.GameData.ConfigProvider.BattleWindowConfig;
+        var configProvider = gameContext.GameData.ConfigProvider;
+        var battleWindowConfig = configProvider.BattleWindowConfig;
         _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
 
         _view = new BattleView(
@@ -102,6 +103,7 @@ public sealed class BattleState : IGameState, IBattleMenu
             database.AbilityRegistry,
             database.AbilitySetRegistry,
             battleWindowConfig,
+            configProvider.PartyChoicesConfig,
             party.Characters
         );
         _uiRoot = _view.UIElement;
