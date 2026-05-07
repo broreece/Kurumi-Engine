@@ -31,15 +31,19 @@ public sealed class MapRendererFactory
         _tileSheetConfig = tileSheetConfig;
     }
 
-    public MapRenderer Create(IReadOnlyList<TileModel> tiles, string tileSheetTextureName) 
+    public MapRenderer Create(IReadOnlyList<TileModel> tiles, string tileSheetName, string mapBackgroundName) 
     {
         var tileSheetTexture = _assetRegistry.GetTexture(
             AssetType.TileSpriteSheets, 
-            tileSheetTextureName
+            tileSheetName
         );
         var animatedTileSheetTexture = _assetRegistry.GetTexture(
             AssetType.AnimatedTileSpriteSheets, 
-            tileSheetTextureName
+            tileSheetName
+        );
+        var mapBackgroundTexture = _assetRegistry.GetTexture(
+            AssetType.MapBackgroundArt, 
+            mapBackgroundName
         );
         return new MapRenderer(
             _renderSystem, 
@@ -47,7 +51,8 @@ public sealed class MapRendererFactory
             _tileSheetConfig, 
             tiles, 
             tileSheetTexture, 
-            animatedTileSheetTexture
+            animatedTileSheetTexture,
+            mapBackgroundTexture
         );
     }
 }

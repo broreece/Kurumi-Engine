@@ -245,15 +245,21 @@ public sealed class MapState : IGameState
             _assetRegistry!, 
             _tileRegistry!, 
             renderSystem, 
-            _tileConfig!);
-        _mapRenderer = _mapRendererFactory.Create(_currentMap!.Tiles, _currentMap.TileSheetName);
+            _tileConfig!
+        );
+        _mapRenderer = _mapRendererFactory.Create(
+            _currentMap!.Tiles, 
+            _currentMap.TileSheetName, 
+            _currentMap.MapBackgroundArtName
+        );
 
         _actorRendererFactory = new ActorRendererFactory(
             _assetRegistry!, 
             _gameData!.GameDatabase.ActorSpriteRegistry,
             renderSystem,  
             _tileConfig!.Width, 
-            _tileConfig.Height);
+            _tileConfig.Height
+        );
         _actorRenderer = _actorRendererFactory.Create(_currentMap.Actors);
 
         _walkAnimationManagerFactory = new WalkAnimationManagerFactory(
@@ -345,7 +351,11 @@ public sealed class MapState : IGameState
     private void HandleMapChangeRequest(MapChangeRequest mapChangeRequest) 
     {
         _currentMap = _gameServices!.MapService.LoadMap(mapChangeRequest.MapName);
-        _mapRenderer = _mapRendererFactory!.Create(_currentMap.Tiles, _currentMap.TileSheetName);
+        _mapRenderer = _mapRendererFactory!.Create(
+            _currentMap.Tiles, 
+            _currentMap.TileSheetName, 
+            _currentMap.MapBackgroundArtName
+        );
         _actorRenderer = _actorRendererFactory!.Create(_currentMap.Actors);
         _walkAnimationManager = _walkAnimationManagerFactory!.Create(_currentMap.Actors, _party);
 

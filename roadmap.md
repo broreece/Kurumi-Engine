@@ -65,7 +65,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Description:** During our work on the forge build we removed the battle state, re-implement it with our new state system.
 
 **Steps:**
-- Add hard coded options like run away and items into the choice box.
 - Add enemy targetting after a base ability is selected.
 - We don't need to implement sub menus yet, this was not in the engine pre-forge.
 
@@ -84,21 +83,6 @@ and re-add any deleted script steps.
 - https://github.com/broreece/Kurumi-Engine/commit/9e840b219cde144331093926bbff00a66e99d2c8#diff-f7e58fef3a0f6fc0677fa9b54340ad885e88bec3bdb9b3700dfa0c774618593bL15
 - The above commit contains where we deleted the steps. Re-add those steps.
 - We also have a few implementations not finished in "Context/Capabilities/Implementations/Map" re-implement them.
-
----
-
-## Map state background is not being rendered. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 3 ###
-
-**Description:** When we are rendering the map the background is not rendering.
-
-**Steps:**
-- In map renderer change just passing tiles to instead pass an interface which can access tiles and the map background
-texture.
-- Render the map background texture scaled to the full screen size.
 
 ---
 

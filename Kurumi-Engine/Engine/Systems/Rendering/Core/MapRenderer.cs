@@ -25,7 +25,7 @@ public sealed class MapRenderer
 
     private readonly IReadOnlyList<TileModel> _tiles;
 
-    private readonly Texture _tileSheetTexture, _animatedTileSheetTexture;
+    private readonly Texture _tileSheetTexture, _animatedTileSheetTexture, _mapBackgroundTexture;
 
     internal MapRenderer(
         RenderSystem renderSystem, 
@@ -33,7 +33,8 @@ public sealed class MapRenderer
         TileSheetConfig tileSheetConfig, 
         IReadOnlyList<TileModel> tiles, 
         Texture tileSheetTexture, 
-        Texture animatedTileSheetTexture) 
+        Texture animatedTileSheetTexture,
+        Texture mapBackgroundTexture) 
     {
         _renderSystem = renderSystem;
         _tileRegistry = tileRegistry;
@@ -41,10 +42,32 @@ public sealed class MapRenderer
         _tiles = tiles;
         _tileSheetTexture = tileSheetTexture;
         _animatedTileSheetTexture = animatedTileSheetTexture;
+        _mapBackgroundTexture = mapBackgroundTexture;
     }
 
     public void Update(ITileFrameAccessor tileFrameAccessor, View view) 
     {
+        // Render background art.
+        var backgroundSprite = new Sprite(_mapBackgroundTexture);
+        Vector2u textureSize = _mapBackgroundTexture.Size;
+        backgroundSprite.Scale = new Vector2f(
+            view.Size.X / textureSize.X,
+            view.Size.Y / textureSize.Y
+        );
+        backgroundSprite.Position = new Vector2f(
+            view.Center.X - view.Size.X / 2f,
+            view.Center.Y - view.Size.Y / 2f
+        );
+        _renderSystem.Submit(
+            new RenderCommand() 
+            {
+                Layer = RenderLayer.BackgroundLayer, 
+                Drawable = backgroundSprite, 
+                States = RenderStates.Default,
+                View = view
+            }
+        );
+
         // Cache the tile config variables.
         var tilesWide = _tileSheetConfig.TileSheetMaxTilesWide;
         var tileWidth = _tileSheetConfig.Width;
@@ -104,8 +127,6 @@ public sealed class MapRenderer
 
                     // Load the tile art.
                     var artId = currentTile.ArtId;
-                    // TODO: (ATSC-01): Based on config we might be able to change this based on number of animated 
-                    // tiles wide the animated tile sheet is.
                     var tileSheetX = tileFrameAccessor.GetTileAnimationFrame();
                     var tileSheetY = artId;
 
