@@ -1,5 +1,10 @@
+using Config.Runtime.Battle;
 using Engine.Systems.Rendering.Base;
+using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
+
+using SFML.Graphics;
+using SFML.System;
 
 namespace Engine.Systems.Rendering.Core;
 
@@ -12,14 +17,51 @@ public sealed class PartyBattleRenderer
 
     private readonly PartyMemberBattleRenderData[] _partyMemberBattleRenderData;
 
-    internal PartyBattleRenderer(RenderSystem renderSystem, PartyMemberBattleRenderData[] partyMemberBattleRenderData)
+    private readonly CharacterBattleSpriteConfig _characterBattleSpriteConfig;
+
+    internal PartyBattleRenderer(
+        RenderSystem renderSystem, 
+        PartyMemberBattleRenderData[] partyMemberBattleRenderData, 
+        CharacterBattleSpriteConfig characterBattleSpriteConfig)
     {
         _renderSystem = renderSystem;
         _partyMemberBattleRenderData = partyMemberBattleRenderData;
+        _characterBattleSpriteConfig = characterBattleSpriteConfig;
     }
     
-    public void Update()
+    public void Update(View view)
     {
-        
+        foreach (var partyMemberRender in _partyMemberBattleRenderData) 
+        {
+            if (partyMemberRender != null) 
+            {
+                var sprite = new Sprite(partyMemberRender.Texture)
+                {
+                    TextureRect = new IntRect(
+                        0,
+                        0,
+                        _characterBattleSpriteConfig.Width,
+                        _characterBattleSpriteConfig.Height
+                    ),
+                    Position = new Vector2f(
+                        // TODO: Swap to scaled width here.
+                        _characterBattleSpriteConfig.PartyXPlacement 
+                            + (_characterBattleSpriteConfig.Width * partyMemberRender.Index),
+                        _characterBattleSpriteConfig.PartyYPlacement
+                    )
+                };
+
+                // Send to render list.
+                _renderSystem.Submit(
+                    new RenderCommand() 
+                    {
+                        Layer = RenderLayer.PartyBattleLayer, 
+                        Drawable = sprite, 
+                        States = RenderStates.Default,
+                        View = view
+                    }
+                );
+            }
+        }
     }
 }

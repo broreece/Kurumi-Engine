@@ -52,10 +52,7 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - Re-implement battle state
-- Re-implement battle rendering
 - Re-implement removed script steps
-- Re-implement UI elements such that battle state and removed script steps function as before
-- Ensure scripts freeze when activating freezing steps such as opening a text box
 
 ---
 
@@ -68,39 +65,9 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Description:** During our work on the forge build we removed the battle state, re-implement it with our new state system.
 
 **Steps:**
-- Check the existing map state and start implementing features required for battle state.
-
-**Blockers:**
-- DSS-01
-- BR-01
-- UI-01
-
----
-
-## (BR-01) Implement battle renderer ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the battle scene, re-implement it with our new render system.
-
-**Steps:**
-- Create new renderers in the System/Rendering for battle background, enemy sprites and party sprites.
-
----
-
-## (UI-01) Implement UI ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the battle scene, re-implement it with our new UI system.
-
-**Steps:**
-- Crate the missing UI elements and ensure they work with both the script steps and battle.
-- Ensure scripts pause as well when UI opens.
+- Add hard coded options like run away and items into the choice box.
+- Add enemy targetting after a base ability is selected.
+- We don't need to implement sub menus yet, this was not in the engine pre-forge.
 
 ---
 
@@ -117,20 +84,6 @@ and re-add any deleted script steps.
 - https://github.com/broreece/Kurumi-Engine/commit/9e840b219cde144331093926bbff00a66e99d2c8#diff-f7e58fef3a0f6fc0677fa9b54340ad885e88bec3bdb9b3700dfa0c774618593bL15
 - The above commit contains where we deleted the steps. Re-add those steps.
 - We also have a few implementations not finished in "Context/Capabilities/Implementations/Map" re-implement them.
-
----
-
-## (SP-01) Script pausing ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the pausing ability of scripts, re-implement it.
-
-**Steps:**
-- When UI elements open or actors start a forced movement the next step will execute immediately again.
-- Ensure this behaviour is reverted.
 
 ---
 
@@ -154,6 +107,7 @@ texture.
 
 - Focused primarily on minor clean up
 - Allows non-passable tiles to be see-through
+- Update windows and UI to have locations work regardless of window size.
 
 ---
 
@@ -169,21 +123,6 @@ change it'll result in us having to change a lot of lines. Removing the full pat
 **Steps:**
 - Create A function to generate the paths based on type.
 - Check if our current design for animated tile sheets and static tile sheets using the same key is correct.
-
----
-
-## (ATSC-01) Edit animated tile sheet config to allow multiple animated tiles per row. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Animated tile sheets are currently very tall but not wide, we can edit to include multiple animations
-in one row.
-
-**Steps:**
-- Edit the config for animated tile sheets to include a new "animated_tiles_per_row"
-- In map renderer mod/div the art id by this config to get it's row value and column.
 
 ---
 
@@ -249,6 +188,8 @@ bootstrap and stored in game context to improve performance.
 
 **Steps:**
 - Go through map state and battle state removing factory initalization and store them in game context instead.
+- Also store the UIRenderSystem reused in the state manager and battle state in state context or somewhere else. It's
+currently being created twice.
 
 ---
 
@@ -265,6 +206,33 @@ bootstrap and stored in game context to improve performance.
 - Ensure all tickets are planned and grouped in releases.
 
 ---
+
+## (SBS-01) Determine scaling of sprites on battle state. ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** The sprites on the battle state are not scaled, we should determine how we scale.
+
+**Steps:**
+- Update scaling on party battle renderer and enemy renderer.
+- We should also wrap around the selection based on the number of options instead of max number of options.
+
+---
+
+## Windows and UI elements should appear based on the screen's width and height. ##
+### Complexity: 4 ###
+### Independent: 3 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Currently I believe UI elements will render in the same place regardless of window size,
+this should be fixed to be based on percents of the window size.
+
+**Steps:**
+- We can divide the intended window screen sizes by the real size to determine the new position or perhaps use a
+SFML camera object to adjust placement and zoom.
 
 ---
 

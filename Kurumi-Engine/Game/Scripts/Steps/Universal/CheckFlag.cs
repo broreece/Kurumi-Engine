@@ -9,6 +9,8 @@ public sealed class CheckFlag : ConditionalScriptStep
     private readonly int _flagIndex;
     private readonly bool _value;
 
+    private bool _conditionMet;
+
     public CheckFlag(int flagIndex, bool value, string? nextIfFalse) : base(nextIfFalse) 
     {
         _flagIndex = flagIndex;
@@ -18,7 +20,8 @@ public sealed class CheckFlag : ConditionalScriptStep
     public override void Activate(ScriptContext scriptContext) 
     {
         IGameStateActions gameStateActions = scriptContext.GetCapability<IGameStateActions>();
-        SetConditionMet(gameStateActions.GetGameFlag(_flagIndex) == _value);
+        _conditionMet = gameStateActions.GetGameFlag(_flagIndex) == _value;
     }
 
+    protected override bool IsConditionMet() => _conditionMet;
 }

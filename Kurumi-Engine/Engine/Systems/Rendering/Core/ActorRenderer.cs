@@ -31,7 +31,7 @@ public sealed class ActorRenderer
         this.tileHeight = tileHeight;
     }
 
-    public void Update() 
+    public void Update(View view) 
     {
         foreach (var currentActorRenderData in actorRenderData) 
         {
@@ -41,8 +41,7 @@ public sealed class ActorRenderer
             var actor = currentActorRenderData.Actor;
 
             // Calculate the render layer.
-            var layer = actor.ActorInfo.BelowParty ? (int) RenderLayer.BelowPartyActor : 
-                (int) RenderLayer.AbovePartyActor;
+            var layer = actor.ActorInfo.BelowParty ? RenderLayer.BelowPartyActor : RenderLayer.AbovePartyActor;
 
             // Calculate interpolated position.
             float interpolatedX = actor.LastX + (actor.XLocation - actor.LastX) * actor.MovementProgress;
@@ -63,7 +62,12 @@ public sealed class ActorRenderer
                 )
             };
 
-            renderSystem.Submit(new RenderCommand() { Layer = layer, Drawable = sprite, States = RenderStates.Default });
+            renderSystem.Submit(new RenderCommand() { 
+                Layer = layer, 
+                Drawable = sprite, 
+                States = RenderStates.Default, 
+                View = view
+            });
         }
     }
 }

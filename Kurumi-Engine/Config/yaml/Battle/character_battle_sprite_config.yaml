@@ -1,2 +1,5 @@
 width: 24
 height: 32
+
+party_x_placement: 100
+party_y_placement: 350

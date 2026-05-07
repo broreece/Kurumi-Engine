@@ -8,6 +8,7 @@ using Data.Runtime.Actors.Core;
 using Data.Runtime.Maps.Base;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
+using Data.Runtime.Scripts;
 
 using Engine.Assets.Core;
 using Engine.Context.Containers;
@@ -111,11 +112,10 @@ public sealed class MapState : IGameState
 
     public void Update(float deltaTime) 
     {
-        HandleInput();
-
         // Handle requested interactions.
         if (_stateContext.InputContextManager.GetGameplayContext()!.InteractRequested) 
         {
+            _stateContext.InputContextManager.GetGameplayContext()!.InteractRequested = false;
             // Get location of party.
             var partyX = _party.XLocation;
             var partyY = _party.YLocation;
@@ -142,14 +142,9 @@ public sealed class MapState : IGameState
                 }
 
                 // Load potential script and activate.
-                if (actor.ActorInfo.OnAction) 
+                if (actor.ActorInfo.OnAction && actor.Script != null) 
                 {
-                    var scriptKey = actor.ActorInfo.ScriptName;
-                    if (scriptKey != null) 
-                    {
-                        var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                        script.Activate(_mapScriptContext!);
-                    }
+                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
             }
         }
@@ -163,14 +158,9 @@ public sealed class MapState : IGameState
             var actors = _currentMap!.GetActorsAt(_party.XLocation, _party.YLocation);
             foreach (var actor in actors) 
             {
-                if (actor.ActorInfo.OnTouch) 
+                if (actor.ActorInfo.OnTouch && actor.Script != null) 
                 {
-                    var scriptKey = actor.ActorInfo.ScriptName;
-                    if (scriptKey != null) 
-                    {
-                        var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                        script.Activate(_mapScriptContext!);
-                    }
+                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
             }
 
@@ -196,10 +186,9 @@ public sealed class MapState : IGameState
         _stateContext.GameWindow.SetView(_camera.View);
 
         // Update the renderers and render.
-        _mapRenderer!.Update(_mapAnimationManager);
-        _actorRenderer!.Update();
-        _partyMapRenderer!.Update();
-        _gameServices!.RenderSystem.Render();
+        _mapRenderer!.Update(_mapAnimationManager, _camera.View);
+        _actorRenderer!.Update(_camera.View);
+        _partyMapRenderer!.Update(_camera.View);
 
         if (_gameObjects!.MapChangeRequest != null) 
         {
@@ -207,6 +196,8 @@ public sealed class MapState : IGameState
             _gameObjects.MapChangeRequest = null;
         }
     }
+
+    public ScriptContext GetScriptContext() => _mapScriptContext!;
 
     private void CacheDependencies() 
     {
@@ -226,7 +217,7 @@ public sealed class MapState : IGameState
         _tileHeight = _tileConfig.Height;
 
         // Map script context.
-        var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext);
+        var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext, _stateContext);
         _mapScriptContext = mapScriptContextBuilder.BuildScriptContext();
     }
 
@@ -300,12 +291,6 @@ public sealed class MapState : IGameState
         _stateContext.GameWindow.SetView(_camera.View);
     }
 
-    private void HandleInput() 
-    {
-        var inputState = _gameServices!.InputMapper.BuildState();
-        _stateContext.InputContextManager.Update(inputState);
-    }
-
     private void MoveAllActors(float deltaTime) {
         // Move all actors.
         foreach (var actor in _currentMap!.Actors) 
@@ -315,7 +300,7 @@ public sealed class MapState : IGameState
             {
                 var currentController = controllers.Peek();
                 // Pop controller if it's finished, otherwise continue updating.
-                if (currentController.IsFinished) 
+                if (currentController.IsFinished()) 
                 {
                     actor.PopController();
                     actor.MaintainFacing = false;
@@ -348,14 +333,12 @@ public sealed class MapState : IGameState
 
     private void ExecuteOnFindScript(Actor actor) 
     {
-        if (actor.ActorInfo.OnFind && _visionResolver!.CanSee(actor, _party, actor.ActorInfo.TrackingRange)) 
+        if (
+            actor.ActorInfo.OnFind && 
+            actor.Script != null && 
+            _visionResolver!.CanSee(actor, _party, actor.ActorInfo.TrackingRange)) 
         {
-            var scriptKey = actor.ActorInfo.ScriptName;
-            if (scriptKey != null) 
-            {
-                var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                script.Activate(_mapScriptContext!);
-            }
+            _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
         }
     }
 

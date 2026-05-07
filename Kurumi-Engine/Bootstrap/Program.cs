@@ -14,6 +14,7 @@ using Engine.Input.Mapper;
 using Engine.Input.System;
 using Engine.State.Base;
 using Engine.State.Core;
+using Engine.State.States.Battle.Core;
 using Engine.State.States.Maps.Core;
 
 using Game.Maps.Loader;
@@ -68,9 +69,14 @@ public static class Program
             GameWindow = window, 
             InputContextManager = input.ContextManager
         };
-        var stateManager = new StateManager(new MapState(gameContext, stateContext, party));
+        var stateManager = new StateManager(
+            new MapState(gameContext, stateContext, party), 
+            stateContext, 
+            gameServices.InputMapper,
+            gameServices.RenderSystem
+        );
 
-        RunGameLoop(window, input.System, stateManager);
+        RunGameLoop(window, input.System, stateManager, gameContext, stateContext, party);
     }
 
     private static Paths BuildPaths() 
@@ -103,12 +109,16 @@ public static class Program
             paths.RegistryRoot, 
             "asset_registry.json"
         );
+        var fontRegistryPath  = Path.Combine(
+            paths.RegistryRoot, 
+            "font_registry.json"
+        );
 
         return new GameData
         {
             ConfigProvider = configProvider, 
             GameDatabase = new GameDatabase(), 
-            AssetRegistry = new AssetRegistry(assetRegistryPath), 
+            AssetRegistry = new AssetRegistry(assetRegistryPath, fontRegistryPath), 
             ScriptLibrary = new ScriptLibrary(paths.RegistryRoot)
         };
     }
@@ -136,16 +146,17 @@ public static class Program
         GameWindow gameWindow) 
     {
         var mapRegistryPath = Path.Combine(paths.RegistryRoot, "map_registry.json");
+        var scriptLibrary = gameData.ScriptLibrary;
         MapService mapService = new(
             new MapRegistry(mapRegistryPath), 
             new MapLoader(), 
             new MapFactory(gameData.GameDatabase.ActorInfoRegistry, 
             gameData.GameDatabase.TileRegistry, 
-            new ActorFactory(), 
-            new DumbTrackingActorFactory(), 
-            new PathedActorFactory(),
-            new RandomActorFactory(), 
-            new SmartTrackingActorFactory(), 
+            new ActorFactory(scriptLibrary), 
+            new DumbTrackingActorFactory(scriptLibrary), 
+            new PathedActorFactory(scriptLibrary),
+            new RandomActorFactory(scriptLibrary), 
+            new SmartTrackingActorFactory(scriptLibrary), 
             party));
 
         return new GameServices() 
@@ -172,12 +183,31 @@ public static class Program
         return new GameWindow(config);
     }
 
-    private static void RunGameLoop(GameWindow window, InputSystem inputSystem, StateManager stateManager) 
+    private static void RunGameLoop(
+        GameWindow window, 
+        InputSystem inputSystem, 
+        StateManager stateManager, 
+        GameContext gameContext,
+        StateContext stateContext,
+        Party party) 
     {
         var clock = new Clock();
+        var gameObjects = gameContext.GameObjects;
 
         while (window.IsOpen) 
         {
+            // Process state changes if requested.
+            if (gameObjects.BattleStartRequest != null)
+            {
+                stateManager.ChangeState(new BattleState(
+                    gameContext, 
+                    stateContext, 
+                    party, 
+                    gameObjects.BattleStartRequest
+                ));
+                gameObjects.BattleStartRequest = null;
+            }
+
             window.DispatchEvents();
 
             var deltaTime = clock.Restart().AsSeconds();

@@ -1,6 +1,6 @@
-window_id: 1
-choice_box_id: 0
-font_id: 0
+window_art_name: "template"
+choice_box_art_name: "template"
+font_name: "template"
 font_size: 25
 
 info_window_width: 60
@@ -8,10 +8,11 @@ info_window_height: 30
 info_window_x: 0
 info_window_y: 450
 
-selection_window_width: 42
+selection_window_width: 40
 selection_window_height: 30
-selection_window_x: 600
+selection_window_x: 610
 selection_window_y: 450
 
-party_x_placement: 100
-party_y_placement: 350
+selection_window_spacing: 25
+
+max_choices_per_page: 6

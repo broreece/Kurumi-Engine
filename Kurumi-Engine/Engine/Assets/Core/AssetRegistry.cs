@@ -13,11 +13,12 @@ namespace Engine.Assets.Core;
 public sealed class AssetRegistry 
 {
     private readonly Dictionary<AssetType, Dictionary<string, Texture>> _assets;
+    private readonly Dictionary<string, Font> _fonts;
 
-    public AssetRegistry(string registryPath) 
+    public AssetRegistry(string registryPath, string fontRegistryPath) 
     {
         // TODO: (MLE-01) Handle exceptions here similar to map loader.
-        // Load json file.
+        // Load main registry file.
         var json = File.ReadAllText(registryPath);
         var stringDictionary = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(json) ?? 
             throw new JsonFileException($"JSON file: {registryPath} is corrupted or incorrect format");
@@ -38,6 +39,18 @@ public sealed class AssetRegistry
                 )));
             }
         }
+
+        // Load font registry file.
+        json = File.ReadAllText(fontRegistryPath);
+        var fontStringDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? 
+            throw new JsonFileException($"JSON file: {fontRegistryPath} is corrupted or incorrect format");
+        _fonts = [];
+        foreach (var jsonDictionaryPair in fontStringDictionary) {
+            _fonts.Add(jsonDictionaryPair.Key, new Font(Path.Combine(
+                AppContext.BaseDirectory,
+                jsonDictionaryPair.Value
+            )));
+        }
     }
 
     /// <summary>
@@ -47,6 +60,8 @@ public sealed class AssetRegistry
     /// <param name="assetName">The name of the asset.</param>
     /// <returns>The asset texture of a provided asset type and name.</returns>
     public Texture GetTexture(AssetType assetType, string assetName) => _assets[assetType][assetName];
+
+    public Font GetFont(string fontName) => _fonts[fontName];
 
     /// <summary>
     /// Function used to convert a string into an asset type.

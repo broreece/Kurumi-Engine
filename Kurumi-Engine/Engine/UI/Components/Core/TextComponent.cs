@@ -19,16 +19,15 @@ public sealed class TextComponent : IUIComponent
     public void Apply(UITransform transform) 
     {
         _text.Position = transform.Position;
-        _text.Scale = transform.Scale;
+        // Text is unaffected by scale but instead only by font size.
+        _text.Scale = new Vector2f(1, 1);
     }
 
-    public void Draw(RenderTarget target) => target.Draw(_text);
+    public Drawable? GetDrawable() => _text;
 
     public Vector2u GetContentSize() 
     {
         FloatRect bounds = _text.GetLocalBounds();
         return new Vector2u((uint) bounds.Width, (uint) bounds.Height);
     }
-
-    public bool IgnoreParentScale() => true;
 }

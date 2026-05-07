@@ -1,6 +1,6 @@
 KURUMI ENGINE – BUILD CHANGE DOCUMENT
-Build: Forge (Post-Crucible)
-Status: In Progress
+Build: Forge
+Status: Finished
 
 ---------------------------------------------------------------------
 
@@ -15,8 +15,10 @@ scene improvements. However, this quickly evolved into a deeper refactor targeti
 - Script system architecture
 - Database structure
 - Engine-wide decoupling
+- Reformatting code to match Microsoft's .NET standards
+- Breaking up logic from classes and moving logic into systems.
 
-This refactor occurred shortly after the 'Anvil' phase, highlighting a key lesson: best practices must be applied 
+This refactor occurred shortly after the 'Crucible' phase, highlighting a key lesson: best practices must be applied 
 proactively, not reactively.
 
 ---------------------------------------------------------------------
@@ -30,7 +32,7 @@ CORE ARCHITECTURAL CHANGES
 - Eliminated unnecessary abstractions and custom data structures.
 - Follow microsoft conventions for namespaces, using statements and now field name cases starting with an underscore.
 - Ordering of fields, auto-properties, constructors and functions has been decided.
-- Swap to allman brace style again for microsoft conventions.
+- Swap to allman brace style again for Microsoft's .NET standards.
 
 ---------------------------------------------------------------------
 
@@ -49,7 +51,7 @@ MAP & ACTOR SYSTEMS
 SCRIPT SYSTEM REFACTOR
 
 - Scripts converted from string-based format to JSON.
-- Registries now store JSON script definitions referenced by ID.
+- Registries now store JSON script file names stored by keys.
 - Eliminated string parsing and manipulation overhead.
 - Introduced a pipeline:
   - Repository → Loader → Converter
@@ -137,6 +139,7 @@ FACTORY & OBJECT CREATION
 - Removed need for multiple actor subclasses.
 - Introduced specialized factories:
   - Responsible for behavior validation and controller assignment.
+- Factories and standardized and the use cases listed in our "factory_system_standards.txt"
 
 ---------------------------------------------------------------------
 
@@ -228,6 +231,7 @@ BOILER PLATE CODE REMOVAL
 
 - Boiler plate code has been removed and replace with C# auto properties.
 - This removed 2400 lines of code and comments that were previously just getters, constructors or setters.
+- Also removed any unnecesary comments that served no purpose.
 
 ---------------------------------------------------------------------
 
