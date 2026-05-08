@@ -24,7 +24,9 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
     public float AnimationTimer { get; set; } = 0;
     public float MovementProgress { get; set; } = 1;
 
-    public int GetLeadersHp() => Characters[0].CurrentHP;
+    public int Size => PartyModel.PartyMembers.Count;
+
+    public int LeadersHp => Characters[0].CurrentHP;
 
     //IMutablePositionProvider and IFacingPositionProvider functionality.
     public int XLocation 

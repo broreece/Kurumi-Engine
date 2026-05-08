@@ -35,6 +35,7 @@ public sealed class FormationFactory
     {
         // TODO: (DKE-01) Exception here if model and definition have different numbers of enemies.
         var storedEntityData = new List<StoredEntityData>();
+        var entities = new List<Entity>();
         for (var enemyIndex = 0; enemyIndex < model.Enemies.Count; enemyIndex ++) 
         {
             var enemyId = definition.Enemies[enemyIndex];
@@ -44,6 +45,7 @@ public sealed class FormationFactory
             var entityId = enemyDefinition.Id;
             var entityDefinition = _entityDefinitionRegistry.Get(entityId);
             var entity = new Entity(entityDefinition, model.Enemies[enemyIndex]) { CurrentHP = entityDefinition.MaxHp };
+            entities.Add(entity);
             storedEntityData.Add(new StoredEntityData() 
             { 
                 Entity = entity, 
@@ -52,6 +54,6 @@ public sealed class FormationFactory
             });
         }
         
-        return new Formation(definition, model) { StoredEntityData = storedEntityData };
+        return new Formation(definition, model, entities) { StoredEntityData = storedEntityData };
     }
 }

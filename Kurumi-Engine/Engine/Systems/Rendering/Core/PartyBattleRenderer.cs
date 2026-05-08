@@ -29,8 +29,9 @@ public sealed class PartyBattleRenderer
         _characterBattleSpriteConfig = characterBattleSpriteConfig;
     }
     
-    public void Update(View view)
+    public void Update(View view, bool targetSelector, int selectedCharacterIndex)
     {
+        var currentCharacterIndex = 0;
         foreach (var partyMemberRender in _partyMemberBattleRenderData) 
         {
             if (partyMemberRender != null) 
@@ -52,15 +53,17 @@ public sealed class PartyBattleRenderer
                 };
 
                 // Send to render list.
-                _renderSystem.Submit(
-                    new RenderCommand() 
-                    {
-                        Layer = RenderLayer.PartyBattleLayer, 
-                        Drawable = sprite, 
-                        States = RenderStates.Default,
-                        View = view
-                    }
-                );
+                RenderStates renderState = selectedCharacterIndex == currentCharacterIndex && targetSelector ? 
+                    new(BlendMode.Add) : RenderStates.Default;
+                _renderSystem.Submit(new RenderCommand() 
+                {
+                    Layer = RenderLayer.PartyBattleLayer, 
+                    Drawable = sprite, 
+                    States = renderState,
+                    View = view
+                });
+
+                currentCharacterIndex ++;
             }
         }
     }

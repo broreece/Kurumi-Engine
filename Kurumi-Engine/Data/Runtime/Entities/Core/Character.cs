@@ -24,6 +24,9 @@ public sealed class Character : IStats, IHasStatuses
 
     public int MaxMP => _model.MaxMP;
 
+    // TODO: Hard coded value here to be replaced with configurable setting.
+    public int BattleSpeed => _model.Stats[2];
+
     public int CurrentHP 
     {
         get => _model.CurrentHP;

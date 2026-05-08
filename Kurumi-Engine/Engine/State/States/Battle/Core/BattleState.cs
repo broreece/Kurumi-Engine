@@ -1,3 +1,4 @@
+using Data.Definitions.Entities.Abilities.Core;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
 using Data.Runtime.Formations.Factories;
@@ -18,6 +19,7 @@ using Game.Scripts.Context.Builder.Core;
 using Game.Scripts.Context.Core;
 using Game.UI.Views;
 
+using Infrastructure.Database.Base;
 using Infrastructure.Rendering.Core;
 
 namespace Engine.State.States.Battle.Core;
@@ -31,6 +33,9 @@ public sealed class BattleState : IGameState, IBattleMenu
     // Context.
     private readonly GameContext _gameContext;
     private readonly StateContext _stateContext;
+
+    // Registries for abilities and skills.
+    private readonly Registry<AbilityDefinition> _abilityRegistry;
 
     // Party.
     private readonly Party _party;
@@ -54,6 +59,10 @@ public sealed class BattleState : IGameState, IBattleMenu
     // Current selection indexes.
     private int _currentCharacterIndex = 0;
     private int _currentSelectionIndex = 0;
+    private int _currentTargetIndex;
+
+    // Current selection state.
+    private bool _targetSelector = false;
 
     // Render system.
     private RenderSystem? _renderSystem;
@@ -71,22 +80,28 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     // List of actions to be executed in order.
     private PriorityQueue<BattleAction, int> _actions = new(Comparer<int>.Create((x, y) => y.CompareTo(x)));
+    private Stack<(BattleAction, int)> _queuedActions = [];
+
+    private int GetNumberOfTargets() => _party.Size + _formation.GetAmountOfLivingEnemies();
 
     private bool WonBattle => _formation.IsDefeated();
 
-    private bool LostBattle => _party.GetLeadersHp() == 0;
+    private bool LostBattle => _party.LeadersHp == 0;
 
     public BattleState(GameContext gameContext, StateContext stateContext, Party party, BattleStartRequest battle) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
         _party = party;
+        _currentTargetIndex = party.Size;
         _battle = battle;
 
         var gameData = _gameContext.GameData;
         var database = gameData.GameDatabase;
         var formationRegistry = database.FormationRegistry;
         var saveData = gameContext.GameObjects.SaveData;
+
+        _abilityRegistry = database.AbilityRegistry;
 
         var formationFactory = new FormationFactory(database.EnemyDefinitionRegistry, database.EntityDefinitionRegistry);
         var formationModel = saveData.Formations[battle.EnemyFormationId];
@@ -100,7 +115,7 @@ public sealed class BattleState : IGameState, IBattleMenu
 
         _view = new BattleView(
             gameData.AssetRegistry, 
-            database.AbilityRegistry,
+            _abilityRegistry,
             database.AbilitySetRegistry,
             battleWindowConfig,
             configProvider.PartyChoicesConfig,
@@ -121,16 +136,9 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     public void Update(float deltaTime)
     {
-        // Handle requested interactions.
-        if (_stateContext.InputContextManager.GetGameplayContext()!.InteractRequested) 
-        {
-            _stateContext.InputContextManager.GetGameplayContext()!.InteractRequested = false;
-            // TODO: Implement select here.
-        }
-
         _battleRenderer!.Update(_camera!.View);
-        _enemyRenderer!.Update(_camera.View);
-        _partyBattleRenderer!.Update(_camera.View);
+        _enemyRenderer!.Update(_camera.View, _targetSelector, _currentTargetIndex - _party.Size);
+        _partyBattleRenderer!.Update(_camera.View, _targetSelector, _currentTargetIndex);
 
         // Update the UI then render the UI.
         _view.Update(_currentCharacterIndex, _currentSelectionIndex);
@@ -151,20 +159,70 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     public void MoveRight()
     {
-        // TODO: Implement here.
-        throw new NotImplementedException();
+        if (_targetSelector)
+        {
+            _currentTargetIndex = _currentTargetIndex == GetNumberOfTargets() - 1 ? 
+                GetNumberOfTargets() - 1 : _currentTargetIndex + 1;
+        }
+        else
+        {
+            // TODO: Implement next page.
+        }
     }
 
     public void MoveLeft()
     {
-        // TODO: Implement here.
-        throw new NotImplementedException();
+        if (_targetSelector)
+        {
+            _currentTargetIndex = _currentTargetIndex == 0 ? 0 : _currentTargetIndex - 1;
+        }
+        else
+        {
+            // TODO: Implement next page.
+        }
+    }
+
+    public void Confirm()
+    {
+        // Check if in target selector state or the menu selector state.
+        if (_targetSelector)
+        {
+            // Check for abilities.
+            var currentCharacter = _party.Characters[_currentCharacterIndex];
+            var abilities = currentCharacter.GetAbilityIDs();
+            if (_currentSelectionIndex < abilities.Count)
+            {
+                _queuedActions.Push((new BattleAction()
+                {
+                    UserIndex = _currentCharacterIndex,
+                    TargetIndex = _currentTargetIndex,
+                    IsEnemy = false,
+                    Script = _abilityRegistry.Get(abilities[_currentSelectionIndex]).ScriptName
+                }, 
+                currentCharacter.BattleSpeed));
+            }
+
+            // TODO: Implement skills and hard coded values here.
+
+            NextBattler();
+        }
+        else
+        {
+            _targetSelector = true;
+        }
     }
 
     public void Cancel()
     {
-        // TODO: Implement here.
-        throw new NotImplementedException();
+        if (_targetSelector)
+        {
+            _targetSelector = false;
+        }
+        else if (_queuedActions.Count > 0)
+        {
+            _queuedActions.Pop();
+            _currentCharacterIndex --;
+        }
     }
 
     private void CacheDependencies() 
@@ -209,5 +267,21 @@ public sealed class BattleState : IGameState, IBattleMenu
     private void InitializeInput()
     {
          _stateContext.InputContextManager.SetContext(new BattleInputContext(this));
+    }
+
+    private void NextBattler()
+    {
+        // Check if it's enemies turns.
+        if (_currentCharacterIndex == _party.Size - 1)
+        {
+            _currentCharacterIndex = 0;
+            // TODO: Function here to conduct enemy phase. Also move all queued actions into the actions priority list.
+        }
+        else
+        {
+            _currentCharacterIndex ++;
+        }
+        _currentSelectionIndex = 0;
+        _currentTargetIndex = 0;
     }
 }

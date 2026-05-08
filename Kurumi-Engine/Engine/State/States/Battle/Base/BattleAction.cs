@@ -1,5 +1,3 @@
-using Game.Scripts.Core;
-
 namespace Engine.State.States.Battle.Base;
 
 /// <summary>
@@ -8,9 +6,8 @@ namespace Engine.State.States.Battle.Base;
 public class BattleAction {
     public required int UserIndex { get; init; }
     public required int TargetIndex { get; init; }
-    public required int Speed { get; init; }
 
     public required bool IsEnemy { get; init; }
 
-    public required Script Script { get; init; }
+    public required string? Script { get; init; }
 }

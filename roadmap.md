@@ -56,24 +56,10 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (BS-01) Implement battle state ##
+## (DSS-01) Re-add deleted script steps ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
 ### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the battle state, re-implement it with our new state system.
-
-**Steps:**
-- Add enemy targetting after a base ability is selected.
-- We don't need to implement sub menus yet, this was not in the engine pre-forge.
-
----
-
-## (DSS-01) Re-add deleted script steps ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 2 ###
 ### Impact: 5 ###
 
 **Description:** During our work on the forge build we removed the traditional constructor for the scripts, we should now go back 
@@ -91,7 +77,24 @@ and re-add any deleted script steps.
 
 - Focused primarily on minor clean up
 - Allows non-passable tiles to be see-through
-- Update windows and UI to have locations work regardless of window size.
+- Update windows and UI to have locations work regardless of window size
+
+---
+
+## (ASI-01) Store agility stat index in config so we can access battle speed. ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 2 ###
+
+**Description:** We currently just hardcode in character the battle speed variable, this needs to be changed to
+a configurable stat.
+
+**Steps:**
+- Update config.
+- Config should be accessible in character factory where we can then pass the index as a static value shared across
+characters.
+- Perhaps config should be passed instead, check to ensure we are using the right method.
 
 ---
 
@@ -105,7 +108,7 @@ and re-add any deleted script steps.
 change it'll result in us having to change a lot of lines. Removing the full path also reduces a lot of bloat.
 
 **Steps:**
-- Create A function to generate the paths based on type.
+- Create a function to generate the paths based on type.
 - Check if our current design for animated tile sheets and static tile sheets using the same key is correct.
 
 ---
@@ -269,16 +272,17 @@ enemy formation interaction a core part of the gameplay loop.
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, font size for 
-damage display and more dynamic enemy targetting.
+**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, damage display and 
+more dynamic enemy targetting.
 
 **Steps:** 
 - Implement additional attack options: (Low Priority)
     - Implement party wide attacks.
     - Implement enemy group wide attacks.
     - Implement random enemy hit attacks.
-- Implement new config for the damage text to have a font size:
-    - Currently hard coded make sure it's in battle scene config.
+- Implement damage text:
+    - Used to exist in forge.
+    - Create custom config declaring it's font type, size and maybe a offset.
 - Implement function to load the index of the first healthy party member when generating the first choices in a 
 battle scene:
     - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
@@ -376,7 +380,7 @@ Allow battle scenes to end either in victory of fail.
 ### Impact: 3 ###
 
 **Description:**
-Create a small demonstration scenario showcasing key engine capabilities implemented during the Forge build.
+Create a small demonstration scenario showcasing key engine capabilities.
 
 **Steps:**
 - The first video should show two actors having forced movements, the player can still move during this time, then one 
@@ -645,19 +649,6 @@ carefully account for the current system and how we will implement threading her
 ### Impact: 1 ###
 
 **Description** We can implement composistion for commonly occuring repeated variables such as font ID and font size.
-
-**Steps:** N/A
-
----
-
-## In the database repos we use the same style of loading for the generic row types ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description** We can implement a unique mapping for these repos and map using the mapping to reduce duplicated
-code, also keeps all database info in one place so better for future changes.
 
 **Steps:** N/A
 

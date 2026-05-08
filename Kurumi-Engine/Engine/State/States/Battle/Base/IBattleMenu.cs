@@ -12,5 +12,7 @@ public interface IBattleMenu {
 
     public void MoveLeft();
 
+    public void Confirm();
+
     public void Cancel();
 }

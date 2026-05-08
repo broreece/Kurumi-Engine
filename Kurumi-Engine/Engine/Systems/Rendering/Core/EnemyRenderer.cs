@@ -29,8 +29,9 @@ public sealed class EnemyRenderer
         _enemyBattleSpriteConfig = enemyBattleSpriteConfig;
     }
 
-    public void Update(View view)
+    public void Update(View view, bool targetSelector, int selectedEnemyIndex)
     {
+        var currentEnemyIndex = 0;
         foreach (var enemyRenderData in _enemyRenderData)
         {
             var enemySprite = new Sprite(enemyRenderData.Texture)
@@ -43,15 +44,19 @@ public sealed class EnemyRenderer
                 ),
                 Position = new Vector2f(enemyRenderData.XLocation, enemyRenderData.YLocation)
             };
-            _renderSystem.Submit(
-                new RenderCommand() 
-                {
-                    Layer = RenderLayer.BaseEnemyLayer, 
-                    Drawable = enemySprite, 
-                    States = RenderStates.Default,
-                    View = view
-                }
-            );
+
+            // Send to render list.
+            RenderStates renderState = selectedEnemyIndex == currentEnemyIndex && targetSelector ? 
+                new(BlendMode.Add) : RenderStates.Default;
+            _renderSystem.Submit(new RenderCommand() 
+            {
+                Layer = RenderLayer.BaseEnemyLayer, 
+                Drawable = enemySprite, 
+                States = renderState,
+                View = view
+            });
+
+            currentEnemyIndex ++;
         }
     }
 }

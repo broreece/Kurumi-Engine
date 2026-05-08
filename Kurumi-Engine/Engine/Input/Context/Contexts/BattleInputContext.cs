@@ -36,11 +36,13 @@ public class BattleInputContext : IGameplayInputContext
         {
             _battleMenu.MoveLeft();
         }
+        if (input.IsPressed(InputAction.Confirm))
+        {
+            _battleMenu.Confirm();
+        }
         if (input.IsPressed(InputAction.Cancel))
         {
             _battleMenu.Cancel();
         }
-        // If confirm is pressed, handle action at next possible moment.
-        InteractRequested = input.IsPressed(InputAction.Confirm);
     }
 }
