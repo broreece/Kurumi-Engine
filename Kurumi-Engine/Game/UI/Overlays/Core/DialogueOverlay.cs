@@ -5,12 +5,14 @@ using Engine.Assets.Core;
 using Engine.Input.Base;
 using Engine.Systems.Rendering.Base;
 using Engine.UI.Components.Core;
+using Engine.UI.Components.Factories;
+using Engine.UI.Data.Content;
 using Engine.UI.Data.Content.Layout;
+using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 
 using Game.UI.Overlays.Base;
 
-using SFML.Graphics;
 using SFML.System;
 
 namespace Game.UI.Overlays.Core;
@@ -35,15 +37,24 @@ public sealed class DialogueOverlay : IUIOverlay
         TextWindowDefaults textWindowDefaults, 
         IReadOnlyList<string> pages) 
     {
-        var textObject = new Text(pages[0], assetRegistry.GetFont(textWindowDefaults.FontName));
-        _textComponent = new TextComponent(textObject);
+        // Component factories.
+        var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
+        var textComponentFactory = new TextComponentFactory(assetRegistry);
+
+        // Text style.
+        var windowTextStyle = new TextStyle()
+        {
+            FontSize = (uint) textWindowDefaults.FontSize, 
+            FontArt = textWindowDefaults.FontName 
+        };
+        _textComponent = textComponentFactory.Create(new TextData() { Text = pages[0] }, windowTextStyle);
 
         _pages = pages;
 
-        var windowComponent = new SpriteComponent(assetRegistry.GetTexture(
-            AssetType.Windows, 
-            textWindowDefaults.WindowName
-        ));
+        var windowComponent = spriteComponentFactory.Create(
+            AssetType.Windows,
+            new SpriteStyle() { SpriteArt = textWindowDefaults.WindowName }
+        );
 
         var width = textWindowDefaults.Width;
         var height = textWindowDefaults.Height;

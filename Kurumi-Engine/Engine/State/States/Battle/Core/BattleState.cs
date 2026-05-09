@@ -275,7 +275,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         if (_currentCharacterIndex == _party.Size - 1)
         {
             _currentCharacterIndex = 0;
-            // TODO: Function here to conduct enemy phase. Also move all queued actions into the actions priority list.
+            ConductEnemyPhase();
         }
         else
         {
@@ -283,5 +283,10 @@ public sealed class BattleState : IGameState, IBattleMenu
         }
         _currentSelectionIndex = 0;
         _currentTargetIndex = 0;
+    }
+
+    private void ConductEnemyPhase()
+    {
+        // TODO: Implement here.
     }
 }

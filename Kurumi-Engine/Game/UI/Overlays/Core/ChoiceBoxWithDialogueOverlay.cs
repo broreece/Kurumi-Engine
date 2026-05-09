@@ -49,19 +49,23 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         var textComponentFactory = new TextComponentFactory(assetRegistry);
 
         // Text style.
-        var textStyle = new TextStyle() 
+        var choiceTextStyle = new TextStyle() 
         { 
             FontSize = (uint) choiceBoxDefaults.FontSize, 
             FontArt = choiceBoxDefaults.FontName 
         };
+        var windowTextStyle = new TextStyle()
+        {
+            FontSize = (uint) textWindowDefaults.FontSize, 
+            FontArt = textWindowDefaults.FontName 
+        };
 
-        var textObject = new Text(text, assetRegistry.GetFont(textWindowDefaults.FontName));
-        var textComponent = new TextComponent(textObject);
+        var textComponent = textComponentFactory.Create(new TextData() { Text = text }, windowTextStyle);
 
         var choiceTextComponents = new List<TextComponent>();
         foreach (var choice in choices)
         {
-            choiceTextComponents.Add(textComponentFactory.Create(new TextData() { Text = choice }, textStyle));
+            choiceTextComponents.Add(textComponentFactory.Create(new TextData() { Text = choice }, choiceTextStyle));
         }
 
         _numberOfChoices = choices.Count;
