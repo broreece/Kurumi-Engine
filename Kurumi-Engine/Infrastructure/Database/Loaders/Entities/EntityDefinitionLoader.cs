@@ -39,7 +39,7 @@ public sealed class EntityDefinitionLoader : IDataLoader<EntityDefinition>
 
         // Create lookup tables for the entity's additional data.
         ILookup<int, EntityAbilityRow> entityAbilityLookup = _entityAbilityRepository.LoadAll().ToLookup(
-            abilityRow => abilityRow.EntityId
+            abilityRow => abilityRow.EntityIndex
         );
         ILookup<int, ObjectAttributeValueRow> entityElementsLookup = _entityElementRepository.LoadAll().ToLookup(
             elementRow => elementRow.ObjectId

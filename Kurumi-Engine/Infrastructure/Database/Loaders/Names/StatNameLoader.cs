@@ -42,7 +42,7 @@ public sealed class StatNameLoader : IDataLoader<TwoNamedData>
         var statShortNames = new Dictionary<string, int>();
         foreach (var row in rows) 
         {
-            statShortNames[row.ShortName] = row.Id;
+            statShortNames[row.ShortName.ToLower()] = row.Id;
         }
         return statShortNames;
     }

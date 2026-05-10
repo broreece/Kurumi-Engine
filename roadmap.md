@@ -51,7 +51,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 ## Milestone: Re-Forge
 **Focus areas:**
 
-- Re-implement battle state
 - Re-implement removed script steps
 
 ---

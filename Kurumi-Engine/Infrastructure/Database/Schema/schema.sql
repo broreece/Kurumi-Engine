@@ -24,16 +24,16 @@ CREATE TABLE IF NOT EXISTS "equipment_abilities" (
 	"equipment_id"	INTEGER NOT NULL,
 	"ability_id"	INTEGER NOT NULL,
 	"sealed"	INTEGER NOT NULL,
-	FOREIGN KEY("ability_id") REFERENCES "abilities"("id"),
 	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
+	FOREIGN KEY("ability_id") REFERENCES "abilities"("id"),
 	PRIMARY KEY("equipment_id","ability_id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_elements" (
 	"equipment_id"	INTEGER NOT NULL,
 	"element_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
 	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
+	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
 	PRIMARY KEY("equipment_id","element_id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_stats" (
@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS "item_pools" (
 CREATE TABLE IF NOT EXISTS "item_pool_items" (
 	"item_pool_id"	INTEGER NOT NULL,
 	"item_id"	INTEGER NOT NULL,
-	FOREIGN KEY("item_pool_id") REFERENCES "item_pools"("id"),
 	FOREIGN KEY("item_id") REFERENCES "items"("id"),
+	FOREIGN KEY("item_pool_id") REFERENCES "item_pools"("id"),
 	PRIMARY KEY("item_id","item_pool_id")
 );
 CREATE TABLE IF NOT EXISTS "actor_paths" (
@@ -102,8 +102,8 @@ CREATE TABLE IF NOT EXISTS "enemy_formations" (
 	"default_actor_info_id"	INTEGER NOT NULL,
 	"on_lose_script"	TEXT,
 	"on_win_script"	TEXT,
-	FOREIGN KEY("default_actor_info_id") REFERENCES "actors"("id"),
 	FOREIGN KEY("item_pool_id") REFERENCES "item_pools"("id"),
+	FOREIGN KEY("default_actor_info_id") REFERENCES "actors"("id"),
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 CREATE TABLE IF NOT EXISTS "enemy_formation_enemies" (
@@ -114,9 +114,9 @@ CREATE TABLE IF NOT EXISTS "enemy_formation_enemies" (
 	"y_location"	INTEGER NOT NULL,
 	"main_part"	INTEGER NOT NULL,
 	"on_kill_script"	TEXT,
-	FOREIGN KEY("enemy_formation_id") REFERENCES "enemy_formations"("id"),
-	FOREIGN KEY("enemy_id") REFERENCES "entities"("id"),
 	FOREIGN KEY("main_part") REFERENCES "enemy_formation_enemies"("id"),
+	FOREIGN KEY("enemy_id") REFERENCES "entities"("id"),
+	FOREIGN KEY("enemy_formation_id") REFERENCES "enemy_formations"("id"),
 	PRIMARY KEY("id")
 );
 CREATE TABLE IF NOT EXISTS "equipment" (
@@ -128,8 +128,8 @@ CREATE TABLE IF NOT EXISTS "equipment" (
 	"evasion_modifier"	INTEGER NOT NULL,
 	"turn_effect_script"	TEXT,
 	FOREIGN KEY("item_id") REFERENCES "items"("id"),
-	FOREIGN KEY("equipment_type") REFERENCES "equipment_types"("id"),
 	FOREIGN KEY("equipment_slot") REFERENCES "equipment_slots"("id"),
+	FOREIGN KEY("equipment_type") REFERENCES "equipment_types"("id"),
 	PRIMARY KEY("id","item_id")
 );
 CREATE TABLE IF NOT EXISTS "items" (
@@ -164,16 +164,16 @@ CREATE TABLE IF NOT EXISTS "equipment_statuses" (
 	"equipment_id"	INTEGER NOT NULL,
 	"status_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
 	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
+	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
 	PRIMARY KEY("equipment_id","status_id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_ability_sets" (
 	"equipment_id"	INTEGER NOT NULL,
 	"ability_set_id"	INTEGER NOT NULL,
 	"sealed"	INTEGER NOT NULL,
-	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
 	FOREIGN KEY("ability_set_id") REFERENCES "ability_sets"("id"),
+	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
 	PRIMARY KEY("equipment_id","ability_set_id")
 );
 CREATE TABLE IF NOT EXISTS "characters" (
@@ -257,24 +257,24 @@ CREATE TABLE IF NOT EXISTS "status_ability_sets" (
 	"status_id"	INTEGER NOT NULL,
 	"ability_set_id"	INTEGER NOT NULL,
 	"sealed"	INTEGER NOT NULL,
-	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
 	FOREIGN KEY("ability_set_id") REFERENCES "ability_sets"("id"),
+	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
 	PRIMARY KEY("status_id","ability_set_id")
 );
 CREATE TABLE IF NOT EXISTS "status_elements" (
 	"status_id"	INTEGER NOT NULL,
 	"element_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
 	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
+	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
 	PRIMARY KEY("status_id","element_id")
 );
 CREATE TABLE IF NOT EXISTS "status_stats" (
 	"status_id"	INTEGER NOT NULL,
 	"stat_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("stat_id") REFERENCES "stats"("id"),
 	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
+	FOREIGN KEY("stat_id") REFERENCES "stats"("id"),
 	PRIMARY KEY("status_id","stat_id")
 );
 CREATE TABLE IF NOT EXISTS "enemy_formation_enemy_battle_scripts" (

@@ -11,19 +11,27 @@ public sealed class Formation
 {
     private readonly FormationDefinition _definition;
     private readonly FormationModel _model;
+
+    // List of entities which contains the stats/statuses of the formation.
     private readonly IReadOnlyList<Entity> _entities;
+
+    // List of enemies which contains the drawable location and battle scripts of the formation.
+    public IReadOnlyList<Enemy> Enemies { get; }
 
     public required IReadOnlyList<StoredEntityData> StoredEntityData { get; init; }
 
     internal Formation(
         FormationDefinition definition, 
         FormationModel model,
-        IReadOnlyList<Entity> entities
+        IReadOnlyList<Entity> entities,
+        IReadOnlyList<Enemy> enemies
     ) 
     {
         _definition = definition;
         _model = model;
         _entities = entities;
+        
+        Enemies = enemies;
     }
 
     public bool IsDefeated()
@@ -50,4 +58,6 @@ public sealed class Formation
         }
         return size;
     }
+
+    public Entity GetEntityAt(int entityIndex) => _entities[entityIndex];
 }

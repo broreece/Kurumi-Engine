@@ -8,6 +8,6 @@ namespace Game.Scripts.Context.Variables.Base;
 /// </summary>
 public static class Variables 
 {
-    public static readonly VariableKey<EntityId> User = new() { Name = "user"};
-    public static readonly VariableKey<EntityId> Target = new() { Name = "target"};
+    public static readonly VariableKey<EntityIndex> User = new() { Name = "user"};
+    public static readonly VariableKey<EntityIndex> Target = new() { Name = "target"};
 }

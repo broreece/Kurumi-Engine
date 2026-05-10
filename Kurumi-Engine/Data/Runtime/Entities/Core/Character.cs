@@ -20,7 +20,7 @@ public sealed class Character : IStats, IHasStatuses
 
     public string BattleSpriteName => _definition.BattleSprite;
 
-    public int MaxHP => _model.MaxHP;
+    public int Id => _definition.Id;
 
     public int MaxMP => _model.MaxMP;
 
@@ -34,6 +34,8 @@ public sealed class Character : IStats, IHasStatuses
     }
 
     public int CurrentMP => _model.CurrentMP;
+
+    public int GetMaxHp() => _model.MaxHP;
 
     public IReadOnlyList<int> GetStats() => _model.Stats;
 

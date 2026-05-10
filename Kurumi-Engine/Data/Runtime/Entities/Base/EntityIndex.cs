@@ -1,8 +1,8 @@
 namespace Data.Runtime.Entities.Base;
 
-public readonly record struct EntityId 
+public readonly record struct EntityIndex 
 {
-    public required int Id { get; init; }
+    public required int Index { get; init; }
 
     public required EntityType EntityType { get; init; }
 }

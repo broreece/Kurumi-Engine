@@ -2,6 +2,7 @@ using Data.Definitions.Entities.Core;
 using Data.Definitions.Formations.Core;
 using Data.Models.Formations;
 using Data.Runtime.Entities.Core;
+using Data.Runtime.Entities.Factories;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
 
@@ -14,14 +15,21 @@ public sealed class FormationFactory
     private readonly Registry<EnemyDefinition> _enemyDefinitionRegistry;
     private readonly Registry<EntityDefinition> _entityDefinitionRegistry;
 
+    private readonly EnemyFactory _enemyFactory;
+    private readonly EntityFactory _entityFactory;
+
     public FormationFactory
     (
         Registry<EnemyDefinition> enemyDefinitionRegistry,
+        Registry<EnemyBattleScript> enemyBattleScriptRegistry,
         Registry<EntityDefinition> entityDefinitionRegistry
     )
     {
         _enemyDefinitionRegistry = enemyDefinitionRegistry;
         _entityDefinitionRegistry = entityDefinitionRegistry;
+
+        _enemyFactory = new EnemyFactory(enemyBattleScriptRegistry);
+        _entityFactory = new EntityFactory();
     }
 
     /// <summary>
@@ -36,6 +44,7 @@ public sealed class FormationFactory
         // TODO: (DKE-01) Exception here if model and definition have different numbers of enemies.
         var storedEntityData = new List<StoredEntityData>();
         var entities = new List<Entity>();
+        var enemies = new List<Enemy>();
         for (var enemyIndex = 0; enemyIndex < model.Enemies.Count; enemyIndex ++) 
         {
             var enemyId = definition.Enemies[enemyIndex];
@@ -44,7 +53,8 @@ public sealed class FormationFactory
             // Load and store entity.
             var entityId = enemyDefinition.Id;
             var entityDefinition = _entityDefinitionRegistry.Get(entityId);
-            var entity = new Entity(entityDefinition, model.Enemies[enemyIndex]) { CurrentHP = entityDefinition.MaxHp };
+            var entity = _entityFactory.Create(entityDefinition, model.Enemies[enemyIndex], entityDefinition.MaxHp);
+            enemies.Add(_enemyFactory.Create(enemyDefinition));
             entities.Add(entity);
             storedEntityData.Add(new StoredEntityData() 
             { 
@@ -54,6 +64,6 @@ public sealed class FormationFactory
             });
         }
         
-        return new Formation(definition, model, entities) { StoredEntityData = storedEntityData };
+        return new Formation(definition, model, entities, enemies) { StoredEntityData = storedEntityData };
     }
 }

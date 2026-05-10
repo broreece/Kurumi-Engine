@@ -1,4 +1,5 @@
 using Data.Definitions.Entities.Abilities.Core;
+using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
 using Data.Runtime.Formations.Factories;
@@ -16,7 +17,11 @@ using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
 using Game.Scripts.Context.Builder.Core;
+using Game.Scripts.Context.Capabilities.Implementations.Entity;
+using Game.Scripts.Context.Capabilities.Interfaces.Entity;
 using Game.Scripts.Context.Core;
+using Game.Scripts.Context.Variables.Base;
+using Game.Scripts.Library;
 using Game.UI.Views;
 
 using Infrastructure.Database.Base;
@@ -61,6 +66,9 @@ public sealed class BattleState : IGameState, IBattleMenu
     private int _currentSelectionIndex = 0;
     private int _currentTargetIndex;
 
+    // Current turn count.
+    private int _currentTurn = 1;
+
     // Current selection state.
     private bool _targetSelector = false;
 
@@ -75,8 +83,9 @@ public sealed class BattleState : IGameState, IBattleMenu
     // Camera.
     private Camera? _camera;
 
-    // Script context.
+    // Script context and library.
     private ScriptContext? _battleScriptContext;
+    private ScriptLibrary? _scriptLibrary;
 
     // List of actions to be executed in order.
     private PriorityQueue<BattleAction, int> _actions = new(Comparer<int>.Create((x, y) => y.CompareTo(x)));
@@ -103,7 +112,11 @@ public sealed class BattleState : IGameState, IBattleMenu
 
         _abilityRegistry = database.AbilityRegistry;
 
-        var formationFactory = new FormationFactory(database.EnemyDefinitionRegistry, database.EntityDefinitionRegistry);
+        var formationFactory = new FormationFactory(
+            database.EnemyDefinitionRegistry, 
+            database.EnemyBattleScriptRegistry, 
+            database.EntityDefinitionRegistry
+        );
         var formationModel = saveData.Formations[battle.EnemyFormationId];
         var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
 
@@ -178,7 +191,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         }
         else
         {
-            // TODO: Implement next page.
+            // TODO: Implement previous page.
         }
     }
 
@@ -197,7 +210,8 @@ public sealed class BattleState : IGameState, IBattleMenu
                     UserIndex = _currentCharacterIndex,
                     TargetIndex = _currentTargetIndex,
                     IsEnemy = false,
-                    Script = _abilityRegistry.Get(abilities[_currentSelectionIndex]).ScriptName
+                    ScriptName = _abilityRegistry.Get(abilities[_currentSelectionIndex]).ScriptName 
+                        ?? throw new Exception("TODO: Change this to custom exception here.")
                 }, 
                 currentCharacter.BattleSpeed));
             }
@@ -227,41 +241,52 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     private void CacheDependencies() 
     {
-        var assetRegistry = _gameContext.GameData.AssetRegistry;
-        var renderSystem = _gameContext.GameServices.RenderSystem;
-        var configProvider = _gameContext.GameData.ConfigProvider;
+        var gameData = _gameContext.GameData;
+        var gameServices = _gameContext.GameServices;
+
+        var assetRegistry = gameData.AssetRegistry;
+        var configProvider = gameData.ConfigProvider;
         var gameWindow = _stateContext.GameWindow;
         var windowSize = gameWindow.Size;
 
+        // Renderer.
+        _renderSystem = gameServices.RenderSystem;
+
+        // Camera
         _camera = new Camera(windowSize.X, windowSize.Y);
         gameWindow.SetView(_camera.View);
 
         var battleRendererFactory = new BattleRendererFactory(
             assetRegistry, 
-            renderSystem, 
+            _renderSystem, 
             configProvider.BattleBackgroundSpriteConfig,
             windowSize);
         _battleRenderer = battleRendererFactory.Create(_battle.BattleBackgroundArtName);
 
         var enemyRendererFactory = new EnemyRendererFactory(
             assetRegistry, 
-            renderSystem, 
+            _renderSystem, 
             configProvider.EnemyBattleSpriteConfig);
         _enemyRenderer = enemyRendererFactory.Create(_formation);
 
         var partyBattleRendererFactory = new PartyBattleRendererFactory(
             assetRegistry, 
-            renderSystem,
+            _renderSystem,
             configProvider.CharacterBattleSpriteConfig
         );
         _partyBattleRenderer = partyBattleRendererFactory.Create(_party);
 
-        // Renderer.
-        _renderSystem = _gameContext.GameServices.RenderSystem;
-
-        // Battle script context.
+        // Battle script context and script library.
         var battleScriptContextBuilder = new BattleScriptContextBuilder(_gameContext, _stateContext);
         _battleScriptContext = battleScriptContextBuilder.BuildScriptContext();
+        _scriptLibrary = gameServices.ScriptLibrary;
+
+        // Set capabilities.
+        _battleScriptContext.SetCapability(typeof(IHpMpActions), new HpMpActions(
+            _party, 
+            gameServices.DamageCalculator, 
+            _formation
+        ));
     }
 
     private void InitializeInput()
@@ -269,24 +294,153 @@ public sealed class BattleState : IGameState, IBattleMenu
          _stateContext.InputContextManager.SetContext(new BattleInputContext(this));
     }
 
+    /// <summary>
+    /// Moves the current turn to the next possible party member or initiates the enemy phase if final character.
+    /// </summary>
     private void NextBattler()
     {
         // Check if it's enemies turns.
         if (_currentCharacterIndex == _party.Size - 1)
         {
             _currentCharacterIndex = 0;
+            QueueAllActions();
             ConductEnemyPhase();
         }
         else
         {
             _currentCharacterIndex ++;
-        }
+        } 
         _currentSelectionIndex = 0;
-        _currentTargetIndex = 0;
+        _currentTargetIndex = _party.Size;
     }
 
+    /// <summary>
+    /// Empties the actions stack and moves it into the actions queue with associated priority.
+    /// </summary>
+    private void QueueAllActions()
+    {
+        while (_queuedActions.Count > 0)
+        {
+            var (action, priority) = _queuedActions.Pop();
+            _actions.Enqueue(action, priority);
+        }
+    }
+
+    /// <summary>
+    /// Loops through all enemies battle scripts to evaluate which actions to queue this turn.
+    /// </summary>
     private void ConductEnemyPhase()
     {
-        // TODO: Implement here.
+        int entityIndex = 0;
+        foreach (var enemy in _formation.Enemies)
+        {
+            if (_formation.GetEntityAt(entityIndex).CurrentHP > 0)
+            {
+                foreach (var enemyBattleScript in enemy.BattleScripts)
+                {
+                    /// Condition for if script is queued is:
+                    /// 1. On the start turn of the battle script.
+                    /// 2. On any turn where the turn count mod by the frequency is 0 (every 2 turns for example).
+                    if (enemyBattleScript.StartTurn == _currentTurn ||
+                        ((enemyBattleScript.StartTurn <= _currentTurn) && 
+                        (_currentTurn % enemyBattleScript.Frequency == 0)))
+                    {
+                        _actions.Enqueue(new BattleAction()
+                        {
+                            UserIndex = entityIndex,
+                            TargetIndex = enemyBattleScript.Target,
+                            IsEnemy = true,
+                            ScriptName = enemyBattleScript.ScriptName
+                        }
+                        , _formation.GetEntityAt(entityIndex).BattleSpeed);
+                    }
+                }
+            }
+            entityIndex ++;
+        }
+
+        ExecuteActions();
+    }
+
+    /// <summary>
+    /// Loops through all queued actions, emptying the priority queue along the way.
+    /// </summary>
+    private void ExecuteActions()
+    {
+        while (_actions.Count > 0)
+        {
+            BattleAction action = _actions.Dequeue();
+            Execute(action);
+        }
+        
+        _currentTurn ++;
+        _targetSelector = false;
+    }
+
+    private void Execute(BattleAction action)
+    {
+        var script = _scriptLibrary!.GetEntityScript(action.ScriptName);
+        EntityIndex user, target;
+
+        // Account for random attack indexes.
+        var targetIndex = action.TargetIndex;
+        switch (targetIndex)
+        {
+            case (int) BattleTargets.RandomPartyMember:
+                // Generate a random alive party member, keep trying to ensure the party member is alive.
+                var random = new Random();
+                do
+                {
+                    targetIndex = random.Next(0, _party.Size);
+                }
+                while (_party.Characters[targetIndex].CurrentHP <= 0);
+                break;
+
+            default:
+                break;
+        }
+
+        // Check if the user is an enemy or not.
+        if (action.IsEnemy)
+        {
+            user = new EntityIndex() 
+            { 
+                Index = action.UserIndex - _party.Size, 
+                EntityType = EntityType.Enemy 
+            };
+        }
+        else
+        {
+            user = new EntityIndex() 
+            { 
+                Index = action.UserIndex, 
+                EntityType = EntityType.Character 
+            };
+        }
+
+        // If target is enemy.
+        if (action.TargetIndex >= _party.Size)
+        {
+            target = new EntityIndex() 
+            { 
+                Index = targetIndex - _party.Size, 
+                EntityType = EntityType.Enemy 
+            };
+        }
+        else
+        {
+            target = new EntityIndex() 
+            { 
+                Index = targetIndex,  
+                EntityType = EntityType.Character 
+            };
+        }
+
+        // Add user and target to script context.
+        _battleScriptContext!.SetVariable(Variables.User, user);
+        _battleScriptContext.SetVariable(Variables.Target, target);
+
+        // Activate.
+        script.Activate(_battleScriptContext, script.StartingKey);
     }
 }

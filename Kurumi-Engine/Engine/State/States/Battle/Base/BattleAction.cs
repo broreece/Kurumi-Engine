@@ -9,5 +9,5 @@ public class BattleAction {
 
     public required bool IsEnemy { get; init; }
 
-    public required string? Script { get; init; }
+    public required string ScriptName { get; init; }
 }

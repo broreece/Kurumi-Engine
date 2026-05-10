@@ -16,6 +16,7 @@ using Engine.State.Base;
 using Engine.State.Core;
 using Engine.State.States.Battle.Core;
 using Engine.State.States.Maps.Core;
+using Engine.Systems.Combat.Factories;
 
 using Game.Maps.Loader;
 using Game.Maps.Registry;
@@ -159,13 +160,16 @@ public static class Program
             new SmartTrackingActorFactory(scriptLibrary), 
             party));
 
+        var damageCalculatorFactory = new DamageCalculatorFactory(gameData.GameDatabase.StatShortNameIndex);
+
         return new GameServices() 
         {
             MapService = mapService, 
             SaveService = saveService, 
             ScriptLibrary = new ScriptLibrary(paths.RegistryRoot), 
             InputMapper = input.Mapper,
-            RenderSystem = new RenderSystem(gameWindow)
+            RenderSystem = new RenderSystem(gameWindow),
+            DamageCalculator = damageCalculatorFactory.Create()
         };
     }
 
