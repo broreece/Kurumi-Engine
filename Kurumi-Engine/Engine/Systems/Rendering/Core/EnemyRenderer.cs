@@ -1,5 +1,9 @@
 using Config.Runtime.Battle;
+
+using Data.Runtime.Formations.Core;
+
 using Engine.Systems.Rendering.Base;
+
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
@@ -15,16 +19,19 @@ public sealed class EnemyRenderer
 {
     private readonly RenderSystem _renderSystem;
 
+    private readonly Formation _formation;
     private readonly IReadOnlyList<EnemyRenderData> _enemyRenderData;
 
     private readonly EnemyBattleSpriteConfig _enemyBattleSpriteConfig;
 
     internal EnemyRenderer(
         RenderSystem renderSystem, 
+        Formation formation,
         IReadOnlyList<EnemyRenderData> enemyRenderData,
         EnemyBattleSpriteConfig enemyBattleSpriteConfig)
     {
         _renderSystem = renderSystem;
+        _formation = formation;
         _enemyRenderData = enemyRenderData;
         _enemyBattleSpriteConfig = enemyBattleSpriteConfig;
     }
@@ -34,28 +41,30 @@ public sealed class EnemyRenderer
         var currentEnemyIndex = 0;
         foreach (var enemyRenderData in _enemyRenderData)
         {
-            var enemySprite = new Sprite(enemyRenderData.Texture)
+            if (_formation.GetEntityAt(currentEnemyIndex).CurrentHP > 0)
             {
-                TextureRect = new IntRect(
-                    0,
-                    0,
-                    _enemyBattleSpriteConfig.Width,
-                    _enemyBattleSpriteConfig.Height
-                ),
-                Position = new Vector2f(enemyRenderData.XLocation, enemyRenderData.YLocation)
-            };
+                var enemySprite = new Sprite(enemyRenderData.Texture)
+                {
+                    TextureRect = new IntRect(
+                        0,
+                        0,
+                        _enemyBattleSpriteConfig.Width,
+                        _enemyBattleSpriteConfig.Height
+                    ),
+                    Position = new Vector2f(enemyRenderData.XLocation, enemyRenderData.YLocation)
+                };
 
-            // Send to render list.
-            RenderStates renderState = selectedEnemyIndex == currentEnemyIndex && targetSelector ? 
-                new(BlendMode.Add) : RenderStates.Default;
-            _renderSystem.Submit(new RenderCommand() 
-            {
-                Layer = RenderLayer.BaseEnemyLayer, 
-                Drawable = enemySprite, 
-                States = renderState,
-                View = view
-            });
-
+                // Send to render list.
+                RenderStates renderState = selectedEnemyIndex == currentEnemyIndex && targetSelector ? 
+                    new(BlendMode.Add) : RenderStates.Default;
+                _renderSystem.Submit(new RenderCommand() 
+                {
+                    Layer = RenderLayer.BaseEnemyLayer, 
+                    Drawable = enemySprite, 
+                    States = renderState,
+                    View = view
+                });
+            }
             currentEnemyIndex ++;
         }
     }

@@ -174,8 +174,21 @@ public sealed class BattleState : IGameState, IBattleMenu
     {
         if (_targetSelector)
         {
-            _currentTargetIndex = _currentTargetIndex == GetNumberOfTargets() - 1 ? 
-                GetNumberOfTargets() - 1 : _currentTargetIndex + 1;
+            var nextTargetIndex = _currentTargetIndex;
+
+            do
+            {
+                nextTargetIndex ++;
+                
+                if (nextTargetIndex >= _party.Size + _formation.Enemies.Count)
+                {
+                    nextTargetIndex = _currentTargetIndex;
+                    break;
+                }
+            }
+            while (!IsValidTarget(nextTargetIndex));
+
+            _currentTargetIndex = nextTargetIndex;
         }
         else
         {
@@ -187,12 +200,59 @@ public sealed class BattleState : IGameState, IBattleMenu
     {
         if (_targetSelector)
         {
-            _currentTargetIndex = _currentTargetIndex == 0 ? 0 : _currentTargetIndex - 1;
+            var nextTargetIndex = _currentTargetIndex;
+
+            do
+            {
+                nextTargetIndex --;
+                
+                if (nextTargetIndex < 0)
+                {
+                    nextTargetIndex = _currentTargetIndex;
+                    break;
+                }
+            }
+            while (!IsValidTarget(nextTargetIndex));
+
+            _currentTargetIndex = nextTargetIndex;
         }
         else
         {
             // TODO: Implement previous page.
         }
+    }
+
+    private bool IsValidTarget(int currentIndex)
+    {
+        if (currentIndex < _party.Size)
+        {
+            return _party.Characters[currentIndex].CurrentHP > 0;
+        }
+        return _formation.StoredEntityData[currentIndex - _party.Size].Entity.CurrentHP > 0;
+    }
+
+    private int GetFirstValidEnemyTarget()
+    {
+        int enemyIndex = 0;
+        do
+        {
+            enemyIndex ++;
+        }
+        while (enemyIndex < _formation.GetAmountOfLivingEnemies() + 1 && 
+            _formation.GetEntityAt(enemyIndex).CurrentHP == 0);
+        return enemyIndex;
+    }
+
+    private int GetFirstValidPartyTarget()
+    {
+        int characterIndex = 0;
+        do
+        {
+            characterIndex ++;
+        }
+        while (characterIndex < _party.Size &&
+            _party.Characters[characterIndex].CurrentHP == 0);
+        return characterIndex;
     }
 
     public void Confirm()
@@ -311,7 +371,7 @@ public sealed class BattleState : IGameState, IBattleMenu
             _currentCharacterIndex ++;
         } 
         _currentSelectionIndex = 0;
-        _currentTargetIndex = _party.Size;
+        _currentTargetIndex = GetFirstValidEnemyTarget();
     }
 
     /// <summary>

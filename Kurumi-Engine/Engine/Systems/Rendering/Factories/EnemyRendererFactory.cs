@@ -45,6 +45,6 @@ public sealed class EnemyRendererFactory
             });
         }
 
-        return new EnemyRenderer(_renderSystem, enemyRenderData, _enemyBattleSpriteConfig);
+        return new EnemyRenderer(_renderSystem, formation, enemyRenderData, _enemyBattleSpriteConfig);
     }
 }
