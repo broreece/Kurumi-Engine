@@ -1,9 +1,12 @@
-window_id: 1
-choice_box_id: 0
-font_id: 0
-font_size: 25
+window_name: "template"
+choice_box_name: "template"
+font_name: "template"
 
-width: 10
+font_size: 12
+
+width: 17
 height: 11
 x: 800
 y: 400
+
+spacing: 25

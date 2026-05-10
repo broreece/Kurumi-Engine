@@ -48,66 +48,17 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Next milestone:
-### Re-Forge
+## Milestone: Re-Forge
 **Focus areas:**
 
-- Re-implement battle state
-- Re-implement battle rendering
 - Re-implement removed script steps
-- Re-implement UI elements such that battle state and removed script steps function as before.
-
----
-
-## (BS-01) Implement battle state ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the battle state, re-implement it with our new state system.
-
-**Steps:**
-- Check the existing map state and start implementing features required for battle state.
-
-**Blockers:**
-- DSS-01
-- BR-01
-- UI-01
-
----
-
-## (BR-01) Implement battle renderer ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the battle scene, re-implement it with our new render system.
-
-**Steps:**
-- Create new renderers in the System/Rendering for battle background, enemy sprites and party sprites.
-
----
-
-## (UI-01) Implement UI ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the battle scene, re-implement it with our new UI system.
-
-**Steps:**
-- Crate the missing UI elements and ensure they work with both the script steps and battle.
-- Ensure scripts pause as well when UI opens.
 
 ---
 
 ## (DSS-01) Re-add deleted script steps ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 2 ###
+### Complexity: 3 ###
+### Independent: 3 ###
+### Momentum: 3 ###
 ### Impact: 5 ###
 
 **Description:** During our work on the forge build we removed the traditional constructor for the scripts, we should now go back 
@@ -120,21 +71,29 @@ and re-add any deleted script steps.
 
 ---
 
-## (SP-01) Script pausing ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
+## Milestone: Quench
+**Focus areas:**
 
-**Description:** During our work on the forge build we removed the pausing ability of scripts, re-implement it.
-
-**Steps:**
-- When UI elements open or actors start a forced movement the next step will execute immediately again.
-- Ensure this behaviour is reverted.
+- Focused primarily on minor clean up
+- Allows non-passable tiles to be see-through
+- Update windows and UI to have locations work regardless of window size
 
 ---
 
-Re-forge reached.
+## (ASI-01) Store agility stat index in config so we can access battle speed. ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 2 ###
+
+**Description:** We currently just hardcode in character the battle speed variable, this needs to be changed to
+a configurable stat.
+
+**Steps:**
+- Update config.
+- Config should be accessible in character factory where we can then pass the index as a static value shared across
+characters.
+- Perhaps config should be passed instead, check to ensure we are using the right method.
 
 ---
 
@@ -148,23 +107,8 @@ Re-forge reached.
 change it'll result in us having to change a lot of lines. Removing the full path also reduces a lot of bloat.
 
 **Steps:**
-- Create A function to generate the paths based on type.
+- Create a function to generate the paths based on type.
 - Check if our current design for animated tile sheets and static tile sheets using the same key is correct.
-
----
-
-## (ATSC-01) Edit animated tile sheet config to allow multiple animated tiles per row. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Animated tile sheets are currently very tall but not wide, we can edit to include multiple animations
-in one row.
-
-**Steps:**
-- Edit the config for animated tile sheets to include a new "animated_tiles_per_row"
-- In map renderer mod/div the art id by this config to get it's row value and column.
 
 ---
 
@@ -219,6 +163,65 @@ dictionary.
 
 ---
 
+## Cache factories currently being made in game state. ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Currently in the battle state and map state we are creating factories. This should all be done in
+bootstrap and stored in game context to improve performance.
+
+**Steps:**
+- Go through map state and battle state removing factory initalization and store them in game context instead.
+- Also store the UIRenderSystem reused in the state manager and battle state in state context or somewhere else. It's
+currently being created twice.
+
+---
+
+## Clean up the roadmap, make release plan for all tickets. ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Current roadmap is a bit messy and needs to be cleaned up.
+
+**Steps:**
+- Go through the roadmap and clean it all up.
+- Ensure all tickets are planned and grouped in releases.
+
+---
+
+## (SBS-01) Determine scaling of sprites on battle state. ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** The sprites on the battle state are not scaled, we should determine how we scale.
+
+**Steps:**
+- Update scaling on party battle renderer and enemy renderer.
+- We should also wrap around the selection based on the number of options instead of max number of options.
+
+---
+
+## Windows and UI elements should appear based on the screen's width and height. ##
+### Complexity: 4 ###
+### Independent: 3 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Currently I believe UI elements will render in the same place regardless of window size,
+this should be fixed to be based on percents of the window size.
+
+**Steps:**
+- We can divide the intended window screen sizes by the real size to determine the new position or perhaps use a
+SFML camera object to adjust placement and zoom.
+
+---
+
 Quench Reached
 
 ---
@@ -268,16 +271,17 @@ enemy formation interaction a core part of the gameplay loop.
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, font size for 
-damage display and more dynamic enemy targetting.
+**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, damage display and 
+more dynamic enemy targetting.
 
 **Steps:** 
 - Implement additional attack options: (Low Priority)
     - Implement party wide attacks.
     - Implement enemy group wide attacks.
     - Implement random enemy hit attacks.
-- Implement new config for the damage text to have a font size:
-    - Currently hard coded make sure it's in battle scene config.
+- Implement damage text:
+    - Used to exist in forge.
+    - Create custom config declaring it's font type, size and maybe a offset.
 - Implement function to load the index of the first healthy party member when generating the first choices in a 
 battle scene:
     - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
@@ -358,7 +362,7 @@ Allow battle scenes to end either in victory of fail.
 ### Momentum: 3 ###
 ### Impact: 1 ###
 
-**Description:** Make the error message look more like a windows error message.
+**Description:** Make the error message look unique.
 
 **Steps:**
 - Make a icon for the error windows.
@@ -368,14 +372,14 @@ Allow battle scenes to end either in victory of fail.
 
 ---
 
-## (FD-01) Forge Build Demonstration ##
+## Create demonstration video ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
 ### Momentum: 4.5 ###
-### Impact: 1 ###
+### Impact: 3 ###
 
 **Description:**
-Create a small demonstration scenario showcasing key engine capabilities implemented during the Forge build.
+Create a small demonstration scenario showcasing key engine capabilities.
 
 **Steps:**
 - The first video should show two actors having forced movements, the player can still move during this time, then one 
@@ -649,19 +653,6 @@ carefully account for the current system and how we will implement threading her
 
 ---
 
-## In the database repos we use the same style of loading for the generic row types ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description** We can implement a unique mapping for these repos and map using the mapping to reduce duplicated
-code, also keeps all database info in one place so better for future changes.
-
-**Steps:** N/A
-
----
-
 ## Expand turn effect modifier ##
 ### Complexity: 3 ###
 ### Independent: 2 ###
@@ -683,19 +674,6 @@ a modifier that activates an effect when they attack, when they get attacked etc
 
 **Description** In the map loader we can create a custom exception to specify the issue. Also exists in asset registry
 and script registry.
-
-**Steps:** N/A
-
----
-
-## (MLE-01) In the database we might be able to interface in some instances. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description** The main example I found was in the enemy formation loader we only access the ID from the enemy rows,
-perhaps we can interface this? We'll need to check how neccesary doing that would be.
 
 **Steps:** N/A
 

@@ -1,6 +1,9 @@
-using Game.Scripts.Context.Capabilities.Interfaces.Map;
 using Data.Runtime.Actors.Controllers.Core;
 using Data.Runtime.Maps.Core;
+
+using Game.Scripts.Context.Capabilities.Interfaces.Map;
+
+using Utils.Interfaces;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Maps;
 
@@ -13,11 +16,20 @@ public sealed class MovementActions : IMovementActions
         _map = map;
     }
 
-    public void ForceMoveActor(bool keepDirection, bool lockMovement, bool instant, int actorIndex, List<int> path) 
+    public IFinishable ForceMoveActor(
+        bool keepDirection, 
+        bool lockMovement, 
+        bool instant, 
+        int actorIndex, 
+        List<int> path) 
     {
-        var actor = _map.GetActors()[actorIndex];
+        var actor = _map.Actors[actorIndex];
         actor.MaintainFacing = keepDirection;
-        actor.AddController(new PathedController(canFinish: true, path) { Interval = actor.ActorInfo.MovementSpeed });
+
+        var controller = new PathedController(canFinish: true, path) { Interval = actor.ActorInfo.MovementSpeed };
+        actor.AddController(controller);
+
+        return controller;
     }
 
     public void ForceMoveParty(bool keepDirection, bool instant, List<int> path) 

@@ -15,7 +15,7 @@ public sealed class CapabilityContainer
     {
         // TODO: (DKE-01) Custom exception here.
         return _capabilities.TryGetValue(typeof(T), out var capability) ? 
-        (T) capability : 
+            (T) capability : 
         throw new Exception();
     }
 

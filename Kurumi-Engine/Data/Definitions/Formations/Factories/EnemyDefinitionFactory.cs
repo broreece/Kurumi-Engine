@@ -11,7 +11,7 @@ public sealed class EnemyDefinitionFactory
         int yLocation, 
         int mainPart, 
         string? onKillScript, 
-        IReadOnlyList<string> battleScripts) 
+        IReadOnlyList<int> battleScripts) 
     {
         return new EnemyDefinition()
         {

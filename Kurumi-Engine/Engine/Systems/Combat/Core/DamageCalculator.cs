@@ -11,11 +11,12 @@ public sealed class DamageCalculator
     /// Takes the stat short name index provided in the database.
     /// </summary>
     /// <param name="statShortNameIndex">The stat short name index.</param>
-    internal DamageCalculator(IReadOnlyDictionary<string, int> statShortNameIndex) {
+    internal DamageCalculator(IReadOnlyDictionary<string, int> statShortNameIndex) 
+    {
         _statShortNameIndex = statShortNameIndex;
     }
 
-    public int Evaluate(string formula, int[] userStats, int[] targetStats) 
+    public int Evaluate(string formula, IReadOnlyList<int> userStats, IReadOnlyList<int> targetStats) 
     {
         List<string> tokens = Tokenize(formula);
 
@@ -111,7 +112,7 @@ public sealed class DamageCalculator
     /// <param name="targetStats">The array of target stats.</param>
     /// <returns>The integer stat value of the variable</returns>
     /// TODO: Add exception message here.
-    private int ResolveVariable(string token, int[] userStats, int[] targetStats) 
+    private int ResolveVariable(string token, IReadOnlyList<int> userStats, IReadOnlyList<int> targetStats) 
     {
         // Token here has to be '.' as we use it to seperate entity and stat such as 'a.atk'
         string[] parts = token.Split('.');

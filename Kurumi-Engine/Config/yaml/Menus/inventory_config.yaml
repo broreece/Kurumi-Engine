@@ -1,7 +1,7 @@
 window_id: 1
 choice_box_id: 0
 font_id: 0
-font_size: 25
+font_size: 12
 
 inventory_items_width: 80
 inventory_items_height: 65

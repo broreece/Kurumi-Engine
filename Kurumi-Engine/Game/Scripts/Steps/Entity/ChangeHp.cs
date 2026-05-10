@@ -21,8 +21,8 @@ public sealed class ChangeHp : ScriptStep
     public override void Activate(ScriptContext scriptContext) 
     {
         IHpMpActions battleActions = scriptContext.GetCapability<IHpMpActions>();
-        EntityId user = scriptContext.GetVariable(Variables.User);
-        EntityId target = scriptContext.GetVariable(Variables.Target);
+        EntityIndex user = scriptContext.GetVariable(Variables.User);
+        EntityIndex target = scriptContext.GetVariable(Variables.Target);
         battleActions.ApplyHealthChange(user, target, _reduceHp, _canKo, _formula);
     }
 }

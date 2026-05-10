@@ -17,6 +17,8 @@ public sealed class PathedController : Controller
         _actorPath = actorPath;
     }
 
+    public override bool IsFinished() => _finished;
+
     /// <summary>
     /// When pathed controllers execute a move increment their current path step index.
     /// </summary>
@@ -40,6 +42,4 @@ public sealed class PathedController : Controller
         var nextStep = _actorPath[_currentPathStepIndex];
         return nextStep;
     }
-
-    public override bool IsFinished() => _finished;
 }

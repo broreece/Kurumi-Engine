@@ -10,9 +10,9 @@ using SFML.System;
 namespace Engine.Systems.Rendering.Core;
 
 /// <summary>
-/// System that renders the party state.
+/// System that renders the party map state.
 /// </summary>
-public sealed class PartyRenderer 
+public sealed class PartyMapRenderer 
 {
     private readonly RenderSystem _renderSystem;
 
@@ -24,7 +24,7 @@ public sealed class PartyRenderer
     private readonly Party _party;
     private readonly Texture _partyTexture;
 
-    internal PartyRenderer(
+    internal PartyMapRenderer(
         RenderSystem renderSystem, 
         CharacterFieldSpriteConfig characterFieldSpriteConfig, 
         Party party, 
@@ -40,7 +40,7 @@ public sealed class PartyRenderer
         _tileHeight = tileHeight;
     }
 
-    public void Update() 
+    public void Update(View view) 
     {
         // Cache common variables.
         var characterWidth = _characterFieldSpriteConfig.Width;
@@ -67,9 +67,10 @@ public sealed class PartyRenderer
         _renderSystem.Submit(
             new RenderCommand() 
             {
-                Layer = (int) RenderLayer.Party, 
+                Layer = RenderLayer.PartyMapLayer, 
                 Drawable = sprite, 
-                States = RenderStates.Default
+                States = RenderStates.Default,
+                View = view
             }
         );
     }

@@ -1,5 +1,6 @@
 using Config.Core;
 using Config.Runtime.Map;
+
 using Data.Definitions.Actors.Base;
 using Data.Definitions.Maps.Base;
 using Data.Definitions.Maps.Core;
@@ -7,11 +8,12 @@ using Data.Runtime.Actors.Core;
 using Data.Runtime.Maps.Base;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
+using Data.Runtime.Scripts;
+
 using Engine.Assets.Core;
 using Engine.Context.Containers;
 using Engine.Context.Core;
 using Engine.Input.Context.Contexts;
-using Engine.Input.Mapper;
 using Engine.State.Base;
 using Engine.Systems.Animation.Map.Core;
 using Engine.Systems.Animation.Map.Factories;
@@ -23,12 +25,13 @@ using Engine.Systems.Perception.Core;
 using Engine.Systems.Perception.Factories;
 using Engine.Systems.Rendering.Core;
 using Engine.Systems.Rendering.Factories;
+
 using Game.Scripts.Context.Builder.Core;
 using Game.Scripts.Context.Core;
-using Infrastructure.Database.Base;
-using Infrastructure.Rendering.Core;
 
-namespace Engine.State.States;
+using Infrastructure.Database.Base;
+
+namespace Engine.State.States.Maps.Core;
 
 /// <summary>
 /// Renders maps, actors and the party. Contains input handler and systems relating to movement for both parties,
@@ -46,14 +49,12 @@ public sealed class MapState : IGameState
     // Cached objects.
     private GameObjects? _gameObjects;
     private GameData? _gameData;
+    private GameServices? _gameServices;
 
     // Config.
     private ConfigProvider? _configProvider;
     private TileSheetConfig? _tileConfig;
     private CharacterFieldSpriteConfig? _characterFieldSpriteConfig;
-
-    // Input mapper.
-    private InputMapper? _inputMapper;
 
     // Registries.
     private AssetRegistry? _assetRegistry;
@@ -69,10 +70,11 @@ public sealed class MapState : IGameState
     private int _tileHeight;
 
     // Renderers.
-    private RenderSystem? _renderSystem;
     private MapRenderer? _mapRenderer;
     private ActorRenderer? _actorRenderer;
-    private PartyRenderer? _partyRenderer;
+    private PartyMapRenderer? _partyMapRenderer;
+
+    // Camera.
     private Camera? _camera;
 
     // Map factories.
@@ -100,8 +102,7 @@ public sealed class MapState : IGameState
     {
         // Break up functionality for readability.
         CacheDependencies();
-        InitializeRendering();
-        InitializePartyRenderer();
+        InitializePartyMapRenderer();
         InitializeMap();
         InitializeInput();
         InitializeCamera();
@@ -111,11 +112,10 @@ public sealed class MapState : IGameState
 
     public void Update(float deltaTime) 
     {
-        HandleInput();
-
         // Handle requested interactions.
         if (_stateContext.InputContextManager.GetGameplayContext()!.InteractRequested) 
         {
+            _stateContext.InputContextManager.GetGameplayContext()!.InteractRequested = false;
             // Get location of party.
             var partyX = _party.XLocation;
             var partyY = _party.YLocation;
@@ -142,14 +142,9 @@ public sealed class MapState : IGameState
                 }
 
                 // Load potential script and activate.
-                if (actor.ActorInfo.OnAction) 
+                if (actor.ActorInfo.OnAction && actor.Script != null) 
                 {
-                    var scriptKey = actor.ActorInfo.ScriptName;
-                    if (scriptKey != null) 
-                    {
-                        var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                        script.Activate(_mapScriptContext!);
-                    }
+                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
             }
         }
@@ -163,14 +158,9 @@ public sealed class MapState : IGameState
             var actors = _currentMap!.GetActorsAt(_party.XLocation, _party.YLocation);
             foreach (var actor in actors) 
             {
-                if (actor.ActorInfo.OnTouch) 
+                if (actor.ActorInfo.OnTouch && actor.Script != null) 
                 {
-                    var scriptKey = actor.ActorInfo.ScriptName;
-                    if (scriptKey != null) 
-                    {
-                        var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                        script.Activate(_mapScriptContext!);
-                    }
+                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
             }
 
@@ -192,14 +182,13 @@ public sealed class MapState : IGameState
         float worldX = interpolatedX * _tileWidth + _tileWidth / 2f;
         float worldY = interpolatedY * _tileHeight + _tileHeight / 2f;
 
-        _camera!.Follow(worldX, worldY, _currentMap!.GetWidth() * _tileWidth, _currentMap.GetHeight() * _tileHeight);
+        _camera!.Follow(worldX, worldY, _currentMap!.Width * _tileWidth, _currentMap.Height * _tileHeight);
         _stateContext.GameWindow.SetView(_camera.View);
 
         // Update the renderers and render.
-        _mapRenderer!.Update(_mapAnimationManager);
-        _actorRenderer!.Update();
-        _partyRenderer!.Update();
-        _renderSystem!.Render();
+        _mapRenderer!.Update(_mapAnimationManager, _camera.View);
+        _actorRenderer!.Update(_camera.View);
+        _partyMapRenderer!.Update(_camera.View);
 
         if (_gameObjects!.MapChangeRequest != null) 
         {
@@ -208,14 +197,17 @@ public sealed class MapState : IGameState
         }
     }
 
+    public ScriptContext GetScriptContext() => _mapScriptContext!;
+
     private void CacheDependencies() 
     {
         // Engine objects.
         _gameObjects = _gameContext.GameObjects;
         _gameData = _gameContext.GameData;
+        _gameServices = _gameContext.GameServices;
+
         _configProvider = _gameData.ConfigProvider;
         _tileConfig = _configProvider.TileSheetConfig;
-        _inputMapper = _gameContext.GameServices.InputMapper;
         _assetRegistry = _gameData.AssetRegistry;
         _tileRegistry = _gameData.GameDatabase.TileRegistry;
         _currentMap = _gameObjects.CurrentMap;
@@ -225,49 +217,55 @@ public sealed class MapState : IGameState
         _tileHeight = _tileConfig.Height;
 
         // Map script context.
-        var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext);
+        var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext, _stateContext);
         _mapScriptContext = mapScriptContextBuilder.BuildScriptContext();
     }
 
-    private void InitializeRendering() => _renderSystem = new RenderSystem(_stateContext.GameWindow);
-
-    private void InitializePartyRenderer() 
+    private void InitializePartyMapRenderer() 
     {
         var characterRegistry = _gameData!.GameDatabase.CharacterRegistry;
         _characterFieldSpriteConfig = _configProvider!.CharacterFieldSpriteConfig;
 
-        var partyRendererFactory = new PartyRendererFactory(
+        var PartyMapRendererFactory = new PartyMapRendererFactory(
             _assetRegistry!, 
-            _renderSystem!, 
+            _gameServices!.RenderSystem, 
             characterRegistry, 
             _characterFieldSpriteConfig, 
             _tileConfig!.Width, 
             _tileConfig.Height
         );
-        _partyRenderer = partyRendererFactory.Create(_party);
+        _partyMapRenderer = PartyMapRendererFactory.Create(_party);
     }
 
     private void InitializeMap() 
     {
+        var renderSystem = _gameServices!.RenderSystem;
+
         _mapRendererFactory = new MapRendererFactory(
             _assetRegistry!, 
             _tileRegistry!, 
-            _renderSystem!, 
-            _tileConfig!);
-        _mapRenderer = _mapRendererFactory.Create(_currentMap!.GetTiles(), _currentMap.GetTileSheetName());
+            renderSystem, 
+            _tileConfig!
+        );
+        _mapRenderer = _mapRendererFactory.Create(
+            _currentMap!.Tiles, 
+            _currentMap.TileSheetName, 
+            _currentMap.MapBackgroundArtName
+        );
 
         _actorRendererFactory = new ActorRendererFactory(
             _assetRegistry!, 
             _gameData!.GameDatabase.ActorSpriteRegistry,
-            _renderSystem!,  
+            renderSystem,  
             _tileConfig!.Width, 
-            _tileConfig.Height);
-        _actorRenderer = _actorRendererFactory.Create(_currentMap.GetActors());
+            _tileConfig.Height
+        );
+        _actorRenderer = _actorRendererFactory.Create(_currentMap.Actors);
 
         _walkAnimationManagerFactory = new WalkAnimationManagerFactory(
             _characterFieldSpriteConfig!.WalkAnimationFrames,
             _characterFieldSpriteConfig.WalkAnimationSpeed);
-        _walkAnimationManager = _walkAnimationManagerFactory.Create(_currentMap!.GetActors(), _party);
+        _walkAnimationManager = _walkAnimationManagerFactory.Create(_currentMap!.Actors, _party);
 
         var mapAnimationManagerFactory = new MapAnimationManagerFactory(
             _configProvider!.AnimatedTileSheetConfig.AnimatedTileFrames, 
@@ -299,15 +297,9 @@ public sealed class MapState : IGameState
         _stateContext.GameWindow.SetView(_camera.View);
     }
 
-    private void HandleInput() 
-    {
-        var inputState = _inputMapper!.BuildState();
-        _stateContext.InputContextManager.Update(inputState);
-    }
-
     private void MoveAllActors(float deltaTime) {
         // Move all actors.
-        foreach (var actor in _currentMap!.GetActors()) 
+        foreach (var actor in _currentMap!.Actors) 
         {
             var controllers = actor.Controllers;
             if (controllers.Count > 0) 
@@ -322,7 +314,7 @@ public sealed class MapState : IGameState
                 else 
                 {
                     currentController.Update(deltaTime);
-                    if (currentController.CanMove()) 
+                    if (currentController.CanMove) 
                     {
                         // Execute move.
                         var move = currentController.GetMove(actor);
@@ -339,7 +331,7 @@ public sealed class MapState : IGameState
 
     private void ExecuteAllOnFindScripts() 
     {
-        foreach (var actor in _currentMap!.GetActors()) 
+        foreach (var actor in _currentMap!.Actors) 
         {
             ExecuteOnFindScript(actor);
         }
@@ -347,23 +339,25 @@ public sealed class MapState : IGameState
 
     private void ExecuteOnFindScript(Actor actor) 
     {
-        if (actor.ActorInfo.OnFind && _visionResolver!.CanSee(actor, _party, actor.ActorInfo.TrackingRange)) 
+        if (
+            actor.ActorInfo.OnFind && 
+            actor.Script != null && 
+            _visionResolver!.CanSee(actor, _party, actor.ActorInfo.TrackingRange)) 
         {
-            var scriptKey = actor.ActorInfo.ScriptName;
-            if (scriptKey != null) 
-            {
-                var script = _gameData!.ScriptLibrary.GetMapScript(scriptKey);
-                script.Activate(_mapScriptContext!);
-            }
+            _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
         }
     }
 
     private void HandleMapChangeRequest(MapChangeRequest mapChangeRequest) 
     {
-        _currentMap = _gameContext.GameServices.MapService.LoadMap(mapChangeRequest.MapName);
-        _mapRenderer = _mapRendererFactory!.Create(_currentMap.GetTiles(), _currentMap.GetTileSheetName());
-        _actorRenderer = _actorRendererFactory!.Create(_currentMap.GetActors());
-        _walkAnimationManager = _walkAnimationManagerFactory!.Create(_currentMap.GetActors(), _party);
+        _currentMap = _gameServices!.MapService.LoadMap(mapChangeRequest.MapName);
+        _mapRenderer = _mapRendererFactory!.Create(
+            _currentMap.Tiles, 
+            _currentMap.TileSheetName, 
+            _currentMap.MapBackgroundArtName
+        );
+        _actorRenderer = _actorRendererFactory!.Create(_currentMap.Actors);
+        _walkAnimationManager = _walkAnimationManagerFactory!.Create(_currentMap.Actors, _party);
 
         var navigationGrid = _navigationGridFactory!.Create(_currentMap);
         var visionResolverFactory = new VisionResolverFactory(navigationGrid);

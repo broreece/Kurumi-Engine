@@ -1,4 +1,5 @@
 using Data.Runtime.Party.Core;
+
 using Engine.Input.Base;
 using Engine.Input.Context.Base;
 using Engine.Systems.Movement.Core;
@@ -14,7 +15,7 @@ public class MapInputContext : IGameplayInputContext
 
     private MovementResolver _movementResolver;
 
-    public bool InteractRequested { get; private set; } = false;
+    public bool InteractRequested { get; set; } = false;
 
     public MapInputContext(Party party, MovementResolver movementResolver) 
     {

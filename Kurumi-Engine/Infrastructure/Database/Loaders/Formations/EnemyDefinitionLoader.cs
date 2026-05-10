@@ -38,10 +38,10 @@ public sealed class EnemyDefinitionLoader : IDataLoader<EnemyDefinition>
             var id = row.Id;
 
             // Load battle scripts.
-            var battleScripts = new List<string>();
+            var battleScripts = new List<int>();
             foreach(var scriptRow in actorPathLookup[id]) 
             {
-                battleScripts.Add(scriptRow.ScriptName);
+                battleScripts.Add(scriptRow.Id);
             }
 
             enemies[index] = _enemyDefinitionFactory.Create(

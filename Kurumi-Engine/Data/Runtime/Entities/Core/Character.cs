@@ -16,13 +16,32 @@ public sealed class Character : IStats, IHasStatuses
         _model = model;
     }
 
+    public string Name => _definition.Name;
+
+    public string BattleSpriteName => _definition.BattleSprite;
+
+    public int Id => _definition.Id;
+
+    public int MaxMP => _model.MaxMP;
+
+    // TODO: Hard coded value here to be replaced with configurable setting.
+    public int BattleSpeed => _model.Stats[2];
+
     public int CurrentHP 
     {
         get => _model.CurrentHP;
         set => _model.CurrentHP = value;
     }
 
+    public int CurrentMP => _model.CurrentMP;
+
+    public int GetMaxHp() => _model.MaxHP;
+
     public IReadOnlyList<int> GetStats() => _model.Stats;
+
+    public List<int> GetAbilityIDs() => _model.Abilities;
+
+    public Dictionary<int, List<int>> GetAbilitySetIDs() => _model.AbilitySets;
 
     public List<int> GetStatuses() => _model.Statuses;
 }
