@@ -30,10 +30,7 @@ public sealed class ScriptDataConverter
         {
             // Battle script steps:
             case "KillEnemy":
-                return new KillEnemy(parameters["EnemyID"].GetInt32()) { NextStep = nextStep};
-
-            case "UseAbility":
-                return new UseAbility(parameters["AbilityID"].GetInt32()) { NextStep = nextStep};
+                return new KillEnemy(parameters["EnemyIndex"].GetInt32()) { NextStep = nextStep};
 
             // Entity script steps:
             case "ChangeHP":

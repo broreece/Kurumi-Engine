@@ -8,7 +8,7 @@ using Data.Runtime.Actors.Core;
 using Data.Runtime.Maps.Base;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
-using Data.Runtime.Scripts;
+using Data.Runtime.Scripts.Execution;
 
 using Engine.Assets.Core;
 using Engine.Context.Containers;

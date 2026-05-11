@@ -8,6 +8,8 @@ public sealed class Enemy
 
     public IReadOnlyList<EnemyBattleScript> BattleScripts { get; }
 
+    public string? OnKillScript => _enemyDefinition.OnKillScript;
+
     internal Enemy(EnemyDefinition enemyDefinition, IReadOnlyList<EnemyBattleScript> battleScripts)
     {
         _enemyDefinition = enemyDefinition;

@@ -4,7 +4,7 @@ using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
 using Data.Runtime.Formations.Factories;
 using Data.Runtime.Party.Core;
-
+using Data.Runtime.Scripts.Execution;
 using Engine.Context.Core;
 using Engine.Input.Context.Contexts;
 using Engine.State.Base;
@@ -17,8 +17,6 @@ using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
 using Game.Scripts.Context.Builder.Core;
-using Game.Scripts.Context.Capabilities.Implementations.Entity;
-using Game.Scripts.Context.Capabilities.Interfaces.Entity;
 using Game.Scripts.Context.Core;
 using Game.Scripts.Context.Variables.Base;
 using Game.Scripts.Library;
@@ -337,16 +335,14 @@ public sealed class BattleState : IGameState, IBattleMenu
         _partyBattleRenderer = partyBattleRendererFactory.Create(_party);
 
         // Battle script context and script library.
-        var battleScriptContextBuilder = new BattleScriptContextBuilder(_gameContext, _stateContext);
+        var battleScriptContextBuilder = new BattleScriptContextBuilder(
+            _gameContext, 
+            _stateContext, 
+            _party, 
+            _formation
+        );
         _battleScriptContext = battleScriptContextBuilder.BuildScriptContext();
         _scriptLibrary = gameServices.ScriptLibrary;
-
-        // Set capabilities.
-        _battleScriptContext.SetCapability(typeof(IHpMpActions), new HpMpActions(
-            _party, 
-            gameServices.DamageCalculator, 
-            _formation
-        ));
     }
 
     private void InitializeInput()
@@ -500,7 +496,20 @@ public sealed class BattleState : IGameState, IBattleMenu
         _battleScriptContext!.SetVariable(Variables.User, user);
         _battleScriptContext.SetVariable(Variables.Target, target);
 
-        // Activate.
-        script.Activate(_battleScriptContext, script.StartingKey);
+        // Add to executing scripts.
+        var scriptExceution = new ScriptExecution(script);
+        scriptExceution.RunToPauseOrFinish(_battleScriptContext, _stateContext);
+
+        // Check if target is enemy and died, if they died execute on kill script.
+        if (target.EntityType == EntityType.Enemy && _formation.GetEntityAt(target.Index).CurrentHP <= 0)
+        {
+            var onKillScriptName = _formation.Enemies[target.Index].OnKillScript;
+            if (onKillScriptName != null)
+            {
+                var onKillScript = _scriptLibrary.GetBattleScript(onKillScriptName);
+                var onKillScriptExecution = new ScriptExecution(onKillScript);
+                onKillScriptExecution.RunToPauseOrFinish(_battleScriptContext, _stateContext);
+            }
+        }
     }
 }
