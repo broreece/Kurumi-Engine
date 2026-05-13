@@ -17,7 +17,7 @@ public sealed class StateContext : IScriptScheduler
     public required GameWindow GameWindow { get; init; }
     public required InputContextManager InputContextManager { get; init; }
 
-    public List<ScriptExecution> Scripts { get; } = [];
+    public IList<ScriptExecution> Scripts { get; } = [];
 
     public Stack<IUIOverlay> UIOverlays { get; } = [];
 

@@ -6,6 +6,6 @@ public enum ModifierType
     Element,
     HitChance,
     Stat,
-    Status,
+    StatusDefinition,
     TurnEffect
 }

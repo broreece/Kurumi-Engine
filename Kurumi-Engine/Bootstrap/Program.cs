@@ -71,13 +71,13 @@ public static class Program
             InputContextManager = input.ContextManager
         };
         var stateManager = new StateManager(
-            new MapState(gameContext, stateContext, party), 
+            new MapState(gameContext, stateContext), 
             stateContext, 
             gameServices.InputMapper,
             gameServices.RenderSystem
         );
 
-        RunGameLoop(window, input.System, stateManager, gameContext, stateContext, party);
+        RunGameLoop(window, input.System, stateManager, gameContext, stateContext);
     }
 
     private static Paths BuildPaths() 
@@ -178,7 +178,7 @@ public static class Program
         var mapService = services.MapService;
         var map = mapService.LoadMap(party.PartyModel.MapName);
 
-        return new GameObjects{SaveData = saveData, CurrentMap = map};
+        return new GameObjects{SaveData = saveData, Party = party, CurrentMap = map};
     }
 
     private static GameWindow BuildWindow(GameData data) 
@@ -192,8 +192,7 @@ public static class Program
         InputSystem inputSystem, 
         StateManager stateManager, 
         GameContext gameContext,
-        StateContext stateContext,
-        Party party) 
+        StateContext stateContext) 
     {
         var clock = new Clock();
         var gameObjects = gameContext.GameObjects;
@@ -206,7 +205,7 @@ public static class Program
                 stateManager.ChangeState(new BattleState(
                     gameContext, 
                     stateContext, 
-                    party, 
+                    gameContext.GameObjects.Party, 
                     gameObjects.BattleStartRequest
                 ));
                 gameObjects.BattleStartRequest = null;

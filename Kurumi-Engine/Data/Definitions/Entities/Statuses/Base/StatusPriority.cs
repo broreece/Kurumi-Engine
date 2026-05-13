@@ -1,4 +1,4 @@
-namespace Data.Definitions.Entities.Status.Base;
+namespace Data.Definitions.Entities.Statuses.Base;
 
 public enum StatusPriority 
 {

@@ -1,17 +1,30 @@
+using Data.Models.Variables;
+
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Universal;
 
 public sealed class GameStateActions : IGameStateActions 
 {
-    public void ChangeFlag(int flagIndex, bool newValue) 
+    private readonly GameVariables _gameVariables;
+
+    public GameStateActions(GameVariables gameVariables)
     {
-        // TODO: Implement here.
+        _gameVariables = gameVariables;
     }
 
-    public bool GetGameFlag(int flagIndex) 
+    public void ChangeFlag(string flagKey, bool newValue) 
     {
-        // TODO: Implement here.
-        return false;
+        _gameVariables.Flags[flagKey] = newValue;
+    }
+
+    public bool GetGameFlag(string flagKey) 
+    {
+        if (_gameVariables.Flags.TryGetValue(flagKey, out var returnValue))
+        {
+            return returnValue;
+        }
+        // TODO: Throw custom exception here.
+        throw new Exception("Custom exception here.");
     }
 }

@@ -493,8 +493,8 @@ public sealed class BattleState : IGameState, IBattleMenu
         }
 
         // Add user and target to script context.
-        _battleScriptContext!.SetVariable(Variables.User, user);
-        _battleScriptContext.SetVariable(Variables.Target, target);
+        _battleScriptContext!.SetVariable(ScriptVariables.User, user);
+        _battleScriptContext.SetVariable(ScriptVariables.Target, target);
 
         // Add to executing scripts.
         var scriptExceution = new ScriptExecution(script);

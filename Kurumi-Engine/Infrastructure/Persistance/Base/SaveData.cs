@@ -17,5 +17,5 @@ public sealed class SaveData
 
     public required Dictionary<int, int> Inventory { get; set; }
     
-    public required Variables Variables { get; set; }
+    public required GameVariables GameVariables { get; set; }
 }

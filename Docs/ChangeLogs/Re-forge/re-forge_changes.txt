@@ -64,11 +64,21 @@ SCRIPT ADDITIONS
 
 ---------------------------------------------------------------------
 
+MINOR CODING CHANGES
+
+- Changed some instances of "List" to "IList" where it was possible.
+- Update some file names for "Variable" and "VariableKey" in scripts and "Variables" in game variables, this is to 
+improve readability.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - Compared to the forge build re-forge was much more minor mainly focused on UI and script implementations
 that were removed.
 - The focus areas of this build were more frustrating aspects of engine work (UI and scripting) however they have high
 impact on the engine.
+- The change log looks minor but the gameplay changes are massive, a whole new functioning game state, UI re-implemented
+and script steps being returned.
 
 ---------------------------------------------------------------------

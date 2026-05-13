@@ -1,3 +1,4 @@
+using Engine.Context.Containers;
 using Engine.Context.Core;
 using Engine.State.Base;
 
@@ -40,8 +41,13 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
             typeof(IMovementActions), 
             new MovementActions(gameObjects.CurrentMap)
         );
-        capabilityContainer.SetCapability(typeof(IGameStateActions), new GameStateActions());
-        capabilityContainer.SetCapability(typeof(IPartyStatusActions), new PartyStatusActions());
+        capabilityContainer.SetCapability(typeof(IGameStateActions), new GameStateActions(
+            gameObjects.SaveData.GameVariables
+        ));
+        capabilityContainer.SetCapability(typeof(IPartyStatusActions), new PartyStatusActions(
+            gameObjects.Party,
+            gameData.GameDatabase.StatusRegistry
+        ));
         capabilityContainer.SetCapability(typeof(IUIActions), new UIActions(
             _stateContext,
             gameData.AssetRegistry, 

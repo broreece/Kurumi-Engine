@@ -4,7 +4,7 @@ namespace Game.Scripts.Context.Capabilities.Interfaces.Universal;
 
 public interface IGameStateActions : ICapability 
 {
-    public void ChangeFlag(int flagIndex, bool newValue);
+    public void ChangeFlag(string flagKey, bool newValue);
 
-    public bool GetGameFlag(int flagIndex);
+    public bool GetGameFlag(string flagKey);
 }
