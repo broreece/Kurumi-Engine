@@ -1,6 +1,6 @@
 using Data.Runtime.Spatials;
 
-using Utils.Interfaces;
+using Utils.Finishable;
 
 namespace Data.Runtime.Actors.Controllers.Base;
 

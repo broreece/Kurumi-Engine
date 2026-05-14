@@ -1,4 +1,5 @@
-using Data.Runtime.Scripts;
+using Data.Runtime.Scripts.Execution;
+using Data.Runtime.Scripts.Scheduler;
 
 using Engine.Input.Context.Core;
 
@@ -11,12 +12,12 @@ namespace Engine.State.Base;
 /// <summary>
 /// Contains low level objects relating to the states display.
 /// </summary>
-public sealed class StateContext 
+public sealed class StateContext : IScriptScheduler 
 {
     public required GameWindow GameWindow { get; init; }
     public required InputContextManager InputContextManager { get; init; }
 
-    public List<ScriptExecution> Scripts { get; } = [];
+    public IList<ScriptExecution> Scripts { get; } = [];
 
     public Stack<IUIOverlay> UIOverlays { get; } = [];
 

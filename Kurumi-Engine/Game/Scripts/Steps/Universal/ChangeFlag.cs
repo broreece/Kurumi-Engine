@@ -6,18 +6,18 @@ namespace Game.Scripts.Steps.Universal;
 
 public sealed class ChangeFlag : ScriptStep 
 {
-    private readonly int _flagIndex;
+    private readonly string _flagKey;
     private readonly bool _newValue;
 
-    public ChangeFlag(int flagIndex, bool newValue) : base() 
+    public ChangeFlag(string flagKey, bool newValue) : base() 
     {
-        _flagIndex = flagIndex;
+        _flagKey = flagKey;
         _newValue = newValue;
     }
 
     public override void Activate(ScriptContext scriptContext) 
     {
         IGameStateActions gameStateActions = scriptContext.GetCapability<IGameStateActions>();
-        gameStateActions.ChangeFlag(_flagIndex, _newValue);
+        gameStateActions.ChangeFlag(_flagKey, _newValue);
     }
 }

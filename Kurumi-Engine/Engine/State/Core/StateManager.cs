@@ -85,9 +85,17 @@ public sealed class StateManager
 
         // Loop through executing scripts, remove any that have finished.
         var executingScripts = _stateContext.Scripts;
-        foreach (var script in executingScripts)
+        for (int scriptIndex = executingScripts.Count - 1; scriptIndex >= 0; scriptIndex --)
         {
-            script.Update(_currentState.GetScriptContext());
+            var script = executingScripts[scriptIndex];
+            if (script.Finished)
+            {
+                _stateContext.RemoveExecutingScript(script);
+            }
+            else
+            {
+                script.Update(_currentState.GetScriptContext());
+            }
         }
 
         if (stateInputValid) {

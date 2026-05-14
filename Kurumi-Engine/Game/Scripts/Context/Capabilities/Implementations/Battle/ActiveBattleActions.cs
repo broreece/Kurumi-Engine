@@ -1,16 +1,20 @@
+using Data.Runtime.Formations.Core;
+
 using Game.Scripts.Context.Capabilities.Interfaces.Battle;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Battle;
 
 public sealed class ActiveBattleActions : IActiveBattleActions 
 {
-    public void ActivateAbility(int abilityId) 
+    private readonly Formation _formation;
+
+    public ActiveBattleActions(Formation formation)
     {
-        // TODO: Implement here.
+        _formation = formation;
     }
 
     public void KillEnemy(int enemyIndex) 
     {
-        // TODO: Implement here.
+        _formation.GetEntityAt(enemyIndex).CurrentHP = 0;
     }
 }

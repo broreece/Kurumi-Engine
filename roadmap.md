@@ -48,29 +48,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Re-Forge
-**Focus areas:**
-
-- Re-implement removed script steps
-
----
-
-## (DSS-01) Re-add deleted script steps ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 5 ###
-
-**Description:** During our work on the forge build we removed the traditional constructor for the scripts, we should now go back 
-and re-add any deleted script steps.
-
-**Steps:**
-- https://github.com/broreece/Kurumi-Engine/commit/9e840b219cde144331093926bbff00a66e99d2c8#diff-f7e58fef3a0f6fc0677fa9b54340ad885e88bec3bdb9b3700dfa0c774618593bL15
-- The above commit contains where we deleted the steps. Re-add those steps.
-- We also have a few implementations not finished in "Context/Capabilities/Implementations/Map" re-implement them.
-
----
-
 ## Milestone: Quench
 **Focus areas:**
 

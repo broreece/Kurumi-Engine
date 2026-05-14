@@ -2,7 +2,7 @@ using Game.Scripts.Base;
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 using Game.Scripts.Context.Core;
 
-using Utils.Interfaces;
+using Utils.Finishable;
 
 namespace Game.Scripts.Steps.Map;
 
@@ -39,5 +39,5 @@ public sealed class ForceMoveActor : ScriptStep
             _path);
     }
 
-    public override bool Waiting() => _finishableController != null && !_finishableController.IsFinished();
+    public override bool Waiting() => !_finishableController!.IsFinished();
 }

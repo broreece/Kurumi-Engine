@@ -1,7 +1,9 @@
+using Data.Runtime.Scripts.Scheduler;
+
 using Game.Scripts.Context.Core;
 using Game.Scripts.Core;
 
-namespace Data.Runtime.Scripts;
+namespace Data.Runtime.Scripts.Execution;
 
 public sealed class ScriptExecution
 {
@@ -11,7 +13,7 @@ public sealed class ScriptExecution
 
     public string? CurrentStepKey { get; private set; }
 
-    private bool Finished => CurrentStepKey == null;
+    public bool Finished => CurrentStepKey == null;
 
     public ScriptExecution(Script script)
     {
@@ -37,6 +39,19 @@ public sealed class ScriptExecution
         if (!Finished && !Script.Waiting)
         {
             Script.Activate(scriptContext, CurrentStepKey!);
+        }
+    }
+
+    public void RunToPauseOrFinish(ScriptContext scriptContext, IScriptScheduler scriptScheduler)
+    {
+        while (!Finished && !Script.Waiting)
+        {
+            Script.Activate(scriptContext, CurrentStepKey!);
+            CurrentStepKey = Script.NextKey;
+        }
+        if (!Finished && Script.Waiting)
+        {
+            scriptScheduler.AddExecutingScript(this);
         }
     }
 }

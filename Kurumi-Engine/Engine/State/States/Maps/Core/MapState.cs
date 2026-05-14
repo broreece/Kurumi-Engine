@@ -8,7 +8,7 @@ using Data.Runtime.Actors.Core;
 using Data.Runtime.Maps.Base;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
-using Data.Runtime.Scripts;
+using Data.Runtime.Scripts.Execution;
 
 using Engine.Assets.Core;
 using Engine.Context.Containers;
@@ -91,11 +91,11 @@ public sealed class MapState : IGameState
     // Script context.
     private ScriptContext? _mapScriptContext;
 
-    public MapState(GameContext gameContext, StateContext stateContext, Party party) 
+    public MapState(GameContext gameContext, StateContext stateContext) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
-        _party = party;
+        _party = gameContext.GameObjects.Party;
     }
 
     public void OnEnter() 

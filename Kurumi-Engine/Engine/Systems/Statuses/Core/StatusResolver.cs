@@ -1,7 +1,7 @@
-using Data.Definitions.Entities.Status.Base;
-using Data.Definitions.Entities.Status.Core;
+using Data.Definitions.Entities.Statuses.Base;
+using Data.Runtime.Entities.Statuses.Core;
+
 using Engine.Systems.Statuses.Interfaces;
-using Infrastructure.Database.Base;
 
 namespace Engine.Systems.Statuses.Core;
 
@@ -10,16 +10,9 @@ namespace Engine.Systems.Statuses.Core;
 /// </summary>
 public sealed class StatusResolver 
 {
-    private readonly Registry<Status> _statusRegistry;
-
-    public StatusResolver(Registry<Status> statusRegistry) {
-        _statusRegistry = statusRegistry;
-    }
-
-    public void ApplyStatus(IHasStatuses statusableObject, int newStatusId) 
+    public void TryApplyStatus(IHasStatuses statusableObject, Status newStatus) 
     {
-        List<int> statuses = statusableObject.GetStatuses();
-        var newStatus = _statusRegistry.Get(newStatusId);
+        var statuses = statusableObject.GetStatuses();
 
         // Check if we can apply the statuses based on priorites.
         if (CanApply(statuses, newStatus)) 
@@ -27,21 +20,20 @@ public sealed class StatusResolver
             // Resolve any erasure rules of statuses.
             if ((StatusPriority) newStatus.Priority != StatusPriority.CanStack) 
             {
-                statuses.Clear();
-                statuses.Add(newStatusId);
+                statusableObject.ClearStatuses();
+                statusableObject.AddStatus(newStatus);
             }
             else 
             {
-                statuses.Add(newStatusId);
+                statusableObject.AddStatus(newStatus);
             }
         }
     }
 
-    private bool CanApply(List<int> statuses, Status newStatus) 
+    private bool CanApply(IList<Status> statuses, Status newStatus) 
     {
-        foreach (var statusId in statuses) 
+        foreach (var status in statuses) 
         {
-            var status = _statusRegistry.Get(statusId);
             if (newStatus.Priority < status.Priority) 
             {
                 return false;

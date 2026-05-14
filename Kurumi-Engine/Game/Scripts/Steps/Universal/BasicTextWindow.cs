@@ -2,7 +2,7 @@ using Game.Scripts.Base;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 using Game.Scripts.Context.Core;
 
-using Utils.Interfaces;
+using Utils.Finishable;
 
 namespace Game.Scripts.Steps.Universal;
 

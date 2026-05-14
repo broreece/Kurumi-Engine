@@ -1,12 +1,12 @@
-namespace Data.Definitions.Entities.Status.Factories;
+namespace Data.Definitions.Entities.Statuses.Factories;
 
-using Data.Definitions.Entities.Status.Core;
+using Data.Definitions.Entities.Statuses.Core;
 using Data.Definitions.Modifiers.Base;
 using Data.Definitions.Modifiers.Core;
 
-public sealed class StatusFactory 
+public sealed class StatusDefinitionFactory 
 {
-    public Status Create(
+    public StatusDefinition Create(
         int id, 
         int maxTurns, 
         int priority, 
@@ -46,7 +46,7 @@ public sealed class StatusFactory
             entityModifiers.Add(ModifierType.TurnEffect, new TurnEffect() {TurnScriptName = turnEffectScriptName});
         }
             
-        return new Status()
+        return new StatusDefinition()
         {
             Id = id, 
             MaxTurns = maxTurns, 

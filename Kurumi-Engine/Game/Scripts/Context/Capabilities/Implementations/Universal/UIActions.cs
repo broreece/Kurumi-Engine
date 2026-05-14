@@ -8,7 +8,7 @@ using Engine.State.Base;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 using Game.UI.Overlays.Core;
 
-using Utils.Interfaces;
+using Utils.Finishable;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Universal;
 
@@ -49,7 +49,8 @@ public sealed class UIActions : IUIActions
 
     public void OpenGlobalMessage(int timeLimit, string text) 
     {
-        // TODO: Implement here.
+        var globalMessage = new GlobalMessage(_assetRegistry, _globalMessageDefaults, timeLimit, text);
+        _stateContext.PushUIOverlay(globalMessage);
     }
 
     public ChoiceBoxWithDialogueOverlay OpenTextWindowWithChoice(IReadOnlyList<string> choices, string text) 

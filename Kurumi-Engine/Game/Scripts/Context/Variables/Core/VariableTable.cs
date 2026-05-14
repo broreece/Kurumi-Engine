@@ -16,7 +16,7 @@ public class VariableTable
     /// <typeparam name="T">The type of variable desired.</typeparam>
     /// <returns>The T typed object at the given key index.</returns>
     /// TODO: Exception here.
-    public T GetVariable<T>(VariableKey<T> key) 
+    public T GetVariable<T>(ScriptVariableKey<T> key) 
     {
         if (!_variables.TryGetValue(key.Name, out var value)) 
         {
@@ -39,5 +39,5 @@ public class VariableTable
     /// <param name="key">The variable key.</param>
     /// <param name="value">The T type object being stored.</param>
     /// <typeparam name="T">The type of variable being stored.</typeparam>
-    public void SetVariable<T>(VariableKey<T> key, T value) => _variables[key.Name] = value!;
+    public void SetVariable<T>(ScriptVariableKey<T> key, T value) => _variables[key.Name] = value!;
 }

@@ -30,10 +30,7 @@ public sealed class ScriptDataConverter
         {
             // Battle script steps:
             case "KillEnemy":
-                return new KillEnemy(parameters["EnemyID"].GetInt32()) { NextStep = nextStep};
-
-            case "UseAbility":
-                return new UseAbility(parameters["AbilityID"].GetInt32()) { NextStep = nextStep};
+                return new KillEnemy(parameters["EnemyIndex"].GetInt32()) { NextStep = nextStep};
 
             // Entity script steps:
             case "ChangeHP":
@@ -65,6 +62,20 @@ public sealed class ScriptDataConverter
                     forceMoveActorInstant, 
                     forceMoveActorIndex, 
                     forceMoveActorSteps
+                ) { NextStep = nextStep };
+
+            case "ForceMoveParty":
+                bool forceMovePartyKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
+                bool forceMovePartyInstant = parameters["Instant"].GetInt32() == 1;
+                JsonElement forceMovePartyStepsElement = parameters["Steps"];
+                var forceMovePartySteps = new List<int>();
+                foreach (var item in forceMovePartyStepsElement.EnumerateArray()) {
+                    forceMovePartySteps.Add(item.GetInt32());
+                }
+                return new ForceMoveParty(
+                    forceMovePartyKeepDirection, 
+                    forceMovePartyInstant, 
+                    forceMovePartySteps
                 ) { NextStep = nextStep };
 
             case "StartBattle":

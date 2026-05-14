@@ -1,8 +1,8 @@
 using Data.Definitions.Modifiers.Base;
 
-namespace Data.Definitions.Entities.Status.Core;
+namespace Data.Definitions.Entities.Statuses.Core;
 
-public sealed class Status 
+public sealed class StatusDefinition 
 {
     public required int Id { get; init; }
     public required int MaxTurns { get; init; }
