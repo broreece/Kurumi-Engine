@@ -107,20 +107,21 @@ public sealed class BattleState : IGameState, IBattleMenu
         var database = gameData.GameDatabase;
         var formationRegistry = database.FormationRegistry;
         var saveData = gameContext.GameObjects.SaveData;
+        var configProvider = gameContext.GameData.ConfigProvider;
 
         _abilityRegistry = database.AbilityRegistry;
 
         var formationFactory = new FormationFactory(
             database.EnemyDefinitionRegistry, 
             database.EnemyBattleScriptRegistry, 
-            database.EntityDefinitionRegistry
+            database.EntityDefinitionRegistry,
+            configProvider.GameConfig.AgilityStatIndex
         );
         var formationModel = saveData.Formations[battle.EnemyFormationId];
         var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
 
         _formation = formationFactory.Create(formationDefinition, formationModel);
 
-        var configProvider = gameContext.GameData.ConfigProvider;
         var battleWindowConfig = configProvider.BattleWindowConfig;
         _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
 

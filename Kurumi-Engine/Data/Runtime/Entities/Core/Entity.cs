@@ -12,23 +12,24 @@ public sealed class Entity : IStats, IHasStatuses
     private readonly EntityDefinition _definition;
     private readonly EnemyModel _model;
 
-    private readonly List<Status> _statuses;
+    private readonly int _agilityIndex;
+
+    private readonly List<Status> _statuses = [];
 
     public required int CurrentHP { get; set; }
 
     public int Id => _definition.Id;
 
-    // TODO: Hard coded value here to be replaced with configurable setting.
-    public int BattleSpeed => _definition.Stats[2];
+    public int BattleSpeed => _definition.Stats[_agilityIndex];
 
     public string SpriteName => _definition.SpriteName;
 
-    internal Entity(EntityDefinition definition, EnemyModel model) 
+    internal Entity(EntityDefinition definition, EnemyModel model, int agilityIndex) 
     {
         _definition = definition;
         _model = model;
 
-        _statuses = [];
+        _agilityIndex = agilityIndex;
     }
 
     public int GetMaxHp() => _definition.MaxHp;

@@ -22,14 +22,15 @@ public sealed class FormationFactory
     (
         Registry<EnemyDefinition> enemyDefinitionRegistry,
         Registry<EnemyBattleScript> enemyBattleScriptRegistry,
-        Registry<EntityDefinition> entityDefinitionRegistry
+        Registry<EntityDefinition> entityDefinitionRegistry,
+        int agilityIndex
     )
     {
         _enemyDefinitionRegistry = enemyDefinitionRegistry;
         _entityDefinitionRegistry = entityDefinitionRegistry;
 
         _enemyFactory = new EnemyFactory(enemyBattleScriptRegistry);
-        _entityFactory = new EntityFactory();
+        _entityFactory = new EntityFactory(agilityIndex);
     }
 
     /// <summary>
