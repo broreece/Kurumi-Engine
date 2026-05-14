@@ -7,4 +7,5 @@ public sealed class Tile
 
     public required bool Animated { get; init; }
     public required bool Passable { get; init; }
+    public required bool SeeThrough { get; init; }
 }

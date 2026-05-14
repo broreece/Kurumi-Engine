@@ -28,7 +28,8 @@ public sealed class TileLoader : IDataLoader<Tile>
                 row.Id,
                 row.ArtId,
                 row.Animated,
-                row.Passable
+                row.Passable,
+                row.SeeThrough
             );
         }
         return tiles;

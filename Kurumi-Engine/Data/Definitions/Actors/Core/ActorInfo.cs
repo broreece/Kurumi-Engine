@@ -12,6 +12,8 @@ public sealed class ActorInfo
 
     public required bool BelowParty { get; init; }
     public required bool Passable { get; init; }
+    public required bool SeeThrough { get; init; }
+    
     public required bool OnTouch { get; init; }
     public required bool Auto { get; init; }
     public required bool OnAction { get; init; }

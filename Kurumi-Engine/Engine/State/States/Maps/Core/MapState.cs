@@ -136,13 +136,13 @@ public sealed class MapState : IGameState
             var actors = _currentMap!.GetActorsAt(targetX, targetY);
             foreach (var actor in actors) 
             {
-                if ((int) ActorBehaviour.StationaryDoesNotTurn != actor.ActorInfo.Behaviour) 
+                if ((int) ActorBehaviour.StationaryDoesNotTurn != actor.Behaviour) 
                 {
                     actor.Facing = newFacing;
                 }
 
                 // Load potential script and activate.
-                if (actor.ActorInfo.OnAction && actor.Script != null) 
+                if (actor.OnAction && actor.Script != null) 
                 {
                     _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
@@ -158,7 +158,7 @@ public sealed class MapState : IGameState
             var actors = _currentMap!.GetActorsAt(_party.XLocation, _party.YLocation);
             foreach (var actor in actors) 
             {
-                if (actor.ActorInfo.OnTouch && actor.Script != null) 
+                if (actor.OnTouch && actor.Script != null) 
                 {
                     _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
@@ -340,9 +340,9 @@ public sealed class MapState : IGameState
     private void ExecuteOnFindScript(Actor actor) 
     {
         if (
-            actor.ActorInfo.OnFind && 
+            actor.OnFind && 
             actor.Script != null && 
-            _visionResolver!.CanSee(actor, _party, actor.ActorInfo.TrackingRange)) 
+            _visionResolver!.CanSee(actor, _party, actor.TrackingRange)) 
         {
             _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
         }
