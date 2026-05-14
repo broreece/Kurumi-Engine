@@ -5,5 +5,5 @@ namespace Game.Scripts.Context.Capabilities.Interfaces.Entity;
 
 public interface IHpMpActions : ICapability 
 {
-    public void ApplyHealthChange(EntityId user, EntityId target, bool reduceHp, bool canKo, string formula);
+    public void ApplyHealthChange(EntityIndex user, EntityIndex target, bool reduceHp, bool canKo, string formula);
 }

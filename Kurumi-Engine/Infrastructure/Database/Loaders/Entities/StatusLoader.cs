@@ -1,5 +1,5 @@
-using Data.Definitions.Entities.Status.Core;
-using Data.Definitions.Entities.Status.Factories;
+using Data.Definitions.Entities.Statuses.Core;
+using Data.Definitions.Entities.Statuses.Factories;
 using Infrastructure.Database.Interfaces;
 using Infrastructure.Database.Repositories.Core.Statuses;
 using Infrastructure.Database.Repositories.Rows.Generic;
@@ -7,14 +7,14 @@ using Infrastructure.Database.Repositories.Rows.Statuses;
 
 namespace Infrastructure.Database.Loaders.Entities;
 
-public sealed class StatusLoader : IDataLoader<Status> 
+public sealed class StatusLoader : IDataLoader<StatusDefinition> 
 {
     private readonly StatusRepository _statusRepository;
     private readonly StatusAbilityRepository _statusAbilityRepository;
     private readonly StatusAbilitySetRepository _statusAbilitySetRepository;
     private readonly StatusElementRepository _statusElementRepository;
     private readonly StatusStatRepository _statusStatRepository;
-    private readonly StatusFactory _statusFactory;
+    private readonly StatusDefinitionFactory _statusFactory;
     
     public StatusLoader(
         StatusRepository statusRepository, 
@@ -22,7 +22,7 @@ public sealed class StatusLoader : IDataLoader<Status>
         StatusAbilitySetRepository statusAbilitySetRepository, 
         StatusElementRepository statusElementRepository, 
         StatusStatRepository statusStatRepository, 
-        StatusFactory statusFactory) 
+        StatusDefinitionFactory statusFactory) 
     {
         _statusRepository = statusRepository;
         _statusAbilityRepository = statusAbilityRepository;
@@ -32,10 +32,10 @@ public sealed class StatusLoader : IDataLoader<Status>
         _statusFactory = statusFactory;
     }
 
-    public IReadOnlyList<Status> LoadAll() 
+    public IReadOnlyList<StatusDefinition> LoadAll() 
     {
         StatusRow[] rows = _statusRepository.LoadAll();
-        var statuses = new Status[rows.Length];
+        var statuses = new StatusDefinition[rows.Length];
 
         // Create lookup tables for the entity's additional data.
         ILookup<int, AbilitySealRow> statusAbilityLookup = _statusAbilityRepository.LoadAll().ToLookup(

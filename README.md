@@ -5,11 +5,11 @@
 </p>
 
 Kurumi Engine is a modular RPG engine written in C# using SFML, designed around a clear separation between engine 
-systems, game logic, and external data. It uses SQLite for structured definitions and YAML/JSON for configuration and 
-runtime state, enabling a data-driven workflow without sacrificing type safety.
+systems, game logic, and external data. It uses SQLite for structured definitions and YAML/JSON for configuration 
+enabling a data-driven workflow.
 
 The engine emphasizes system-driven architecture, where states orchestrate behavior, systems execute logic, and 
-contexts handle input, allowing complex features—such as scripted events, AI actors, and dynamic UI—to remain decoupled 
+contexts handle input, allowing complex features—such as scripted events, AI actors, and dynamic UI to remain decoupled 
 and scalable.
 
 ---
@@ -17,7 +17,8 @@ and scalable.
 ## Development Status
 
 Re-Forge build is currently in progress, it is focused on:
-- Re-implementing some temporarily removed script steps and states that were removed to ensure the forge build was stable. 
+- Re-implementing some temporarily removed script steps and states that were removed to ensure the forge build was 
+stable. 
 
 ---
 
@@ -30,11 +31,10 @@ Key ideas:
 
 - **Minimal engine magic**
 - **Deterministic step-based script logic in map and battle**
-- **Engine follows SOLID principles**
-- **Explicit separation between data (definitions/state) and runtime behavior**
+- **Engine follows SOLID principles and .NET coding standards**
 
-The engine aims to keep any gameplay logic outside of scripts **explicit and readable**. If any licensed user wanted 
-to edit the engine for their own purpose it should be straight-forward.
+The engine aims to keep any gameplay logic outside of scripts **explicit and readable**. If any user wanted to edit the 
+engine for their own purpose it should be straight-forward.
 
 ---
 
@@ -43,9 +43,9 @@ to edit the engine for their own purpose it should be straight-forward.
 Current engine capabilities include:
 
 ### Core Systems
-- Script-driven event system applying on both overworld and battles.
-- Actor AI controllers
-- Tile-based map navigation
+- Script-driven event system applying on both overworld and battles
+- Actor AI controllers allowing dynamic changing of AI movement patterns
+- 2D grid tile-based map navigation
 - Modular UI state system that allows for blocking and non blocking UI elements
 - Enemy formations are being implemented to persist across saves and affect the game world
 
@@ -144,10 +144,8 @@ Kurumi-Engine/
 ## Project Goals
 
 - Build a **modular RPG engine architecture** with clear system boundaries and clean and readable code.
-- Implement actors, scripts and enemy formations such that they act in tandem to create dynamic gameplay with no 
-adjustments to code.
-- Build an engine that is both simple to use and allows for complex situations. Scalability is the most important 
-factor.
-- Maintain a clear separation between **Definitions, State, and Runtime systems**.
+- Implement actors, scripts and enemy formations such that they act in tandem to be able to create dynamic gameplay 
+with no adjustments to code.
+- The engine should be highly scalable, simple to use but allows growth smoothly.
 
 ---

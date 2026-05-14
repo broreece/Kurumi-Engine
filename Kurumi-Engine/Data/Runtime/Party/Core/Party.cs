@@ -1,10 +1,14 @@
 using Data.Models.Party;
+using Data.Runtime.Actors.Controllers.Core;
+using Data.Runtime.Entities.Core;
 using Data.Runtime.Spatials;
 
 namespace Data.Runtime.Party.Core;
 
 public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, IWalkable 
 {
+    public required Character[] Characters { get; init; }
+
     public required PartyModel PartyModel { get; init; }
     
     public required Dictionary<int, int> Inventory { get; init; }
@@ -20,6 +24,12 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
 
     public float AnimationTimer { get; set; } = 0;
     public float MovementProgress { get; set; } = 1;
+
+    public PathedController? PathedController { get; set; } = null;
+
+    public int Size => PartyModel.PartyMembers.Count;
+
+    public int LeadersHp => Characters[0].CurrentHP;
 
     //IMutablePositionProvider and IFacingPositionProvider functionality.
     public int XLocation 

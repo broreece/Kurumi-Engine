@@ -6,8 +6,20 @@ namespace Engine.Systems.Rendering.Base;
 public enum RenderLayer 
 {
     BackgroundLayer = 0,
+
     TileLayer = 1,
-    BelowPartyActor = 2,
-    Party = 3,
-    AbovePartyActor = 4
+    AnimatedTileLayer = 2,
+    BelowPartyActor = 3,
+    PartyMapLayer = 4,
+    AbovePartyActor = 5,
+
+    BelowPartyBattleLayer = 6,
+    PartyBattleLayer = 7,
+    AbovePartyBattleLayer = 8,
+    BaseEnemyLayer = 9,
+    EnemyBodyPartsLayer = 10,
+
+    UIWindow = 11,
+    UISelectionBox = 12,
+    UIText = 13
 }

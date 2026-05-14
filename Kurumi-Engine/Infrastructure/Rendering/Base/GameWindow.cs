@@ -13,6 +13,10 @@ public sealed class GameWindow
 {
     private readonly RenderWindow _window;
 
+    public bool IsOpen => _window.IsOpen;
+
+    public Vector2u Size => _window.Size;
+
     public GameWindow(GameWindowConfig gameWindowConfig) 
     {
         var mode = new VideoMode((uint) gameWindowConfig.Width, (uint) gameWindowConfig.Height);
@@ -45,8 +49,4 @@ public sealed class GameWindow
     public void DispatchEvents() => _window.DispatchEvents();
 
     public void SetView(View? view) => _window.SetView(view);
-
-    public bool IsOpen() => _window.IsOpen;
-
-    public Vector2u GetSize() => _window.Size;
 }

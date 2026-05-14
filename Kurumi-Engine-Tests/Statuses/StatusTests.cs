@@ -1,13 +1,15 @@
 namespace Tests.Statuses;
 
 using Data.Definitions.Entities.Factories;
-using Data.Definitions.Entities.Status.Base;
-using Data.Definitions.Entities.Status.Core;
-using Data.Definitions.Entities.Status.Factories;
+using Data.Definitions.Entities.Statuses.Base;
+using Data.Definitions.Entities.Statuses.Factories;
 using Data.Models.Formations;
 using Data.Runtime.Entities.Factories;
+using Data.Runtime.Entities.Statuses.Core;
+using Data.Runtime.Entities.Statuses.Factories;
+
 using Engine.Systems.Statuses.Core;
-using Infrastructure.Database.Base;
+
 using Xunit;
 
 public class StatusTests 
@@ -20,19 +22,20 @@ public class StatusTests
         var canNotStackHighPriority = (int) StatusPriority.CanNotStackHighPriority;
         var fainted = (int) StatusPriority.Fainted;
 
+        var statusDefinitionFactory = new StatusDefinitionFactory();
+        var status1 = statusDefinitionFactory.Create(1, 5, canNotStackLowPriority, 0, 0, "test", null, "test", "test", 
+            false, false, new Dictionary<int, int>(), new Dictionary<int, int>(), [], [], []);
+        var status2 = statusDefinitionFactory.Create(2, 5, canStack, 0, 0, "test", null, "test", "test", 
+            false, false, new Dictionary<int, int>(), new Dictionary<int, int>(), [], [], []);
+        var status3 = statusDefinitionFactory.Create(3, 5, canNotStackHighPriority, 0, 0, "test", null, "test", "test", 
+            false, false, new Dictionary<int, int>(), new Dictionary<int, int>(), [], [], []);
+        var status4 = statusDefinitionFactory.Create(4, 5, fainted, 0, 0, "test", null, "test", "test", 
+            false, false, new Dictionary<int, int>(), new Dictionary<int, int>(), [], [], []);
         var statusFactory = new StatusFactory();
-        var status1 = statusFactory.Create(1, 5, canNotStackLowPriority, 0, 0, "test", null, "test", "test", 
-            false, false, new Dictionary<int, int>(), new Dictionary<int, int>(), [], [], []);
-        var status2 = statusFactory.Create(2, 5, canStack, 0, 0, "test", null, "test", "test", 
-            false, false, new Dictionary<int, int>(), new Dictionary<int, int>(), [], [], []);
-        var status3 = statusFactory.Create(3, 5, canNotStackHighPriority, 0, 0, "test", null, "test", "test", 
-            false, false, new Dictionary<int, int>(), new Dictionary<int, int>(), [], [], []);
-        var status4 = statusFactory.Create(4, 5, fainted, 0, 0, "test", null, "test", "test", 
-            false, false, new Dictionary<int, int>(), new Dictionary<int, int>(), [], [], []);
-        IReadOnlyList<Status> statuses = [ status1, status2, status3, status4 ];
+        IReadOnlyList<Status> statuses = [ statusFactory.Create(status1), statusFactory.Create(status2), 
+            statusFactory.Create(status3), statusFactory.Create(status4) ];
 
-        var statusRegistry = new Registry<Status>(statuses, status => status.Id);
-        var statusResolver = new StatusResolver(statusRegistry);
+        var statusResolver = new StatusResolver();
         
         var enemyModel = new EnemyModel() { Id = 1, Statuses = [] };
 
@@ -43,13 +46,13 @@ public class StatusTests
         var entityFactory = new EntityFactory();
         var entity = entityFactory.Create(entityDefinition, enemyModel, 10);
 
-        statusResolver.ApplyStatus(entity, 1);
+        statusResolver.TryApplyStatus(entity, statuses[0]);
         Assert.Single(entity.GetStatuses());
-        Assert.Contains(status1.Id, entity.GetStatuses());
+        Assert.Contains(statuses[0], entity.GetStatuses());
 
-        statusResolver.ApplyStatus(entity, 3);
+        statusResolver.TryApplyStatus(entity, statuses[2]);
         Assert.Single(entity.GetStatuses());
-        Assert.DoesNotContain(status1.Id, entity.GetStatuses());
-        Assert.Contains(status3.Id, entity.GetStatuses());
+        Assert.DoesNotContain(statuses[0], entity.GetStatuses());
+        Assert.Contains(statuses[2], entity.GetStatuses());
     }
 }

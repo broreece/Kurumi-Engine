@@ -17,13 +17,19 @@ public sealed class RenderSystem
     /// <summary>
     /// Loops through all render commands and draws them.
     /// </summary>
-    public void Render() {
+    public void Render() 
+    {
+        // Sort queued commands.
+        _commands.Sort((a, b) => a.Layer.CompareTo(b.Layer));
+
         _window.Clear();
         foreach (var command in _commands) 
         {
+            _window.SetView(command.View);
             _window.Draw(command.Drawable, command.States);
         }
         _window.Display();
-        _commands.Clear();
     }
+
+    public void Clear() => _commands.Clear();
 }

@@ -1,0 +1,84 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Re-forge
+Status: Finished
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Forge' release.
+
+'Re-forge' mostly focused on adding elements we temporarily removed during the work on the 'Forge' build, some
+examples include:
+
+- Implementing the battle state including:
+    - Rendering all elements.
+    - Displaying UI and allowing UI functionality.
+    - Reinstating the existing battle logic pre-forge build.
+- Re-adding removed script steps.
+- Adding back the UI elements into our new UI system.
+- Ensuring scripts paused during execution if a pause is neccesary (Such as UI or force movement).
+
+---------------------------------------------------------------------
+
+PERFORMANCE ENHANCEMENTS OF SCRIPTS
+
+- Scripts are now all cached on map creation meaning we no longer convert at execution point.
+- Script steps are also all cached on script execution also meaning we no longer need to convert at execution point.
+- Also re-implemented the ability for scripts to freeze during execution, this includes multiple scripts executing
+at once.
+
+---------------------------------------------------------------------
+
+RE-IMPLEMENTED MISSING UI ELEMENTS
+
+- UI elements have been re-added to the engine, same format as pre-forge build (Dialogue, Choice boxes, battle UI)
+
+---------------------------------------------------------------------
+
+RE-IMPLEMENTED BATTLE STATE
+
+- Battle state has the functionality of pre-forge including enemy selecting, choices being based on current character,
+etc
+
+---------------------------------------------------------------------
+
+UI SCALING
+
+- UI Scaling is no longer based on parent scales but 100% based on window size, meaning no more children elements
+being scaled based on parents.
+- Positioning is still based on hierarchy however ensuring UI views are consistently placed.
+
+---------------------------------------------------------------------
+
+RE-IMPLEMENTATION OF REMOVED SCRIPT FEATURES
+
+- Battle scripts can once again activate when enemies are killed.
+- Script capabilities that were once stored in steps have been re-implemented following the new script flow.
+
+---------------------------------------------------------------------
+
+SCRIPT ADDITIONS
+
+- Scripts can now be executed right away and only be deferred once a waiting step activates.
+
+---------------------------------------------------------------------
+
+MINOR CODING CHANGES
+
+- Changed some instances of "List" to "IList" where it was possible.
+- Update some file names for "Variable" and "VariableKey" in scripts and "Variables" in game variables, this is to 
+improve readability.
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+- Compared to the forge build re-forge was much more minor mainly focused on UI and script implementations
+that were removed.
+- The focus areas of this build were more frustrating aspects of engine work (UI and scripting) however they have high
+impact on the engine.
+- The change log looks minor but the gameplay changes are massive, a whole new functioning game state, UI re-implemented
+and script steps being returned.
+
+---------------------------------------------------------------------

@@ -1,22 +1,69 @@
+using Config.Core;
+using Config.Runtime.Defaults;
+using Config.Runtime.Windows;
+
+using Engine.Assets.Core;
+using Engine.State.Base;
+
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
+using Game.UI.Overlays.Core;
+
+using Utils.Finishable;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Universal;
 
 public sealed class UIActions : IUIActions 
 {
-    public void OpenBasicTextWindow(string text) 
+    // State context.
+    private readonly StateContext _stateContext;
+
+    // Asset registry.
+    private readonly AssetRegistry _assetRegistry;
+
+    // Config.
+    private readonly WindowConfig _windowConfig;
+
+    // Defaults.
+    private readonly ChoiceBoxDefaults _choiceBoxDefaults;
+    private readonly GlobalMessageDefaults _globalMessageDefaults;
+    private readonly NameBoxDefaults _nameBoxDefaults;
+    private readonly TextWindowDefaults _textWindowDefaults;
+
+    public UIActions(StateContext stateContext, AssetRegistry assetRegistry, ConfigProvider configProvider)
     {
-        // TODO: Implement here.
+        _stateContext = stateContext;
+        _assetRegistry = assetRegistry;
+        _windowConfig = configProvider.WindowConfig;
+        _choiceBoxDefaults = configProvider.ChoiceBoxDefaults;
+        _globalMessageDefaults = configProvider.GlobalMessageDefaults;
+        _nameBoxDefaults = configProvider.NameBoxDefaults;
+        _textWindowDefaults = configProvider.TextWindowDefaults;
+    }
+
+    public IFinishable OpenBasicTextWindow(IReadOnlyList<string> pages) 
+    {
+        var dialogueOverlay = new DialogueOverlay(_assetRegistry, _textWindowDefaults, pages);
+        _stateContext.PushUIOverlay(dialogueOverlay);
+        return dialogueOverlay;
     }
 
     public void OpenGlobalMessage(int timeLimit, string text) 
     {
-        // TODO: Implement here.
+        var globalMessage = new GlobalMessage(_assetRegistry, _globalMessageDefaults, timeLimit, text);
+        _stateContext.PushUIOverlay(globalMessage);
     }
 
-    public void OpenTextWindowWithChoice(string text, string[] choices) 
+    public ChoiceBoxWithDialogueOverlay OpenTextWindowWithChoice(IReadOnlyList<string> choices, string text) 
     {
-        // TODO: Implement here.
+        var choiceBoxWithDialogueOverlay = new ChoiceBoxWithDialogueOverlay(
+            _assetRegistry, 
+            _textWindowDefaults, 
+            _choiceBoxDefaults, 
+            choices, 
+            text
+        );
+        _stateContext.PushUIOverlay(choiceBoxWithDialogueOverlay);
+        return choiceBoxWithDialogueOverlay;
     }
 
     public void OpenTextWindowWithNameBox(string text, string name) 

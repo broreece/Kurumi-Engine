@@ -30,10 +30,7 @@ public sealed class ScriptDataConverter
         {
             // Battle script steps:
             case "KillEnemy":
-                return new KillEnemy(parameters["EnemyID"].GetInt32()) { NextStep = nextStep};
-
-            case "UseAbility":
-                return new UseAbility(parameters["AbilityID"].GetInt32()) { NextStep = nextStep};
+                return new KillEnemy(parameters["EnemyIndex"].GetInt32()) { NextStep = nextStep};
 
             // Entity script steps:
             case "ChangeHP":
@@ -65,7 +62,21 @@ public sealed class ScriptDataConverter
                     forceMoveActorInstant, 
                     forceMoveActorIndex, 
                     forceMoveActorSteps
-                ) { NextStep = nextStep};
+                ) { NextStep = nextStep };
+
+            case "ForceMoveParty":
+                bool forceMovePartyKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
+                bool forceMovePartyInstant = parameters["Instant"].GetInt32() == 1;
+                JsonElement forceMovePartyStepsElement = parameters["Steps"];
+                var forceMovePartySteps = new List<int>();
+                foreach (var item in forceMovePartyStepsElement.EnumerateArray()) {
+                    forceMovePartySteps.Add(item.GetInt32());
+                }
+                return new ForceMoveParty(
+                    forceMovePartyKeepDirection, 
+                    forceMovePartyInstant, 
+                    forceMovePartySteps
+                ) { NextStep = nextStep };
 
             case "StartBattle":
                 string backgroundMusicName = parameters["BackgroundMusicName"].GetString()
@@ -80,9 +91,34 @@ public sealed class ScriptDataConverter
 
             // Universal steps:
             case "BasicTextWindow":
-                return new BasicTextWindow(parameters["Text"].GetString() 
-                    ?? throw new ScriptStepException("Basic text window 'Text' parameter not found.")) { NextStep 
-                    = nextStep};
+                JsonElement basicTextWindowPagesElement = parameters["Pages"];
+                var basicTextWindowPages = new List<string>();
+                foreach (var item in basicTextWindowPagesElement.EnumerateArray()) 
+                {
+                    basicTextWindowPages.Add(item.GetString() 
+                    ?? throw new ScriptStepException("Basic text window 'Pages' parameter not found."));
+                }
+                return new BasicTextWindow(basicTextWindowPages) { NextStep = nextStep };
+
+            case "ChoiceBoxWithText":
+                string choiceBoxWithTextNextIfFalse = parameters["NextIfFalse"].GetString()
+                    ?? throw new ScriptStepException("Choice box with text 'NextIfFalse' parameter not found.");
+
+                string choiceBoxWithTextText = parameters["Text"].GetString()
+                    ?? throw new ScriptStepException("Choice box with text 'Text' parameter not found.");
+
+                JsonElement choiceBoxWithTextChoicesElement = parameters["Choices"];
+                var choiceBoxWithTextChoices = new List<string>();
+                foreach (var item in choiceBoxWithTextChoicesElement.EnumerateArray())
+                {
+                    choiceBoxWithTextChoices.Add(item.GetString()
+                    ?? throw new ScriptStepException("choice box with text 'Choices' parameter not found."));
+                }
+                return new ChoiceBoxWithText(
+                    choiceBoxWithTextChoices, 
+                    choiceBoxWithTextText, 
+                    choiceBoxWithTextNextIfFalse
+                ) { NextStep = nextStep };
 
             case "DisplayGlobalMessage":
                 return new DisplayGlobalMessage(parameters["TimeLimit"].GetInt32(), parameters["Text"].GetString() 

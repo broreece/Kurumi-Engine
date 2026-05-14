@@ -28,7 +28,7 @@ public sealed class EntityAbilityRepository
             // Add each row then return the array of all rows.
             rows.Add(new EntityAbilityRow 
             {
-                EntityId = reader.GetInt(Col.EntityId),
+                EntityIndex = reader.GetInt(Col.EntityIndex),
                 AbilityId = reader.GetInt(Col.AbilityId)
             });
         }
@@ -37,7 +37,7 @@ public sealed class EntityAbilityRepository
 
     private static class Col 
     {
-        public const int EntityId = 0;
+        public const int EntityIndex = 0;
         public const int AbilityId = 1;
     }
 }

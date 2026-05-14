@@ -5,5 +5,5 @@ namespace Engine.Input.Context.Base;
 /// </summary>
 public interface IGameplayInputContext : IInputContext 
 {
-    public bool InteractRequested { get; }
+    public bool InteractRequested { get; set; }
 }

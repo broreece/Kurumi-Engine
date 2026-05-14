@@ -3,12 +3,16 @@ using Data.Models.Maps;
 using Data.Runtime.Spatials;
 using Data.Runtime.Actors.Controllers.Base;
 
+using Game.Scripts.Core;
+
 namespace Data.Runtime.Actors.Core;
 
 public class Actor : IMutablePositionProvider, IFacingPositionProvider, IWalkable 
 {
     public required ActorInfo ActorInfo { get; init; }
     public required ActorModel ActorModel { get; init; }
+
+    public required Script? Script { get; init; }
 
     public required Stack<Controller> Controllers { get; init; }
 

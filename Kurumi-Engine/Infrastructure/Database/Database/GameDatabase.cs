@@ -4,8 +4,8 @@ using Data.Definitions.Entities.Abilities.Core;
 using Data.Definitions.Entities.Abilities.Factories;
 using Data.Definitions.Entities.Core;
 using Data.Definitions.Entities.Factories;
-using Data.Definitions.Entities.Status.Core;
-using Data.Definitions.Entities.Status.Factories;
+using Data.Definitions.Entities.Statuses.Core;
+using Data.Definitions.Entities.Statuses.Factories;
 using Data.Definitions.Formations.Core;
 using Data.Definitions.Formations.Factories;
 using Data.Definitions.Items.Core;
@@ -67,7 +67,7 @@ public sealed class GameDatabase
         var equipmentSlotNameFactory = new NamedDataFactory();
         var equipmentTypeNameFactory = new NamedDataFactory();
         var itemFactory = new ItemFactory();
-        var statusFactory = new StatusFactory();
+        var statusFactory = new StatusDefinitionFactory();
         var statNameFactory = new TwoNamedDataFactory();
         var tileFactory = new TileFactory();
 
@@ -224,7 +224,7 @@ public sealed class GameDatabase
             item => item.Id
         );
 
-        StatusRegistry = new Registry<Status>(
+        StatusRegistry = new Registry<StatusDefinition>(
             statusLoader.LoadAll(),
             status => status.Id
         );
@@ -258,7 +258,7 @@ public sealed class GameDatabase
     public Registry<FormationDefinition> FormationRegistry { get; }
     public Registry<Item> ItemRegistry { get; }
     public Registry<TwoNamedData> StatNameRegistry { get; }
-    public Registry<Status> StatusRegistry { get; }
+    public Registry<StatusDefinition> StatusRegistry { get; }
     public Registry<Tile> TileRegistry { get; }
 
     public IReadOnlyDictionary<string, int> StatShortNameIndex { get; }

@@ -8,4 +8,6 @@ public abstract class ScriptStep {
     public abstract void Activate(ScriptContext scriptContext);
 
     public virtual string? GetNextStep() => NextStep;
+
+    public virtual bool Waiting() => false;
 }

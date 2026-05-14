@@ -6,19 +6,22 @@ namespace Game.Scripts.Steps.Universal;
 
 public sealed class CheckFlag : ConditionalScriptStep 
 {
-    private readonly int _flagIndex;
+    private readonly string _flagKey;
     private readonly bool _value;
 
-    public CheckFlag(int flagIndex, bool value, string? nextIfFalse) : base(nextIfFalse) 
+    private bool _conditionMet;
+
+    public CheckFlag(string flagKey, bool value, string? nextIfFalse) : base(nextIfFalse) 
     {
-        _flagIndex = flagIndex;
+        _flagKey = flagKey;
         _value = value;
     }
     
     public override void Activate(ScriptContext scriptContext) 
     {
         IGameStateActions gameStateActions = scriptContext.GetCapability<IGameStateActions>();
-        SetConditionMet(gameStateActions.GetGameFlag(_flagIndex) == _value);
+        _conditionMet = gameStateActions.GetGameFlag(_flagKey) == _value;
     }
 
+    protected override bool IsConditionMet() => _conditionMet;
 }

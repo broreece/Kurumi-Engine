@@ -1,6 +1,7 @@
-window_id: 1
-font_id: 0
-font_size: 25
+window_name: "template"
+font_name: "template"
+
+font_size: 12
 
 width: 90
 height: 25

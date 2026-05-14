@@ -10,5 +10,5 @@ public sealed class EnemyDefinition
 
     public required string? OnKillScript { get; init; }
 
-    public required IReadOnlyList<string> BattleScripts { get; init; }
+    public required IReadOnlyList<int> BattleScripts { get; init; }
 }
