@@ -41,7 +41,7 @@ public sealed class ActorRenderer
             var actor = currentActorRenderData.Actor;
 
             // Calculate the render layer.
-            var layer = actor.ActorInfo.BelowParty ? RenderLayer.BelowPartyActor : RenderLayer.AbovePartyActor;
+            var layer = actor.BelowParty ? RenderLayer.BelowPartyActor : RenderLayer.AbovePartyActor;
 
             // Calculate interpolated position.
             float interpolatedX = actor.LastX + (actor.XLocation - actor.LastX) * actor.MovementProgress;
@@ -49,7 +49,7 @@ public sealed class ActorRenderer
 
             var textureRect = new IntRect(
                 actor.WalkAnimationFrame * actorWidth, 
-                actor.ActorModel.Facing * actorHeight, 
+                actor.Facing * actorHeight, 
                 actorWidth, 
                 actorHeight
             );

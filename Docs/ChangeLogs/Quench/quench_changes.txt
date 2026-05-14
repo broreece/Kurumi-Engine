@@ -31,6 +31,13 @@ ASSET REGISTRY
 
 ---------------------------------------------------------------------
 
+TILES AND ACTOR BEHAVIOUR
+
+- Tiles and actors can now be see-through, this means that even if a tile is not passable an actor can spot the user 
+and activate on found scripts or change their active controller.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - This has been the third build in a row where instead of new features the focus was on "cleaning up", it's a common

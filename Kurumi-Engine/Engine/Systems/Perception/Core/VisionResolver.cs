@@ -4,8 +4,6 @@ using Engine.Systems.Navigation.Core;
 
 namespace Engine.Systems.Perception.Core;
 
-// TODO: (VE-01) Redesign this sytem with new tile features in mind.
-
 /// <summary>
 /// Used to check if a location provider is in vision of another position provider.
 /// </summary>
@@ -113,7 +111,10 @@ public sealed class VisionResolver
             {
                 return true;
             }
-            if (!_navigationGrid.IsNavigable(viewerLocation + coordinate, viewerPeriphery + peripheralDistance)) 
+            if (!_navigationGrid.IsLocationSeeThrough(
+                viewerLocation + coordinate, 
+                viewerPeriphery + peripheralDistance
+            )) 
             {
                 return false;
             }
