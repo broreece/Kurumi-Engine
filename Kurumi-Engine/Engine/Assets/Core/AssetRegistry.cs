@@ -15,6 +15,21 @@ public sealed class AssetRegistry
     private readonly Dictionary<AssetType, Dictionary<string, Texture>> _assets;
     private readonly Dictionary<string, Font> _fonts;
 
+    private static readonly Dictionary<AssetType, string> _assetFolders = new()
+    {
+        [AssetType.ActorSpriteSheets] = Path.Combine("Assets", "Art", "ActorSpriteSheets"),
+        [AssetType.AnimatedTileSpriteSheets] = Path.Combine("Assets", "Art", "AnimatedTileSpriteSheets"),
+        [AssetType.BattleBackgroundArt] = Path.Combine("Assets", "Art", "BattleBackgroundArt"),
+        [AssetType.CharacterBattleSpriteSheets] = Path.Combine("Assets", "Art", "CharacterBattleSpriteSheets"),
+        [AssetType.CharacterFieldSpriteSheets] = Path.Combine("Assets", "Art", "CharacterFieldSpriteSheets"),
+        [AssetType.EnemyBattleSprites] = Path.Combine("Assets", "Art", "EnemyBattleSprites"),
+        [AssetType.MapBackgroundArt] = Path.Combine("Assets", "Art", "MapBackgroundArt"),
+        [AssetType.TileSpriteSheets] = Path.Combine("Assets", "Art", "TileSpriteSheets"),
+        [AssetType.Windows] = Path.Combine("Assets", "Art", "Windows", "WindowArt"),
+        [AssetType.ChoiceSelectionArt] = Path.Combine("Assets", "Art", "Windows", "ChoiceSelectionArt")
+    };
+    private static readonly string _fontFolder = Path.Combine("Assets", "Fonts");
+
     public AssetRegistry(string registryPath, string fontRegistryPath) 
     {
         // TODO: (MLE-01) Handle exceptions here similar to map loader.
@@ -35,6 +50,7 @@ public sealed class AssetRegistry
                 // Add the texture to the sub dictionary.
                 subDictionary.Add(assetNamePair.Key, new Texture(Path.Combine(
                     AppContext.BaseDirectory,
+                    _assetFolders[assetType],
                     assetNamePair.Value
                 )));
             }
@@ -48,6 +64,7 @@ public sealed class AssetRegistry
         foreach (var jsonDictionaryPair in fontStringDictionary) {
             _fonts.Add(jsonDictionaryPair.Key, new Font(Path.Combine(
                 AppContext.BaseDirectory,
+                _fontFolder,
                 jsonDictionaryPair.Value
             )));
         }
