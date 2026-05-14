@@ -1,0 +1,33 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Quench
+Status: In Progress
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Re-Forge' release.
+
+'Quench' focused on cleaning up the remaining minor issues from the forge builds, including but not limited to:
+
+- Removing full path directories being stored in asset registries.
+- Creating new config to store agility index instead of hard coding in the character/entity class.
+- Creating new exceptions for the various throw situations created in the forge builds.
+- Allowing tiles to be see through for actors even if they are not passable.
+- Scaling sprites correctly in the battle view.
+- Updating UI elements to always ensure correct placement and size regardless of window size.
+
+---------------------------------------------------------------------
+
+
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+- This has been the third build in a row where instead of new features the focus was on "cleaning up", it's a common
+pitfall to fall into this trap early in development of constant cleaning up and optimization.
+- Next build should be focused on actual development of new features to avoid being stuck in this loop of optimization
+of low level features.
+
+---------------------------------------------------------------------

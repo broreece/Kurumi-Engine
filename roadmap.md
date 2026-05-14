@@ -57,23 +57,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (ASI-01) Store agility stat index in config so we can access battle speed. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 2 ###
-
-**Description:** We currently just hardcode in character the battle speed variable, this needs to be changed to
-a configurable stat.
-
-**Steps:**
-- Update config.
-- Config should be accessible in character factory where we can then pass the index as a static value shared across
-characters.
-- Perhaps config should be passed instead, check to ensure we are using the right method.
-
----
-
 ## (DKE-01) Remove full paths in asset registry json. ##
 ### Complexity: 1 ###
 ### Independent: 1 ###

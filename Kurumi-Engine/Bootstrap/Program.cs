@@ -45,12 +45,15 @@ public static class Program
         var window = BuildWindow(gameData);
         var input = BuildInput();
 
+        var config = gameData.ConfigProvider.GameConfig;
+
         var saveService = new SaveService(paths.SavePath);
         var saveData = saveService.LoadNewSaveData();
         var partyFactory = new PartyFactory(
             saveData.Characters, 
             gameData.GameDatabase.CharacterRegistry, 
-            gameData.ConfigProvider.GameConfig.MaxPartySize
+            config.MaxPartySize,
+            config.AgilityStatIndex
         );
         var party = partyFactory.Create(saveData.Party, saveData.Inventory);
         var gameServices = BuildGameServices(paths, input, gameData, saveService, party, window);
