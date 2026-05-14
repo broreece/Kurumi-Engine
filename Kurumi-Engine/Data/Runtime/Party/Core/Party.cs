@@ -1,4 +1,5 @@
 using Data.Models.Party;
+using Data.Runtime.Actors.Controllers.Core;
 using Data.Runtime.Entities.Core;
 using Data.Runtime.Spatials;
 
@@ -23,6 +24,8 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
 
     public float AnimationTimer { get; set; } = 0;
     public float MovementProgress { get; set; } = 1;
+
+    public PathedController? PathedController { get; set; } = null;
 
     public int Size => PartyModel.PartyMembers.Count;
 

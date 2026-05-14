@@ -64,6 +64,20 @@ public sealed class ScriptDataConverter
                     forceMoveActorSteps
                 ) { NextStep = nextStep };
 
+            case "ForceMoveParty":
+                bool forceMovePartyKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
+                bool forceMovePartyInstant = parameters["Instant"].GetInt32() == 1;
+                JsonElement forceMovePartyStepsElement = parameters["Steps"];
+                var forceMovePartySteps = new List<int>();
+                foreach (var item in forceMovePartyStepsElement.EnumerateArray()) {
+                    forceMovePartySteps.Add(item.GetInt32());
+                }
+                return new ForceMoveParty(
+                    forceMovePartyKeepDirection, 
+                    forceMovePartyInstant, 
+                    forceMovePartySteps
+                ) { NextStep = nextStep };
+
             case "StartBattle":
                 string backgroundMusicName = parameters["BackgroundMusicName"].GetString()
                     ?? throw new ScriptStepException("Start battle 'BackgroundMusicName' parameter not found.");

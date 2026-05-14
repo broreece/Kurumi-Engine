@@ -39,7 +39,7 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
         );
         capabilityContainer.SetCapability(
             typeof(IMovementActions), 
-            new MovementActions(gameObjects.CurrentMap)
+            new MovementActions(gameObjects.CurrentMap, gameObjects.Party)
         );
         capabilityContainer.SetCapability(typeof(IGameStateActions), new GameStateActions(
             gameObjects.SaveData.GameVariables

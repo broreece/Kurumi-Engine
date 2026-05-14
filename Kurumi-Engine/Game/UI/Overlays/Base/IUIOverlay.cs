@@ -1,7 +1,7 @@
 using Engine.Input.Base;
 using Engine.UI.Elements;
 
-using Utils.Interfaces;
+using Utils.Finishable;
 
 namespace Game.UI.Overlays.Base;
 

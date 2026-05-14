@@ -8,7 +8,7 @@ using Engine.State.Base;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 using Game.UI.Overlays.Core;
 
-using Utils.Interfaces;
+using Utils.Finishable;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Universal;
 
