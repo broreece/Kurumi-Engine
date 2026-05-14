@@ -49,7 +49,8 @@ public sealed class UIActions : IUIActions
 
     public void OpenGlobalMessage(int timeLimit, string text) 
     {
-        // TODO: Implement here.
+        var globalMessage = new GlobalMessage(_assetRegistry, _globalMessageDefaults, timeLimit, text);
+        _stateContext.PushUIOverlay(globalMessage);
     }
 
     public ChoiceBoxWithDialogueOverlay OpenTextWindowWithChoice(IReadOnlyList<string> choices, string text) 
