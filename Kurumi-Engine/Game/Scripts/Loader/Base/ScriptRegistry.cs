@@ -10,6 +10,8 @@ namespace Game.Scripts.Loader.Base;
 public sealed class ScriptRegistry 
 {
     private readonly IReadOnlyDictionary<string, string> _scriptFileNames;
+    
+    public required string SubPath { get; init; }
 
     public ScriptRegistry(string registryPath) 
     {

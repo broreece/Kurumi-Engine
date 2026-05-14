@@ -24,6 +24,7 @@ public sealed class ScriptLoader {
         {
             var scriptPath = Path.Combine(
                 AppContext.BaseDirectory,
+                _registry.SubPath,
                 _registry.GetScriptFileName(scriptName)
             );
             var json = File.ReadAllText(scriptPath);

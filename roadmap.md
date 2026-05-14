@@ -57,21 +57,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (DKE-01) Remove full paths in asset registry json. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 2 ###
-
-**Description:** Currently we put the full path in the asset registry, this is risky because if the art folders
-change it'll result in us having to change a lot of lines. Removing the full path also reduces a lot of bloat.
-
-**Steps:**
-- Create a function to generate the paths based on type.
-- Check if our current design for animated tile sheets and static tile sheets using the same key is correct.
-
----
-
 ## (VE-01) Allow non-passable tiles to be see through. ##
 ### Complexity: 2 ###
 ### Independent: 1 ###

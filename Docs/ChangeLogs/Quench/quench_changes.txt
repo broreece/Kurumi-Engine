@@ -19,7 +19,15 @@ This document outlines the architectural and system-level changes made since the
 
 ---------------------------------------------------------------------
 
+CONFIG
 
+- Agility state index is now used from config to determine battle ordering speed instead of hard coding.
+
+---------------------------------------------------------------------
+
+ASSET REGISTRY
+
+- Assets no longer have their full file path stored in the asset registry massively reducing duplicated lines.
 
 ---------------------------------------------------------------------
 

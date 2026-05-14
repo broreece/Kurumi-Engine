@@ -10,12 +10,15 @@ namespace Game.Maps.Loader;
 /// </summary>
 public sealed class MapLoader 
 {
+    private static readonly string _mapFolder = "Assets\\Maps";
+
     public MapModel LoadMap(string mapFilePath) 
     {
         try 
         {
             var fullRegistryPath = Path.Combine(
                 AppContext.BaseDirectory,
+                _mapFolder,
                 mapFilePath
             );
             var json = File.ReadAllText(fullRegistryPath);
