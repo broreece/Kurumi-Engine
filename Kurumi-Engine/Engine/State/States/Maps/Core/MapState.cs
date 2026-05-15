@@ -260,12 +260,12 @@ public sealed class MapState : IGameState
             _tileConfig!.Width, 
             _tileConfig.Height
         );
-        _actorRenderer = _actorRendererFactory.Create(_currentMap.Actors);
+        _actorRenderer = _actorRendererFactory.Create(_currentMap.Actors!);
 
         _walkAnimationManagerFactory = new WalkAnimationManagerFactory(
             _characterFieldSpriteConfig!.WalkAnimationFrames,
             _characterFieldSpriteConfig.WalkAnimationSpeed);
-        _walkAnimationManager = _walkAnimationManagerFactory.Create(_currentMap!.Actors, _party);
+        _walkAnimationManager = _walkAnimationManagerFactory.Create(_currentMap!.Actors!, _party);
 
         var mapAnimationManagerFactory = new MapAnimationManagerFactory(
             _configProvider!.AnimatedTileSheetConfig.AnimatedTileFrames, 
@@ -299,7 +299,7 @@ public sealed class MapState : IGameState
 
     private void MoveAllActors(float deltaTime) {
         // Move all actors.
-        foreach (var actor in _currentMap!.Actors) 
+        foreach (var actor in _currentMap!.Actors!) 
         {
             var controllers = actor.Controllers;
             if (controllers.Count > 0) 
@@ -331,7 +331,7 @@ public sealed class MapState : IGameState
 
     private void ExecuteAllOnFindScripts() 
     {
-        foreach (var actor in _currentMap!.Actors) 
+        foreach (var actor in _currentMap!.Actors!) 
         {
             ExecuteOnFindScript(actor);
         }
@@ -356,8 +356,8 @@ public sealed class MapState : IGameState
             _currentMap.TileSheetName, 
             _currentMap.MapBackgroundArtName
         );
-        _actorRenderer = _actorRendererFactory!.Create(_currentMap.Actors);
-        _walkAnimationManager = _walkAnimationManagerFactory!.Create(_currentMap.Actors, _party);
+        _actorRenderer = _actorRendererFactory!.Create(_currentMap.Actors!);
+        _walkAnimationManager = _walkAnimationManagerFactory!.Create(_currentMap.Actors!, _party);
 
         var navigationGrid = _navigationGridFactory!.Create(_currentMap);
         var visionResolverFactory = new VisionResolverFactory(navigationGrid);

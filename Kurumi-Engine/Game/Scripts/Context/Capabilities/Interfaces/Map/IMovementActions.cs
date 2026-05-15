@@ -10,7 +10,7 @@ public interface IMovementActions : ICapability
         bool keepDirection, 
         bool lockMovement, 
         bool instant, 
-        int actorIndex, 
+        string actorKey, 
         List<int> path);
 
     public IFinishable ForceMoveParty(bool keepDirection, bool instant, IReadOnlyList<int> path);

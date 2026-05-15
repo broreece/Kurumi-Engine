@@ -35,6 +35,8 @@ TILES AND ACTOR BEHAVIOUR
 
 - Tiles and actors can now be see-through, this means that even if a tile is not passable an actor can spot the user 
 and activate on found scripts or change their active controller.
+- Actors are now stored in dictionaries alongside string keys in maps. This removes the need to load actors at a 
+specific location improving performance and reduces errors for if an actor does not exist at a provided location.
 
 ---------------------------------------------------------------------
 

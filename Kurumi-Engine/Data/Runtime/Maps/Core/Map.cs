@@ -1,5 +1,6 @@
 using Data.Models.Maps;
 using Data.Runtime.Actors.Core;
+using Data.Runtime.Maps.Exceptions;
 
 namespace Data.Runtime.Maps.Core;
 
@@ -9,13 +10,13 @@ public sealed class Map
     private readonly IReadOnlyDictionary<(int, int), TileModel> _tileDictionary;
 
     private Dictionary<(int, int), List<Actor>>? _actorDictionary;
-    private IReadOnlyList<Actor>? _actors;
+    private Dictionary<string, Actor>? _actorStringDictionary;
+
+    public IReadOnlyList<Actor>? Actors { get; private set; }
 
     public int Width => _mapModel.Width;
 
     public int Height => _mapModel.Height;
-
-    public IReadOnlyList<Actor> Actors => _actors!;
 
     public IReadOnlyList<TileModel> Tiles => _mapModel.Tiles;
 
@@ -34,10 +35,16 @@ public sealed class Map
     /// </summary>
     /// <param name="actors">The list of all actors/</param>
     /// <param name="actorDictionary">The dictionary of actors at each location.</param>
-    public void SetActors(IReadOnlyList<Actor> actors, Dictionary<(int, int), List<Actor>> actorDictionary) 
+    /// <param name="actorStringDictionary">The dictionary of actors including their string keys.</param>
+    public void SetActors(
+        IReadOnlyList<Actor> actors, 
+        Dictionary<(int, int), List<Actor>> actorDictionary,
+        Dictionary<string, Actor>? actorStringDictionary
+    ) 
     {
-        _actors = actors;
+        Actors = actors;
         _actorDictionary = actorDictionary;
+        _actorStringDictionary = actorStringDictionary;
     }
 
     public void AddActorTo(Actor actor, int xLocation, int yLocation) 
@@ -73,5 +80,11 @@ public sealed class Map
             return _actorDictionary[(xLocation, yLocation)];
         }
         return [];
+    }
+
+    public Actor GetActor(string key)
+    {
+        return _actorStringDictionary!.TryGetValue(key, out var result) ? result : 
+            throw new ActorNotFoundException($"The map: {key} was not found.");
     }
 }

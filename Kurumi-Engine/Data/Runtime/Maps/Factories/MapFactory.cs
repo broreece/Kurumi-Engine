@@ -65,6 +65,7 @@ public sealed class MapFactory
 
         var actors = new List<Actor>();
         var actorDictionary = new Dictionary<(int, int), List<Actor>>();
+        var actorStringDictionary = new Dictionary<string, Actor>();
 
         var navigationGridFactory = new NavigationGridFactory(_tileRegistry, _partyPosition);
         var navigationGrid = navigationGridFactory.Create(map);
@@ -98,7 +99,7 @@ public sealed class MapFactory
             // Add to universal list.
             actors.Add(actor);
 
-            // Add to tile dictionary.
+            // Add to actor dictionary.
             if (actorDictionary.ContainsKey((actorModel.XLocation, actorModel.YLocation)))
             {
                 actorDictionary[(actorModel.XLocation, actorModel.YLocation)].Add(actor);
@@ -107,8 +108,11 @@ public sealed class MapFactory
             {
                 actorDictionary.Add((actorModel.XLocation, actorModel.YLocation), [actor]);
             }
+
+            // Add to actor string dictionary.
+            actorStringDictionary.Add(actorModel.ActorKey, actor);
         }
-        map.SetActors(actors, actorDictionary);
+        map.SetActors(actors, actorDictionary, actorStringDictionary);
 
         return map;
     }
