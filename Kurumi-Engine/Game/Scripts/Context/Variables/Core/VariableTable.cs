@@ -1,4 +1,5 @@
 using Game.Scripts.Context.Variables.Base;
+using Game.Scripts.Context.Variables.Exceptions;
 
 namespace Game.Scripts.Context.Variables.Core;
 
@@ -15,19 +16,17 @@ public class VariableTable
     /// <param name="key">The key being used.</param>
     /// <typeparam name="T">The type of variable desired.</typeparam>
     /// <returns>The T typed object at the given key index.</returns>
-    /// TODO: Exception here.
+    /// <exception cref="MissingCapabilityException">Exception thrown if a capability is not found.</exception>
     public T GetVariable<T>(ScriptVariableKey<T> key) 
     {
         if (!_variables.TryGetValue(key.Name, out var value)) 
         {
-            // TODO: (DKE-01) Custom exception here.
-            throw new Exception($"Variable '{key}' not found");
+            throw new VariableNotFoundException($"Variable '{key}' not found");
         }
 
         if (value is not T typed) 
         {
-            // TODO: (DKE-01) Custom exception here.
-            throw new Exception($"Variable '{key}' is not of type {typeof(T).Name}");
+            throw new IncorrectTypeVariableException($"Variable '{key}' is not of type {typeof(T).Name}");
         }
 
         return typed;

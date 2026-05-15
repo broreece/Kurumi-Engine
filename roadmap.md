@@ -51,43 +51,9 @@ Tickets will also display a brief description, a set of planned steps for comple
 ## Milestone: Quench
 **Focus areas:**
 
-- Focused primarily on minor clean up
-- Allows non-passable tiles to be see-through
-- Update windows and UI to have locations work regardless of window size
-
----
-
-## (VE-01) Allow non-passable tiles to be see through. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 2 ###
-
-**Description:** Currently in our vision resolver if a tile is not passable actors can not see through them.
-We should change this so that we have options for visible tiles that are not passable.
-
-**Steps:**
-- Edit the database to have the new field for tiles.
-- Edit the tile class to include new field.
-- Edit logic in vision resolver:
-    - Remove navigation grid pass dictionary of booleans where the coordinate is the key.
-    - The values set to if the tiles are visible or not.
-
----
-
-## (DKE-01) Create exceptions for if a dictionary key doesen't exist. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 3 ###
-
-**Description:** During our work on the forge refractor we introduced dictionaries for storing scripts, maps and assets.
-We need to introduce checkers for if keys exist.
-
-**Steps:**
-- Create exceptions for if a key is not found anywhere we check for keys (Scripts, Assets etc.)
-- Additional math exceptions in damage calculator.
-- Additional exception in the capability container for script contexts.
+- Update windows and UI to have locations work regardless of window size.
+- Correctly scaling sprites in battle state.
+- Cleaning up roadmap and other misc code.
 
 ---
 
@@ -606,19 +572,6 @@ carefully account for the current system and how we will implement threading her
 
 **Description** Currently we're just assuming turn effect activates every turn. This is fine but we could also make
 a modifier that activates an effect when they attack, when they get attacked etc.
-
-**Steps:** N/A
-
----
-
-## (MLE-01) Loading maps throw a specific error for if the format was wrong or if the format was right. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description** In the map loader we can create a custom exception to specify the issue. Also exists in asset registry
-and script registry.
 
 **Steps:** N/A
 

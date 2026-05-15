@@ -1,5 +1,7 @@
 using System.Text.Json;
 
+using Game.Scripts.Loader.Exceptions;
+
 using Infrastructure.Exceptions.Base;
 
 namespace Game.Scripts.Loader.Base;
@@ -15,22 +17,23 @@ public sealed class ScriptRegistry
 
     public ScriptRegistry(string registryPath) 
     {
-        // TODO: (MLE-01) Create specific exceptions here.
         try 
         {
             var json = File.ReadAllText(registryPath);
             _scriptFileNames = JsonSerializer.Deserialize<IReadOnlyDictionary<string, string>>(json) ?? 
-                throw new Exception();
+                throw new RegistryFormatException($"The provided registry at: {registryPath} is in an incorrect " +
+                    "format.");
         } 
-        catch (Exception) 
+        catch (Exception exception) when (exception is not RegistryFormatException) 
         {
-            throw new JsonFileException($"Registry path: {registryPath} not found or invalid format");
+            throw new JsonFileException($"Registry path: {registryPath} was not found, or an error occured opening " + 
+                "the file.");
         }
     }
 
     public string GetScriptFileName(string scriptName) 
     {
-        // TODO: (DKE-01) Add exception if key isn't found.
-        return _scriptFileNames[scriptName];
+        return _scriptFileNames.TryGetValue(scriptName, out var scriptFileName) ? scriptFileName :
+            throw new MissingScriptFileNameException($"Script: {scriptName} was not found");
     }
 }

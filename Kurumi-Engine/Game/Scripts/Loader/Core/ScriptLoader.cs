@@ -1,7 +1,9 @@
 using System.Text.Json;
 
 using Game.Scripts.Loader.Base;
+using Game.Scripts.Loader.Exceptions;
 using Game.Scripts.Serialization;
+
 using Infrastructure.Exceptions.Base;
 
 namespace Game.Scripts.Loader.Core;
@@ -19,7 +21,6 @@ public sealed class ScriptLoader {
 
     public ScriptData LoadScriptData(string scriptName) 
     {
-        // TODO: (MLE-01) Create specific exceptions here.
         try 
         {
             var scriptPath = Path.Combine(
@@ -28,9 +29,10 @@ public sealed class ScriptLoader {
                 _registry.GetScriptFileName(scriptName)
             );
             var json = File.ReadAllText(scriptPath);
-            return JsonSerializer.Deserialize<ScriptData>(json) ?? throw new Exception();
+            return JsonSerializer.Deserialize<ScriptData>(json) ?? 
+                throw new InvalidScriptFormatException($"Provided script at: {scriptPath} is in an invalid format.");
         } 
-        catch (Exception) 
+        catch (Exception exception) when (exception is not InvalidScriptFormatException) 
         {
             throw new JsonFileException($"Script: {scriptName} not found or invalid format");
         }

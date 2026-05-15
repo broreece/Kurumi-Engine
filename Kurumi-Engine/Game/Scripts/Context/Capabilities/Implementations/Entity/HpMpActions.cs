@@ -3,7 +3,7 @@ using Data.Runtime.Formations.Core;
 using Data.Runtime.Party.Core;
 
 using Engine.Systems.Combat.Core;
-
+using Game.Scripts.Context.Capabilities.Exceptions;
 using Game.Scripts.Context.Capabilities.Interfaces.Entity;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Entity;
@@ -25,11 +25,12 @@ public sealed class HpMpActions : IHpMpActions
 
     public void ApplyHealthChange(EntityIndex user, EntityIndex target, bool reduceHp, bool canKo, string formula) 
     {
-        // TODO: Change '!' to question mark throw custom exception.
         IStats userStats = user.EntityType == EntityType.Character ? _party.Characters[user.Index] :
-            _formation!.GetEntityAt(user.Index);
+            (_formation ?? throw new FormationNotFoundException("The user formation of a health change effect was " + 
+                "not set")).GetEntityAt(user.Index);
         IStats targetStats = target.EntityType == EntityType.Character ? _party.Characters[target.Index] :
-            _formation!.GetEntityAt(target.Index);
+            (_formation ?? throw new FormationNotFoundException("The target formation of a health change effect was " + 
+                "not set")).GetEntityAt(target.Index);
         
         var value = _damageCalculator.Evaluate(formula, userStats.GetStats(), targetStats.GetStats());
         if (reduceHp && value > 0)

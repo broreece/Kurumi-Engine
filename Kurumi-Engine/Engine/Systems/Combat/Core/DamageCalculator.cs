@@ -1,3 +1,5 @@
+using Engine.Assets.Exceptions;
+
 namespace Engine.Systems.Combat.Core;
 
 /// <summary>
@@ -111,7 +113,8 @@ public sealed class DamageCalculator
     /// <param name="userStats">The array of user stats.</param>
     /// <param name="targetStats">The array of target stats.</param>
     /// <returns>The integer stat value of the variable</returns>
-    /// TODO: Add exception message here.
+    /// <exception cref="DamageCalculatorException">Exception thrown if a stat name was not found or if the token 
+    /// passed was not in our provided format.</exception>
     private int ResolveVariable(string token, IReadOnlyList<int> userStats, IReadOnlyList<int> targetStats) 
     {
         // Token here has to be '.' as we use it to seperate entity and stat such as 'a.atk'
@@ -119,17 +122,15 @@ public sealed class DamageCalculator
 
         if (parts.Length != 2) 
         {
-            // TODO: (DKE-01) Custom exception here, the token passed wasn't in our format.
-            throw new Exception($"Invalid variable format: {token}");
+            throw new DamageCalculatorException($"Invalid variable format: {token}");
         }
 
         var entity = parts[0];
         var statName = parts[1].ToLowerInvariant();
 
-        // TODO: (DKE-01) Custom exception here, stat does not exist.
         if (!_statShortNameIndex.TryGetValue(statName, out int statIndex)) 
         {
-            throw new Exception($"Unknown stat: {statName}");
+            throw new DamageCalculatorException($"Unknown stat: {statName}");
         }
 
         var stats = entity == "a" ? userStats : targetStats;
@@ -158,6 +159,8 @@ public sealed class DamageCalculator
     /// <param name="secondValue">The second or righthand value.</param>
     /// <param name="operation">The operation being performed on the values.</param>
     /// <returns>The integer value of the operation performed with the two values.</returns>
+    /// <exception cref="DamageCalculatorException">Exception thrown if attempted to divide by 0 or if an unknown 
+    /// operator was passed.</exception>
     private int Apply(int firstValue, int secondValue, string operation) 
     {
         return operation switch 
@@ -165,11 +168,11 @@ public sealed class DamageCalculator
             "+" => firstValue + secondValue,
             "-" => firstValue - secondValue,
             "*" => firstValue * secondValue,
-            // TODO: (DKE-01) Custom exception here, division by 0.
-            "/" => secondValue == 0 ? 0 : firstValue / secondValue,
+            "/" => secondValue == 0 ? 
+                throw new DamageCalculatorException("Attempted to divide by 0 in damage calculator.") : 
+                firstValue / secondValue,
             "^" => (int) Math.Pow(firstValue, secondValue),
-            // TODO: (DKE-01) Custom exception here.
-            _ => throw new Exception($"Unknown operator: {operation}")
+            _ => throw new DamageCalculatorException($"Unknown operator: {operation}.")
         };
     }
 
