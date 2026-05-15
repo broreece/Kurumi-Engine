@@ -1,6 +1,8 @@
 using System.Text.Json;
 
 using Engine.Assets.Base;
+using Engine.Assets.Exceptions;
+
 using Infrastructure.Exceptions.Base;
 
 using SFML.Graphics;
@@ -32,41 +34,48 @@ public sealed class AssetRegistry
 
     public AssetRegistry(string registryPath, string fontRegistryPath) 
     {
-        // TODO: (MLE-01) Handle exceptions here similar to map loader.
         // Load main registry file.
-        var json = File.ReadAllText(registryPath);
-        var stringDictionary = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(json) ?? 
-            throw new JsonFileException($"JSON file: {registryPath} is corrupted or incorrect format");
-        
-        // Convert string dictionary to asset type enum dictionary with textures.
-        _assets = [];
-        foreach (var jsonDictionaryPair in stringDictionary) {
-            var assetType = ParseAssetType(jsonDictionaryPair.Key);
-            // Create sub dictionary for every type.
-            var subDictionary = new Dictionary<string, Texture>();
-            _assets.Add(assetType, subDictionary);
+        try 
+        {
+            var json = File.ReadAllText(registryPath);
+            var stringDictionary = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(json) ?? 
+                throw new RegistryFormatException($"JSON file: {registryPath} is incorrect format");
 
-            foreach (var assetNamePair in jsonDictionaryPair.Value) {
-                // Add the texture to the sub dictionary.
-                subDictionary.Add(assetNamePair.Key, new Texture(Path.Combine(
+            // Convert string dictionary to asset type enum dictionary with textures.
+            _assets = [];
+            foreach (var jsonDictionaryPair in stringDictionary) {
+                var assetType = ParseAssetType(jsonDictionaryPair.Key);
+                // Create sub dictionary for every type.
+                var subDictionary = new Dictionary<string, Texture>();
+                _assets.Add(assetType, subDictionary);
+
+                foreach (var assetNamePair in jsonDictionaryPair.Value) {
+                    // Add the texture to the sub dictionary.
+                    subDictionary.Add(assetNamePair.Key, new Texture(Path.Combine(
+                        AppContext.BaseDirectory,
+                        _assetFolders[assetType],
+                        assetNamePair.Value
+                    )));
+                }
+            }
+
+            // Load font registry file.
+            json = File.ReadAllText(fontRegistryPath);
+            var fontStringDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? 
+                throw new JsonFileException($"JSON file: {fontRegistryPath} is corrupted or incorrect format");
+            _fonts = [];
+            foreach (var jsonDictionaryPair in fontStringDictionary) {
+                _fonts.Add(jsonDictionaryPair.Key, new Font(Path.Combine(
                     AppContext.BaseDirectory,
-                    _assetFolders[assetType],
-                    assetNamePair.Value
+                    _fontFolder,
+                    jsonDictionaryPair.Value
                 )));
             }
-        }
-
-        // Load font registry file.
-        json = File.ReadAllText(fontRegistryPath);
-        var fontStringDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? 
-            throw new JsonFileException($"JSON file: {fontRegistryPath} is corrupted or incorrect format");
-        _fonts = [];
-        foreach (var jsonDictionaryPair in fontStringDictionary) {
-            _fonts.Add(jsonDictionaryPair.Key, new Font(Path.Combine(
-                AppContext.BaseDirectory,
-                _fontFolder,
-                jsonDictionaryPair.Value
-            )));
+        } 
+        catch (Exception exception) when (exception is not RegistryFormatException) 
+        {
+            throw new JsonFileException($"Registry path: {registryPath} was not found, or an error occured opening " + 
+                "the file.");
         }
     }
 
@@ -85,9 +94,9 @@ public sealed class AssetRegistry
     /// </summary>
     /// <param name="key">The string being converted.</param>
     /// <returns>An asset type enum.</returns>
+    /// <exception cref="AssetTypeInvalidException">Exception thrown if a provided asset type is invalid.</exception>
     private static AssetType ParseAssetType(string key) 
     {
-        // TODO: (MLE-01) Custom exception here.
         return key switch {
             "actor_sprite_sheets" => AssetType.ActorSpriteSheets,
             "animated_tile_sprite_sheets" => AssetType.AnimatedTileSpriteSheets,
@@ -100,7 +109,7 @@ public sealed class AssetRegistry
             "windows" => AssetType.Windows,
             "choice_selection_art" => AssetType.ChoiceSelectionArt,
 
-            _ => throw new Exception($"Unknown asset type: {key}")
+            _ => throw new AssetTypeInvalidException($"Unknown asset type: {key}")
         };
     }
 }

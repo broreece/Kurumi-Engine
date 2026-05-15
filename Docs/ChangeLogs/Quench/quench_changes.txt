@@ -38,6 +38,12 @@ and activate on found scripts or change their active controller.
 
 ---------------------------------------------------------------------
 
+EXCEPTIONS
+
+- New exceptions have been made for when dictionary keys don't exist when they should exist.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - This has been the third build in a row where instead of new features the focus was on "cleaning up", it's a common

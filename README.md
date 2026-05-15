@@ -16,9 +16,10 @@ and scalable.
 
 ## Development Status
 
-Re-Forge build is currently in progress, it is focused on:
-- Re-implementing some temporarily removed script steps and states that were removed to ensure the forge build was 
-stable. 
+Quench build is currently in progress, it is focused on:
+- Update windows and UI to have locations work regardless of window size.
+- Correctly scaling sprites in battle state.
+- Cleaning up roadmap and other misc code.
 
 ---
 

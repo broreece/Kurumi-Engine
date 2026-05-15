@@ -5,10 +5,12 @@ using Data.Runtime.Formations.Core;
 using Data.Runtime.Formations.Factories;
 using Data.Runtime.Party.Core;
 using Data.Runtime.Scripts.Execution;
+
 using Engine.Context.Core;
 using Engine.Input.Context.Contexts;
 using Engine.State.Base;
 using Engine.State.States.Battle.Base;
+using Engine.State.States.Battle.Exceptions;
 using Engine.Systems.Camera;
 using Engine.Systems.Rendering.Core;
 using Engine.Systems.Rendering.Factories;
@@ -270,7 +272,8 @@ public sealed class BattleState : IGameState, IBattleMenu
                     TargetIndex = _currentTargetIndex,
                     IsEnemy = false,
                     ScriptName = _abilityRegistry.Get(abilities[_currentSelectionIndex]).ScriptName 
-                        ?? throw new Exception("TODO: Change this to custom exception here.")
+                        ?? throw new AbilityHasNoScriptException($"The ability of user {_currentCharacterIndex} has " +
+                        $"no assoicated script for the ability: {_currentSelectionIndex}.")
                 }, 
                 currentCharacter.BattleSpeed));
             }

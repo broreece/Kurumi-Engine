@@ -1,6 +1,8 @@
 using Data.Definitions.Maps.Base;
 using Data.Runtime.Spatials;
+
 using Engine.Systems.Navigation.Core;
+using Engine.Systems.Perception.Exceptions;
 
 namespace Engine.Systems.Perception.Core;
 
@@ -99,6 +101,8 @@ public sealed class VisionResolver
     /// <param name="viewerPeriphery">The viewer's periphery coordinate.</param>
     /// <param name="targetLocation">The target's relevant location coordinate.</param>
     /// <returns>If there is a clear line of sight between viewer and target.</returns>
+    /// <exception cref="PerceptionException">Exception thrown if a target isn't in range of the view even after passing
+    /// pre-checks for being in range.</exception>
     private bool ClearSight(int distance, int peripheralDistance, int viewerLocation, int viewerPeriphery, 
         int targetLocation) 
         {
@@ -119,7 +123,8 @@ public sealed class VisionResolver
                 return false;
             }
         }
-        // TODO: (DKE-01) Custom exception here, because we check for in range this line should never be reached.
-        return false;
+        // Line should never be reached as we previously check the boundaries.
+        throw new PerceptionException("The location of a target was not found within the range of a viewer when it " +
+            "should have been");
     }
 }
