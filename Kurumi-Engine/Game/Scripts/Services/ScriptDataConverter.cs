@@ -50,7 +50,8 @@ public sealed class ScriptDataConverter
                 bool forceMoveActorKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
                 bool forceMoveActorLockMovement = parameters["LockMovement"].GetInt32() == 1;
                 bool forceMoveActorInstant = parameters["Instant"].GetInt32() == 1;
-                int forceMoveActorIndex = parameters["ActorIndex"].GetInt32();
+                string forceMoveActorKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Force move actor 'ActorKey' parameter not found.");
                 JsonElement forceMoveActorStepsElement = parameters["Steps"];
                 var forceMoveActorSteps = new List<int>();
                 foreach (var item in forceMoveActorStepsElement.EnumerateArray()) {
@@ -60,7 +61,7 @@ public sealed class ScriptDataConverter
                     forceMoveActorKeepDirection, 
                     forceMoveActorLockMovement, 
                     forceMoveActorInstant, 
-                    forceMoveActorIndex, 
+                    forceMoveActorKey, 
                     forceMoveActorSteps
                 ) { NextStep = nextStep };
 

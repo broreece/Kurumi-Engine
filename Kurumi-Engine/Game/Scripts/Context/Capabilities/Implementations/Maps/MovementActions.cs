@@ -25,10 +25,10 @@ public sealed class MovementActions : IMovementActions
         bool keepDirection, 
         bool lockMovement, 
         bool instant, 
-        int actorIndex, 
+        string actorKey, 
         List<int> path) 
     {
-        var actor = _map.Actors[actorIndex];
+        var actor = _map.GetActor(actorKey);
         actor.MaintainFacing = keepDirection;
 
         var controller = new PathedController(canFinish: true, path) { Interval = actor.MovementSpeed };
