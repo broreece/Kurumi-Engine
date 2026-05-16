@@ -29,14 +29,15 @@ public sealed class StateManager
         IGameState currentState, 
         StateContext stateContext, 
         InputMapper inputMapper, 
-        RenderSystem renderSystem) 
+        RenderSystem renderSystem,
+        UIRenderSystem uIRenderSystem) 
     {
         _currentState = currentState;
         _currentState.OnEnter();
         _stateContext = stateContext;
         _inputMapper = inputMapper;
         _renderSystem = renderSystem;
-        _uiRenderSystem = new UIRenderSystem(new UILayoutSystem());
+        _uiRenderSystem = uIRenderSystem;
     }
 
     public void ChangeState(IGameState newState) 

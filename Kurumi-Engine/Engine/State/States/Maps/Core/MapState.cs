@@ -1,35 +1,24 @@
-using Config.Core;
-using Config.Runtime.Map;
-
 using Data.Definitions.Actors.Base;
 using Data.Definitions.Maps.Base;
-using Data.Definitions.Maps.Core;
 using Data.Runtime.Actors.Core;
 using Data.Runtime.Maps.Base;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
 using Data.Runtime.Scripts.Execution;
 
-using Engine.Assets.Core;
 using Engine.Context.Containers;
 using Engine.Context.Core;
 using Engine.Input.Context.Contexts;
 using Engine.State.Base;
 using Engine.Systems.Animation.Map.Core;
-using Engine.Systems.Animation.Map.Factories;
 using Engine.Systems.Camera;
 using Engine.Systems.Movement.Core;
-using Engine.Systems.Movement.Factories;
-using Engine.Systems.Navigation.Factories;
 using Engine.Systems.Perception.Core;
 using Engine.Systems.Perception.Factories;
 using Engine.Systems.Rendering.Core;
-using Engine.Systems.Rendering.Factories;
 
 using Game.Scripts.Context.Builder.Core;
 using Game.Scripts.Context.Core;
-
-using Infrastructure.Database.Base;
 
 namespace Engine.State.States.Maps.Core;
 
@@ -51,15 +40,6 @@ public sealed class MapState : IGameState
     private GameData? _gameData;
     private GameServices? _gameServices;
 
-    // Config.
-    private ConfigProvider? _configProvider;
-    private TileSheetConfig? _tileConfig;
-    private CharacterFieldSpriteConfig? _characterFieldSpriteConfig;
-
-    // Registries.
-    private AssetRegistry? _assetRegistry;
-    private Registry<Tile>? _tileRegistry;
-
     // Map, movement resolver and vision resolver.
     private Map? _currentMap;
     private MovementResolver? _movementResolver;
@@ -76,13 +56,6 @@ public sealed class MapState : IGameState
 
     // Camera.
     private Camera? _camera;
-
-    // Map factories.
-    private MovementResolverFactory? _movementResolverFactory;
-    private MapRendererFactory? _mapRendererFactory;
-    private ActorRendererFactory? _actorRendererFactory;
-    private WalkAnimationManagerFactory? _walkAnimationManagerFactory;
-    private NavigationGridFactory? _navigationGridFactory;
 
     // Animation managers.
     private WalkAnimationManager? _walkAnimationManager;
@@ -102,7 +75,6 @@ public sealed class MapState : IGameState
     {
         // Break up functionality for readability.
         CacheDependencies();
-        InitializePartyMapRenderer();
         InitializeMap();
         InitializeInput();
         InitializeCamera();
@@ -206,89 +178,48 @@ public sealed class MapState : IGameState
         _gameData = _gameContext.GameData;
         _gameServices = _gameContext.GameServices;
 
-        _configProvider = _gameData.ConfigProvider;
-        _tileConfig = _configProvider.TileSheetConfig;
-        _assetRegistry = _gameData.AssetRegistry;
-        _tileRegistry = _gameData.GameDatabase.TileRegistry;
         _currentMap = _gameObjects.CurrentMap;
 
         // Variables.
-        _tileWidth = _tileConfig.Width;
-        _tileHeight = _tileConfig.Height;
+        var tileConfig = _gameData.ConfigProvider.TileSheetConfig;
+        _tileWidth = tileConfig.Width;
+        _tileHeight = tileConfig.Height;
 
         // Map script context.
         var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext, _stateContext);
         _mapScriptContext = mapScriptContextBuilder.BuildScriptContext();
     }
 
-    private void InitializePartyMapRenderer() 
-    {
-        var characterRegistry = _gameData!.GameDatabase.CharacterRegistry;
-        _characterFieldSpriteConfig = _configProvider!.CharacterFieldSpriteConfig;
-
-        var PartyMapRendererFactory = new PartyMapRendererFactory(
-            _assetRegistry!, 
-            _gameServices!.RenderSystem, 
-            characterRegistry, 
-            _characterFieldSpriteConfig, 
-            _tileConfig!.Width, 
-            _tileConfig.Height
-        );
-        _partyMapRenderer = PartyMapRendererFactory.Create(_party);
-    }
-
     private void InitializeMap() 
     {
-        var renderSystem = _gameServices!.RenderSystem;
-
-        _mapRendererFactory = new MapRendererFactory(
-            _assetRegistry!, 
-            _tileRegistry!, 
-            renderSystem, 
-            _tileConfig!
-        );
-        _mapRenderer = _mapRendererFactory.Create(
-            _currentMap!.Tiles, 
+        // Map renderers.
+        _actorRenderer = _gameServices!.ActorRendererFactory.Create(_currentMap!.Actors!);
+        _mapAnimationManager = _gameServices.MapAnimationManagerFactory.Create();
+        _mapRenderer = _gameServices.MapRendererFactory.Create(
+            _currentMap.Tiles, 
             _currentMap.TileSheetName, 
             _currentMap.MapBackgroundArtName
         );
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory.Create(_currentMap!.Actors!, _party);
 
-        _actorRendererFactory = new ActorRendererFactory(
-            _assetRegistry!, 
-            _gameData!.GameDatabase.ActorSpriteRegistry,
-            renderSystem,  
-            _tileConfig!.Width, 
-            _tileConfig.Height
-        );
-        _actorRenderer = _actorRendererFactory.Create(_currentMap.Actors!);
+        // Party renderer.
+        _partyMapRenderer = _gameServices!.PartyMapRendererFactory.Create(_party);
 
-        _walkAnimationManagerFactory = new WalkAnimationManagerFactory(
-            _characterFieldSpriteConfig!.WalkAnimationFrames,
-            _characterFieldSpriteConfig.WalkAnimationSpeed);
-        _walkAnimationManager = _walkAnimationManagerFactory.Create(_currentMap!.Actors!, _party);
-
-        var mapAnimationManagerFactory = new MapAnimationManagerFactory(
-            _configProvider!.AnimatedTileSheetConfig.AnimatedTileFrames, 
-            _configProvider!.AnimatedTileSheetConfig.AnimationInterval
-        );
-        _mapAnimationManager = mapAnimationManagerFactory.Create();
-
-        _navigationGridFactory = new NavigationGridFactory(_tileRegistry!, _party);
-        var navigationGrid = _navigationGridFactory.Create(_currentMap);
+        // Navigation grid related objects.
+        var navigationGrid = _gameServices.NavigationGridFactory.Create(_currentMap);
         var visionResolverFactory = new VisionResolverFactory(navigationGrid);
         _visionResolver = visionResolverFactory.Create();
     }
 
     private void InitializeInput() 
     {
-        _movementResolverFactory = new MovementResolverFactory(_tileRegistry!, _party);
-        _movementResolver = _movementResolverFactory.Create(_gameObjects!.CurrentMap);
+        _movementResolver = _gameServices!.MovementResolverFactory.Create(_gameObjects!.CurrentMap);
         _stateContext.InputContextManager.SetContext(new MapInputContext(_party, _movementResolver));
     }
 
     private void InitializeCamera() 
     {
-        var mapConfig = _configProvider!.MapConfig;
+        var mapConfig = _gameData!.ConfigProvider.MapConfig;
 
         float viewWidth = mapConfig.MaxTilesWide * _tileWidth;
         float viewHeight = mapConfig.MaxTilesHigh * _tileHeight;
@@ -351,22 +282,22 @@ public sealed class MapState : IGameState
     private void HandleMapChangeRequest(MapChangeRequest mapChangeRequest) 
     {
         _currentMap = _gameServices!.MapService.LoadMap(mapChangeRequest.MapName);
-        _mapRenderer = _mapRendererFactory!.Create(
+        _mapRenderer = _gameServices.MapRendererFactory!.Create(
             _currentMap.Tiles, 
             _currentMap.TileSheetName, 
             _currentMap.MapBackgroundArtName
         );
-        _actorRenderer = _actorRendererFactory!.Create(_currentMap.Actors!);
-        _walkAnimationManager = _walkAnimationManagerFactory!.Create(_currentMap.Actors!, _party);
+        _actorRenderer = _gameServices.ActorRendererFactory!.Create(_currentMap.Actors!);
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create(_currentMap.Actors!, _party);
 
-        var navigationGrid = _navigationGridFactory!.Create(_currentMap);
+        var navigationGrid = _gameServices.NavigationGridFactory!.Create(_currentMap);
         var visionResolverFactory = new VisionResolverFactory(navigationGrid);
         _visionResolver = visionResolverFactory.Create();
 
         _party.XLocation = mapChangeRequest.X;
         _party.YLocation = mapChangeRequest.Y;
 
-        _movementResolver = _movementResolverFactory!.Create(_currentMap);
+        _movementResolver = _gameServices.MovementResolverFactory!.Create(_currentMap);
         _stateContext.InputContextManager.SetContext(new MapInputContext(_party, _movementResolver));
     }
 }

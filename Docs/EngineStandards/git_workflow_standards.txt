@@ -22,7 +22,20 @@ Bug fixes:
 Format: fix/<bug-description>
 E.G: fix/actor-movement-not-rendering
 
+Documentation branches:
+Format: documentation/<change-description>
+E.G: documentation/roadmap-update-for-pursuit-build
+
 Workflow:
 Branch from dev when starting work on a new feature, use meaningful commit messages without vague wording like "fix"
 or "update". When feature is deemed to be completed merge into dev, for releases merge dev into master then tag the
 release with the build name.
+
+Issues, labels and milestones:
+We current use the following labels:
+- Feature
+- Documentation
+- Release
+
+Use the labels for issues based on the nature of the issue being created. Issues can be created and grouped under 
+milestones, each milestone representing a release. 

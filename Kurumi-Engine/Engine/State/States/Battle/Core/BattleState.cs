@@ -2,7 +2,6 @@ using Data.Definitions.Entities.Abilities.Core;
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
-using Data.Runtime.Formations.Factories;
 using Data.Runtime.Party.Core;
 using Data.Runtime.Scripts.Execution;
 
@@ -13,9 +12,7 @@ using Engine.State.States.Battle.Base;
 using Engine.State.States.Battle.Exceptions;
 using Engine.Systems.Camera;
 using Engine.Systems.Rendering.Core;
-using Engine.Systems.Rendering.Factories;
 using Engine.UI.Elements;
-using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
 using Game.Scripts.Context.Builder.Core;
@@ -106,6 +103,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         _battle = battle;
 
         var gameData = _gameContext.GameData;
+        var gameServices = _gameContext.GameServices;
         var database = gameData.GameDatabase;
         var formationRegistry = database.FormationRegistry;
         var saveData = gameContext.GameObjects.SaveData;
@@ -113,16 +111,10 @@ public sealed class BattleState : IGameState, IBattleMenu
 
         _abilityRegistry = database.AbilityRegistry;
 
-        var formationFactory = new FormationFactory(
-            database.EnemyDefinitionRegistry, 
-            database.EnemyBattleScriptRegistry, 
-            database.EntityDefinitionRegistry,
-            configProvider.GameConfig.AgilityStatIndex
-        );
         var formationModel = saveData.Formations[battle.EnemyFormationId];
         var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
 
-        _formation = formationFactory.Create(formationDefinition, formationModel);
+        _formation = gameServices.FormationFactory.Create(formationDefinition, formationModel);
 
         var battleWindowConfig = configProvider.BattleWindowConfig;
         _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
@@ -136,8 +128,7 @@ public sealed class BattleState : IGameState, IBattleMenu
             party.Characters
         );
         _uiRoot = _view.UIElement;
-
-        _uiRenderSystem = new UIRenderSystem(new UILayoutSystem());
+        _uiRenderSystem = gameServices.UIRenderSystem;
     }
 
     public void OnEnter()
@@ -303,11 +294,8 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     private void CacheDependencies() 
     {
-        var gameData = _gameContext.GameData;
         var gameServices = _gameContext.GameServices;
 
-        var assetRegistry = gameData.AssetRegistry;
-        var configProvider = gameData.ConfigProvider;
         var gameWindow = _stateContext.GameWindow;
         var windowSize = gameWindow.Size;
 
@@ -318,25 +306,10 @@ public sealed class BattleState : IGameState, IBattleMenu
         _camera = new Camera(windowSize.X, windowSize.Y);
         gameWindow.SetView(_camera.View);
 
-        var battleRendererFactory = new BattleRendererFactory(
-            assetRegistry, 
-            _renderSystem, 
-            configProvider.BattleBackgroundSpriteConfig,
-            windowSize);
-        _battleRenderer = battleRendererFactory.Create(_battle.BattleBackgroundArtName);
-
-        var enemyRendererFactory = new EnemyRendererFactory(
-            assetRegistry, 
-            _renderSystem, 
-            configProvider.EnemyBattleSpriteConfig);
-        _enemyRenderer = enemyRendererFactory.Create(_formation);
-
-        var partyBattleRendererFactory = new PartyBattleRendererFactory(
-            assetRegistry, 
-            _renderSystem,
-            configProvider.CharacterBattleSpriteConfig
-        );
-        _partyBattleRenderer = partyBattleRendererFactory.Create(_party);
+        // Renderers.
+        _battleRenderer = gameServices.BattleRendererFactory.Create(_battle.BattleBackgroundArtName);
+        _enemyRenderer = gameServices.EnemyRendererFactory.Create(_formation);
+        _partyBattleRenderer = gameServices.PartyBattleRendererFactory.Create(_party);
 
         // Battle script context and script library.
         var battleScriptContextBuilder = new BattleScriptContextBuilder(
