@@ -67,7 +67,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 **Steps:**
 - Update scaling on party battle renderer and enemy renderer.
-- We should also wrap around the selection based on the number of options instead of max number of options.
 
 ---
 
