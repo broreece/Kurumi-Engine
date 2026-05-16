@@ -57,53 +57,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Change the hard coded indexes in the force move actor to use actor keys. ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Currently when force moving actors we use "ActorIndex" yets change the format to a string key in
-dictionary.
-
-**Steps:**
-- Edit the map's json format to include keys for actors.
-- Edit the index variables to be strings called "ActorKey".
-- Edit the way the maps store actors from a list to a string dictionary initally:
-    - We will need to change how we convert the list to a dictionary of int coordinates.
-
----
-
-## Cache factories currently being made in game state. ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Currently in the battle state and map state we are creating factories. This should all be done in
-bootstrap and stored in game context to improve performance.
-
-**Steps:**
-- Go through map state and battle state removing factory initalization and store them in game context instead.
-- Also store the UIRenderSystem reused in the state manager and battle state in state context or somewhere else. It's
-currently being created twice.
-
----
-
-## Clean up the roadmap, make release plan for all tickets. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Current roadmap is a bit messy and needs to be cleaned up.
-
-**Steps:**
-- Go through the roadmap and clean it all up.
-- Ensure all tickets are planned and grouped in releases.
-
----
-
 ## (SBS-01) Determine scaling of sprites on battle state. ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
@@ -118,18 +71,32 @@ currently being created twice.
 
 ---
 
-## Windows and UI elements should appear based on the screen's width and height. ##
+## (WWHA-01) Windows and UI elements should appear based on the screen's width and height. ##
 ### Complexity: 4 ###
 ### Independent: 3 ###
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
 **Description:** Currently I believe UI elements will render in the same place regardless of window size,
-this should be fixed to be based on percents of the window size.
+this should be fixed to be based on percent of the window size.
 
 **Steps:**
 - We can divide the intended window screen sizes by the real size to determine the new position or perhaps use a
 SFML camera object to adjust placement and zoom.
+
+---
+
+## (CRM-01) Clean up the roadmap, make release plan for all tickets. ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Current roadmap is a bit messy and needs to be cleaned up.
+
+**Steps:**
+- Go through the roadmap and clean it all up.
+- Ensure all tickets are planned and grouped in releases.
 
 ---
 

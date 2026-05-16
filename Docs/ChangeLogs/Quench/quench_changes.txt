@@ -46,6 +46,18 @@ EXCEPTIONS
 
 ---------------------------------------------------------------------
 
+MISC CODE CHANGES
+
+- Improved caching of frequently used data such as UIRenderSystem and factories.
+
+---------------------------------------------------------------------
+
+GIT WORKFLOW
+
+- Started utilizing issues in place of roadmap. Updated our git documentation for these changes.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - This has been the third build in a row where instead of new features the focus was on "cleaning up", it's a common

@@ -2,6 +2,7 @@
 using Config.Core;
 
 using Data.Runtime.Actors.Factories;
+using Data.Runtime.Formations.Factories;
 using Data.Runtime.Maps.Factories;
 using Data.Runtime.Party.Core;
 using Data.Runtime.Party.Factory;
@@ -16,7 +17,13 @@ using Engine.State.Base;
 using Engine.State.Core;
 using Engine.State.States.Battle.Core;
 using Engine.State.States.Maps.Core;
+using Engine.Systems.Animation.Map.Factories;
 using Engine.Systems.Combat.Factories;
+using Engine.Systems.Movement.Factories;
+using Engine.Systems.Navigation.Factories;
+using Engine.Systems.Rendering.Factories;
+using Engine.UI.Layout.Core;
+using Engine.UI.Render;
 
 using Game.Maps.Loader;
 using Game.Maps.Registry;
@@ -77,7 +84,8 @@ public static class Program
             new MapState(gameContext, stateContext), 
             stateContext, 
             gameServices.InputMapper,
-            gameServices.RenderSystem
+            gameServices.RenderSystem,
+            gameServices.UIRenderSystem
         );
 
         RunGameLoop(window, input.System, stateManager, gameContext, stateContext);
@@ -149,13 +157,17 @@ public static class Program
         Party party,
         GameWindow gameWindow) 
     {
+        // Map services
         var mapRegistryPath = Path.Combine(paths.RegistryRoot, "map_registry.json");
         var scriptLibrary = gameData.ScriptLibrary;
+        var tileRegistry = gameData.GameDatabase.TileRegistry;
+        var database = gameData.GameDatabase;
+
         MapService mapService = new(
             new MapRegistry(mapRegistryPath), 
             new MapLoader(), 
-            new MapFactory(gameData.GameDatabase.ActorInfoRegistry, 
-            gameData.GameDatabase.TileRegistry, 
+            new MapFactory(database.ActorInfoRegistry, 
+            tileRegistry, 
             new ActorFactory(scriptLibrary), 
             new DumbTrackingActorFactory(scriptLibrary), 
             new PathedActorFactory(scriptLibrary),
@@ -163,16 +175,102 @@ public static class Program
             new SmartTrackingActorFactory(scriptLibrary), 
             party));
 
-        var damageCalculatorFactory = new DamageCalculatorFactory(gameData.GameDatabase.StatShortNameIndex);
+        // System factories.
+        var damageCalculatorFactory = new DamageCalculatorFactory(database.StatShortNameIndex);
+
+        // Render system.
+        var renderSystem = new RenderSystem(gameWindow);
+
+        // Map factories.
+        var assetRegistry = gameData.AssetRegistry;
+        var configProvider = gameData.ConfigProvider;
+        var tileConfig = configProvider.TileSheetConfig;
+        var animatedTileConfig = configProvider.AnimatedTileSheetConfig;
+        var characterFieldSpriteConfig = configProvider.CharacterFieldSpriteConfig;
+
+        var actorRendererFactory = new ActorRendererFactory(
+            assetRegistry, 
+            database.ActorSpriteRegistry,
+            renderSystem,  
+            tileConfig.Width, 
+            tileConfig.Height
+        );
+        var mapAnimationManagerFactory = new MapAnimationManagerFactory(
+            animatedTileConfig.AnimatedTileFrames, 
+            animatedTileConfig.AnimationInterval
+        );
+        var mapRendererFactory = new MapRendererFactory(
+            assetRegistry, 
+            tileRegistry, 
+            renderSystem, 
+            tileConfig
+        );
+        var movementResolverFactory = new MovementResolverFactory(tileRegistry, party);
+        var navigationGridFactory = new NavigationGridFactory(tileRegistry, party);
+        var partyMapRendererFactory = new PartyMapRendererFactory(
+            assetRegistry, 
+            renderSystem, 
+            database.CharacterRegistry, 
+            characterFieldSpriteConfig, 
+            tileConfig.Width, 
+            tileConfig.Height
+        );
+        var walkAnimationManagerFactory = new WalkAnimationManagerFactory(
+            characterFieldSpriteConfig.WalkAnimationFrames,
+            characterFieldSpriteConfig.WalkAnimationSpeed
+        );
+
+        // Battle factories.
+        var battleRendererFactory = new BattleRendererFactory(
+            assetRegistry, 
+            renderSystem, 
+            configProvider.BattleBackgroundSpriteConfig,
+            gameWindow.Size
+        );
+        var enemyRendererFactory = new EnemyRendererFactory(
+            assetRegistry, 
+            renderSystem, 
+            configProvider.EnemyBattleSpriteConfig
+        );
+        var formationFactory = new FormationFactory(
+            database.EnemyDefinitionRegistry, 
+            database.EnemyBattleScriptRegistry, 
+            database.EntityDefinitionRegistry,
+            configProvider.GameConfig.AgilityStatIndex
+        );
+        var partyBattleRendererFactory = new PartyBattleRendererFactory(
+            assetRegistry, 
+            renderSystem,
+            configProvider.CharacterBattleSpriteConfig
+        );
 
         return new GameServices() 
         {
             MapService = mapService, 
             SaveService = saveService, 
+
             ScriptLibrary = new ScriptLibrary(paths.RegistryRoot), 
+
             InputMapper = input.Mapper,
-            RenderSystem = new RenderSystem(gameWindow),
-            DamageCalculator = damageCalculatorFactory.Create()
+
+            RenderSystem = renderSystem,
+            UIRenderSystem = new UIRenderSystem(new UILayoutSystem()),
+
+            DamageCalculator = damageCalculatorFactory.Create(),
+
+            ActorRendererFactory = actorRendererFactory,
+            MapAnimationManagerFactory = mapAnimationManagerFactory,
+            MapRendererFactory = mapRendererFactory,
+            MovementResolverFactory = movementResolverFactory,
+            NavigationGridFactory = navigationGridFactory,
+            PartyMapRendererFactory = partyMapRendererFactory,
+            WalkAnimationManagerFactory = walkAnimationManagerFactory,
+
+            BattleRendererFactory = battleRendererFactory,
+            EnemyRendererFactory = enemyRendererFactory,
+            FormationFactory = formationFactory,
+            PartyBattleRendererFactory = partyBattleRendererFactory
+
         };
     }
 
