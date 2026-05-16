@@ -57,6 +57,8 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     // Cached config.
     private readonly int _maxChoicesPerPage;
+    private readonly bool _itemsEnabled;
+    private readonly bool _runAwayEnabled;
 
     // Current selection indexes.
     private int _currentCharacterIndex = 0;
@@ -88,8 +90,6 @@ public sealed class BattleState : IGameState, IBattleMenu
     private PriorityQueue<BattleAction, int> _actions = new(Comparer<int>.Create((x, y) => y.CompareTo(x)));
     private Stack<(BattleAction, int)> _queuedActions = [];
 
-    private int GetNumberOfTargets() => _party.Size + _formation.GetAmountOfLivingEnemies();
-
     private bool WonBattle => _formation.IsDefeated();
 
     private bool LostBattle => _party.LeadersHp == 0;
@@ -119,12 +119,17 @@ public sealed class BattleState : IGameState, IBattleMenu
         var battleWindowConfig = configProvider.BattleWindowConfig;
         _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
 
+        // Assign party choices config.
+        var partyChoicesConfig = configProvider.PartyChoicesConfig;
+        _itemsEnabled = partyChoicesConfig.ItemsEnabled;
+        _runAwayEnabled = partyChoicesConfig.RunAwayEnabled;
+
         _view = new BattleView(
             gameData.AssetRegistry, 
             _abilityRegistry,
             database.AbilitySetRegistry,
             battleWindowConfig,
-            configProvider.PartyChoicesConfig,
+            partyChoicesConfig,
             party.Characters
         );
         _uiRoot = _view.UIElement;
@@ -154,12 +159,12 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     public void MoveUp()
     {
-        _currentSelectionIndex = _currentSelectionIndex == 0 ? _maxChoicesPerPage - 1: _currentSelectionIndex - 1;
+        _currentSelectionIndex = _currentSelectionIndex == 0 ? GetNumberOfOptions() : _currentSelectionIndex - 1;
     }
 
     public void MoveDown()
     {
-        _currentSelectionIndex = _currentSelectionIndex == _maxChoicesPerPage - 1 ? 0 : _currentSelectionIndex + 1;
+        _currentSelectionIndex = _currentSelectionIndex == GetNumberOfOptions() ? 0 : _currentSelectionIndex + 1;
     }
 
     public void MoveRight()
@@ -489,4 +494,26 @@ public sealed class BattleState : IGameState, IBattleMenu
             }
         }
     }
+
+    private int GetNumberOfTargets() => _party.Size + _formation.GetAmountOfLivingEnemies();
+
+    private int GetNumberOfOptions()
+    {
+        var currentCharacter = _party.Characters[_currentCharacterIndex];
+        var numberOfOptions = currentCharacter.GetAbilityIDs().Count + currentCharacter.GetAbilitySetIDs().Count;
+        if (_itemsEnabled)
+        {
+            numberOfOptions ++;
+        }
+        if (_runAwayEnabled)
+        {
+            numberOfOptions ++;
+        }
+        if (_maxChoicesPerPage > numberOfOptions)
+        {
+            return numberOfOptions - 1;
+        }
+        return _maxChoicesPerPage - 1;
+
+    } 
 }
