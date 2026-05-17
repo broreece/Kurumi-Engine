@@ -36,6 +36,7 @@ We current use the following labels:
 - Feature
 - Documentation
 - Release
+- Refractor
 
 Use the labels for issues based on the nature of the issue being created. Issues can be created and grouped under 
 milestones, each milestone representing a release. 

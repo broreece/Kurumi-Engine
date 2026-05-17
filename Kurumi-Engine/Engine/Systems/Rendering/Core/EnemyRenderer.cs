@@ -51,7 +51,11 @@ public sealed class EnemyRenderer
                         _enemyBattleSpriteConfig.Width,
                         _enemyBattleSpriteConfig.Height
                     ),
-                    Position = new Vector2f(enemyRenderData.XLocation, enemyRenderData.YLocation)
+                    Position = new Vector2f(enemyRenderData.XLocation, enemyRenderData.YLocation),
+                    Scale = new Vector2f(
+                        _enemyBattleSpriteConfig.WidthScale,
+                        _enemyBattleSpriteConfig.HeightScale
+                    ),
                 };
 
                 // Send to render list.
