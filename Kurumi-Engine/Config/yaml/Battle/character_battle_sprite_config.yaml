@@ -3,3 +3,6 @@ height: 32
 
 party_x_placement: 100
 party_y_placement: 350
+
+width_scale: 3.0
+height_scale: 3.0

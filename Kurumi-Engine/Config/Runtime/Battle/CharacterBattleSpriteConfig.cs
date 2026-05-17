@@ -7,4 +7,7 @@ public sealed class CharacterBattleSpriteConfig
 
     public required int PartyXPlacement { get; init; }
     public required int PartyYPlacement { get; init; }
+
+    public required float WidthScale { get; init; }
+    public required float HeightScale { get; init; }
 }

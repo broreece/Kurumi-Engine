@@ -8,8 +8,10 @@ using Game.Scripts.Context.Builder.Base;
 using Game.Scripts.Context.Capabilities.Base;
 using Game.Scripts.Context.Capabilities.Implementations.Battle;
 using Game.Scripts.Context.Capabilities.Implementations.Entity;
+using Game.Scripts.Context.Capabilities.Implementations.Universal;
 using Game.Scripts.Context.Capabilities.Interfaces.Battle;
 using Game.Scripts.Context.Capabilities.Interfaces.Entity;
+using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 using Game.Scripts.Context.Core;
 using Game.Scripts.Context.Variables.Core;
 
@@ -45,7 +47,14 @@ public sealed class BattleScriptContextBuilder : IScriptContextBuilder
         var capabilityContainer = new CapabilityContainer();
         var variableTable = new VariableTable();
 
+        var gameData = _gameContext.GameData;
+
         // Construct capability container.
+        capabilityContainer.SetCapability(typeof(IUIActions), new UIActions(
+            _stateContext,
+            gameData.AssetRegistry, 
+            gameData.ConfigProvider
+        ));
         capabilityContainer.SetCapability(typeof(IActiveBattleActions), new ActiveBattleActions(_formation));
         capabilityContainer.SetCapability(typeof(IHpMpActions), new HpMpActions(
             _party, 

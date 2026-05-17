@@ -57,19 +57,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (SBS-01) Determine scaling of sprites on battle state. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** The sprites on the battle state are not scaled, we should determine how we scale.
-
-**Steps:**
-- Update scaling on party battle renderer and enemy renderer.
-
----
-
 ## (WWHA-01) Windows and UI elements should appear based on the screen's width and height. ##
 ### Complexity: 4 ###
 ### Independent: 3 ###
