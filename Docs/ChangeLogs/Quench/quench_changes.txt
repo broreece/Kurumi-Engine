@@ -55,6 +55,7 @@ MISC CODE CHANGES
 GIT WORKFLOW
 
 - Started utilizing issues in place of roadmap. Updated our git documentation for these changes.
+- Created wiki pages for the git repo.
 
 ---------------------------------------------------------------------
 
