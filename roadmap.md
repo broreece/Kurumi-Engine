@@ -48,32 +48,18 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Quench
+## Milestone: Pursuit
 **Focus areas:**
 
-- Cleaning up roadmap and other misc code.
+- Focused on enemy formations and battle.
+- Allowing enemy formations to appear on the map.
+- Enemy formations can switch controller based on if they spot the party.
+- Battles can now start and end with dynamic scripts.
+- Further sprite additions for actors to include a dead state for after battle enemy formations.
 
 ---
 
-## (CRM-01) Clean up the roadmap, make release plan for all tickets. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Current roadmap is a bit messy and needs to be cleaned up.
-
-**Steps:**
-- Go through the roadmap and clean it all up.
-- Ensure all tickets are planned and grouped in releases.
-
----
-
-Quench Reached
-
----
-
-## AI and enemy formation map data implementation ##
+## (EFMI-01) AI and enemy formation map data implementation ##
 ### Complexity: 5 ###
 ### Independent: 5 ###
 ### Momentum: 4 ###
@@ -105,14 +91,10 @@ enemy formation interaction a core part of the gameplay loop.
     - When checking if a tile is passable check if the tile is passable, if all events are passable and then if there 
     is an enemy formation on the
     tile they are dead.
-    - **NOTE** Rendering under the player might involve the work on ticket: (MSAC-02)
-
-**Related tickets:**
-- (MSAC-02)
 
 ---
 
-## (BSE-03) Battle scene enhancements ##
+## (BSE-03) Battle scene enhancements 3 ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
 ### Momentum: 3 ###
@@ -130,13 +112,13 @@ more dynamic enemy targetting.
     - Used to exist in forge.
     - Create custom config declaring it's font type, size and maybe a offset.
 - Implement function to load the index of the first healthy party member when generating the first choices in a 
-battle scene:
+    battle scene:
     - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
     same in both.
 
 ---
 
-## (BSE-02) Battle scene changes ##
+## (BSE-02) Battle scene enhacements 2 ##
 ### Complexity: 2 ###
 ### Independent: 2 ###
 ### Momentum: 3 ###
@@ -153,6 +135,10 @@ Allow battle scenes to end either in victory of fail.
     - If all enemies are dead return to previous scene.
     - If the event had a "OnWinEvent" execute it after returning to the scene.
     - Make sure we always check defeat before victory.
+
+---
+
+## Pursuit milestone reached.
 
 ---
 

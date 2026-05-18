@@ -7,7 +7,7 @@ of in-game entities, including:
 
 Actor Data Structure
 Actors are defined in the database using the following schema:
-ID | Behaviour | SpriteID | MovementSpeed | TrackingRange | BelowParty | Passable | OnTouch | OnAction | OnFind | Script
+ID | Behaviour | SpriteID | MovementSpeed | TrackingRange | BelowParty | Passable | SeeThrough | OnTouch | OnAction | OnFind | Script
 Each field directly maps to a specific aspect of the actor’s configuration and behavior.
 
 Field Overview:
@@ -18,6 +18,7 @@ MovementSpeed - Controls how fast the actor moves on the map.
 TrackingRange - Distance at which the actor begins tracking or reacting to the player.
 BelowParty - Determines render layering relative to the player.
 Passable - Indicates whether the player can move through the actor.
+SeeThrough - Indicates if other actors or enemy formations can see through the actor.
 OnTouch / OnAction / OnFind - Script triggers for different interaction types:
     - OnTouch: Triggered when the player collides with the actor
     - OnAction: Triggered via player interaction (e.g. button press)

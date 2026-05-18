@@ -86,7 +86,6 @@ Characteristics:
 
 Responsibilities:
 - Game states (GameplayState, MenuState, etc.)
-- Gameplay systems (movement, combat, AI)
 - Scripts and scripted events
 - UI states and views
 - Map systems and world logic

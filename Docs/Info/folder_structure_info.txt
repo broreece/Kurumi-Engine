@@ -99,6 +99,18 @@ Engine/Systems
 
 ---------------------------------------------------------------------
 
+Engine/Input
+
+- Contains mapper, contexts and systems for the input.
+
+---------------------------------------------------------------------
+
+Engine/Systems
+
+- Advanced self contained systems that contain logic.
+
+---------------------------------------------------------------------
+
 Engine/UI
 
 UI framework layer only:
@@ -119,14 +131,6 @@ Contains all gameplay-specific logic and content.
 - Responsible for WHAT the game does
 - Depends on Engine
 
----------------------------------------------------------------------
-
-Game/Input
-
-- Concrete input contexts
-- Examples:
-  - GameplayInputContext
-  - MenuInputContext
 
 ---------------------------------------------------------------------
 
@@ -147,16 +151,6 @@ Game/Scripts
 - Script execution
 
 Defines gameplay behavior through scripting.
-
----------------------------------------------------------------------
-
-Game/Systems
-
-- Gameplay systems (future)
-- Examples:
-  - Movement
-  - Combat
-  - AI
 
 ---------------------------------------------------------------------
 

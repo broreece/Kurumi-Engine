@@ -16,9 +16,11 @@ and scalable.
 
 ## Development Status
 
-Quench build is currently in progress, it is focused on:
-- Update windows and UI to have locations work regardless of window size.
-- Cleaning up roadmap and other misc code.
+Pursuit build is currently in progress, it is focused on:
+- Allowing enemy formations to appear on the map.
+- Enemy formations can switch controller based on if they spot the party.
+- Battles can now start and end with dynamic scripts.
+- Further sprite additions for actors to include a dead state for after battle enemy formations.
 
 ---
 

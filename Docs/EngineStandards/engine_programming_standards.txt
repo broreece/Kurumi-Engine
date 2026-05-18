@@ -85,4 +85,4 @@ Class ordering details:
         - Internal classes.
 
 Internal classes:
-    Use only if the internal class is never referenced elsewhere.
+    Use if the internal class should be made via a factory.
