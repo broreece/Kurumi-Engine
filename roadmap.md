@@ -51,26 +51,7 @@ Tickets will also display a brief description, a set of planned steps for comple
 ## Milestone: Quench
 **Focus areas:**
 
-- Update windows and UI to have locations work regardless of window size.
 - Cleaning up roadmap and other misc code.
-
----
-
-## (WWHA-01) Windows and UI elements should appear based on the screen's width and height. ##
-### Complexity: 4 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Currently UI elements will render in the same place regardless of window size, we should implement
-a "virtual" screen size and scale based on that.
-
-**Steps:**
-- Add virtual resolution config.
-- Camera should always use this virtual resolution.
-- Add a calculator for our window ratio, this will require new work.
-- Apply the calculations to camera view.
-- No longer use window size for layout logic in UI and maps, instead use the virtual window size.
 
 ---
 

@@ -67,8 +67,10 @@ scaling.
 
 WINDOWS
 
-- Regardless of window size UI elements, and sprites all are correctly placed. A true dynamic window size has been
-created.
+- Regardless of window size UI elements, and sprites all are correctly placed.
+- One important note is that if the ratio of tiles on screen is changed the placements of UI elements will need to be
+adjusted, we can change the virtual display size from tile ratio to a fixed config size but each approach has it's
+own strengths and weaknesses.
 
 ---------------------------------------------------------------------
 

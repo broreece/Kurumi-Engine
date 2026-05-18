@@ -1,6 +1,7 @@
 using Config.Loader;
 using Config.Runtime.Battle;
 using Config.Runtime.Defaults;
+using Config.Runtime.Display;
 using Config.Runtime.Game;
 using Config.Runtime.Map;
 using Config.Runtime.Menus;
@@ -48,6 +49,9 @@ public sealed class ConfigProvider
     // Window config.
     public WindowConfig WindowConfig { get; }
 
+    // Display config.
+    public DisplayConfig DisplayConfig { get; }
+
     public ConfigProvider(string configBasePath) 
     {
         _configBasePath = configBasePath;
@@ -93,6 +97,11 @@ public sealed class ConfigProvider
 
         // Window config.
         WindowConfig = LoadConfig<WindowConfig>("Windows", "windows_config.yaml");
+
+        // Display config.
+        float viewWidth = MapConfig.MaxTilesWide * TileSheetConfig.Width;
+        float viewHeight = MapConfig.MaxTilesHigh * TileSheetConfig.Height;
+        DisplayConfig = new DisplayConfig() { ViewHeight = viewWidth, ViewWidth = viewHeight };
     }
 
     private T LoadConfig<T>(string folder, string file) 

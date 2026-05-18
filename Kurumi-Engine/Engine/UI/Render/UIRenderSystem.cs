@@ -24,10 +24,11 @@ public sealed class UIRenderSystem
     /// </summary>
     /// <param name="root">The UI element root object.</param>
     /// <param name="renderSystem">The render system.</param>
-    /// <param name="windowSize">The size of the game window.</param>
-    public void Render(UIElement root, RenderSystem renderSystem, Vector2u windowSize) 
+    /// <param name="displaySize">The size of the virtual game window.</param>
+    /// <param name="windowSize">The size of the real game window, used for text.</param>
+    public void Render(UIElement root, RenderSystem renderSystem, Vector2u displaySize, Vector2u windowSize) 
     {
-        RenderElement(root, renderSystem, windowSize, new Vector2f(0, 0));
+        RenderElement(root, renderSystem, displaySize, windowSize, new Vector2f(0, 0));
     }
 
     /// <summary>
@@ -36,45 +37,103 @@ public sealed class UIRenderSystem
     /// </summary>
     /// <param name="element">The UI element being rendered.</param>
     /// <param name="renderSystem">The render system.</param>
-    /// <param name="windowSize">The size of the game window.</param>
+    /// <param name="displaySize">The size of the virtual game window.</param>
+    /// <param name="windowSize">The size of the real game window, used for text.</param>
     /// <param name="parentPosition">The recursively changing parent position of the UI element updates based on
     /// local offset.</param>
     private void RenderElement(
         UIElement element, 
         RenderSystem renderSystem, 
+        Vector2u displaySize, 
         Vector2u windowSize, 
         Vector2f parentPosition) 
     {
         // Calculate the transform.
-        Vector2u contentSize = element.UIComponent.GetContentSize();
-        UITransform layoutTransform = _layoutSystem.Calculate(element.Layout, windowSize, contentSize);
+        var component = element.UIComponent;
+        bool useVirtualDisplay = component.UseVirtualDisplay();
 
-        // Set position to be equal to the parent position, add the current elements position and the current elements
-        // offset.
-        Vector2f finalPosition = parentPosition + layoutTransform.Position + element.LocalOffset;
-        Vector2f finalScale = new(
-            layoutTransform.Scale.X,
-            layoutTransform.Scale.Y
+        Vector2u contentSize = component.GetContentSize();
+
+        UITransform layoutTransform = _layoutSystem.Calculate(
+            element.Layout,
+            displaySize,
+            contentSize
         );
 
-        // Apply the final tansform and draw.
-        UITransform finalTransform = new() { Position = finalPosition, Scale = finalScale };
-        element.UIComponent.Apply(finalTransform);
-        
-        var drawable = element.UIComponent.GetDrawable();
-        if (drawable != null) {
-            renderSystem.Submit(new RenderCommand() 
-            { 
-                Layer = element.RenderLayer, 
-                States = RenderStates.Default, 
+        // Final virtual position.
+        Vector2f finalPosition = parentPosition + layoutTransform.Position + element.LocalOffset;
+
+        // Convert to screen-space if required.
+        Vector2f appliedPosition = useVirtualDisplay ? finalPosition : 
+            VirtualToScreenPosition(finalPosition, displaySize, windowSize );
+
+        // Text/screen-space elements should not inherit virtual scaling.
+        Vector2f appliedScale = useVirtualDisplay ? layoutTransform.Scale : new Vector2f(1f, 1f);
+
+        // Apply final transform.
+        component.Apply(new UITransform()
+        {
+            Position = appliedPosition,
+            Scale = appliedScale
+        });
+
+        var drawable = component.GetDrawable();
+
+        if (drawable != null)
+        {
+            var view = useVirtualDisplay ? new View(new FloatRect(
+                0,
+                0,
+                displaySize.X,
+                displaySize.Y
+            )) : new View(new FloatRect(
+                0,
+                0,
+                windowSize.X,
+                windowSize.Y
+            ));
+
+            renderSystem.Submit(new RenderCommand()
+            {
+                Layer = element.RenderLayer,
+                States = RenderStates.Default,
                 Drawable = drawable,
-                View = new View(new FloatRect(0, 0, windowSize.X, windowSize.Y))
+                View = view
             });
         }
 
         // Recurse into children.
-        foreach (var child in element.Children) {
-            RenderElement(child, renderSystem, windowSize, finalPosition);
+        foreach (var child in element.Children)
+        {
+            RenderElement(
+                child,
+                renderSystem,
+                displaySize,
+                windowSize,
+                finalPosition
+            );
         }
+    }
+
+    /// <summary>
+    /// Function used to transform a virtual screen location to a real screen location. Used for rendering components
+    /// where they do not utilize the virtual screen.
+    /// </summary>
+    /// <param name="virtualPosition">The virtual screen location of the component.</param>
+    /// <param name="displaySize">The size of the virtual display.</param>
+    /// <param name="windowSize">The size of the real window.</param>
+    /// <returns></returns>
+    private static Vector2f VirtualToScreenPosition(
+        Vector2f virtualPosition,
+        Vector2u displaySize,
+        Vector2u windowSize)
+    {
+        float scaleX = (float) windowSize.X / displaySize.X;
+        float scaleY = (float) windowSize.Y / displaySize.Y;
+
+        return new Vector2f(
+            virtualPosition.X * scaleX,
+            virtualPosition.Y * scaleY
+        );
     }
 }

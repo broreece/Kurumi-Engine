@@ -30,4 +30,6 @@ public sealed class TextComponent : IUIComponent
         FloatRect bounds = _text.GetLocalBounds();
         return new Vector2u((uint) bounds.Width, (uint) bounds.Height);
     }
+
+    public bool UseVirtualDisplay() => false;
 }

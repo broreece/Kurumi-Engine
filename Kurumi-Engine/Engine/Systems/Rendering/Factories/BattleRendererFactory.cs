@@ -16,18 +16,18 @@ public sealed class BattleRendererFactory
     private readonly RenderSystem _renderSystem;
 
     private readonly BattleBackgroundSpriteConfig _battleBackgroundSpriteConfig;
-    private readonly Vector2u _windowSize;
+    private readonly Vector2u _displaySize;
 
     public BattleRendererFactory(
         AssetRegistry assetRegistry, 
         RenderSystem renderSystem,
         BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
-        Vector2u windowSize)
+        Vector2u displaySize)
     {
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;
         _battleBackgroundSpriteConfig = battleBackgroundSpriteConfig;
-        _windowSize = windowSize;
+        _displaySize = displaySize;
     }
 
     public BattleRenderer Create(string battleBackgroundArt) 
@@ -39,8 +39,8 @@ public sealed class BattleRendererFactory
         var textureWidth = _battleBackgroundSpriteConfig.Width;
         var textureHeight = _battleBackgroundSpriteConfig.Height;
 
-        var windowWidth = _windowSize.X;
-        var windowHeight = _windowSize.Y;
+        var windowWidth = _displaySize.X;
+        var windowHeight = _displaySize.Y;
 
         float scaleX = (float) windowWidth / textureWidth;
         float scaleY = (float) windowHeight / textureHeight;
