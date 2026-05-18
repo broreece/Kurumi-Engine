@@ -30,18 +30,14 @@ public sealed class SmartTrackingActorFactory
         controllers.Push(new SmartTrackingController(target, navigationGrid) {Interval = actorInfo.MovementSpeed});
         if (actorInfo.ScriptName == null)
         {
-            return new Actor() 
+            return new Actor(actorInfo, actorModel) 
             {
-                ActorInfo = actorInfo, 
-                ActorModel = actorModel, 
                 Controllers = controllers,
                 Script = null
             };
         }
-        return new Actor() 
+        return new Actor(actorInfo, actorModel) 
         {
-            ActorInfo = actorInfo, 
-            ActorModel = actorModel, 
             Controllers = controllers,
             Script = _scriptLibrary.GetMapScript(actorInfo.ScriptName)
         };

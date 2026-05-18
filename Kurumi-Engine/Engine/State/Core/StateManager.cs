@@ -1,11 +1,12 @@
 using Engine.Input.Mapper;
 using Engine.State.Base;
-using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
 using Game.UI.Overlays.Base;
 
 using Infrastructure.Rendering.Core;
+
+using SFML.System;
 
 namespace Engine.State.Core;
 
@@ -25,18 +26,24 @@ public sealed class StateManager
     // Input mapper.
     private readonly InputMapper _inputMapper;
 
+    // Virtual window size.
+    private readonly Vector2u _displaySize;
+
     public StateManager(
         IGameState currentState, 
         StateContext stateContext, 
         InputMapper inputMapper, 
-        RenderSystem renderSystem) 
+        RenderSystem renderSystem,
+        UIRenderSystem uIRenderSystem,
+        Vector2u displaySize) 
     {
         _currentState = currentState;
         _currentState.OnEnter();
         _stateContext = stateContext;
         _inputMapper = inputMapper;
         _renderSystem = renderSystem;
-        _uiRenderSystem = new UIRenderSystem(new UILayoutSystem());
+        _uiRenderSystem = uIRenderSystem;
+        _displaySize = displaySize;
     }
 
     public void ChangeState(IGameState newState) 
@@ -67,7 +74,12 @@ public sealed class StateManager
             foreach (IUIOverlay uIOverlay in _stateContext.UIOverlays)
             {
                 uIOverlay.Update(deltaTime);
-                _uiRenderSystem.Render(uIOverlay.GetUIElement(), _renderSystem, _stateContext.GameWindow.Size);
+                _uiRenderSystem.Render(
+                    uIOverlay.GetUIElement(), 
+                    _renderSystem, 
+                    _displaySize, 
+                    _stateContext.GameWindow.Size
+                );
             }
 
             // Load top UI element, check if finished, if so remove it, else check if it should handle the input state.

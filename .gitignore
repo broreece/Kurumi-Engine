@@ -34,3 +34,7 @@ Kurumi-Engine/Saves
 
 # - Ignore logs.
 Kurumi-Engine/logs/*
+
+# - Ignore cache files.
+Kurumi-Engine/Kurumi-Engine.csproj.lscache
+Kurumi-Engine-Tests/Kurumi-Engine-Tests.csproj.lscache

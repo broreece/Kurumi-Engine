@@ -5,6 +5,7 @@ using Data.Runtime.Entities.Core;
 using Data.Runtime.Entities.Factories;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
+using Data.Runtime.Formations.Exceptions;
 
 using Infrastructure.Database.Base;
 
@@ -22,14 +23,15 @@ public sealed class FormationFactory
     (
         Registry<EnemyDefinition> enemyDefinitionRegistry,
         Registry<EnemyBattleScript> enemyBattleScriptRegistry,
-        Registry<EntityDefinition> entityDefinitionRegistry
+        Registry<EntityDefinition> entityDefinitionRegistry,
+        int agilityIndex
     )
     {
         _enemyDefinitionRegistry = enemyDefinitionRegistry;
         _entityDefinitionRegistry = entityDefinitionRegistry;
 
         _enemyFactory = new EnemyFactory(enemyBattleScriptRegistry);
-        _entityFactory = new EntityFactory();
+        _entityFactory = new EntityFactory(agilityIndex);
     }
 
     /// <summary>
@@ -41,7 +43,10 @@ public sealed class FormationFactory
     /// <returns>A new enemy formation runtime object.</returns>
     public Formation Create(FormationDefinition definition, FormationModel model) 
     {
-        // TODO: (DKE-01) Exception here if model and definition have different numbers of enemies.
+        if (definition.Enemies.Count != model.Enemies.Count)
+        {
+            throw new FormationException($"Formation: {definition.Id} has a model with a different number of enemies.");
+        }
         var storedEntityData = new List<StoredEntityData>();
         var entities = new List<Entity>();
         var enemies = new List<Enemy>();

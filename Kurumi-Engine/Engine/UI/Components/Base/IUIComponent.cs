@@ -22,4 +22,10 @@ public interface IUIComponent
     public Drawable? GetDrawable();
 
     public Vector2u GetContentSize();
+
+    /// <summary>
+    /// Determines if the component should utilize the virtual display or the real game window size.
+    /// </summary>
+    /// <returns>True unless the component is a text component.</returns>
+    public bool UseVirtualDisplay() => true;
 }

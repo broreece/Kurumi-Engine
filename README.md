@@ -16,9 +16,11 @@ and scalable.
 
 ## Development Status
 
-Re-Forge build is currently in progress, it is focused on:
-- Re-implementing some temporarily removed script steps and states that were removed to ensure the forge build was 
-stable. 
+Pursuit build is currently in progress, it is focused on:
+- Allowing enemy formations to appear on the map.
+- Enemy formations can switch controller based on if they spot the party.
+- Battles can now start and end with dynamic scripts.
+- Further sprite additions for actors to include a dead state for after battle enemy formations.
 
 ---
 

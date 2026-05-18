@@ -48,162 +48,18 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Quench
+## Milestone: Pursuit
 **Focus areas:**
 
-- Focused primarily on minor clean up
-- Allows non-passable tiles to be see-through
-- Update windows and UI to have locations work regardless of window size
+- Focused on enemy formations and battle.
+- Allowing enemy formations to appear on the map.
+- Enemy formations can switch controller based on if they spot the party.
+- Battles can now start and end with dynamic scripts.
+- Further sprite additions for actors to include a dead state for after battle enemy formations.
 
 ---
 
-## (ASI-01) Store agility stat index in config so we can access battle speed. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 2 ###
-
-**Description:** We currently just hardcode in character the battle speed variable, this needs to be changed to
-a configurable stat.
-
-**Steps:**
-- Update config.
-- Config should be accessible in character factory where we can then pass the index as a static value shared across
-characters.
-- Perhaps config should be passed instead, check to ensure we are using the right method.
-
----
-
-## (DKE-01) Remove full paths in asset registry json. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 2 ###
-
-**Description:** Currently we put the full path in the asset registry, this is risky because if the art folders
-change it'll result in us having to change a lot of lines. Removing the full path also reduces a lot of bloat.
-
-**Steps:**
-- Create a function to generate the paths based on type.
-- Check if our current design for animated tile sheets and static tile sheets using the same key is correct.
-
----
-
-## (VE-01) Allow non-passable tiles to be see through. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 2 ###
-
-**Description:** Currently in our vision resolver if a tile is not passable actors can not see through them.
-We should change this so that we have options for visible tiles that are not passable.
-
-**Steps:**
-- Edit the database to have the new field for tiles.
-- Edit the tile class to include new field.
-- Edit logic in vision resolver:
-    - Remove navigation grid pass dictionary of booleans where the coordinate is the key.
-    - The values set to if the tiles are visible or not.
-
----
-
-## (DKE-01) Create exceptions for if a dictionary key doesen't exist. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 3 ###
-
-**Description:** During our work on the forge refractor we introduced dictionaries for storing scripts, maps and assets.
-We need to introduce checkers for if keys exist.
-
-**Steps:**
-- Create exceptions for if a key is not found anywhere we check for keys (Scripts, Assets etc.)
-- Additional math exceptions in damage calculator.
-- Additional exception in the capability container for script contexts.
-
----
-
-## Change the hard coded indexes in the force move actor to use actor keys. ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Currently when force moving actors we use "ActorIndex" yets change the format to a string key in
-dictionary.
-
-**Steps:**
-- Edit the map's json format to include keys for actors.
-- Edit the index variables to be strings called "ActorKey".
-- Edit the way the maps store actors from a list to a string dictionary initally:
-    - We will need to change how we convert the list to a dictionary of int coordinates.
-
----
-
-## Cache factories currently being made in game state. ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Currently in the battle state and map state we are creating factories. This should all be done in
-bootstrap and stored in game context to improve performance.
-
-**Steps:**
-- Go through map state and battle state removing factory initalization and store them in game context instead.
-- Also store the UIRenderSystem reused in the state manager and battle state in state context or somewhere else. It's
-currently being created twice.
-
----
-
-## Clean up the roadmap, make release plan for all tickets. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Current roadmap is a bit messy and needs to be cleaned up.
-
-**Steps:**
-- Go through the roadmap and clean it all up.
-- Ensure all tickets are planned and grouped in releases.
-
----
-
-## (SBS-01) Determine scaling of sprites on battle state. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** The sprites on the battle state are not scaled, we should determine how we scale.
-
-**Steps:**
-- Update scaling on party battle renderer and enemy renderer.
-- We should also wrap around the selection based on the number of options instead of max number of options.
-
----
-
-## Windows and UI elements should appear based on the screen's width and height. ##
-### Complexity: 4 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Currently I believe UI elements will render in the same place regardless of window size,
-this should be fixed to be based on percents of the window size.
-
-**Steps:**
-- We can divide the intended window screen sizes by the real size to determine the new position or perhaps use a
-SFML camera object to adjust placement and zoom.
-
----
-
-Quench Reached
-
----
-
-## AI and enemy formation map data implementation ##
+## (EFMI-01) AI and enemy formation map data implementation ##
 ### Complexity: 5 ###
 ### Independent: 5 ###
 ### Momentum: 4 ###
@@ -235,14 +91,10 @@ enemy formation interaction a core part of the gameplay loop.
     - When checking if a tile is passable check if the tile is passable, if all events are passable and then if there 
     is an enemy formation on the
     tile they are dead.
-    - **NOTE** Rendering under the player might involve the work on ticket: (MSAC-02)
-
-**Related tickets:**
-- (MSAC-02)
 
 ---
 
-## (BSE-03) Battle scene enhancements ##
+## (BSE-03) Battle scene enhancements 3 ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
 ### Momentum: 3 ###
@@ -260,13 +112,13 @@ more dynamic enemy targetting.
     - Used to exist in forge.
     - Create custom config declaring it's font type, size and maybe a offset.
 - Implement function to load the index of the first healthy party member when generating the first choices in a 
-battle scene:
+    battle scene:
     - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
     same in both.
 
 ---
 
-## (BSE-02) Battle scene changes ##
+## (BSE-02) Battle scene enhacements 2 ##
 ### Complexity: 2 ###
 ### Independent: 2 ###
 ### Momentum: 3 ###
@@ -283,6 +135,10 @@ Allow battle scenes to end either in victory of fail.
     - If all enemies are dead return to previous scene.
     - If the event had a "OnWinEvent" execute it after returning to the scene.
     - Make sure we always check defeat before victory.
+
+---
+
+## Pursuit milestone reached.
 
 ---
 
@@ -638,19 +494,6 @@ carefully account for the current system and how we will implement threading her
 
 **Description** Currently we're just assuming turn effect activates every turn. This is fine but we could also make
 a modifier that activates an effect when they attack, when they get attacked etc.
-
-**Steps:** N/A
-
----
-
-## (MLE-01) Loading maps throw a specific error for if the format was wrong or if the format was right. ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description** In the map loader we can create a custom exception to specify the issue. Also exists in asset registry
-and script registry.
 
 **Steps:** N/A
 

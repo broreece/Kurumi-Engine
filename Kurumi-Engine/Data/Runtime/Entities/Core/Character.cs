@@ -12,14 +12,16 @@ public sealed class Character : IStats, IHasStatuses
     private readonly CharacterDefinition _definition;
     private readonly CharacterModel _model;
 
-    private readonly List<Status> _statuses;
+    private readonly int _agilityIndex;
 
-    internal Character(CharacterDefinition definition, CharacterModel model) 
+    private readonly List<Status> _statuses = [];
+
+    internal Character(CharacterDefinition definition, CharacterModel model, int agilityIndex) 
     {
         _definition = definition;
         _model = model;
-        
-        _statuses = [];
+
+        _agilityIndex = agilityIndex;
     }
 
     public string Name => _definition.Name;
@@ -30,8 +32,7 @@ public sealed class Character : IStats, IHasStatuses
 
     public int MaxMP => _model.MaxMP;
 
-    // TODO: Hard coded value here to be replaced with configurable setting.
-    public int BattleSpeed => _model.Stats[2];
+    public int BattleSpeed => _model.Stats[_agilityIndex];
 
     public int CurrentHP 
     {

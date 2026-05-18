@@ -9,7 +9,7 @@ namespace Game.Scripts.Steps.Map;
 public sealed class ForceMoveActor : ScriptStep 
 {
     private readonly bool _keepDirection, _lockMovement, _instant;
-    private readonly int _actorIndex;
+    private readonly string _actorKey;
     private readonly List<int> _path;
 
     private IFinishable? _finishableController;
@@ -18,13 +18,13 @@ public sealed class ForceMoveActor : ScriptStep
         bool keepDirection, 
         bool lockMovement, 
         bool instant, 
-        int actorIndex, 
+        string actorKey, 
         List<int> path) : base() 
     {
         _keepDirection = keepDirection;
         _lockMovement = lockMovement;
         _instant = instant;
-        _actorIndex = actorIndex;
+        _actorKey = actorKey;
         _path = path;
     }
     
@@ -35,9 +35,9 @@ public sealed class ForceMoveActor : ScriptStep
             _keepDirection, 
             _lockMovement, 
             _instant, 
-            _actorIndex, 
+            _actorKey, 
             _path);
     }
 
-    public override bool Waiting() => !_finishableController!.IsFinished();
+    public override bool Waiting() => _finishableController != null && !_finishableController.IsFinished();
 }

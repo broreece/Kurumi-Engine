@@ -32,6 +32,27 @@ public sealed class NavigationGrid
             NotPartyLocation(xLocation, yLocation);
     }
 
+    public bool IsLocationSeeThrough(int xLocation, int yLocation)
+    {
+        var tileObjects = _map.GetTileObjectsAt(xLocation, yLocation);
+        var actors = _map.GetActorsAt(xLocation, yLocation);
+        foreach (int tileObject in tileObjects) 
+        {
+            if (!_tileRegistry.Get(tileObject).SeeThrough) 
+            {
+                return false;
+            }
+        }
+        foreach (var actor in actors) 
+        {
+            if (!actor.SeeThrough) 
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private bool InMapRange(int xLocation, int yLocation) 
     {
         return xLocation >= 0 && xLocation < _map.Width && yLocation >= 0 && yLocation < _map.Height;
@@ -53,7 +74,7 @@ public sealed class NavigationGrid
     {
         foreach (var actor in actors) 
         {
-            if (!actor.ActorInfo.Passable) 
+            if (!actor.Passable) 
             {
                 return false;
             }

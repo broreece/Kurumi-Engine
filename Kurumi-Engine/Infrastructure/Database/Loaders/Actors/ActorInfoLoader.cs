@@ -53,6 +53,7 @@ public sealed class ActorInfoLoader : IDataLoader<ActorInfo>
                 row.ScriptName,
                 row.BelowParty,
                 row.Passable,
+                row.SeeThrough,
                 row.OnTouch,
                 row.Auto,
                 row.OnAction,

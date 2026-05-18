@@ -2,18 +2,17 @@ using Data.Definitions.Entities.Abilities.Core;
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
-using Data.Runtime.Formations.Factories;
 using Data.Runtime.Party.Core;
 using Data.Runtime.Scripts.Execution;
+
 using Engine.Context.Core;
 using Engine.Input.Context.Contexts;
 using Engine.State.Base;
 using Engine.State.States.Battle.Base;
+using Engine.State.States.Battle.Exceptions;
 using Engine.Systems.Camera;
 using Engine.Systems.Rendering.Core;
-using Engine.Systems.Rendering.Factories;
 using Engine.UI.Elements;
-using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
 using Game.Scripts.Context.Builder.Core;
@@ -24,6 +23,8 @@ using Game.UI.Views;
 
 using Infrastructure.Database.Base;
 using Infrastructure.Rendering.Core;
+
+using SFML.System;
 
 namespace Engine.State.States.Battle.Core;
 
@@ -58,6 +59,9 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     // Cached config.
     private readonly int _maxChoicesPerPage;
+    private readonly bool _itemsEnabled;
+    private readonly bool _runAwayEnabled;
+    private Vector2u? _displaySize;
 
     // Current selection indexes.
     private int _currentCharacterIndex = 0;
@@ -89,8 +93,6 @@ public sealed class BattleState : IGameState, IBattleMenu
     private PriorityQueue<BattleAction, int> _actions = new(Comparer<int>.Create((x, y) => y.CompareTo(x)));
     private Stack<(BattleAction, int)> _queuedActions = [];
 
-    private int GetNumberOfTargets() => _party.Size + _formation.GetAmountOfLivingEnemies();
-
     private bool WonBattle => _formation.IsDefeated();
 
     private bool LostBattle => _party.LeadersHp == 0;
@@ -104,37 +106,37 @@ public sealed class BattleState : IGameState, IBattleMenu
         _battle = battle;
 
         var gameData = _gameContext.GameData;
+        var gameServices = _gameContext.GameServices;
         var database = gameData.GameDatabase;
         var formationRegistry = database.FormationRegistry;
         var saveData = gameContext.GameObjects.SaveData;
+        var configProvider = gameContext.GameData.ConfigProvider;
 
         _abilityRegistry = database.AbilityRegistry;
 
-        var formationFactory = new FormationFactory(
-            database.EnemyDefinitionRegistry, 
-            database.EnemyBattleScriptRegistry, 
-            database.EntityDefinitionRegistry
-        );
         var formationModel = saveData.Formations[battle.EnemyFormationId];
         var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
 
-        _formation = formationFactory.Create(formationDefinition, formationModel);
+        _formation = gameServices.FormationFactory.Create(formationDefinition, formationModel);
 
-        var configProvider = gameContext.GameData.ConfigProvider;
         var battleWindowConfig = configProvider.BattleWindowConfig;
         _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
+
+        // Assign party choices config.
+        var partyChoicesConfig = configProvider.PartyChoicesConfig;
+        _itemsEnabled = partyChoicesConfig.ItemsEnabled;
+        _runAwayEnabled = partyChoicesConfig.RunAwayEnabled;
 
         _view = new BattleView(
             gameData.AssetRegistry, 
             _abilityRegistry,
             database.AbilitySetRegistry,
             battleWindowConfig,
-            configProvider.PartyChoicesConfig,
+            partyChoicesConfig,
             party.Characters
         );
         _uiRoot = _view.UIElement;
-
-        _uiRenderSystem = new UIRenderSystem(new UILayoutSystem());
+        _uiRenderSystem = gameServices.UIRenderSystem;
     }
 
     public void OnEnter()
@@ -153,19 +155,25 @@ public sealed class BattleState : IGameState, IBattleMenu
 
         // Update the UI then render the UI.
         _view.Update(_currentCharacterIndex, _currentSelectionIndex);
-        _uiRenderSystem.Render(_uiRoot, _renderSystem!, _stateContext.GameWindow.Size);
+        _uiRenderSystem.Render(
+            _uiRoot, 
+            _renderSystem!, 
+            _displaySize ?? 
+                throw new DisplayConfigNotSetException("Display size field was not assigned in battle state."), 
+            _stateContext.GameWindow.Size    
+        );
     }
 
     public ScriptContext GetScriptContext() => _battleScriptContext!;
 
     public void MoveUp()
     {
-        _currentSelectionIndex = _currentSelectionIndex == 0 ? _maxChoicesPerPage - 1: _currentSelectionIndex - 1;
+        _currentSelectionIndex = _currentSelectionIndex == 0 ? GetNumberOfOptions() : _currentSelectionIndex - 1;
     }
 
     public void MoveDown()
     {
-        _currentSelectionIndex = _currentSelectionIndex == _maxChoicesPerPage - 1 ? 0 : _currentSelectionIndex + 1;
+        _currentSelectionIndex = _currentSelectionIndex == GetNumberOfOptions() ? 0 : _currentSelectionIndex + 1;
     }
 
     public void MoveRight()
@@ -269,7 +277,8 @@ public sealed class BattleState : IGameState, IBattleMenu
                     TargetIndex = _currentTargetIndex,
                     IsEnemy = false,
                     ScriptName = _abilityRegistry.Get(abilities[_currentSelectionIndex]).ScriptName 
-                        ?? throw new Exception("TODO: Change this to custom exception here.")
+                        ?? throw new AbilityHasNoScriptException($"The ability of user {_currentCharacterIndex} has " +
+                        $"no assoicated script for the ability: {_currentSelectionIndex}.")
                 }, 
                 currentCharacter.BattleSpeed));
             }
@@ -299,40 +308,25 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     private void CacheDependencies() 
     {
-        var gameData = _gameContext.GameData;
         var gameServices = _gameContext.GameServices;
 
-        var assetRegistry = gameData.AssetRegistry;
-        var configProvider = gameData.ConfigProvider;
         var gameWindow = _stateContext.GameWindow;
-        var windowSize = gameWindow.Size;
+        var displayConfig = _gameContext.GameData.ConfigProvider.DisplayConfig;
+        var displayWidth = displayConfig.ViewWidth;
+        var displayHeight = displayConfig.ViewHeight;
+        _displaySize = new Vector2u((uint) displayWidth, (uint) displayHeight);
 
         // Renderer.
         _renderSystem = gameServices.RenderSystem;
 
         // Camera
-        _camera = new Camera(windowSize.X, windowSize.Y);
+        _camera = new Camera(displayWidth, displayHeight);
         gameWindow.SetView(_camera.View);
 
-        var battleRendererFactory = new BattleRendererFactory(
-            assetRegistry, 
-            _renderSystem, 
-            configProvider.BattleBackgroundSpriteConfig,
-            windowSize);
-        _battleRenderer = battleRendererFactory.Create(_battle.BattleBackgroundArtName);
-
-        var enemyRendererFactory = new EnemyRendererFactory(
-            assetRegistry, 
-            _renderSystem, 
-            configProvider.EnemyBattleSpriteConfig);
-        _enemyRenderer = enemyRendererFactory.Create(_formation);
-
-        var partyBattleRendererFactory = new PartyBattleRendererFactory(
-            assetRegistry, 
-            _renderSystem,
-            configProvider.CharacterBattleSpriteConfig
-        );
-        _partyBattleRenderer = partyBattleRendererFactory.Create(_party);
+        // Renderers.
+        _battleRenderer = gameServices.BattleRendererFactory.Create(_battle.BattleBackgroundArtName);
+        _enemyRenderer = gameServices.EnemyRendererFactory.Create(_formation);
+        _partyBattleRenderer = gameServices.PartyBattleRendererFactory.Create(_party);
 
         // Battle script context and script library.
         var battleScriptContextBuilder = new BattleScriptContextBuilder(
@@ -512,4 +506,26 @@ public sealed class BattleState : IGameState, IBattleMenu
             }
         }
     }
+
+    private int GetNumberOfTargets() => _party.Size + _formation.GetAmountOfLivingEnemies();
+
+    private int GetNumberOfOptions()
+    {
+        var currentCharacter = _party.Characters[_currentCharacterIndex];
+        var numberOfOptions = currentCharacter.GetAbilityIDs().Count + currentCharacter.GetAbilitySetIDs().Count;
+        if (_itemsEnabled)
+        {
+            numberOfOptions ++;
+        }
+        if (_runAwayEnabled)
+        {
+            numberOfOptions ++;
+        }
+        if (_maxChoicesPerPage > numberOfOptions)
+        {
+            return numberOfOptions - 1;
+        }
+        return _maxChoicesPerPage - 1;
+
+    } 
 }

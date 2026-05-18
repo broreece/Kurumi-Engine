@@ -13,7 +13,6 @@ using Engine.UI.Elements;
 
 using Game.UI.Overlays.Base;
 
-using SFML.Graphics;
 using SFML.System;
 
 namespace Game.UI.Overlays.Core;

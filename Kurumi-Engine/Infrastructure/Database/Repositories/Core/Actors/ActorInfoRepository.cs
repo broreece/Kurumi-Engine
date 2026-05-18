@@ -18,7 +18,7 @@ public sealed class ActorInfoRepository
     public ActorInfoRow[] LoadAll() 
     {
         using SqliteDataReader sqlReader = _databaseService.Query(
-            @"SELECT id, behaviour, sprite_id, movement_speed, tracking_range, below_party, passable, on_touch, auto, on_action, on_find, script_name
+            @"SELECT id, behaviour, sprite_id, movement_speed, tracking_range, below_party, passable, see_through, on_touch, auto, on_action, on_find, script_name
                 FROM actors"
         );
         var rows = new List<ActorInfoRow>();
@@ -35,6 +35,7 @@ public sealed class ActorInfoRepository
                 TrackingRange = reader.GetInt(Col.TrackingRange),
                 BelowParty = reader.GetBool(Col.BelowParty),
                 Passable = reader.GetBool(Col.Passable),
+                SeeThrough = reader.GetBool(Col.SeeThrough),
                 OnTouch = reader.GetBool(Col.OnTouch),
                 Auto = reader.GetBool(Col.Auto),
                 OnAction = reader.GetBool(Col.OnAction),
@@ -54,10 +55,11 @@ public sealed class ActorInfoRepository
         public const int TrackingRange = 4;
         public const int BelowParty = 5;
         public const int Passable = 6;
-        public const int OnTouch = 7;
-        public const int Auto = 8;
-        public const int OnAction = 9;
-        public const int OnFind = 10;
-        public const int ScriptName = 11;
+        public const int SeeThrough = 7;
+        public const int OnTouch = 8;
+        public const int Auto = 9;
+        public const int OnAction = 10;
+        public const int OnFind = 11;
+        public const int ScriptName = 12;
     }
 }

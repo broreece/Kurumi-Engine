@@ -14,16 +14,16 @@ public sealed class MapRegistry
     public MapRegistry(string registryPath) 
     {
         // Load json file.
-        // TODO: (MLE-01) Specify exception here..
         try 
         {
             var json = File.ReadAllText(registryPath);
             _mapFileNames = JsonSerializer.Deserialize<IReadOnlyDictionary<string, string>>(json) ?? 
-                throw new Exception();
+                throw new RegistryFormatException($"JSON file: {registryPath} is incorrect format");
         } 
-        catch (Exception) 
+        catch (Exception exception) when (exception is not RegistryFormatException) 
         {
-            throw new JsonFileException($"Registry path: {registryPath} not found or invalid format");
+            throw new JsonFileException($"Registry path: {registryPath} was not found, or an error occured opening " + 
+                "the file.");
         }
     }
 

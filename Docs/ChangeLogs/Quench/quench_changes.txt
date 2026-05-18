@@ -1,0 +1,85 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Quench
+Status: In Progress
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Re-Forge' release.
+
+'Quench' focused on cleaning up the remaining minor issues from the forge builds, including but not limited to:
+
+- Removing full path directories being stored in asset registries.
+- Creating new config to store agility index instead of hard coding in the character/entity class.
+- Creating new exceptions for the various throw situations created in the forge builds.
+- Allowing tiles to be see through for actors even if they are not passable.
+- Scaling sprites correctly in the battle view.
+- Updating UI elements to always ensure correct placement and size regardless of window size.
+
+---------------------------------------------------------------------
+
+CONFIG
+
+- Agility state index is now used from config to determine battle ordering speed instead of hard coding.
+
+---------------------------------------------------------------------
+
+ASSET REGISTRY
+
+- Assets no longer have their full file path stored in the asset registry massively reducing duplicated lines.
+
+---------------------------------------------------------------------
+
+TILES AND ACTOR BEHAVIOUR
+
+- Tiles and actors can now be see-through, this means that even if a tile is not passable an actor can spot the user 
+and activate on found scripts or change their active controller.
+- Actors are now stored in dictionaries alongside string keys in maps. This removes the need to load actors at a 
+specific location improving performance and reduces errors for if an actor does not exist at a provided location.
+
+---------------------------------------------------------------------
+
+EXCEPTIONS
+
+- New exceptions have been made for when dictionary keys don't exist when they should exist.
+
+---------------------------------------------------------------------
+
+MISC CODE CHANGES
+
+- Improved caching of frequently used data such as UIRenderSystem and factories.
+
+---------------------------------------------------------------------
+
+GIT WORKFLOW
+
+- Started utilizing issues in place of roadmap. Updated our git documentation for these changes.
+- Created wiki pages for the git repo.
+
+---------------------------------------------------------------------
+
+BATTLE SPRITES
+
+- Battle sprites can now have scaling set in config, in previous builds it was no scaling or determined by the map
+scaling.
+
+---------------------------------------------------------------------
+
+WINDOWS
+
+- Regardless of window size UI elements, and sprites all are correctly placed.
+- One important note is that if the ratio of tiles on screen is changed the placements of UI elements will need to be
+adjusted, we can change the virtual display size from tile ratio to a fixed config size but each approach has it's
+own strengths and weaknesses.
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+- This has been the third build in a row where instead of new features the focus was on "cleaning up", it's a common
+pitfall to fall into this trap early in development of constant cleaning up and optimization.
+- Next build should be focused on actual development of new features to avoid being stuck in this loop of optimization
+of low level features.
+
+---------------------------------------------------------------------

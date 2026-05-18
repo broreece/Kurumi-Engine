@@ -45,10 +45,13 @@ public sealed class PartyBattleRenderer
                         _characterBattleSpriteConfig.Height
                     ),
                     Position = new Vector2f(
-                        // TODO: Swap to scaled width here.
                         _characterBattleSpriteConfig.PartyXPlacement 
                             + (_characterBattleSpriteConfig.Width * partyMemberRender.Index),
                         _characterBattleSpriteConfig.PartyYPlacement
+                    ),
+                    Scale = new Vector2f(
+                        _characterBattleSpriteConfig.WidthScale,
+                        _characterBattleSpriteConfig.HeightScale
                     )
                 };
 

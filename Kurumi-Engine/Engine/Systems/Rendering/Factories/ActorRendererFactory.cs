@@ -38,7 +38,7 @@ public sealed class ActorRendererFactory
         // Load actor render data.
         var actorRenderData = new List<ActorRenderData>();
         foreach (var actor in actors) {
-            var actorSprite = _actorSpriteRegistry.Get(actor.ActorInfo.SpriteId);
+            var actorSprite = _actorSpriteRegistry.Get(actor.SpriteId);
 
             // Load actor texture.
             var actorTexture = _assetRegistry.GetTexture(AssetType.ActorSpriteSheets, actorSprite.SpriteName);
