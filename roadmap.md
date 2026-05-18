@@ -52,7 +52,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - Update windows and UI to have locations work regardless of window size.
-- Correctly scaling sprites in battle state.
 - Cleaning up roadmap and other misc code.
 
 ---
@@ -63,12 +62,15 @@ Tickets will also display a brief description, a set of planned steps for comple
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:** Currently I believe UI elements will render in the same place regardless of window size,
-this should be fixed to be based on percent of the window size.
+**Description:** Currently UI elements will render in the same place regardless of window size, we should implement
+a "virtual" screen size and scale based on that.
 
 **Steps:**
-- We can divide the intended window screen sizes by the real size to determine the new position or perhaps use a
-SFML camera object to adjust placement and zoom.
+- Add virtual resolution config.
+- Camera should always use this virtual resolution.
+- Add a calculator for our window ratio, this will require new work.
+- Apply the calculations to camera view.
+- No longer use window size for layout logic in UI and maps, instead use the virtual window size.
 
 ---
 

@@ -58,6 +58,20 @@ GIT WORKFLOW
 
 ---------------------------------------------------------------------
 
+BATTLE SPRITES
+
+- Battle sprites can now have scaling set in config, in previous builds it was no scaling or determined by the map
+scaling.
+
+---------------------------------------------------------------------
+
+WINDOWS
+
+- Regardless of window size UI elements, and sprites all are correctly placed. A true dynamic window size has been
+created.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - This has been the third build in a row where instead of new features the focus was on "cleaning up", it's a common

@@ -18,7 +18,6 @@ and scalable.
 
 Quench build is currently in progress, it is focused on:
 - Update windows and UI to have locations work regardless of window size.
-- Correctly scaling sprites in battle state.
 - Cleaning up roadmap and other misc code.
 
 ---
