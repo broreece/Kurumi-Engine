@@ -51,24 +51,7 @@ Tickets will also display a brief description, a set of planned steps for comple
 ## Milestone: Quench
 **Focus areas:**
 
-- Update windows and UI to have locations work regardless of window size.
-- Correctly scaling sprites in battle state.
 - Cleaning up roadmap and other misc code.
-
----
-
-## (WWHA-01) Windows and UI elements should appear based on the screen's width and height. ##
-### Complexity: 4 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Currently I believe UI elements will render in the same place regardless of window size,
-this should be fixed to be based on percent of the window size.
-
-**Steps:**
-- We can divide the intended window screen sizes by the real size to determine the new position or perhaps use a
-SFML camera object to adjust placement and zoom.
 
 ---
 

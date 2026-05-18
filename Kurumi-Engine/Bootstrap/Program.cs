@@ -52,15 +52,16 @@ public static class Program
         var window = BuildWindow(gameData);
         var input = BuildInput();
 
-        var config = gameData.ConfigProvider.GameConfig;
+        var configProvider = gameData.ConfigProvider;
+        var gameConfig = configProvider.GameConfig;
 
         var saveService = new SaveService(paths.SavePath);
         var saveData = saveService.LoadNewSaveData();
         var partyFactory = new PartyFactory(
             saveData.Characters, 
             gameData.GameDatabase.CharacterRegistry, 
-            config.MaxPartySize,
-            config.AgilityStatIndex
+            gameConfig.MaxPartySize,
+            gameConfig.AgilityStatIndex
         );
         var party = partyFactory.Create(saveData.Party, saveData.Inventory);
         var gameServices = BuildGameServices(paths, input, gameData, saveService, party, window);
@@ -80,12 +81,17 @@ public static class Program
             GameWindow = window, 
             InputContextManager = input.ContextManager
         };
+        var displaySize = new Vector2u(
+            (uint) configProvider.DisplayConfig.ViewWidth, 
+            (uint) configProvider.DisplayConfig.ViewHeight 
+        );
         var stateManager = new StateManager(
             new MapState(gameContext, stateContext), 
             stateContext, 
             gameServices.InputMapper,
             gameServices.RenderSystem,
-            gameServices.UIRenderSystem
+            gameServices.UIRenderSystem,
+            displaySize
         );
 
         RunGameLoop(window, input.System, stateManager, gameContext, stateContext);
@@ -221,11 +227,12 @@ public static class Program
         );
 
         // Battle factories.
+        var virtualWindowConfig = configProvider.DisplayConfig;
         var battleRendererFactory = new BattleRendererFactory(
             assetRegistry, 
             renderSystem, 
             configProvider.BattleBackgroundSpriteConfig,
-            gameWindow.Size
+            new Vector2u((uint) virtualWindowConfig.ViewWidth, (uint) virtualWindowConfig.ViewHeight)
         );
         var enemyRendererFactory = new EnemyRendererFactory(
             assetRegistry, 

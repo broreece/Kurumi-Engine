@@ -219,12 +219,9 @@ public sealed class MapState : IGameState
 
     private void InitializeCamera() 
     {
-        var mapConfig = _gameData!.ConfigProvider.MapConfig;
+        var displayConfig = _gameData!.ConfigProvider.DisplayConfig;
 
-        float viewWidth = mapConfig.MaxTilesWide * _tileWidth;
-        float viewHeight = mapConfig.MaxTilesHigh * _tileHeight;
-
-        _camera = new Camera(viewWidth, viewHeight);
+        _camera = new Camera(displayConfig.ViewWidth, displayConfig.ViewHeight);
         _stateContext.GameWindow.SetView(_camera.View);
     }
 

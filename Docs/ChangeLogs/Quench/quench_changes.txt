@@ -58,6 +58,22 @@ GIT WORKFLOW
 
 ---------------------------------------------------------------------
 
+BATTLE SPRITES
+
+- Battle sprites can now have scaling set in config, in previous builds it was no scaling or determined by the map
+scaling.
+
+---------------------------------------------------------------------
+
+WINDOWS
+
+- Regardless of window size UI elements, and sprites all are correctly placed.
+- One important note is that if the ratio of tiles on screen is changed the placements of UI elements will need to be
+adjusted, we can change the virtual display size from tile ratio to a fixed config size but each approach has it's
+own strengths and weaknesses.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - This has been the third build in a row where instead of new features the focus was on "cleaning up", it's a common

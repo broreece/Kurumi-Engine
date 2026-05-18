@@ -24,6 +24,8 @@ using Game.UI.Views;
 using Infrastructure.Database.Base;
 using Infrastructure.Rendering.Core;
 
+using SFML.System;
+
 namespace Engine.State.States.Battle.Core;
 
 /// <summary>
@@ -59,6 +61,7 @@ public sealed class BattleState : IGameState, IBattleMenu
     private readonly int _maxChoicesPerPage;
     private readonly bool _itemsEnabled;
     private readonly bool _runAwayEnabled;
+    private Vector2u? _displaySize;
 
     // Current selection indexes.
     private int _currentCharacterIndex = 0;
@@ -152,7 +155,13 @@ public sealed class BattleState : IGameState, IBattleMenu
 
         // Update the UI then render the UI.
         _view.Update(_currentCharacterIndex, _currentSelectionIndex);
-        _uiRenderSystem.Render(_uiRoot, _renderSystem!, _stateContext.GameWindow.Size);
+        _uiRenderSystem.Render(
+            _uiRoot, 
+            _renderSystem!, 
+            _displaySize ?? 
+                throw new DisplayConfigNotSetException("Display size field was not assigned in battle state."), 
+            _stateContext.GameWindow.Size    
+        );
     }
 
     public ScriptContext GetScriptContext() => _battleScriptContext!;
@@ -302,13 +311,16 @@ public sealed class BattleState : IGameState, IBattleMenu
         var gameServices = _gameContext.GameServices;
 
         var gameWindow = _stateContext.GameWindow;
-        var windowSize = gameWindow.Size;
+        var displayConfig = _gameContext.GameData.ConfigProvider.DisplayConfig;
+        var displayWidth = displayConfig.ViewWidth;
+        var displayHeight = displayConfig.ViewHeight;
+        _displaySize = new Vector2u((uint) displayWidth, (uint) displayHeight);
 
         // Renderer.
         _renderSystem = gameServices.RenderSystem;
 
         // Camera
-        _camera = new Camera(windowSize.X, windowSize.Y);
+        _camera = new Camera(displayWidth, displayHeight);
         gameWindow.SetView(_camera.View);
 
         // Renderers.
