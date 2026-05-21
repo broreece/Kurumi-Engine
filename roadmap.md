@@ -94,7 +94,7 @@ enemy formation interaction a core part of the gameplay loop.
 
 ---
 
-## (BSE-03) Battle scene enhancements 3 ##
+## (BSE-02) Battle scene enhancements 2 ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
 ### Momentum: 3 ###
@@ -118,7 +118,7 @@ more dynamic enemy targetting.
 
 ---
 
-## (BSE-02) Battle scene enhacements 2 ##
+## (BSE-03) Battle scene enhancements 3 ##
 ### Complexity: 2 ###
 ### Independent: 2 ###
 ### Momentum: 3 ###
@@ -409,19 +409,6 @@ the database.
 ---
 
 # Unplaned tickets:
-
----
-
-## Make a tiled application modification to output in our format ##
-### Complexity: 3 ###
-### Independent: 1 ###
-### Momentum: 4 ###
-### Impact: 3 ###
-
-**Description:** Currently we have a messy way to convert files using a python script. Yets just modify the tiled 
-application to do the work for us.
-
-**Steps:** N/A
 
 ---
 

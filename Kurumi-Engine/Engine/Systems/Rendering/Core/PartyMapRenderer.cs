@@ -68,6 +68,7 @@ public sealed class PartyMapRenderer
             new RenderCommand() 
             {
                 Layer = RenderLayer.PartyMapLayer, 
+                SubmissionIndex = 0, 
                 Drawable = sprite, 
                 States = RenderStates.Default,
                 View = view

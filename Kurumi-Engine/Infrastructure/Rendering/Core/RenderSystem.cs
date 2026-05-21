@@ -19,8 +19,16 @@ public sealed class RenderSystem
     /// </summary>
     public void Render() 
     {
-        // Sort queued commands.
-        _commands.Sort((a, b) => a.Layer.CompareTo(b.Layer));
+        // Sort queued commands based on rendering layer and then the submission index (for tiles).
+        _commands.Sort((a, b) => {
+            int layerCompare = a.Layer.CompareTo(b.Layer);
+        
+            if (layerCompare != 0) {
+                return layerCompare;
+            }
+
+            return a.SubmissionIndex.CompareTo(b.SubmissionIndex);
+        });
 
         _window.Clear();
         foreach (var command in _commands) 

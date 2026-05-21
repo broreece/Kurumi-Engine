@@ -95,9 +95,10 @@ public sealed class UIRenderSystem
 
             renderSystem.Submit(new RenderCommand()
             {
-                Layer = element.RenderLayer,
-                States = RenderStates.Default,
-                Drawable = drawable,
+                Layer = element.RenderLayer, 
+                SubmissionIndex = 0, 
+                States = RenderStates.Default, 
+                Drawable = drawable, 
                 View = view
             });
         }

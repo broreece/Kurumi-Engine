@@ -28,6 +28,7 @@ public sealed class BattleRenderer
             new RenderCommand() 
             {
                 Layer = RenderLayer.BackgroundLayer, 
+                SubmissionIndex = 0, 
                 Drawable = _backgroundSprite, 
                 States = RenderStates.Default,
                 View = view
