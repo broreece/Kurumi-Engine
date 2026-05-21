@@ -61,6 +61,7 @@ public sealed class PartyBattleRenderer
                 _renderSystem.Submit(new RenderCommand() 
                 {
                     Layer = RenderLayer.PartyBattleLayer, 
+                    SubmissionIndex = 0, 
                     Drawable = sprite, 
                     States = renderState,
                     View = view

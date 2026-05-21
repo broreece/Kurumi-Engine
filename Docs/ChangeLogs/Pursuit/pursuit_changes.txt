@@ -1,0 +1,28 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Pursuit
+Status: In Progress
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Quench' release.
+
+'Pursuit' focused on adding core gameplay features involving enemy formations, battles and persistance:
+
+- Created a tiled map format convertor into our .json format. The repo is hosted on git.
+
+---------------------------------------------------------------------
+
+Rendering
+
+- A new submission index has been created to allow tiles to not be rendered out of order. This affects all renderers
+now.
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+
+
+---------------------------------------------------------------------

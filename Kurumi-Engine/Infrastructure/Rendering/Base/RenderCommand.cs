@@ -10,6 +10,7 @@ namespace Infrastructure.Rendering.Base;
 public readonly struct RenderCommand 
 {
     public required RenderLayer Layer { get; init; }
+    public required int SubmissionIndex { get; init; }
 
     public required Drawable Drawable { get; init; }
     
