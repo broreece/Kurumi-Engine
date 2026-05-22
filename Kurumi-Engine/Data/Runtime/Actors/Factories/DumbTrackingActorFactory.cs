@@ -21,7 +21,10 @@ public sealed class DumbTrackingActorFactory
     public Actor Create(ActorInfo actorInfo, ActorModel actorModel, IPositionProvider target) 
     {
         Stack<Controller> controllers = [];
-        controllers.Push(new DumbTrackingController(target) {Interval = actorInfo.MovementSpeed});
+        controllers.Push(new DumbTrackingController(target, actorInfo.TrackingRange) 
+        { 
+            Interval = actorInfo.MovementSpeed 
+        });
         if (actorInfo.ScriptName == null)
         {
             return new Actor(actorInfo, actorModel) 
