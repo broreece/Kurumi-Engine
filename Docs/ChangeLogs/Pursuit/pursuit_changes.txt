@@ -14,15 +14,22 @@ This document outlines the architectural and system-level changes made since the
 
 ---------------------------------------------------------------------
 
-Rendering
+RENDERING
 
 - A new submission index has been created to allow tiles to not be rendered out of order. This affects all renderers
 now.
 
 ---------------------------------------------------------------------
 
+TOOLING
+
+- Created a new tool that converts the "Tiled" map format into our map format. Repo at:
+    https://github.com/broreece/Kurumi-Tools
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
-
+-
 
 ---------------------------------------------------------------------

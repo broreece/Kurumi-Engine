@@ -134,12 +134,25 @@ Kurumi-Engine/
 | Technology | Purpose |
 |-----------|--------|
 | **C# (.NET 8)** | Core engine development |
+| **Python 3.11** | Additional scripts handled in the tooling repo |
 | **SFML.NET** | Rendering, window management, and input handling |
 | **SQLite** | Static game definitions (items, enemies, etc.) |
 | **YAML** | Configuration files |
-| **JSON** | Dynamic save data and scripts |
+| **JSON** | Dynamic save data, custom map and script formats |
 | **Git** | Version control and development workflow |
 | **Xunit** | Unit tests |
+
+---
+
+## Tooling
+
+Official tooling and asset pipeline utilities are maintained separately in:
+- https://github.com/broreece/Kurumi-Tools
+
+This includes:
+- Tiled map conversion
+
+---
 
 ---
 

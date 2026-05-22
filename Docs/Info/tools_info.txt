@@ -1,0 +1,20 @@
+The Kurumi-Tools repository contains standalone tooling and asset pipeline utilities used during development of the 
+Kurumi Engine.
+
+The tools repository is intended for systems that assist development workflows, content generation, preprocessing, 
+validation, and asset conversion, but are not part of the engine runtime itself.
+
+Examples include:
+- Tiled map conversion
+
+Design Intent
+Kurumi-Tools exists to maintain a clear separation between:
+- Runtime engine systems
+- Offline tooling and content pipelines
+
+This separation allows tooling to evolve independently from the engine while keeping the runtime focused, lightweight, 
+and deterministic.
+
+Guiding Principle
+The engine executes game logic.
+The tools repository contain code that might affect the game's data but no effect on the engine itself.
