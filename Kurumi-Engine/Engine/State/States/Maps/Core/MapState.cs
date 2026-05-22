@@ -246,8 +246,11 @@ public sealed class MapState : IGameState
                     {
                         // Execute move.
                         var move = currentController.GetMove(actor);
-                        _movementResolver!.TryMove(actor, move);
-                        currentController.ExecuteMove();
+                        if (move >= 0) 
+                        {
+                            _movementResolver!.TryMove(actor, move);
+                            currentController.ExecuteMove();
+                        }
 
                         // Execute on find script.
                         ExecuteOnFindScript(actor);

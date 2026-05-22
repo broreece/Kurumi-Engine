@@ -69,9 +69,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 enemy formation interaction a core part of the gameplay loop.
 
 **Steps:**
-- Implement a max limit on the smart tracking events:
-    - For normal smart tracking events perhaps no limit is fine, hard code a value like 0 to reference infinite range.
-    - If the distance is greater then the limit throw the error to not move.
 - Load enemy formations on new maps in map scene or in the map class: (High Priority)
     - When loading a map into map scene loop through enemy formations file and place enemy formations in the map by 
     creating them.

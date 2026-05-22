@@ -27,6 +27,6 @@ public abstract class Controller : IFinishable
     // Overriden by pathed controllers which also increment a movement index when moving.
     public virtual void ExecuteMove() =>_elapsedTime = 0;
 
-    // Overriden by derived controllers for custom logic.
+    // Overriden by derived controllers for custom logic. Returns -1 if no move found.
     public virtual int GetMove(IPositionProvider actorLocation) => -1;
 }

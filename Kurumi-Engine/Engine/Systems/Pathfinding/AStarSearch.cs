@@ -8,8 +8,23 @@ namespace Engine.Systems.Pathfinding;
 /// </summary>
 public sealed class AStarSearch 
 {
-    public int LoadFastestPath(int originX, int originY, int targetX, int targetY, NavigationGrid navigationGrid) 
+    public int LoadFastestPath(
+        int originX, 
+        int originY, 
+        int targetX, 
+        int targetY, 
+        NavigationGrid navigationGrid, 
+        int maxRange
+    ) 
     {
+        // Check if out of range first to avoid unnecesary logic.
+        var xDifference = originX > targetX ? originX - targetX : targetX - originX;
+        var yDifference = originY > targetY ? originY - targetY : targetY - originY;
+        if (xDifference + yDifference > maxRange)
+        {
+            return -1;
+        }
+
         var openSet = new PriorityQueue<AStarNode, int>();
         var closedSet = new HashSet<(int, int)>();
         
@@ -61,17 +76,20 @@ public sealed class AStarSearch
                 {
                     // Create a new node and place on queue.
                     var currentDistance = currentNode.DistanceFromStart + 1;
-                    var newX = currentX + rightMovement;
-                    var newY = currentY + downMovement;
-                    AStarNode newNode = new() 
-                    { 
-                        Parent = currentNode, 
-                        XLocation = newX, 
-                        YLocation = newY, 
-                        DistanceFromStart = currentDistance, 
-                        DistanceFromGoal = FastestPathHeuristic(newX, newY, targetX, targetY) 
-                    };
-                    openSet.Enqueue(newNode, newNode.TotalDistance);
+                    if (currentDistance < maxRange)
+                    {
+                        var newX = currentX + rightMovement;
+                        var newY = currentY + downMovement;
+                        AStarNode newNode = new() 
+                        { 
+                            Parent = currentNode, 
+                            XLocation = newX, 
+                            YLocation = newY, 
+                            DistanceFromStart = currentDistance, 
+                            DistanceFromGoal = FastestPathHeuristic(newX, newY, targetX, targetY) 
+                        };
+                        openSet.Enqueue(newNode, newNode.TotalDistance);
+                    }
                 }
             }
         }

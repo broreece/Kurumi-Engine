@@ -9,10 +9,13 @@ public sealed class SmartTrackingController : TrackedController
 {
     private readonly NavigationGrid _navigationGrid;
 
-    public SmartTrackingController(IPositionProvider targetLocation, NavigationGrid navigationGrid) : 
+    private readonly int _maxRange;
+
+    public SmartTrackingController(IPositionProvider targetLocation, NavigationGrid navigationGrid, int maxRange) : 
         base(targetLocation) 
     {
         _navigationGrid = navigationGrid;
+        _maxRange = maxRange;
     }
 
     public override int GetMove(IPositionProvider actorLocation) 
@@ -22,7 +25,8 @@ public sealed class SmartTrackingController : TrackedController
             actorLocation.YLocation, 
             _targetLocation.XLocation, 
             _targetLocation.YLocation, 
-            _navigationGrid
+            _navigationGrid,
+            _maxRange
         );
     }
 }

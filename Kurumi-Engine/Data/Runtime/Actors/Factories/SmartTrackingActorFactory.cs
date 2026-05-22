@@ -24,10 +24,14 @@ public sealed class SmartTrackingActorFactory
         ActorInfo actorInfo, 
         ActorModel actorModel, 
         IPositionProvider target, 
-        NavigationGrid navigationGrid) 
+        NavigationGrid navigationGrid
+    ) 
     {
         Stack<Controller> controllers = [];
-        controllers.Push(new SmartTrackingController(target, navigationGrid) {Interval = actorInfo.MovementSpeed});
+        controllers.Push(new SmartTrackingController(target, navigationGrid, actorInfo.TrackingRange) 
+        { 
+            Interval = actorInfo.MovementSpeed 
+        });
         if (actorInfo.ScriptName == null)
         {
             return new Actor(actorInfo, actorModel) 
