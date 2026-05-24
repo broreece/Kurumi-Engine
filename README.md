@@ -49,7 +49,7 @@ Current engine capabilities include:
 - Actor AI controllers allowing dynamic changing of AI movement patterns
 - 2D grid tile-based map navigation
 - Modular UI state system that allows for blocking and non blocking UI elements
-- Enemy formations are being implemented to persist across saves and affect the game world
+- Enemy formations persist across saves and affect the game world
 
 ---
 

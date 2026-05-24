@@ -69,9 +69,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 enemy formation interaction a core part of the gameplay loop.
 
 **Steps:**
-- Load enemy formations on new maps in map scene or in the map class: (High Priority)
-    - When loading a map into map scene loop through enemy formations file and place enemy formations in the map by 
-    creating them.
 - Create clocks for each enemy formation on a map: (High Priority)
     - Each enemy formation we create and place on the map create 2 clocks to control movement and determine when they 
     give up chasing the party.
@@ -136,6 +133,47 @@ Allow battle scenes to end either in victory of fail.
 ---
 
 ## Pursuit milestone reached.
+
+---
+
+## (LIE-01) Lookup indexes enhancement ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** In loaders that also load index lookups we should store values after inital load to prevent re-loading
+
+**Steps:**
+- In formation definition loader and state short name loader create new fields to store the loaded data.
+- Update the index getter functions to utilize the stored fields.
+
+---
+
+## (LFBU-01) Seperate large functions into sub functions ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 3 ###
+### Impact: 1 ###
+
+**Description:** To better apply to CRUD principles we should seperate out the large functions in the code into sub
+functions.
+
+**Steps:**
+- Search code for largest functions and break them up (E.G: Map Factories "Create" function).
+
+---
+
+## (PF-01) Run a profiler on the code ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Description:** We should start using a profiler to check where our code is heaviest.
+
+**Steps:**
+- Utilize 'Visual Studio Performance Profiler'.
 
 ---
 

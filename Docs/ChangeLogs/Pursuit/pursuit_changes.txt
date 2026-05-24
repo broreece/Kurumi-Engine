@@ -21,6 +21,12 @@ now.
 
 ---------------------------------------------------------------------
 
+FORMATIONS AND ACTOR CONTROLLERS
+
+- Smart and dumb tracking controllers now have a fixed range of where they can track their targets.
+
+---------------------------------------------------------------------
+
 TOOLING
 
 - Created a new tool that converts the "Tiled" map format into our map format. Repo at:

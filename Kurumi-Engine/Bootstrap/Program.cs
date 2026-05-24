@@ -64,7 +64,7 @@ public static class Program
             gameConfig.AgilityStatIndex
         );
         var party = partyFactory.Create(saveData.Party, saveData.Inventory);
-        var gameServices = BuildGameServices(paths, input, gameData, saveService, party, window);
+        var gameServices = BuildGameServices(paths, input, gameData, saveData, saveService, party, window);
 
         var gameObjects = BuildGameObjects(gameServices, saveData, party);
 
@@ -159,6 +159,7 @@ public static class Program
         Paths paths, 
         InputBundle input, 
         GameData gameData, 
+        SaveData saveData, 
         SaveService saveService, 
         Party party,
         GameWindow gameWindow) 
@@ -168,18 +169,32 @@ public static class Program
         var scriptLibrary = gameData.ScriptLibrary;
         var tileRegistry = gameData.GameDatabase.TileRegistry;
         var database = gameData.GameDatabase;
+        var configProvider = gameData.ConfigProvider;
+
+        var formationFactory = new FormationFactory(
+            database.EnemyDefinitionRegistry, 
+            database.EnemyBattleScriptRegistry, 
+            database.EntityDefinitionRegistry,
+            configProvider.GameConfig.AgilityStatIndex
+        );
 
         MapService mapService = new(
             new MapRegistry(mapRegistryPath), 
             new MapLoader(), 
-            new MapFactory(database.ActorInfoRegistry, 
-            tileRegistry, 
-            new ActorFactory(scriptLibrary), 
-            new DumbTrackingActorFactory(scriptLibrary), 
-            new PathedActorFactory(scriptLibrary),
-            new RandomActorFactory(scriptLibrary), 
-            new SmartTrackingActorFactory(scriptLibrary), 
-            party));
+
+            new MapFactory(
+                formationFactory,
+                database.MapFormationsIndex,
+                saveData.Formations,
+                database.FormationRegistry,
+                database.ActorInfoRegistry, 
+                tileRegistry, 
+                new ActorFactory(scriptLibrary), 
+                new DumbTrackingActorFactory(scriptLibrary), 
+                new PathedActorFactory(scriptLibrary),
+                new RandomActorFactory(scriptLibrary), 
+                new SmartTrackingActorFactory(scriptLibrary), 
+                party));
 
         // System factories.
         var damageCalculatorFactory = new DamageCalculatorFactory(database.StatShortNameIndex);
@@ -189,7 +204,6 @@ public static class Program
 
         // Map factories.
         var assetRegistry = gameData.AssetRegistry;
-        var configProvider = gameData.ConfigProvider;
         var tileConfig = configProvider.TileSheetConfig;
         var animatedTileConfig = configProvider.AnimatedTileSheetConfig;
         var characterFieldSpriteConfig = configProvider.CharacterFieldSpriteConfig;
@@ -238,12 +252,6 @@ public static class Program
             assetRegistry, 
             renderSystem, 
             configProvider.EnemyBattleSpriteConfig
-        );
-        var formationFactory = new FormationFactory(
-            database.EnemyDefinitionRegistry, 
-            database.EnemyBattleScriptRegistry, 
-            database.EntityDefinitionRegistry,
-            configProvider.GameConfig.AgilityStatIndex
         );
         var partyBattleRendererFactory = new PartyBattleRendererFactory(
             assetRegistry, 

@@ -1,5 +1,6 @@
 using Data.Models.Maps;
 using Data.Runtime.Actors.Core;
+using Data.Runtime.Formations.Core;
 using Data.Runtime.Maps.Exceptions;
 
 namespace Data.Runtime.Maps.Core;
@@ -10,6 +11,7 @@ public sealed class Map
     private readonly IReadOnlyDictionary<(int, int), TileModel> _tileDictionary;
 
     private Dictionary<(int, int), List<Actor>>? _actorDictionary;
+    private Dictionary<(int, int), Formation> _formationDictionary;
     private Dictionary<string, Actor>? _actorStringDictionary;
 
     public IReadOnlyList<Actor>? Actors { get; private set; }
@@ -24,9 +26,14 @@ public sealed class Map
 
     public string MapBackgroundArtName => _mapModel.BackgroundArtName;
 
-    internal Map(MapModel mapModel, IReadOnlyDictionary<(int, int), TileModel> tileDictionary) 
+    internal Map(
+        MapModel mapModel, 
+        Dictionary<(int, int), Formation> formationDictionary, 
+        IReadOnlyDictionary<(int, int), TileModel> tileDictionary
+    ) 
     {
         _mapModel = mapModel;
+        _formationDictionary = formationDictionary;
         _tileDictionary = tileDictionary;
     }
 
