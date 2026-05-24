@@ -1,3 +1,4 @@
+using Data.Definitions.Actors.Core;
 using Data.Definitions.Formations.Core;
 
 using Data.Models.Formations;
@@ -12,6 +13,12 @@ public sealed class Formation
     private readonly FormationDefinition _definition;
     private readonly FormationModel _model;
 
+    // Map elements.
+    // The actor information of the formation.
+    private readonly ActorInfo _defaultActor;
+    private readonly ActorInfo _onFoundActor;
+
+    // Battle elements.
     // List of entities which contains the stats/statuses of the formation.
     private readonly IReadOnlyList<Entity> _entities;
 
@@ -22,15 +29,20 @@ public sealed class Formation
 
     internal Formation(
         FormationDefinition definition, 
-        FormationModel model,
-        IReadOnlyList<Entity> entities,
+        FormationModel model, 
+        ActorInfo defaultActor, 
+        ActorInfo onFoundActor, 
+        IReadOnlyList<Entity> entities, 
         IReadOnlyList<Enemy> enemies
     ) 
     {
         _definition = definition;
         _model = model;
+
+        _defaultActor = defaultActor;
+        _onFoundActor = onFoundActor;
+
         _entities = entities;
-        
         Enemies = enemies;
     }
 

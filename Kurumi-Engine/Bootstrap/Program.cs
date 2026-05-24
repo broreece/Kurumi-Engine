@@ -172,6 +172,7 @@ public static class Program
         var configProvider = gameData.ConfigProvider;
 
         var formationFactory = new FormationFactory(
+            database.ActorInfoRegistry,
             database.EnemyDefinitionRegistry, 
             database.EnemyBattleScriptRegistry, 
             database.EntityDefinitionRegistry,

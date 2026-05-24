@@ -72,6 +72,7 @@ enemy formation interaction a core part of the gameplay loop.
 - Create clocks for each enemy formation on a map: (High Priority)
     - Each enemy formation we create and place on the map create 2 clocks to control movement and determine when they 
     give up chasing the party.
+- Enemy formations should visually appear on the map in the same way as actors.
 - Implement the AI switching when found and check against the timer when to turn off the found flag: (High Priority)
     - When we check each map event also check each enemy formation on the map in the "onFound" trigger, if found set 
     found flag to true. 

@@ -8,10 +8,12 @@ namespace Data.Runtime.Maps.Core;
 public sealed class Map 
 {
     private readonly MapModel _mapModel;
+
     private readonly IReadOnlyDictionary<(int, int), TileModel> _tileDictionary;
 
+    private readonly Dictionary<(int, int), Formation> _formationDictionary;
+
     private Dictionary<(int, int), List<Actor>>? _actorDictionary;
-    private Dictionary<(int, int), Formation> _formationDictionary;
     private Dictionary<string, Actor>? _actorStringDictionary;
 
     public IReadOnlyList<Actor>? Actors { get; private set; }
@@ -28,13 +30,13 @@ public sealed class Map
 
     internal Map(
         MapModel mapModel, 
-        Dictionary<(int, int), Formation> formationDictionary, 
-        IReadOnlyDictionary<(int, int), TileModel> tileDictionary
+        IReadOnlyDictionary<(int, int), TileModel> tileDictionary,
+        Dictionary<(int, int), Formation> formationDictionary
     ) 
     {
         _mapModel = mapModel;
-        _formationDictionary = formationDictionary;
         _tileDictionary = tileDictionary;
+        _formationDictionary = formationDictionary;
     }
 
     /// <summary>
@@ -63,11 +65,32 @@ public sealed class Map
         _actorDictionary![(xLocation, yLocation)].Add(actor);
     }
 
+    public void AddFormationTo(Formation formation, int xLocation, int yLocation) 
+    {
+        if (!_formationDictionary.ContainsKey((xLocation, yLocation))) 
+        {
+            _formationDictionary[(xLocation, yLocation)] = formation;
+        }
+        else
+        {
+            throw new FormationAlreadyPresentException("A formation was already found at location: " +
+                $"{xLocation}, {yLocation} on map: {_mapModel.MachineName}");
+        }
+    }
+
     public void RemoveActorAt(Actor actor, int xLocation, int yLocation) 
     {
         if (_actorDictionary!.ContainsKey((xLocation, yLocation))) 
         {
             _actorDictionary[(xLocation, yLocation)].Remove(actor);
+        }
+    }
+
+    public void RemoveFormationAt(int xLocation, int yLocation) 
+    {
+        if (_formationDictionary.ContainsKey((xLocation, yLocation))) 
+        {
+            _formationDictionary.Remove((xLocation, yLocation));
         }
     }
 

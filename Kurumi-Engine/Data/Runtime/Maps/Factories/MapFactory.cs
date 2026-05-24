@@ -98,7 +98,7 @@ public sealed class MapFactory
             tileDictionary.Add((tile.X, tile.Y), tile);
         }
 
-        var map = new Map(mapModel, formationDictionary, tileDictionary);
+        var map = new Map(mapModel, tileDictionary, formationDictionary);
 
         // After map is created set actors.
         IReadOnlyList<ActorModel> actorModels = mapModel.Actors;
