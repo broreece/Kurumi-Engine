@@ -1,8 +1,8 @@
 using Data.Definitions.Maps.Base;
-using Data.Runtime.Actors.Controllers.Base;
+using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Spatials;
 
-namespace Data.Runtime.Actors.Controllers.Core;
+namespace Data.Runtime.Maps.Base.Controllers.Core;
 
 /// <summary>
 /// Controller that moves an actor directly toward the party using a naive approach, ignoring obstacles and 

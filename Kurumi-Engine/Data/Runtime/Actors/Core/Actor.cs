@@ -1,7 +1,7 @@
 using Data.Definitions.Actors.Core;
 using Data.Models.Maps;
 using Data.Runtime.Spatials;
-using Data.Runtime.Actors.Controllers.Base;
+using Data.Runtime.Maps.Base.Controllers.Base;
 
 using Game.Scripts.Core;
 
@@ -47,7 +47,7 @@ public class Actor : IMutablePositionProvider, IFacingPositionProvider, IWalkabl
 
     public bool OnFind => _actorInfo.OnFind;
 
-    //IMutablePositionProvider and IFacingPositionProvider functionality.
+    // IMutablePositionProvider and IFacingPositionProvider functionality.
     public int XLocation 
     {
         get => _actorModel.XLocation;

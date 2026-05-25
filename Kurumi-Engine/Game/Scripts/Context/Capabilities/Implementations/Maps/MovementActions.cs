@@ -1,5 +1,5 @@
 using Data.Definitions.Maps.Base;
-using Data.Runtime.Actors.Controllers.Core;
+using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
 

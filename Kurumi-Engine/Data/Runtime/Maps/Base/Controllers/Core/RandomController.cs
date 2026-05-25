@@ -1,7 +1,7 @@
-using Data.Runtime.Actors.Controllers.Base;
+using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Spatials;
 
-namespace Data.Runtime.Actors.Controllers.Core;
+namespace Data.Runtime.Maps.Base.Controllers.Core;
 
 /// <summary>
 /// Controller that moves an actor randomly. It maintains a base movement interval, which is reset after each move.

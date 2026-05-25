@@ -1,4 +1,4 @@
-namespace Data.Runtime.Maps.Base;
+namespace Data.Runtime.Maps.Base.Change;
 
 /// <summary>
 /// Class used to store information regarding a map change request. Stored in game objects.

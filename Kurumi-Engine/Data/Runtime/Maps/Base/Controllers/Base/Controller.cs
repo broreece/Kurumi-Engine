@@ -2,7 +2,7 @@ using Data.Runtime.Spatials;
 
 using Utils.Finishable;
 
-namespace Data.Runtime.Actors.Controllers.Base;
+namespace Data.Runtime.Maps.Base.Controllers.Base;
 
 /// <summary>
 /// Base class for actor controllers, responsible for handling movement timing and execution.

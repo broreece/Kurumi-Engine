@@ -1,7 +1,7 @@
 using Data.Definitions.Actors.Base;
 using Data.Definitions.Maps.Base;
 using Data.Runtime.Actors.Core;
-using Data.Runtime.Maps.Base;
+using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
 using Data.Runtime.Scripts.Execution;
@@ -143,6 +143,8 @@ public sealed class MapState : IGameState
 
         MoveAllActors(deltaTime);
 
+        MoveAllFormations(deltaTime);
+
         // Update animations.
         _walkAnimationManager!.Update(deltaTime);
         _mapAnimationManager!.Update(deltaTime);
@@ -256,6 +258,27 @@ public sealed class MapState : IGameState
                         ExecuteOnFindScript(actor);
                     }
                 }
+            }
+        }
+    }
+
+    private void MoveAllFormations(float deltaTime)
+    {
+        foreach (var formation in _currentMap!.Formations)
+        {
+            var controller = formation.CurrentController;
+            controller.Update(deltaTime);
+            if (controller.CanMove)
+            {
+                // Execute move.
+                var move = controller.GetMove(formation);
+                if (move >= 0) 
+                {
+                    _movementResolver!.TryMove(formation, move);
+                    controller.ExecuteMove();
+                }
+
+                // TODO: Check if party is in range of this singular formation.
             }
         }
     }

@@ -76,16 +76,19 @@ public sealed class MapFactory
     {
         // Create enemy formation. 
         var formationDictionary = new Dictionary<(int, int), Formation>();
+        var formationList = new List<Formation>();
         if (_mapFormationsIndex.TryGetValue(mapModel.MachineName, out var mapFormationsIds)) 
         {
             foreach(var mapFormationId in mapFormationsIds)
             {
                 if (_formationModels.TryGetValue(mapFormationId, out var formationModel)) 
                 {
-                    formationDictionary[(formationModel.X, formationModel.Y)] = _formationFactory.Create(
+                    var formation = _formationFactory.Create(
                         _formationDefinitionRegistry.Get(mapFormationId),
                         formationModel
                     );
+                    formationDictionary[(formationModel.XLocation, formationModel.YLocation)] = formation;
+                    formationList.Add(formation);
                 }
             }
         }
@@ -98,7 +101,7 @@ public sealed class MapFactory
             tileDictionary.Add((tile.X, tile.Y), tile);
         }
 
-        var map = new Map(mapModel, tileDictionary, formationDictionary);
+        var map = new Map(mapModel, tileDictionary, formationDictionary) { Formations = formationList };
 
         // After map is created set actors.
         IReadOnlyList<ActorModel> actorModels = mapModel.Actors;

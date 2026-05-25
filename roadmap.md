@@ -70,8 +70,8 @@ enemy formation interaction a core part of the gameplay loop.
 
 **Steps:**
 - Create clocks for each enemy formation on a map: (High Priority)
-    - Each enemy formation we create and place on the map create 2 clocks to control movement and determine when they 
-    give up chasing the party.
+    - We can use an update deltatime function for the formations, to increase the time, when a time is reached we flip
+    the current AI.
 - Enemy formations should visually appear on the map in the same way as actors.
 - Implement the AI switching when found and check against the timer when to turn off the found flag: (High Priority)
     - When we check each map event also check each enemy formation on the map in the "onFound" trigger, if found set 
@@ -178,7 +178,21 @@ functions.
 
 ---
 
-## Add text window with namebox and choice box ##
+## (ASE-01) Actor scripts stored in enemy formations should execute on find. ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Description:** Actor scripts stored in formations are never executed. We want the on find script to execute if the
+enemy formation finds the party.
+
+**Steps:**
+- Edit the map state function that triggers when an enemy formation finds the party to activate it's stored script.
+
+---
+
+## (TNCB-01) Add text window with namebox (and choice box) ##
 ### Complexity: 1 ###
 ### Independent: 1 ###
 ### Momentum: 2 ###
@@ -187,8 +201,8 @@ functions.
 **Description:** Create the ability to add a new text window with namebox and choice box.
 
 **Steps:**
-- Add a new UI State inherit from dialogue with choice state and then add a namebox component.
-- Create a new script that performs the same function as the previous one but also loads the name box defaults.
+- Add the new UI view using our existing windows as examples.
+- Create a new script that can open this UI view (Ensure freezing takes place the same as choice box).
 
 ---
 

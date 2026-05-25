@@ -1,5 +1,5 @@
 using Data.Runtime.Formations.Base;
-using Data.Runtime.Maps.Base;
+using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Party.Core;
 

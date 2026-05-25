@@ -16,6 +16,7 @@ public sealed class Map
     private Dictionary<(int, int), List<Actor>>? _actorDictionary;
     private Dictionary<string, Actor>? _actorStringDictionary;
 
+    public required IReadOnlyList<Formation> Formations { get; init; }
     public IReadOnlyList<Actor>? Actors { get; private set; }
 
     public int Width => _mapModel.Width;

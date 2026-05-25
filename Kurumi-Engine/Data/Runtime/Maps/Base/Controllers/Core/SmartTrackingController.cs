@@ -1,9 +1,9 @@
-using Data.Runtime.Actors.Controllers.Base;
+using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Spatials;
 using Engine.Systems.Navigation.Core;
 using Engine.Systems.Pathfinding;
 
-namespace Data.Runtime.Actors.Controllers.Core;
+namespace Data.Runtime.Maps.Base.Controllers.Core;
 
 public sealed class SmartTrackingController : TrackedController 
 {

@@ -1,5 +1,5 @@
 using Data.Models.Party;
-using Data.Runtime.Actors.Controllers.Core;
+using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Entities.Core;
 using Data.Runtime.Spatials;
 
