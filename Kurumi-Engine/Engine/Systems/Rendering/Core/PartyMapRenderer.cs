@@ -1,5 +1,5 @@
 using Config.Runtime.Map;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 using Engine.Systems.Rendering.Base;
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;

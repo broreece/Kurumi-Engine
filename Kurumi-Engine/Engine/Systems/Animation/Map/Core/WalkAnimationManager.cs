@@ -1,5 +1,5 @@
 using Data.Runtime.Actors.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 using Data.Runtime.Spatials;
 
 namespace Engine.Systems.Animation.Map.Core;

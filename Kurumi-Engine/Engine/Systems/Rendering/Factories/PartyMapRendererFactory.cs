@@ -1,6 +1,6 @@
 using Config.Runtime.Map;
 using Data.Definitions.Entities.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 using Engine.Assets.Base;
 using Engine.Assets.Core;
 using Engine.Systems.Rendering.Core;

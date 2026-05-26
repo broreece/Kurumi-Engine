@@ -2,7 +2,7 @@ using Data.Definitions.Entities.Abilities.Core;
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 using Data.Runtime.Scripts.Execution;
 
 using Engine.Context.Core;
@@ -117,7 +117,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         var formationModel = saveData.Formations[battle.EnemyFormationId];
         var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
 
-        _formation = gameServices.FormationFactory.Create(formationDefinition, formationModel);
+        _formation = gameServices.FormationFactory.Create(formationDefinition, formationModel, null);
 
         var battleWindowConfig = configProvider.BattleWindowConfig;
         _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;

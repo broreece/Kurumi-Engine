@@ -5,9 +5,12 @@ using Data.Runtime.Maps.Base.Controllers.Base;
 
 using Game.Scripts.Core;
 
+using Engine.Systems.Rendering.Base;
+using Engine.Systems.Navigation.Base;
+
 namespace Data.Runtime.Actors.Core;
 
-public class Actor : IMutablePositionProvider, IFacingPositionProvider, IWalkable 
+public class Actor : IActorAppearance, IFacingPositionProvider, IMutablePositionProvider, IWalkable, ICollisionObject 
 {
     private readonly ActorInfo _actorInfo;
     private readonly ActorModel _actorModel;
@@ -18,16 +21,19 @@ public class Actor : IMutablePositionProvider, IFacingPositionProvider, IWalkabl
 
     // Walk animation variables.
     public bool IsMoving { get; set; } = false;
+
     public int WalkAnimationFrame { get; set; } = 0;
+    
     public int LastX { get; set; }
+
     public int LastY { get; set; }
+
     public float AnimationTimer { get; set; } = 0;
+
     public float MovementProgress { get; set; } = 1;
 
     // Force movement variables.
     public bool MaintainFacing { get; set; } = false;
-
-    public int SpriteId => _actorInfo.SpriteId;
 
     public int Behaviour => _actorInfo.Behaviour;
 
@@ -35,11 +41,7 @@ public class Actor : IMutablePositionProvider, IFacingPositionProvider, IWalkabl
 
     public int TrackingRange => _actorInfo.TrackingRange;
 
-    public bool BelowParty => _actorInfo.BelowParty;
-
     public bool Passable => _actorInfo.Passable;
-
-    public bool SeeThrough => _actorInfo.SeeThrough;
 
     public bool OnTouch => _actorInfo.OnTouch;
 
@@ -72,9 +74,12 @@ public class Actor : IMutablePositionProvider, IFacingPositionProvider, IWalkabl
         _actorModel = actorModel;
     }
 
-    public void AddController(Controller controller) => Controllers.Push(controller);
-    
-    public void PopController() => Controllers.Pop();
+    // Actor movement functions.
+    public int GetSpriteId() => _actorInfo.SpriteId;
+
+    public bool IsBelowParty() => _actorInfo.BelowParty;
+
+    public bool IsSeeThrough() => _actorInfo.SeeThrough;
 
     public void StartMovement() 
     {
@@ -82,4 +87,9 @@ public class Actor : IMutablePositionProvider, IFacingPositionProvider, IWalkabl
         MovementProgress = 0;
         IsMoving = true;
     }
+
+    // Controller functions.
+    public void AddController(Controller controller) => Controllers.Push(controller);
+    
+    public void PopController() => Controllers.Pop();
 }

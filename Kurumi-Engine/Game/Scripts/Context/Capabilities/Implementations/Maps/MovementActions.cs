@@ -1,7 +1,7 @@
 using Data.Definitions.Maps.Base;
 using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Maps.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 

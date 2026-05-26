@@ -1,7 +1,7 @@
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Maps.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 
 using Infrastructure.Persistance.Base;
 

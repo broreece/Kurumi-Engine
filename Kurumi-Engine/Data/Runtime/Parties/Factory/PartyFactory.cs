@@ -1,13 +1,13 @@
-namespace Data.Runtime.Party.Factory;
-
 using Data.Definitions.Entities.Core;
 using Data.Models.Characters;
 using Data.Models.Party;
 using Data.Runtime.Entities.Core;
 using Data.Runtime.Entities.Factories;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 
 using Infrastructure.Database.Base;
+
+namespace Data.Runtime.Parties.Factory;
 
 public sealed class PartyFactory 
 {

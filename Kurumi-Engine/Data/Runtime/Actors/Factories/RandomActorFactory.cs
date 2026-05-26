@@ -20,7 +20,7 @@ public sealed class RandomActorFactory
     public Actor Create(ActorInfo actorInfo, ActorModel actorModel) 
     {
         Stack<Controller> controllers = [];
-        controllers.Push(new RandomController() {Interval = actorInfo.MovementSpeed});
+        controllers.Push(new RandomController() { Interval = actorInfo.MovementSpeed });
         if (actorInfo.ScriptName == null)
         {
             return new Actor(actorInfo, actorModel) 

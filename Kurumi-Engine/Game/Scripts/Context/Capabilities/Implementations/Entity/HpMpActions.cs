@@ -1,6 +1,6 @@
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 
 using Engine.Systems.Combat.Core;
 using Game.Scripts.Context.Capabilities.Exceptions;

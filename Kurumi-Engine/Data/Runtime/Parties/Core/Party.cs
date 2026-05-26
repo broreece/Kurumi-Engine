@@ -3,7 +3,7 @@ using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Entities.Core;
 using Data.Runtime.Spatials;
 
-namespace Data.Runtime.Party.Core;
+namespace Data.Runtime.Parties.Core;
 
 public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, IWalkable 
 {

@@ -1,5 +1,5 @@
 using Data.Runtime.Formations.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 
 using Engine.Context.Core;
 using Engine.State.Base;

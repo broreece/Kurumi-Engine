@@ -33,12 +33,12 @@ public sealed class ActorRendererFactory
         _tileHeight = tileHeight;
     }
 
-    public ActorRenderer Create(IReadOnlyList<Actor> actors) 
+    public ActorRenderer Create(IReadOnlyList<IActorAppearance> actors) 
     {
         // Load actor render data.
         var actorRenderData = new List<ActorRenderData>();
         foreach (var actor in actors) {
-            var actorSprite = _actorSpriteRegistry.Get(actor.SpriteId);
+            var actorSprite = _actorSpriteRegistry.Get(actor.GetSpriteId());
 
             // Load actor texture.
             var actorTexture = _assetRegistry.GetTexture(AssetType.ActorSpriteSheets, actorSprite.SpriteName);

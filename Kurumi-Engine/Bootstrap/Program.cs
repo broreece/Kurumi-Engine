@@ -4,8 +4,8 @@ using Config.Core;
 using Data.Runtime.Actors.Factories;
 using Data.Runtime.Formations.Factories;
 using Data.Runtime.Maps.Factories;
-using Data.Runtime.Party.Core;
-using Data.Runtime.Party.Factory;
+using Data.Runtime.Parties.Core;
+using Data.Runtime.Parties.Factory;
 
 using Engine.Assets.Core;
 using Engine.Context.Containers;
@@ -172,6 +172,7 @@ public static class Program
         var configProvider = gameData.ConfigProvider;
 
         var formationFactory = new FormationFactory(
+            party, 
             database.ActorInfoRegistry,
             database.EnemyDefinitionRegistry, 
             database.EnemyBattleScriptRegistry, 

@@ -1,6 +1,6 @@
 using Data.Definitions.Entities.Statuses.Core;
 using Data.Runtime.Entities.Statuses.Factories;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 
 using Engine.Systems.Statuses.Core;
 

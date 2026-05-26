@@ -71,21 +71,17 @@ enemy formation interaction a core part of the gameplay loop.
 **Steps:**
 - Create clocks for each enemy formation on a map: (High Priority)
     - We can use an update deltatime function for the formations, to increase the time, when a time is reached we flip
-    the current AI.
-- Enemy formations should visually appear on the map in the same way as actors.
+        the current AI.
+    - Each frame the party is in the on found events range we reset the chase clock, if the chase clock reaches the 
+        limit we turn found to false.
 - Implement the AI switching when found and check against the timer when to turn off the found flag: (High Priority)
     - When we check each map event also check each enemy formation on the map in the "onFound" trigger, if found set 
-    found flag to true. 
-    - In the movement function we check each enemy formation, if the found flag is set to true we use it's other AI to 
-    determine movement.
-    - Each frame the party is in the on found events range we reset the chase clock, if the chase clock reaches the 
-    limit we turn found to false.
+        found flag to true.
 - Implement when battle formations die they can be found dead on map and appear under the player: (Mid Priority)
     - If party is victorous in battle set the enemy formations "dead" flag to true.
     - On the map scene when loading sprites for enemy formations check if dead use unique sprite.
     - When checking if a tile is passable check if the tile is passable, if all events are passable and then if there 
-    is an enemy formation on the
-    tile they are dead.
+        is an enemy formation on the tile they are dead.
 
 ---
 
@@ -162,6 +158,8 @@ functions.
 
 **Steps:**
 - Search code for largest functions and break them up (E.G: Map Factories "Create" function).
+- Also whilst refractoring ensure that any using statements are correctly spaced based on type and then subtype;
+    if all main types match.
 
 ---
 
@@ -203,6 +201,22 @@ enemy formation finds the party.
 **Steps:**
 - Add the new UI view using our existing windows as examples.
 - Create a new script that can open this UI view (Ensure freezing takes place the same as choice box).
+
+---
+
+## (EFI-01) Pass enemy formation from map state to battle state. ##
+### Complexity: 2 ###
+### Independent: 3 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Description:** We recreate the enemy formations when a battle starts, this means we pass a nullable navigation grid.
+    We can drastically improve this logic.
+
+**Steps:**
+- In the battle start request we should pass the enemy formation.
+- This means in the battle state we don't need to recreate the enemy formation, it also removes the formation factory
+    dependency in battle state.
 
 ---
 

@@ -1,22 +1,30 @@
+// Data.
 using Data.Definitions.Actors.Base;
 using Data.Definitions.Maps.Base;
+
 using Data.Runtime.Actors.Core;
 using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Maps.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 using Data.Runtime.Scripts.Execution;
 
+// Engine.
 using Engine.Context.Containers;
 using Engine.Context.Core;
+
 using Engine.Input.Context.Contexts;
+
 using Engine.State.Base;
+
 using Engine.Systems.Animation.Map.Core;
 using Engine.Systems.Camera;
 using Engine.Systems.Movement.Core;
 using Engine.Systems.Perception.Core;
 using Engine.Systems.Perception.Factories;
+using Engine.Systems.Rendering.Base;
 using Engine.Systems.Rendering.Core;
 
+// Game.
 using Game.Scripts.Context.Builder.Core;
 using Game.Scripts.Context.Core;
 
@@ -195,7 +203,12 @@ public sealed class MapState : IGameState
     private void InitializeMap() 
     {
         // Map renderers.
-        _actorRenderer = _gameServices!.ActorRendererFactory.Create(_currentMap!.Actors!);
+        // Cast the list of actors and formations to the actor appearance shared interface.
+        IEnumerable<IActorAppearance> combined = _currentMap!.Actors!.Cast<IActorAppearance>().Concat(
+            _currentMap.Formations!.Cast<IActorAppearance>()
+        );
+        _actorRenderer = _gameServices!.ActorRendererFactory!.Create([.. combined]);
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create(_currentMap.Actors!, _party);
         _mapAnimationManager = _gameServices.MapAnimationManagerFactory.Create();
         _mapRenderer = _gameServices.MapRendererFactory.Create(
             _currentMap.Tiles, 
@@ -228,34 +241,37 @@ public sealed class MapState : IGameState
     }
 
     private void MoveAllActors(float deltaTime) {
-        // Move all actors.
-        foreach (var actor in _currentMap!.Actors!) 
+        if (_currentMap!.Actors != null)
         {
-            var controllers = actor.Controllers;
-            if (controllers.Count > 0) 
+            // Move all actors.
+            foreach (var actor in _currentMap!.Actors!) 
             {
-                var currentController = controllers.Peek();
-                // Pop controller if it's finished, otherwise continue updating.
-                if (currentController.IsFinished()) 
+                var controllers = actor.Controllers;
+                if (controllers.Count > 0) 
                 {
-                    actor.PopController();
-                    actor.MaintainFacing = false;
-                }
-                else 
-                {
-                    currentController.Update(deltaTime);
-                    if (currentController.CanMove) 
+                    var currentController = controllers.Peek();
+                    // Pop controller if it's finished, otherwise continue updating.
+                    if (currentController.IsFinished()) 
                     {
-                        // Execute move.
-                        var move = currentController.GetMove(actor);
-                        if (move >= 0) 
+                        actor.PopController();
+                        actor.MaintainFacing = false;
+                    }
+                    else 
+                    {
+                        currentController.Update(deltaTime);
+                        if (currentController.CanMove) 
                         {
-                            _movementResolver!.TryMove(actor, move);
-                            currentController.ExecuteMove();
-                        }
+                            // Execute move.
+                            var move = currentController.GetMove(actor);
+                            if (move >= 0) 
+                            {
+                                _movementResolver!.TryMove(actor, move);
+                                currentController.ExecuteMove();
+                            }
 
-                        // Execute on find script.
-                        ExecuteOnFindScript(actor);
+                            // Execute on find script.
+                            ExecuteOnFindScript(actor);
+                        }
                     }
                 }
             }
@@ -264,21 +280,28 @@ public sealed class MapState : IGameState
 
     private void MoveAllFormations(float deltaTime)
     {
-        foreach (var formation in _currentMap!.Formations)
+        if (_currentMap!.Formations != null)
         {
-            var controller = formation.CurrentController;
-            controller.Update(deltaTime);
-            if (controller.CanMove)
+            // Move all formations.
+            foreach (var formation in _currentMap.Formations)
             {
-                // Execute move.
-                var move = controller.GetMove(formation);
-                if (move >= 0) 
+                var controller = formation.GetCurrentController();
+                if (controller != null)
                 {
-                    _movementResolver!.TryMove(formation, move);
-                    controller.ExecuteMove();
-                }
+                    controller.Update(deltaTime);
+                    if (controller.CanMove)
+                    {
+                        // Execute move.
+                        var move = controller.GetMove(formation);
+                        if (move >= 0) 
+                        {
+                            _movementResolver!.TryMove(formation, move);
+                            controller.ExecuteMove();
+                        }
 
-                // TODO: Check if party is in range of this singular formation.
+                        // TODO: Check if party is in range of this singular formation.
+                    }
+                }
             }
         }
     }
@@ -310,7 +333,12 @@ public sealed class MapState : IGameState
             _currentMap.TileSheetName, 
             _currentMap.MapBackgroundArtName
         );
-        _actorRenderer = _gameServices.ActorRendererFactory!.Create(_currentMap.Actors!);
+
+        // Cast the list of actors and formations to the actor appearance shared interface.
+        IEnumerable<IActorAppearance> combined = _currentMap.Actors!.Cast<IActorAppearance>().Concat(
+            _currentMap.Formations!.Cast<IActorAppearance>()
+        );
+        _actorRenderer = _gameServices.ActorRendererFactory!.Create([.. combined]);
         _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create(_currentMap.Actors!, _party);
 
         var navigationGrid = _gameServices.NavigationGridFactory!.Create(_currentMap);

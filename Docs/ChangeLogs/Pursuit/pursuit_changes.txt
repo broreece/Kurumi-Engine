@@ -24,6 +24,7 @@ now.
 FORMATIONS AND ACTOR CONTROLLERS
 
 - Smart and dumb tracking controllers now have a fixed range of where they can track their targets.
+- Formations now have their own controllers similar to actors. They execute movements based on their current AI.
 
 ---------------------------------------------------------------------
 

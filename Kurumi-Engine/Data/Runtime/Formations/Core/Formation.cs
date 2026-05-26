@@ -8,9 +8,17 @@ using Data.Runtime.Formations.Base;
 using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Spatials;
 
+using Engine.Systems.Navigation.Base;
+using Engine.Systems.Rendering.Base;
+
 namespace Data.Runtime.Formations.Core;
 
-public sealed class Formation : IMutablePositionProvider, IFacingPositionProvider, IWalkable 
+public sealed class Formation : 
+    IActorAppearance, 
+    IFacingPositionProvider, 
+    IMutablePositionProvider, 
+    IWalkable, 
+    ICollisionObject 
 {
     private readonly FormationDefinition _formationDefinition;
     private readonly FormationModel _formationModel;
@@ -19,13 +27,17 @@ public sealed class Formation : IMutablePositionProvider, IFacingPositionProvide
     // The actor information of the formation.
     private readonly ActorInfo _defaultActor;
     private readonly ActorInfo _onFoundActor;
+    private readonly Controller? _defaultController;
+    private readonly Controller? _onFoundController;
 
     // Battle elements.
     // List of entities which contains the stats/statuses of the formation.
     private readonly IReadOnlyList<Entity> _entities;
 
+    // All formations are not passable to avoid infinite battle issues.
+    public bool Passable => false;
+
     // The current state of the formation.
-    public required Controller CurrentController { get; init; }
     public bool Alert { get; set; } = false;
 
     // List of enemies which contains the drawable location and battle scripts of the formation.
@@ -65,6 +77,8 @@ public sealed class Formation : IMutablePositionProvider, IFacingPositionProvide
         FormationModel formationModel, 
         ActorInfo defaultActor, 
         ActorInfo onFoundActor, 
+        Controller? defaultController, 
+        Controller? onFoundController, 
         IReadOnlyList<Entity> entities, 
         IReadOnlyList<Enemy> enemies
     ) 
@@ -74,10 +88,19 @@ public sealed class Formation : IMutablePositionProvider, IFacingPositionProvide
 
         _defaultActor = defaultActor;
         _onFoundActor = onFoundActor;
+        _defaultController = defaultController;
+        _onFoundController = onFoundController;
 
         _entities = entities;
         Enemies = enemies;
     }
+
+    // Actor movement functions.
+    public int GetSpriteId() => Alert ? _onFoundActor.SpriteId : _defaultActor.SpriteId;
+
+    public bool IsBelowParty() => Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty;
+
+    public bool IsSeeThrough() => Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough;
 
     public void StartMovement() 
     {
@@ -86,6 +109,7 @@ public sealed class Formation : IMutablePositionProvider, IFacingPositionProvide
         IsMoving = true;
     }
 
+    // Battle functions.
     public bool IsDefeated()
     {
         foreach (var entityData in StoredEntityData)
@@ -112,4 +136,6 @@ public sealed class Formation : IMutablePositionProvider, IFacingPositionProvide
     }
 
     public Entity GetEntityAt(int entityIndex) => _entities[entityIndex];
+
+    public Controller? GetCurrentController() => Alert ? _onFoundController : _defaultController;
 }

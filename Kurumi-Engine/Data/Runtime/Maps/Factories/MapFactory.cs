@@ -74,25 +74,6 @@ public sealed class MapFactory
 
     public Map Create(MapModel mapModel)
     {
-        // Create enemy formation. 
-        var formationDictionary = new Dictionary<(int, int), Formation>();
-        var formationList = new List<Formation>();
-        if (_mapFormationsIndex.TryGetValue(mapModel.MachineName, out var mapFormationsIds)) 
-        {
-            foreach(var mapFormationId in mapFormationsIds)
-            {
-                if (_formationModels.TryGetValue(mapFormationId, out var formationModel)) 
-                {
-                    var formation = _formationFactory.Create(
-                        _formationDefinitionRegistry.Get(mapFormationId),
-                        formationModel
-                    );
-                    formationDictionary[(formationModel.XLocation, formationModel.YLocation)] = formation;
-                    formationList.Add(formation);
-                }
-            }
-        }
-
         // Create tile and actor dictionary by converting our list to a 2D grid in dictionary form.
         IReadOnlyList<TileModel> tiles = mapModel.Tiles;
         var tileDictionary = new Dictionary<(int, int), TileModel>();
@@ -101,7 +82,7 @@ public sealed class MapFactory
             tileDictionary.Add((tile.X, tile.Y), tile);
         }
 
-        var map = new Map(mapModel, tileDictionary, formationDictionary) { Formations = formationList };
+        var map = new Map(mapModel, tileDictionary);
 
         // After map is created set actors.
         IReadOnlyList<ActorModel> actorModels = mapModel.Actors;
@@ -156,6 +137,27 @@ public sealed class MapFactory
             actorStringDictionary.Add(actorModel.ActorKey, actor);
         }
         map.SetActors(actors, actorDictionary, actorStringDictionary);
+
+        // After map is created set enemy formation. 
+        var formationDictionary = new Dictionary<(int, int), Formation>();
+        var formationList = new List<Formation>();
+        if (_mapFormationsIndex.TryGetValue(mapModel.MachineName, out var mapFormationsIds)) 
+        {
+            foreach(var mapFormationId in mapFormationsIds)
+            {
+                if (_formationModels.TryGetValue(mapFormationId, out var formationModel)) 
+                {
+                    var formation = _formationFactory.Create( 
+                        _formationDefinitionRegistry.Get(mapFormationId),
+                        formationModel, 
+                        navigationGrid
+                    );
+                    formationDictionary[(formationModel.XLocation, formationModel.YLocation)] = formation;
+                    formationList.Add(formation);
+                }
+            }
+        }
+        map.SetFormations(formationList, formationDictionary);
 
         return map;
     }
