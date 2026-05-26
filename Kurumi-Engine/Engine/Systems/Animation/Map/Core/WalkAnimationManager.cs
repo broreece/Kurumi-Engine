@@ -1,4 +1,4 @@
-using Data.Runtime.Actors.Core;
+// Data.
 using Data.Runtime.Parties.Core;
 using Data.Runtime.Spatials;
 
@@ -6,7 +6,7 @@ namespace Engine.Systems.Animation.Map.Core;
 
 public sealed class WalkAnimationManager 
 {
-    private readonly IReadOnlyList<Actor> _actors;
+    private readonly IReadOnlyList<IWalkable> _walkableEntities;
 
     private readonly Party _party;
 
@@ -14,12 +14,13 @@ public sealed class WalkAnimationManager
     private readonly float _partyWalkAnimationLength;
 
     internal WalkAnimationManager(
-        IReadOnlyList<Actor> actors, 
+        IReadOnlyList<IWalkable> walkableEntities, 
         Party party, 
         int walkAnimationFrames, 
-        float partyWalkAnimationLength) 
+        float partyWalkAnimationLength
+    ) 
     {
-        _actors = actors;
+        _walkableEntities = walkableEntities;
         _party = party;
         _walkAnimationFrames = walkAnimationFrames;
         _partyWalkAnimationLength = partyWalkAnimationLength;
@@ -27,10 +28,10 @@ public sealed class WalkAnimationManager
 
     public void Update(float deltaTime) 
     {
-        // Update actors.
-        foreach (var actor in _actors) 
+        // Update walkable entities.
+        foreach (var walkableEntity in _walkableEntities) 
         {
-            UpdateWalkableEntity(actor, actor.MovementSpeed, deltaTime);
+            UpdateWalkableEntity(walkableEntity, walkableEntity.GetMovementSpeed(), deltaTime);
         }
 
         // Update party.

@@ -1,6 +1,8 @@
+// Data.
 using Data.Definitions.Maps.Base;
 using Data.Runtime.Spatials;
 
+// Engine.
 using Engine.Systems.Navigation.Core;
 using Engine.Systems.Perception.Exceptions;
 
@@ -28,18 +30,18 @@ public sealed class VisionResolver
         switch (viewer.Facing) 
         {
             case (int) Direction.North:
-                if (WithinRange(yDifference, range) 
+                if (WithinNegativeRange(yDifference, range) 
                     && InPeripheralVision(xDifference) 
-                    && !OutOfSight(viewer.YLocation, target.YLocation)) 
+                    && !SameCoordinate(viewer.YLocation, target.YLocation)) 
                 {
                     return ClearSight(yDifference, xDifference, viewer.YLocation, viewer.XLocation, target.YLocation);
                 }
                 return false;
                 
             case (int) Direction.East:
-                if (WithinRange(xDifference, range) 
+                if (WithinPositiveRange(xDifference, range) 
                     && InPeripheralVision(yDifference) 
-                    && !OutOfSight(viewer.XLocation, target.XLocation)) 
+                    && !SameCoordinate(viewer.XLocation, target.XLocation)) 
                 {
                     return ClearSight(xDifference, yDifference, viewer.XLocation, viewer.YLocation, target.XLocation);
                 }
@@ -47,9 +49,9 @@ public sealed class VisionResolver
 
 
             case (int) Direction.South:
-                if (WithinRange(yDifference, range) 
+                if (WithinPositiveRange(yDifference, range) 
                     && InPeripheralVision(xDifference) 
-                    && !OutOfSight(viewer.YLocation, target.YLocation)) 
+                    && !SameCoordinate(viewer.YLocation, target.YLocation)) 
                 {
                     return ClearSight(yDifference, xDifference, viewer.YLocation, viewer.XLocation, target.YLocation);
                 }
@@ -57,9 +59,9 @@ public sealed class VisionResolver
 
 
             default:
-                if (WithinRange(xDifference, range) 
+                if (WithinNegativeRange(xDifference, range) 
                     && InPeripheralVision(yDifference) 
-                    && !OutOfSight(viewer.XLocation, target.XLocation)) 
+                    && !SameCoordinate(viewer.XLocation, target.XLocation)) 
                 {
                     return ClearSight(xDifference, yDifference, viewer.XLocation, viewer.YLocation, target.XLocation);
                 }
@@ -68,7 +70,21 @@ public sealed class VisionResolver
         }
     }
 
-    private bool WithinRange(int distance, int range) => range * -1 <= distance && distance <= range;
+    /// <summary>
+    /// Checks if the target is within a positive range of the viewer.
+    /// </summary>
+    /// <param name="distance">The distance between the viewer and target.</param>
+    /// <param name="range">The maximum range of the viewer.</param>
+    /// <returns></returns>
+    private bool WithinPositiveRange(int distance, int range) => distance > 0 && distance <= range;
+
+    /// <summary>
+    /// Checks if the target is within a negative range of the viewer.
+    /// </summary>
+    /// <param name="distance">The distance between the viewer and target.</param>
+    /// <param name="range">The maximum range of the viewer.</param>
+    /// <returns></returns>
+    private bool WithinNegativeRange(int distance, int range) => distance < 0 && distance >= -range;
 
     /// <summary>
     /// Enables checking if a target is in the peripheral vision of an actor instead of just in front of them.
@@ -88,7 +104,7 @@ public sealed class VisionResolver
     /// <param name="viewerLocation">The viewer's relevant location coordinate.</param>
     /// <param name="targetLocation">The target's relevant location coordinate.</param>
     /// <returns>If the target is just out of sight of the viewer.</returns>
-    private bool OutOfSight(int viewerLocation, int targetLocation) => viewerLocation == targetLocation;
+    private bool SameCoordinate(int viewerLocation, int targetLocation) => viewerLocation == targetLocation;
 
     /// <summary>
     /// Function used to check if the target is in clear view of the viewer in terms of passability of tiles and

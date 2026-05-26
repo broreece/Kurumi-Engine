@@ -21,8 +21,8 @@ public sealed class Map
     private Dictionary<string, Actor>? _actorStringDictionary;
 
     // Formations, actors and the collision objects list used for navigation grids.
-    public IReadOnlyList<Formation>? Formations { get; private set; }
-    public IReadOnlyList<Actor>? Actors { get; private set; }
+    public IReadOnlyList<Formation> Formations { get; private set; } = [];
+    public IReadOnlyList<Actor> Actors { get; private set; } = [];
 
     public int Width => _mapModel.Width;
 

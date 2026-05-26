@@ -52,8 +52,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - Focused on enemy formations and battle.
-- Allowing enemy formations to appear on the map.
-- Enemy formations can switch controller based on if they spot the party.
 - Battles can now start and end with dynamic scripts.
 - Further sprite additions for actors to include a dead state for after battle enemy formations.
 
@@ -74,9 +72,6 @@ enemy formation interaction a core part of the gameplay loop.
         the current AI.
     - Each frame the party is in the on found events range we reset the chase clock, if the chase clock reaches the 
         limit we turn found to false.
-- Implement the AI switching when found and check against the timer when to turn off the found flag: (High Priority)
-    - When we check each map event also check each enemy formation on the map in the "onFound" trigger, if found set 
-        found flag to true.
 - Implement when battle formations die they can be found dead on map and appear under the player: (Mid Priority)
     - If party is victorous in battle set the enemy formations "dead" flag to true.
     - On the map scene when loading sprites for enemy formations check if dead use unique sprite.
@@ -217,6 +212,20 @@ enemy formation finds the party.
 - In the battle start request we should pass the enemy formation.
 - This means in the battle state we don't need to recreate the enemy formation, it also removes the formation factory
     dependency in battle state.
+
+---
+
+## (MSC-01) Party movement speed config. ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Description:** We don't have a hard coded movement speed, we need to fix this and store it in the party class.
+
+**Steps:**
+- Create new config for the movement speed.
+- Update the movement controls so holding buttons will continue movement.
 
 ---
 

@@ -1,7 +1,12 @@
+// Data.
 using Data.Definitions.Maps.Base;
+
 using Data.Runtime.Actors.Core;
+using Data.Runtime.Formations.Core;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Spatials;
+
+// Engine.
 using Engine.Systems.Navigation.Core;
 
 namespace Engine.Systems.Movement.Core;
@@ -50,6 +55,12 @@ public sealed class MovementResolver
                 {
                     direction = actor.Facing;
                 }
+            }
+            // Start the mutable position providers walk animation and update formation grid.
+            else if (mutablePositionProvider is Formation formation)
+            {
+                _map.RemoveFormationAt(oldX, oldY);
+                _map.AddFormationTo(formation, newX, newY);
             }
         }
         mutablePositionProvider.Facing = direction;

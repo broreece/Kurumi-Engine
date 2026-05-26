@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Actors.Core;
 using Data.Definitions.Formations.Core;
 
@@ -8,17 +9,14 @@ using Data.Runtime.Formations.Base;
 using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Spatials;
 
+// Engine.
+using Engine.State.States.Maps.Base;
+
 using Engine.Systems.Navigation.Base;
-using Engine.Systems.Rendering.Base;
 
 namespace Data.Runtime.Formations.Core;
 
-public sealed class Formation : 
-    IActorAppearance, 
-    IFacingPositionProvider, 
-    IMutablePositionProvider, 
-    IWalkable, 
-    ICollisionObject 
+public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePositionProvider, ICollisionObject 
 {
     private readonly FormationDefinition _formationDefinition;
     private readonly FormationModel _formationModel;
@@ -95,12 +93,17 @@ public sealed class Formation :
         Enemies = enemies;
     }
 
+    // Tracking range.
+    public int GetTrackingRange() => Alert ? _onFoundActor.TrackingRange : _defaultActor.TrackingRange;
+
     // Actor movement functions.
     public int GetSpriteId() => Alert ? _onFoundActor.SpriteId : _defaultActor.SpriteId;
 
     public bool IsBelowParty() => Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty;
 
     public bool IsSeeThrough() => Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough;
+
+    public int GetMovementSpeed() => Alert ? _onFoundActor.MovementSpeed : _defaultActor.MovementSpeed;
 
     public void StartMovement() 
     {

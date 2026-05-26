@@ -1,16 +1,19 @@
+// Data.
 using Data.Definitions.Actors.Core;
 using Data.Models.Maps;
 using Data.Runtime.Spatials;
 using Data.Runtime.Maps.Base.Controllers.Base;
 
+// Game.
 using Game.Scripts.Core;
 
-using Engine.Systems.Rendering.Base;
+// Engine.
 using Engine.Systems.Navigation.Base;
+using Engine.State.States.Maps.Base;
 
 namespace Data.Runtime.Actors.Core;
 
-public class Actor : IActorAppearance, IFacingPositionProvider, IMutablePositionProvider, IWalkable, ICollisionObject 
+public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvider, ICollisionObject 
 {
     private readonly ActorInfo _actorInfo;
     private readonly ActorModel _actorModel;
@@ -36,8 +39,6 @@ public class Actor : IActorAppearance, IFacingPositionProvider, IMutablePosition
     public bool MaintainFacing { get; set; } = false;
 
     public int Behaviour => _actorInfo.Behaviour;
-
-    public int MovementSpeed => _actorInfo.MovementSpeed;
 
     public int TrackingRange => _actorInfo.TrackingRange;
 
@@ -80,6 +81,8 @@ public class Actor : IActorAppearance, IFacingPositionProvider, IMutablePosition
     public bool IsBelowParty() => _actorInfo.BelowParty;
 
     public bool IsSeeThrough() => _actorInfo.SeeThrough;
+
+    public int GetMovementSpeed() => _actorInfo.MovementSpeed;
 
     public void StartMovement() 
     {

@@ -3,6 +3,7 @@ using Data.Definitions.Actors.Base;
 using Data.Definitions.Maps.Base;
 
 using Data.Runtime.Actors.Core;
+using Data.Runtime.Formations.Core;
 using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Parties.Core;
@@ -15,7 +16,7 @@ using Engine.Context.Core;
 using Engine.Input.Context.Contexts;
 
 using Engine.State.Base;
-
+using Engine.State.States.Maps.Base;
 using Engine.Systems.Animation.Map.Core;
 using Engine.Systems.Camera;
 using Engine.Systems.Movement.Core;
@@ -86,6 +87,10 @@ public sealed class MapState : IGameState
         InitializeMap();
         InitializeInput();
         InitializeCamera();
+
+        // Check if in range of actors or formations.
+        ExecuteAllOnFindScripts();
+        CheckInRangeFormations();
     }
 
     public void OnExit() {}
@@ -144,13 +149,14 @@ public sealed class MapState : IGameState
                 }
             }
 
+            // Check if in range of actors or formations.
             ExecuteAllOnFindScripts();
+            CheckInRangeFormations();
 
             _party.MovingLastFrame = false;
         }
 
         MoveAllActors(deltaTime);
-
         MoveAllFormations(deltaTime);
 
         // Update animations.
@@ -203,19 +209,19 @@ public sealed class MapState : IGameState
     private void InitializeMap() 
     {
         // Map renderers.
-        // Cast the list of actors and formations to the actor appearance shared interface.
-        IEnumerable<IActorAppearance> combined = _currentMap!.Actors!.Cast<IActorAppearance>().Concat(
-            _currentMap.Formations!.Cast<IActorAppearance>()
+        // Cast the list of actors and formations to the map entity shared interface.
+        IEnumerable<IMapEntity> combined = _currentMap!.Actors!.Cast<IMapEntity>().Concat(
+            _currentMap.Formations!.Cast<IMapEntity>()
         );
         _actorRenderer = _gameServices!.ActorRendererFactory!.Create([.. combined]);
-        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create(_currentMap.Actors!, _party);
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create([.. combined], _party);
         _mapAnimationManager = _gameServices.MapAnimationManagerFactory.Create();
         _mapRenderer = _gameServices.MapRendererFactory.Create(
             _currentMap.Tiles, 
             _currentMap.TileSheetName, 
             _currentMap.MapBackgroundArtName
         );
-        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory.Create(_currentMap!.Actors!, _party);
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory.Create([.. combined], _party);
 
         // Party renderer.
         _partyMapRenderer = _gameServices!.PartyMapRendererFactory.Create(_party);
@@ -267,10 +273,13 @@ public sealed class MapState : IGameState
                             {
                                 _movementResolver!.TryMove(actor, move);
                                 currentController.ExecuteMove();
-                            }
 
-                            // Execute on find script.
-                            ExecuteOnFindScript(actor);
+                                // Execute on find script.
+                                ExecuteOnFindScript(actor);
+
+                                // After actor moves visiblity might change.
+                                CheckInRangeFormations();
+                            }
                         }
                     }
                 }
@@ -297,12 +306,32 @@ public sealed class MapState : IGameState
                         {
                             _movementResolver!.TryMove(formation, move);
                             controller.ExecuteMove();
-                        }
 
-                        // TODO: Check if party is in range of this singular formation.
+                            // Check if the party is in range of the formation.
+                            CheckInRangeFormation(formation);
+
+                            // After formation moves visiblity might change.
+                            ExecuteAllOnFindScripts();
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private void CheckInRangeFormations()
+    {
+        foreach (var formation in _currentMap!.Formations!)
+        {
+            CheckInRangeFormation(formation);
+        }
+    }
+
+    private void CheckInRangeFormation(Formation formation) 
+    {
+        if (_visionResolver!.CanSee(formation, _party, formation.GetTrackingRange()))
+        {
+            formation.Alert = true;
         }
     }
 
@@ -335,11 +364,11 @@ public sealed class MapState : IGameState
         );
 
         // Cast the list of actors and formations to the actor appearance shared interface.
-        IEnumerable<IActorAppearance> combined = _currentMap.Actors!.Cast<IActorAppearance>().Concat(
-            _currentMap.Formations!.Cast<IActorAppearance>()
+        IEnumerable<IMapEntity> combined = _currentMap.Actors!.Cast<IMapEntity>().Concat(
+            _currentMap.Formations!.Cast<IMapEntity>()
         );
         _actorRenderer = _gameServices.ActorRendererFactory!.Create([.. combined]);
-        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create(_currentMap.Actors!, _party);
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create([.. combined], _party);
 
         var navigationGrid = _gameServices.NavigationGridFactory!.Create(_currentMap);
         var visionResolverFactory = new VisionResolverFactory(navigationGrid);
