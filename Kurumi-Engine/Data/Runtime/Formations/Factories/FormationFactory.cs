@@ -143,7 +143,10 @@ public sealed class FormationFactory
                 Interval = actorInfo.MovementSpeed
             },
 
-            (int) ActorBehaviour.SmartTracking => new SmartTrackingController(_party, navigationGrid, actorInfo.TrackingRange)
+            (int) ActorBehaviour.SmartTracking => new SmartTrackingController(
+                _party, navigationGrid, 
+                actorInfo.TrackingRange
+            )
             {
                 Interval = actorInfo.MovementSpeed
             },

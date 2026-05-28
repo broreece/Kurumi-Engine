@@ -67,11 +67,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 enemy formation interaction a core part of the gameplay loop.
 
 **Steps:**
-- Create clocks for each enemy formation on a map: (High Priority)
-    - We can use an update deltatime function for the formations, to increase the time, when a time is reached we flip
-        the current AI.
-    - Each frame the party is in the on found events range we reset the chase clock, if the chase clock reaches the 
-        limit we turn found to false.
 - Implement when battle formations die they can be found dead on map and appear under the player: (Mid Priority)
     - If party is victorous in battle set the enemy formations "dead" flag to true.
     - On the map scene when loading sprites for enemy formations check if dead use unique sprite.
@@ -226,6 +221,10 @@ enemy formation finds the party.
 **Steps:**
 - Create new config for the movement speed.
 - Update the movement controls so holding buttons will continue movement.
+
+---
+
+## Refinement milestone reached.
 
 ---
 

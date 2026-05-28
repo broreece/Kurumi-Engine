@@ -9,16 +9,19 @@ namespace Data.Runtime.Maps.Base.Controllers.Core;
 /// </summary>
 public sealed class RandomController : Controller 
 {
-    private readonly int _fixedActorInterval;
-
-    public RandomController() 
-    {
-        _fixedActorInterval = Interval;
-    }
+    private bool _initialized;
+    private int _fixedActorInterval;
 
     public override void ExecuteMove() 
     {
+        if (!_initialized)
+        {
+            _fixedActorInterval = Interval;
+            _initialized = true;
+        }
+
         Interval = _fixedActorInterval;
+        
         base.ExecuteMove();
     }
 

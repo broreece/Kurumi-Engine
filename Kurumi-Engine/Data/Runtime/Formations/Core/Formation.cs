@@ -32,6 +32,9 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
     // List of entities which contains the stats/statuses of the formation.
     private readonly IReadOnlyList<Entity> _entities;
 
+    // Alert timer of the formation.
+    private float _alertTimer;
+
     // All formations are not passable to avoid infinite battle issues.
     public bool Passable => false;
 
@@ -111,6 +114,12 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
         MovementProgress = 0;
         IsMoving = true;
     }
+
+    public void ResetAlertTimer() => _alertTimer = 0;
+
+    public void Update(float deltaTime) => _alertTimer += deltaTime;
+
+    public bool AlertLimitReached() => _alertTimer >= _formationDefinition.SearchTimer;
 
     // Battle functions.
     public bool IsDefeated()

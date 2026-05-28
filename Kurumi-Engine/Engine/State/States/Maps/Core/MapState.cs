@@ -22,7 +22,6 @@ using Engine.Systems.Camera;
 using Engine.Systems.Movement.Core;
 using Engine.Systems.Perception.Core;
 using Engine.Systems.Perception.Factories;
-using Engine.Systems.Rendering.Base;
 using Engine.Systems.Rendering.Core;
 
 // Game.
@@ -157,7 +156,7 @@ public sealed class MapState : IGameState
         }
 
         MoveAllActors(deltaTime);
-        MoveAllFormations(deltaTime);
+        UpdateAllFormations(deltaTime);
 
         // Update animations.
         _walkAnimationManager!.Update(deltaTime);
@@ -287,7 +286,7 @@ public sealed class MapState : IGameState
         }
     }
 
-    private void MoveAllFormations(float deltaTime)
+    private void UpdateAllFormations(float deltaTime)
     {
         if (_currentMap!.Formations != null)
         {
@@ -304,6 +303,9 @@ public sealed class MapState : IGameState
                         var move = controller.GetMove(formation);
                         if (move >= 0) 
                         {
+                            // If the formation can execute moves we reset their alert status.
+                            formation.ResetAlertTimer();
+
                             _movementResolver!.TryMove(formation, move);
                             controller.ExecuteMove();
 
@@ -312,6 +314,16 @@ public sealed class MapState : IGameState
 
                             // After formation moves visiblity might change.
                             ExecuteAllOnFindScripts();
+                        }
+                        // If the formation can not execute any moves increment their alert counter.
+                        else
+                        {
+                            formation.Update(deltaTime);
+                            if (formation.AlertLimitReached())
+                            {
+                                formation.Alert = false;
+                                formation.ResetAlertTimer();
+                            }
                         }
                     }
                 }
