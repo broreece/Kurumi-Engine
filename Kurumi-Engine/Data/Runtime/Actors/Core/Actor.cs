@@ -69,6 +69,11 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
         set => _actorModel.Facing = value;
     }
 
+    // Visibility variables.
+    public bool BelowParty => _actorInfo.BelowParty;
+
+    public bool SeeThrough => _actorInfo.SeeThrough;
+
     internal Actor(ActorInfo actorInfo, ActorModel actorModel)
     {
         _actorInfo = actorInfo;
@@ -77,10 +82,6 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
 
     // Actor movement functions.
     public int GetSpriteId() => _actorInfo.SpriteId;
-
-    public bool IsBelowParty() => _actorInfo.BelowParty;
-
-    public bool IsSeeThrough() => _actorInfo.SeeThrough;
 
     public int GetMovementSpeed() => _actorInfo.MovementSpeed;
 

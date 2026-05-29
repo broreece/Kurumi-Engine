@@ -111,11 +111,8 @@ Allow battle scenes to end either in victory of fail.
 **Steps:**
 - Implement defeat bool function: (Low Priority).
     - Check if the enemy formation has a "OnLoseEvent", if so execute the event.
-    - If not we'll add a TODO to create a game over scene.
 - Implement victory bool function: (Low Priority)
-    - If all enemies are dead return to previous scene.
     - If the event had a "OnWinEvent" execute it after returning to the scene.
-    - Make sure we always check defeat before victory.
 
 ---
 

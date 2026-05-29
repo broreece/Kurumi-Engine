@@ -18,8 +18,8 @@ public interface IActorAppearance
     
     public float MovementProgress { get; }
 
+    public bool BelowParty { get; }
+
     // Actor information functions.
     public int GetSpriteId();
-
-    public bool IsBelowParty();
 }

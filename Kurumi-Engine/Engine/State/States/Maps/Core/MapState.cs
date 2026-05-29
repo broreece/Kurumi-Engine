@@ -319,7 +319,7 @@ public sealed class MapState : IGameState
                         else
                         {
                             formation.Update(deltaTime);
-                            if (formation.AlertLimitReached())
+                            if (formation.AlertLimitReached)
                             {
                                 formation.Alert = false;
                                 formation.ResetAlertTimer();

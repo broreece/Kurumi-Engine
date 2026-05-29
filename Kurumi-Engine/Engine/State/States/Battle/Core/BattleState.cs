@@ -2,6 +2,7 @@ using Data.Definitions.Entities.Abilities.Core;
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
+using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Parties.Core;
 using Data.Runtime.Scripts.Execution;
 
@@ -355,6 +356,7 @@ public sealed class BattleState : IGameState, IBattleMenu
             _currentCharacterIndex = 0;
             QueueAllActions();
             ConductEnemyPhase();
+            CheckIfBattleEnded();
         }
         else
         {
@@ -504,6 +506,22 @@ public sealed class BattleState : IGameState, IBattleMenu
                 var onKillScriptExecution = new ScriptExecution(onKillScript);
                 onKillScriptExecution.RunToPauseOrFinish(_battleScriptContext, _stateContext);
             }
+        }
+    }
+
+    private void CheckIfBattleEnded()
+    {
+        if (LostBattle)
+        {
+            if (_formation.HasOnLoseScript)
+            {
+                // TODO: Game over start here.
+            }
+            _gameContext.GameObjects.BattleEndRequest = new BattleEndRequest();
+        }
+        else if (WonBattle)
+        {
+            _gameContext.GameObjects.BattleEndRequest = new BattleEndRequest();
         }
     }
 

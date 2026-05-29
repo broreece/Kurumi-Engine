@@ -71,6 +71,10 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
         set => _formationModel.Facing = value;
     }
 
+    public bool AlertLimitReached => _alertTimer >= _formationDefinition.SearchTimer;
+
+    public bool HasOnLoseScript => _formationDefinition.OnLoseScript != null;
+
     public required IReadOnlyList<StoredEntityData> StoredEntityData { get; init; }
 
     internal Formation(
@@ -102,9 +106,9 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
     // Actor movement functions.
     public int GetSpriteId() => Alert ? _onFoundActor.SpriteId : _defaultActor.SpriteId;
 
-    public bool IsBelowParty() => Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty;
+    public bool BelowParty => Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty;
 
-    public bool IsSeeThrough() => Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough;
+    public bool SeeThrough => Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough;
 
     public int GetMovementSpeed() => Alert ? _onFoundActor.MovementSpeed : _defaultActor.MovementSpeed;
 
@@ -118,8 +122,6 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
     public void ResetAlertTimer() => _alertTimer = 0;
 
     public void Update(float deltaTime) => _alertTimer += deltaTime;
-
-    public bool AlertLimitReached() => _alertTimer >= _formationDefinition.SearchTimer;
 
     // Battle functions.
     public bool IsDefeated()

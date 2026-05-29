@@ -4,5 +4,5 @@ public interface ICollisionObject
 {
     public bool Passable { get; }
 
-    public bool IsSeeThrough();
+    public bool SeeThrough { get; }
 }
