@@ -47,19 +47,19 @@ public sealed class MovementActions : IMovementActions
             {
                 switch (movement)
                 {
-                    case (int) Direction.North:
+                    case (int) SpriteState.North:
                         yPositionChange --;
                         break;
 
-                    case (int) Direction.East:
+                    case (int) SpriteState.East:
                         xPositionChange ++;
                         break;
 
-                    case (int) Direction.South:
+                    case (int) SpriteState.South:
                         yPositionChange ++;
                         break;
 
-                    case (int) Direction.West:
+                    case (int) SpriteState.West:
                         xPositionChange --;
                         break;
 

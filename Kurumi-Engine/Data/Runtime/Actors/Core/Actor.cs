@@ -63,7 +63,7 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
         set => _actorModel.YLocation = value;
     }
 
-    public int Facing 
+    public int SpriteState 
     {
         get => _actorModel.Facing;
         set => _actorModel.Facing = value;

@@ -7,7 +7,7 @@ public interface IActorAppearance
 
     public int YLocation { get; }
 
-    public int Facing { get; }
+    public int SpriteState { get; }
 
     // Walk animation properties.
     public int WalkAnimationFrame { get; }

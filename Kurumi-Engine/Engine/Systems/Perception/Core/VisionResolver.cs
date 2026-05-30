@@ -1,5 +1,6 @@
 // Data.
 using Data.Definitions.Maps.Base;
+
 using Data.Runtime.Spatials;
 
 // Engine.
@@ -27,9 +28,9 @@ public sealed class VisionResolver
         var xDifference = target.XLocation - viewer.XLocation;
         var yDifference = target.YLocation - viewer.YLocation;
 
-        switch (viewer.Facing) 
+        switch (viewer.SpriteState) 
         {
-            case (int) Direction.North:
+            case (int) SpriteState.North:
                 if (WithinNegativeRange(yDifference, range) 
                     && InPeripheralVision(xDifference) 
                     && !SameCoordinate(viewer.YLocation, target.YLocation)) 
@@ -38,7 +39,7 @@ public sealed class VisionResolver
                 }
                 return false;
                 
-            case (int) Direction.East:
+            case (int) SpriteState.East:
                 if (WithinPositiveRange(xDifference, range) 
                     && InPeripheralVision(yDifference) 
                     && !SameCoordinate(viewer.XLocation, target.XLocation)) 
@@ -48,7 +49,7 @@ public sealed class VisionResolver
                 return false;
 
 
-            case (int) Direction.South:
+            case (int) SpriteState.South:
                 if (WithinPositiveRange(yDifference, range) 
                     && InPeripheralVision(xDifference) 
                     && !SameCoordinate(viewer.YLocation, target.YLocation)) 
@@ -58,7 +59,7 @@ public sealed class VisionResolver
                 return false;
 
 
-            default:
+            case (int) SpriteState.West:
                 if (WithinNegativeRange(xDifference, range) 
                     && InPeripheralVision(yDifference) 
                     && !SameCoordinate(viewer.XLocation, target.XLocation)) 
@@ -66,7 +67,9 @@ public sealed class VisionResolver
                     return ClearSight(xDifference, yDifference, viewer.XLocation, viewer.YLocation, target.XLocation);
                 }
                 return false;
-                
+
+            default:
+                return false;
         }
     }
 

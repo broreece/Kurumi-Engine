@@ -51,24 +51,7 @@ Tickets will also display a brief description, a set of planned steps for comple
 ## Milestone: Pursuit
 **Focus areas:**
 
-- Focused on enemy formations and battle.
-- Battles can now start and end with dynamic scripts.
-- Further sprite additions for actors to include a dead state for after battle enemy formations.
-
----
-
-## (EFMI-01) AI and enemy formation map data implementation ##
-### Complexity: 5 ###
-### Independent: 5 ###
-### Momentum: 4 ###
-### Impact: 5 ###
-
-**Description:** This task is focused on finishing all implementation of enemy formations on the map. This will allow 
-enemy formation interaction a core part of the gameplay loop.
-
-**Steps:**
-- Implement when battle formations die they can be found dead on map and appear under the player: (Mid Priority)
-    - On the map scene when loading sprites for enemy formations check if dead use unique sprite.
+- Focused on improving the battle actions.
 
 ---
 
@@ -78,8 +61,7 @@ enemy formation interaction a core part of the gameplay loop.
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, damage display and 
-more dynamic enemy targetting.
+**Description:** Allow multiple target attack, damage display and more dynamic enemy targetting.
 
 **Steps:** 
 - Implement additional attack options: (Low Priority)
@@ -171,22 +153,6 @@ enemy formation finds the party.
 
 ---
 
-## (EFI-01) Pass enemy formation from map state to battle state. ##
-### Complexity: 2 ###
-### Independent: 3 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:** We recreate the enemy formations when a battle starts, this means we pass a nullable navigation grid.
-    We can drastically improve this logic.
-
-**Steps:**
-- In the battle start request we should pass the enemy formation.
-- This means in the battle state we don't need to recreate the enemy formation, it also removes the formation factory
-    dependency in battle state.
-
----
-
 ## (MSC-01) Party movement speed config. ##
 ### Complexity: 2 ###
 ### Independent: 2 ###
@@ -198,6 +164,21 @@ enemy formation finds the party.
 **Steps:**
 - Create new config for the movement speed.
 - Update the movement controls so holding buttons will continue movement.
+
+---
+
+## (EFE-01) Enemy formation encounters. ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 2 ###
+### Impact: 4 ###
+
+**Description:** Currently battles only start to scripts, we should make it so if a formation catches the party the 
+battle will start.
+
+**Steps:**
+- In map state when getting a move from the formations if the formation is exactly 1 tile away from the party instead
+    of getting a move we should force a battle to start.
 
 ---
 

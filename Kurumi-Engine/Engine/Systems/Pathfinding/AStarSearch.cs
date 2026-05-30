@@ -56,10 +56,10 @@ public sealed class AStarSearch
                 // Check the direction being moved in and then convert that into the enum format.
                 var rightDirection = currentNode.XLocation - originX;
                 var downDirection = currentNode.YLocation - originY;
-                var direction = rightDirection == -1 ? (int) Direction.West : 
-                    rightDirection == 1 ? (int) Direction.East : 
-                    downDirection == -1 ? (int) Direction.North : 
-                    (int) Direction.South;
+                var direction = rightDirection == -1 ? (int) SpriteState.West : 
+                    rightDirection == 1 ? (int) SpriteState.East : 
+                    downDirection == -1 ? (int) SpriteState.North : 
+                    (int) SpriteState.South;
                 return direction;
             }
 

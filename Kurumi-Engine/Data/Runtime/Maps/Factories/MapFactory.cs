@@ -1,9 +1,12 @@
+// Data.
 using Data.Definitions.Actors.Base;
 using Data.Definitions.Actors.Core;
 using Data.Definitions.Formations.Core;
 using Data.Definitions.Maps.Core;
+
 using Data.Models.Formations;
 using Data.Models.Maps;
+
 using Data.Runtime.Actors.Core;
 using Data.Runtime.Actors.Factories;
 using Data.Runtime.Formations.Core;
@@ -11,8 +14,10 @@ using Data.Runtime.Formations.Factories;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Spatials;
 
+// Engine.
 using Engine.Systems.Navigation.Factories;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 
 namespace Data.Runtime.Maps.Factories;
@@ -139,25 +144,29 @@ public sealed class MapFactory
         map.SetActors(actors, actorDictionary, actorStringDictionary);
 
         // After map is created set enemy formation. 
-        var formationDictionary = new Dictionary<(int, int), Formation>();
-        var formationList = new List<Formation>();
+        var formations = new List<Formation>();
+        var formationIdDictionary = new Dictionary<int, Formation>();
+        var formationLocationDictionary = new Dictionary<(int, int), Formation>();
         if (_mapFormationsIndex.TryGetValue(mapModel.MachineName, out var mapFormationsIds)) 
         {
             foreach(var mapFormationId in mapFormationsIds)
             {
                 if (_formationModels.TryGetValue(mapFormationId, out var formationModel)) 
                 {
+
                     var formation = _formationFactory.Create( 
                         _formationDefinitionRegistry.Get(mapFormationId),
                         formationModel, 
                         navigationGrid
                     );
-                    formationDictionary[(formationModel.XLocation, formationModel.YLocation)] = formation;
-                    formationList.Add(formation);
+
+                    formations.Add(formation);
+                    formationLocationDictionary[(formationModel.XLocation, formationModel.YLocation)] = formation;
+                    formationIdDictionary[mapFormationId] = formation;
                 }
             }
         }
-        map.SetFormations(formationList, formationDictionary);
+        map.SetFormations(formations, formationLocationDictionary, formationIdDictionary);
 
         return map;
     }

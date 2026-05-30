@@ -35,9 +35,6 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
     // Alert timer of the formation.
     private float _alertTimer;
 
-    // All formations are not passable to avoid infinite battle issues.
-    public bool Passable => false;
-
     // The current state of the formation.
     public bool Alert { get; set; } = false;
 
@@ -70,10 +67,10 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
         set => _formationModel.YLocation = value;
     }
 
-    public int Facing 
+    public int SpriteState 
     {
-        get => _formationModel.Facing;
-        set => _formationModel.Facing = value;
+        get => _formationModel.SpriteState;
+        set => _formationModel.SpriteState = value;
     }
 
     public bool Dead
@@ -81,6 +78,9 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
         get => _formationModel.Dead;
         set => _formationModel.Dead = value;
     }
+
+    // Formations are passable only if they are dead.
+    public bool Passable => Dead;
 
     public bool AlertLimitReached => _alertTimer >= _formationDefinition.SearchTimer;
 
@@ -97,7 +97,7 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
     // Actor movement properties.
     public int SpriteId => Alert ? _onFoundActor.SpriteId : _defaultActor.SpriteId;
 
-    public bool BelowParty => Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty;
+    public bool BelowParty => Dead || (Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty);
 
     public bool SeeThrough => Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough;
 
@@ -134,6 +134,18 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
         WalkAnimationFrame = 1;
         MovementProgress = 0;
         IsMoving = true;
+    }
+
+    public void Kill()
+    {
+        // Mark as dead.
+        Dead = true;
+        SpriteState = (int) Definitions.Maps.Base.SpriteState.Dead;
+
+        // End walk animation.
+        WalkAnimationFrame = 0;
+        MovementProgress = 1;
+        IsMoving = false;
     }
 
     public void ResetAlertTimer() => _alertTimer = 0;

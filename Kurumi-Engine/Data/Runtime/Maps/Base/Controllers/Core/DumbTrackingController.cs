@@ -41,12 +41,12 @@ public sealed class DumbTrackingController : TrackedController
         // If x distance is greater then y distance.
         if (xDiff > yDiff) 
         {
-            return actorXLocation > targetXLocation ? (int) Direction.West : (int) Direction.East;
+            return actorXLocation > targetXLocation ? (int) SpriteState.West : (int) SpriteState.East;
         }
         // If y distance is greater then x distance.
         else if (yDiff > xDiff) 
         {
-            return actorYLocation > targetYLocation ? (int) Direction.North : (int) Direction.South;
+            return actorYLocation > targetYLocation ? (int) SpriteState.North : (int) SpriteState.South;
         }
         // If y and x distance is same but there is a possible movement.
         else if (xDiff == yDiff && xDiff > 0) 

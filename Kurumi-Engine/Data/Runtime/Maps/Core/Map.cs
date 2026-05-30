@@ -15,10 +15,11 @@ public sealed class Map
 
     private readonly IReadOnlyDictionary<(int, int), TileModel> _tileDictionary;
 
-    private Dictionary<(int, int), Formation> _formationDictionary = [];
+    private Dictionary<(int, int), Formation> _formationLocationDictionary = [];
+    private Dictionary<int, Formation> _formationIdDictionary = [];
 
-    private Dictionary<(int, int), List<Actor>>? _actorDictionary;
-    private Dictionary<string, Actor>? _actorStringDictionary;
+    private Dictionary<(int, int), List<Actor>> _actorDictionary = [];
+    private Dictionary<string, Actor> _actorStringDictionary = [];
 
     // Formations, actors and the collision objects list used for navigation grids.
     public IReadOnlyList<Formation> Formations { get; private set; } = [];
@@ -44,14 +45,17 @@ public sealed class Map
     /// Function used after the map's creation to set the formations in the map.
     /// </summary>
     /// <param name="formations">The list of all formations.</param>
-    /// <param name="formationDictionary">The dictionary of formations at each location.</param>
+    /// <param name="formationLocationDictionary">The dictionary of formations at each location.</param>
+    /// <param name="formationIdDictionary">The dictionary of formations using their ID as keys.</param>
     public void SetFormations(
         IReadOnlyList<Formation> formations, 
-        Dictionary<(int, int), Formation> formationDictionary
+        Dictionary<(int, int), Formation> formationLocationDictionary,
+        Dictionary<int, Formation> formationIdDictionary
     )
     {
         Formations = formations;
-        _formationDictionary = formationDictionary;
+        _formationLocationDictionary = formationLocationDictionary;
+        _formationIdDictionary = formationIdDictionary;
     }
 
     /// <summary>
@@ -63,7 +67,7 @@ public sealed class Map
     public void SetActors(
         IReadOnlyList<Actor> actors, 
         Dictionary<(int, int), List<Actor>> actorDictionary,
-        Dictionary<string, Actor>? actorStringDictionary
+        Dictionary<string, Actor> actorStringDictionary
     ) 
     {
         Actors = actors;
@@ -73,7 +77,7 @@ public sealed class Map
 
     public void AddActorTo(Actor actor, int xLocation, int yLocation) 
     {
-        if (!_actorDictionary!.ContainsKey((xLocation, yLocation))) 
+        if (!_actorDictionary.ContainsKey((xLocation, yLocation))) 
         {
             _actorDictionary[(xLocation, yLocation)] = [];
         }
@@ -82,9 +86,9 @@ public sealed class Map
 
     public void AddFormationTo(Formation formation, int xLocation, int yLocation) 
     {
-        if (!_formationDictionary.ContainsKey((xLocation, yLocation))) 
+        if (!_formationLocationDictionary.ContainsKey((xLocation, yLocation))) 
         {
-            _formationDictionary[(xLocation, yLocation)] = formation;
+            _formationLocationDictionary[(xLocation, yLocation)] = formation;
         }
         else
         {
@@ -95,7 +99,7 @@ public sealed class Map
 
     public void RemoveActorAt(Actor actor, int xLocation, int yLocation) 
     {
-        if (_actorDictionary!.ContainsKey((xLocation, yLocation))) 
+        if (_actorDictionary.ContainsKey((xLocation, yLocation))) 
         {
             _actorDictionary[(xLocation, yLocation)].Remove(actor);
         }
@@ -103,9 +107,9 @@ public sealed class Map
 
     public void RemoveFormationAt(int xLocation, int yLocation) 
     {
-        if (_formationDictionary.ContainsKey((xLocation, yLocation))) 
+        if (_formationLocationDictionary.ContainsKey((xLocation, yLocation))) 
         {
-            _formationDictionary.Remove((xLocation, yLocation));
+            _formationLocationDictionary.Remove((xLocation, yLocation));
         }
     }
 
@@ -120,16 +124,16 @@ public sealed class Map
 
     public Formation? GetFormationAt(int xLocation, int yLocation) 
     {
-        if (_formationDictionary!.ContainsKey((xLocation, yLocation))) 
+        if (_formationLocationDictionary.ContainsKey((xLocation, yLocation))) 
         {
-            return _formationDictionary[(xLocation, yLocation)];
+            return _formationLocationDictionary[(xLocation, yLocation)];
         }
         return null;
     }
 
     public IReadOnlyList<Actor> GetActorsAt(int xLocation, int yLocation) 
     {
-        if (_actorDictionary!.ContainsKey((xLocation, yLocation))) 
+        if (_actorDictionary.ContainsKey((xLocation, yLocation))) 
         {
             return _actorDictionary[(xLocation, yLocation)];
         }

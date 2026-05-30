@@ -44,7 +44,7 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
         set => PartyModel.YLocation = value;
     }
 
-    public int Facing 
+    public int SpriteState 
     {
         get => PartyModel.Facing;
         set => PartyModel.Facing = value;

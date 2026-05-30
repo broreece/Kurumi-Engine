@@ -27,8 +27,8 @@ public sealed class MovementResolver
 
     public void TryMove(IMutablePositionProvider mutablePositionProvider, int direction) 
     {
-        int xChange = direction == (int) Direction.West ? -1 : direction == (int) Direction.East ? 1 : 0;
-        int yChange = direction == (int) Direction.South ? 1 : direction == (int) Direction.North ? -1 : 0;
+        int xChange = direction == (int) SpriteState.West ? -1 : direction == (int) SpriteState.East ? 1 : 0;
+        int yChange = direction == (int) SpriteState.South ? 1 : direction == (int) SpriteState.North ? -1 : 0;
         var oldX = mutablePositionProvider.XLocation;
         var oldY = mutablePositionProvider.YLocation;
         var newX = mutablePositionProvider.XLocation + xChange;
@@ -53,7 +53,7 @@ public sealed class MovementResolver
                 // maintaining facing direction.
                 if (actor.MaintainFacing) 
                 {
-                    direction = actor.Facing;
+                    direction = actor.SpriteState;
                 }
             }
             // Start the mutable position providers walk animation and update formation grid.
@@ -63,6 +63,6 @@ public sealed class MovementResolver
                 _map.AddFormationTo(formation, newX, newY);
             }
         }
-        mutablePositionProvider.Facing = direction;
+        mutablePositionProvider.SpriteState = direction;
     } 
 }

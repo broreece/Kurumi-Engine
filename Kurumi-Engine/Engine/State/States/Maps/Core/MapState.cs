@@ -110,18 +110,18 @@ public sealed class MapState : IGameState
             // Get location of party.
             var partyX = _party.XLocation;
             var partyY = _party.YLocation;
-            var facing = _party.Facing;
+            var facing = _party.SpriteState;
 
             // Calculate the location being interacted with.
-            var xChange = facing == (int) Direction.West ? -1 : facing == (int) Direction.East ? 1 : 0;
-            var yChange = facing == (int) Direction.South ? 1 : facing == (int) Direction.North ? -1 : 0;
+            var xChange = facing == (int) SpriteState.West ? -1 : facing == (int) SpriteState.East ? 1 : 0;
+            var yChange = facing == (int) SpriteState.South ? 1 : facing == (int) SpriteState.North ? -1 : 0;
             var targetX = partyX + xChange;
             var targetY = partyY + yChange;
             var newFacing = facing == 
-                (int) Direction.North ? (int) Direction.South 
-                : facing == (int) Direction.East ? (int) Direction.West 
-                : facing == (int) Direction.South ? (int) Direction.North 
-                : (int) Direction.East;
+                (int) SpriteState.North ? (int) SpriteState.South 
+                : facing == (int) SpriteState.East ? (int) SpriteState.West 
+                : facing == (int) SpriteState.South ? (int) SpriteState.North 
+                : (int) SpriteState.East;
 
             // Set new facing direction if the actor turns and activate script.
             var actors = _currentMap!.GetActorsAt(targetX, targetY);
@@ -129,7 +129,7 @@ public sealed class MapState : IGameState
             {
                 if ((int) ActorBehaviour.StationaryDoesNotTurn != actor.Behaviour) 
                 {
-                    actor.Facing = newFacing;
+                    actor.SpriteState = newFacing;
                 }
 
                 // Load potential script and activate.
@@ -300,36 +300,38 @@ public sealed class MapState : IGameState
             // Move all formations.
             foreach (var formation in _currentMap.Formations)
             {
-                var controller = formation.GetCurrentController();
-                if (controller != null)
-                {
-                    controller.Update(deltaTime);
-                    if (controller.CanMove)
+                if (!formation.Dead) {
+                    var controller = formation.GetCurrentController();
+                    if (controller != null)
                     {
-                        // Execute move.
-                        var move = controller.GetMove(formation);
-                        if (move >= 0) 
+                        controller.Update(deltaTime);
+                        if (controller.CanMove)
                         {
-                            // If the formation can execute moves we reset their alert status.
-                            formation.ResetAlertTimer();
-
-                            _movementResolver!.TryMove(formation, move);
-                            controller.ExecuteMove();
-
-                            // Check if the party is in range of the formation.
-                            CheckInRangeFormation(formation);
-
-                            // After formation moves visiblity might change.
-                            ExecuteAllOnFindScripts();
-                        }
-                        // If the formation can not execute any moves increment their alert counter.
-                        else
-                        {
-                            formation.Update(deltaTime);
-                            if (formation.AlertLimitReached)
+                            // Execute move.
+                            var move = controller.GetMove(formation);
+                            if (move >= 0) 
                             {
-                                formation.Alert = false;
+                                // If the formation can execute moves we reset their alert status.
                                 formation.ResetAlertTimer();
+
+                                _movementResolver!.TryMove(formation, move);
+                                controller.ExecuteMove();
+
+                                // Check if the party is in range of the formation.
+                                CheckInRangeFormation(formation);
+
+                                // After formation moves visiblity might change.
+                                ExecuteAllOnFindScripts();
+                            }
+                            // If the formation can not execute any moves increment their alert counter.
+                            else
+                            {
+                                formation.Update(deltaTime);
+                                if (formation.AlertLimitReached)
+                                {
+                                    formation.Alert = false;
+                                    formation.ResetAlertTimer();
+                                }
                             }
                         }
                     }

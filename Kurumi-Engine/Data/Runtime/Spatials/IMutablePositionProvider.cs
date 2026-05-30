@@ -13,7 +13,7 @@ public interface IMutablePositionProvider : IPositionProvider
 
     public int LastY { set; }
 
-    public int Facing { set; }
+    public int SpriteState { set; }
 
     public void StartMovement();
 }

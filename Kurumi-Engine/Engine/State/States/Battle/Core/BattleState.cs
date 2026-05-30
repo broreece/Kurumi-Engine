@@ -120,16 +120,9 @@ public sealed class BattleState : IGameState, IBattleMenu
         var gameData = _gameContext.GameData;
         var gameServices = _gameContext.GameServices;
         var database = gameData.GameDatabase;
-        var formationRegistry = database.FormationRegistry;
-        var saveData = gameContext.GameObjects.SaveData;
         var configProvider = gameContext.GameData.ConfigProvider;
 
         _abilityRegistry = database.AbilityRegistry;
-
-        var formationModel = saveData.Formations[battle.EnemyFormationId];
-        var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
-
-        _formation = gameServices.FormationFactory.Create(formationDefinition, formationModel, null);
 
         var battleWindowConfig = configProvider.BattleWindowConfig;
         _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
@@ -149,6 +142,22 @@ public sealed class BattleState : IGameState, IBattleMenu
         );
         _uiRoot = _view.UIElement;
         _uiRenderSystem = gameServices.UIRenderSystem;
+
+        // Check if the battle started from a formation encounter or a script.
+        if (battle.Formation != null)
+        {
+            _formation = battle.Formation;
+        }
+        else
+        {
+            var formationRegistry = database.FormationRegistry;
+            var saveData = gameContext.GameObjects.SaveData;
+
+            var formationModel = saveData.Formations[battle.EnemyFormationId!];
+            var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
+
+            _formation = gameServices.FormationFactory.Create(formationDefinition, formationModel, null);
+        }
     }
 
     public void OnEnter()
@@ -535,7 +544,8 @@ public sealed class BattleState : IGameState, IBattleMenu
         }
         else if (WonBattle)
         {
-            _formation.Dead = true;
+            _formation.Kill();
+
             _gameContext.GameObjects.BattleEndRequest = new BattleEndRequest() { Script = _formation.OnWinScript };
         }
     }
