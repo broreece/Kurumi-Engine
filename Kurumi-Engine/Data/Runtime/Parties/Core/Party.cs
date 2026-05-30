@@ -51,7 +51,7 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
     }
 
     // TODO: (MSC-01) Implement new config here.
-    public int GetMovementSpeed() => 1;
+    public int MovementSpeed => 1;
 
     /// <summary>
     /// Function that starts the movement of the party.

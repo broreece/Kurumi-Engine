@@ -31,7 +31,7 @@ public sealed class MovementActions : IMovementActions
         var actor = _map.GetActor(actorKey);
         actor.MaintainFacing = keepDirection;
 
-        var controller = new PathedController(canFinish: true, path) { Interval = actor.GetMovementSpeed() };
+        var controller = new PathedController(canFinish: true, path) { Interval = actor.MovementSpeed };
         actor.AddController(controller);
 
         return controller;

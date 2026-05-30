@@ -2,14 +2,14 @@ namespace Engine.Systems.Rendering.Base;
 
 public interface IActorAppearance
 {
-    // Location variables.
+    // Location properties.
     public int XLocation { get; }
 
     public int YLocation { get; }
 
     public int Facing { get; }
 
-    // Walk animation variables.
+    // Walk animation properties.
     public int WalkAnimationFrame { get; }
 
     public int LastX { get; }
@@ -20,6 +20,6 @@ public interface IActorAppearance
 
     public bool BelowParty { get; }
 
-    // Actor information functions.
-    public int GetSpriteId();
+    // Actor information properties.
+    public int SpriteId { get; }
 }

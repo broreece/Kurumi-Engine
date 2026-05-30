@@ -68,10 +68,7 @@ enemy formation interaction a core part of the gameplay loop.
 
 **Steps:**
 - Implement when battle formations die they can be found dead on map and appear under the player: (Mid Priority)
-    - If party is victorous in battle set the enemy formations "dead" flag to true.
     - On the map scene when loading sprites for enemy formations check if dead use unique sprite.
-    - When checking if a tile is passable check if the tile is passable, if all events are passable and then if there 
-        is an enemy formation on the tile they are dead.
 
 ---
 
@@ -96,23 +93,6 @@ more dynamic enemy targetting.
     battle scene:
     - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
     same in both.
-
----
-
-## (BSE-03) Battle scene enhancements 3 ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:**
-Allow battle scenes to end either in victory of fail.
-
-**Steps:**
-- Implement defeat bool function: (Low Priority).
-    - Check if the enemy formation has a "OnLoseEvent", if so execute the event.
-- Implement victory bool function: (Low Priority)
-    - If the event had a "OnWinEvent" execute it after returning to the scene.
 
 ---
 

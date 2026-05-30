@@ -74,16 +74,16 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
 
     public bool SeeThrough => _actorInfo.SeeThrough;
 
+    // Actor movement functions.
+    public int SpriteId => _actorInfo.SpriteId;
+
+    public int MovementSpeed => _actorInfo.MovementSpeed;
+
     internal Actor(ActorInfo actorInfo, ActorModel actorModel)
     {
         _actorInfo = actorInfo;
         _actorModel = actorModel;
     }
-
-    // Actor movement functions.
-    public int GetSpriteId() => _actorInfo.SpriteId;
-
-    public int GetMovementSpeed() => _actorInfo.MovementSpeed;
 
     public void StartMovement() 
     {

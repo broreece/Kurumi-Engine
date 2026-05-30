@@ -46,10 +46,15 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
 
     // Walk animation variables.
     public bool IsMoving { get; set; } = false;
+
     public int WalkAnimationFrame { get; set; } = 0;
+
     public int LastX { get; set; }
+
     public int LastY { get; set; }
+
     public float AnimationTimer { get; set; } = 0;
+    
     public float MovementProgress { get; set; } = 1;
 
     // IMutablePositionProvider and IFacingPositionProvider functionality.
@@ -71,10 +76,34 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
         set => _formationModel.Facing = value;
     }
 
+    public bool Dead
+    {
+        get => _formationModel.Dead;
+        set => _formationModel.Dead = value;
+    }
+
     public bool AlertLimitReached => _alertTimer >= _formationDefinition.SearchTimer;
+
+    // Information regarding the formations scripts.
+    public string? OnWinScript => _formationDefinition.OnWinScript;
+
+    public string? OnLoseScript => _formationDefinition.OnLoseScript;
 
     public bool HasOnLoseScript => _formationDefinition.OnLoseScript != null;
 
+    // Tracking range.
+    public int TrackingRange => Alert ? _onFoundActor.TrackingRange : _defaultActor.TrackingRange;
+
+    // Actor movement properties.
+    public int SpriteId => Alert ? _onFoundActor.SpriteId : _defaultActor.SpriteId;
+
+    public bool BelowParty => Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty;
+
+    public bool SeeThrough => Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough;
+
+    public int MovementSpeed => Alert ? _onFoundActor.MovementSpeed : _defaultActor.MovementSpeed;
+
+    // The stored entity data of formations.
     public required IReadOnlyList<StoredEntityData> StoredEntityData { get; init; }
 
     internal Formation(
@@ -99,18 +128,6 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
         _entities = entities;
         Enemies = enemies;
     }
-
-    // Tracking range.
-    public int GetTrackingRange() => Alert ? _onFoundActor.TrackingRange : _defaultActor.TrackingRange;
-
-    // Actor movement functions.
-    public int GetSpriteId() => Alert ? _onFoundActor.SpriteId : _defaultActor.SpriteId;
-
-    public bool BelowParty => Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty;
-
-    public bool SeeThrough => Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough;
-
-    public int GetMovementSpeed() => Alert ? _onFoundActor.MovementSpeed : _defaultActor.MovementSpeed;
 
     public void StartMovement() 
     {

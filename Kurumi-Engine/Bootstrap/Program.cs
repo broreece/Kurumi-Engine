@@ -89,7 +89,7 @@ public static class Program
             (uint) configProvider.DisplayConfig.ViewHeight 
         );
         var stateManager = new StateManager(
-            new MapState(gameContext, stateContext), 
+            new MapState(gameContext, stateContext, startingScript: null), 
             stateContext, 
             gameServices.InputMapper,
             gameServices.RenderSystem,
@@ -333,7 +333,7 @@ public static class Program
             }
             else if (gameObjects.BattleEndRequest != null)
             {
-                stateManager.ChangeState(new MapState(gameContext,stateContext));
+                stateManager.ChangeState(new MapState(gameContext, stateContext, gameObjects.BattleEndRequest.Script));
                 gameObjects.BattleEndRequest = null;
             }
 
