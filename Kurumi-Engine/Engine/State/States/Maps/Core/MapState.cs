@@ -43,6 +43,9 @@ public sealed class MapState : IGameState
     // Party.
     private readonly Party _party;
 
+    // Starting script.
+    private readonly string? _startingScript;
+
     // Cached objects.
     private GameObjects? _gameObjects;
     private GameData? _gameData;
@@ -72,11 +75,12 @@ public sealed class MapState : IGameState
     // Script context.
     private ScriptContext? _mapScriptContext;
 
-    public MapState(GameContext gameContext, StateContext stateContext) 
+    public MapState(GameContext gameContext, StateContext stateContext, string? startingScript) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
         _party = gameContext.GameObjects.Party;
+        _startingScript = startingScript;
     }
 
     public void OnEnter() 
@@ -86,6 +90,9 @@ public sealed class MapState : IGameState
         InitializeMap();
         InitializeInput();
         InitializeCamera();
+
+        // Execute any starting scripts.
+        ExecuteStartingScripts();
 
         // Check if in range of actors or formations.
         ExecuteAllOnFindScripts();
@@ -319,7 +326,7 @@ public sealed class MapState : IGameState
                         else
                         {
                             formation.Update(deltaTime);
-                            if (formation.AlertLimitReached())
+                            if (formation.AlertLimitReached)
                             {
                                 formation.Alert = false;
                                 formation.ResetAlertTimer();
@@ -328,6 +335,15 @@ public sealed class MapState : IGameState
                     }
                 }
             }
+        }
+    }
+
+    private void ExecuteStartingScripts()
+    {
+        if (_startingScript != null)
+        {
+            var script = _gameContext.GameServices.ScriptLibrary.GetMapScript(_startingScript);
+            _stateContext.AddExecutingScript(new ScriptExecution(script));
         }
     }
 
@@ -341,7 +357,7 @@ public sealed class MapState : IGameState
 
     private void CheckInRangeFormation(Formation formation) 
     {
-        if (_visionResolver!.CanSee(formation, _party, formation.GetTrackingRange()))
+        if (_visionResolver!.CanSee(formation, _party, formation.TrackingRange))
         {
             formation.Alert = true;
         }

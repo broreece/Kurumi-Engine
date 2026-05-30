@@ -47,7 +47,7 @@ public sealed class NavigationGrid
         }
         foreach (var actor in actors) 
         {
-            if (!actor.IsSeeThrough()) 
+            if (!actor.SeeThrough) 
             {
                 return false;
             }

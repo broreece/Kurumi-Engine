@@ -31,7 +31,7 @@ public sealed class WalkAnimationManager
         // Update walkable entities.
         foreach (var walkableEntity in _walkableEntities) 
         {
-            UpdateWalkableEntity(walkableEntity, walkableEntity.GetMovementSpeed(), deltaTime);
+            UpdateWalkableEntity(walkableEntity, walkableEntity.MovementSpeed, deltaTime);
         }
 
         // Update party.

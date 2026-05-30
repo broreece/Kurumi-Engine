@@ -1,29 +1,41 @@
+// Data.
 using Data.Definitions.Entities.Abilities.Core;
+
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
+using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Parties.Core;
 using Data.Runtime.Scripts.Execution;
 
+// Engine.
 using Engine.Context.Core;
+
 using Engine.Input.Context.Contexts;
+
 using Engine.State.Base;
 using Engine.State.States.Battle.Base;
 using Engine.State.States.Battle.Exceptions;
+
 using Engine.Systems.Camera;
 using Engine.Systems.Rendering.Core;
+
 using Engine.UI.Elements;
 using Engine.UI.Render;
 
+// Game.
 using Game.Scripts.Context.Builder.Core;
 using Game.Scripts.Context.Core;
 using Game.Scripts.Context.Variables.Base;
 using Game.Scripts.Library;
+
 using Game.UI.Views;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.System;
 
 namespace Engine.State.States.Battle.Core;
@@ -355,6 +367,7 @@ public sealed class BattleState : IGameState, IBattleMenu
             _currentCharacterIndex = 0;
             QueueAllActions();
             ConductEnemyPhase();
+            CheckIfBattleEnded();
         }
         else
         {
@@ -504,6 +517,26 @@ public sealed class BattleState : IGameState, IBattleMenu
                 var onKillScriptExecution = new ScriptExecution(onKillScript);
                 onKillScriptExecution.RunToPauseOrFinish(_battleScriptContext, _stateContext);
             }
+        }
+    }
+
+    private void CheckIfBattleEnded()
+    {
+        if (LostBattle)
+        {
+            if (_formation.HasOnLoseScript)
+            {
+                _gameContext.GameObjects.BattleEndRequest = new BattleEndRequest() { Script = _formation.OnLoseScript };
+            }
+            else
+            {
+                // TODO: Game over start here.
+            }
+        }
+        else if (WonBattle)
+        {
+            _formation.Dead = true;
+            _gameContext.GameObjects.BattleEndRequest = new BattleEndRequest() { Script = _formation.OnWinScript };
         }
     }
 

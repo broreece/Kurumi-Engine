@@ -1,12 +1,14 @@
-// Engine classes.
+// Config.
 using Config.Core;
 
+// Data.
 using Data.Runtime.Actors.Factories;
 using Data.Runtime.Formations.Factories;
 using Data.Runtime.Maps.Factories;
 using Data.Runtime.Parties.Core;
 using Data.Runtime.Parties.Factory;
 
+// Engine.
 using Engine.Assets.Core;
 using Engine.Context.Containers;
 using Engine.Context.Core;
@@ -25,17 +27,18 @@ using Engine.Systems.Rendering.Factories;
 using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
+// Game.
 using Game.Maps.Loader;
 using Game.Maps.Registry;
 using Game.Maps.Services;
 using Game.Scripts.Library;
 
+// Infrastructure.
 using Infrastructure.Database.Database;
 using Infrastructure.Persistance.Base;
 using Infrastructure.Persistance.Services;
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
-
 
 // External libraries.
 using SFML.System;
@@ -86,7 +89,7 @@ public static class Program
             (uint) configProvider.DisplayConfig.ViewHeight 
         );
         var stateManager = new StateManager(
-            new MapState(gameContext, stateContext), 
+            new MapState(gameContext, stateContext, startingScript: null), 
             stateContext, 
             gameServices.InputMapper,
             gameServices.RenderSystem,
@@ -327,6 +330,11 @@ public static class Program
                     gameObjects.BattleStartRequest
                 ));
                 gameObjects.BattleStartRequest = null;
+            }
+            else if (gameObjects.BattleEndRequest != null)
+            {
+                stateManager.ChangeState(new MapState(gameContext, stateContext, gameObjects.BattleEndRequest.Script));
+                gameObjects.BattleEndRequest = null;
             }
 
             window.DispatchEvents();
