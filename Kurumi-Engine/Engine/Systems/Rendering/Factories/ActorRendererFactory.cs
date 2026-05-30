@@ -33,7 +33,7 @@ public sealed class ActorRendererFactory
         _tileHeight = tileHeight;
     }
 
-    public ActorRenderer Create(IReadOnlyList<Actor> actors) 
+    public ActorRenderer Create(IReadOnlyList<IActorAppearance> actors) 
     {
         // Load actor render data.
         var actorRenderData = new List<ActorRenderData>();

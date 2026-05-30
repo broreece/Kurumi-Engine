@@ -49,7 +49,7 @@ public sealed class ActorRenderer
 
             var textureRect = new IntRect(
                 actor.WalkAnimationFrame * actorWidth, 
-                actor.Facing * actorHeight, 
+                actor.SpriteState * actorHeight, 
                 actorWidth, 
                 actorHeight
             );

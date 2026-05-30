@@ -1,9 +1,9 @@
 using Data.Models.Party;
-using Data.Runtime.Actors.Controllers.Core;
+using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Entities.Core;
 using Data.Runtime.Spatials;
 
-namespace Data.Runtime.Party.Core;
+namespace Data.Runtime.Parties.Core;
 
 public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, IWalkable 
 {
@@ -44,11 +44,14 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
         set => PartyModel.YLocation = value;
     }
 
-    public int Facing 
+    public int SpriteState 
     {
         get => PartyModel.Facing;
         set => PartyModel.Facing = value;
     }
+
+    // TODO: (MSC-01) Implement new config here.
+    public int MovementSpeed => 1;
 
     /// <summary>
     /// Function that starts the movement of the party.

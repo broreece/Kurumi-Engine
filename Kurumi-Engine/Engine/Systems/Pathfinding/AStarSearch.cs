@@ -8,8 +8,23 @@ namespace Engine.Systems.Pathfinding;
 /// </summary>
 public sealed class AStarSearch 
 {
-    public int LoadFastestPath(int originX, int originY, int targetX, int targetY, NavigationGrid navigationGrid) 
+    public int LoadFastestPath(
+        int originX, 
+        int originY, 
+        int targetX, 
+        int targetY, 
+        NavigationGrid navigationGrid, 
+        int maxRange
+    ) 
     {
+        // Check if out of range first to avoid unnecesary logic.
+        var xDifference = originX > targetX ? originX - targetX : targetX - originX;
+        var yDifference = originY > targetY ? originY - targetY : targetY - originY;
+        if (xDifference + yDifference > maxRange)
+        {
+            return -1;
+        }
+
         var openSet = new PriorityQueue<AStarNode, int>();
         var closedSet = new HashSet<(int, int)>();
         
@@ -41,10 +56,10 @@ public sealed class AStarSearch
                 // Check the direction being moved in and then convert that into the enum format.
                 var rightDirection = currentNode.XLocation - originX;
                 var downDirection = currentNode.YLocation - originY;
-                var direction = rightDirection == -1 ? (int) Direction.West : 
-                    rightDirection == 1 ? (int) Direction.East : 
-                    downDirection == -1 ? (int) Direction.North : 
-                    (int) Direction.South;
+                var direction = rightDirection == -1 ? (int) SpriteState.West : 
+                    rightDirection == 1 ? (int) SpriteState.East : 
+                    downDirection == -1 ? (int) SpriteState.North : 
+                    (int) SpriteState.South;
                 return direction;
             }
 
@@ -61,17 +76,20 @@ public sealed class AStarSearch
                 {
                     // Create a new node and place on queue.
                     var currentDistance = currentNode.DistanceFromStart + 1;
-                    var newX = currentX + rightMovement;
-                    var newY = currentY + downMovement;
-                    AStarNode newNode = new() 
-                    { 
-                        Parent = currentNode, 
-                        XLocation = newX, 
-                        YLocation = newY, 
-                        DistanceFromStart = currentDistance, 
-                        DistanceFromGoal = FastestPathHeuristic(newX, newY, targetX, targetY) 
-                    };
-                    openSet.Enqueue(newNode, newNode.TotalDistance);
+                    if (currentDistance < maxRange)
+                    {
+                        var newX = currentX + rightMovement;
+                        var newY = currentY + downMovement;
+                        AStarNode newNode = new() 
+                        { 
+                            Parent = currentNode, 
+                            XLocation = newX, 
+                            YLocation = newY, 
+                            DistanceFromStart = currentDistance, 
+                            DistanceFromGoal = FastestPathHeuristic(newX, newY, targetX, targetY) 
+                        };
+                        openSet.Enqueue(newNode, newNode.TotalDistance);
+                    }
                 }
             }
         }

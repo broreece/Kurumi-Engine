@@ -11,6 +11,8 @@ This document outlines the architectural and system-level changes made since the
 'Pursuit' focused on adding core gameplay features involving enemy formations, battles and persistance:
 
 - Created a tiled map format convertor into our .json format. The repo is hosted on git.
+- Enemy formations now display on the map, directly interact with the map's visibility and navigability.
+- Battles can now end and result in world changes.
 
 ---------------------------------------------------------------------
 
@@ -18,6 +20,22 @@ RENDERING
 
 - A new submission index has been created to allow tiles to not be rendered out of order. This affects all renderers
 now.
+
+---------------------------------------------------------------------
+
+FORMATIONS AND ACTOR CONTROLLERS
+
+- Smart and dumb tracking controllers now have a fixed range of where they can track their targets.
+- Formations now have their own controllers similar to actors. They execute movements based on their current AI.
+    They also directly interact with the map state by affecting visibilty and navigability.
+
+---------------------------------------------------------------------
+
+BATTLE
+
+- Battles can now end when an enemy formation is defeated.
+- When battles end; on win or on lose scripts execute allowing for more script interactions such as flags being set
+    etc.
 
 ---------------------------------------------------------------------
 
@@ -30,6 +48,8 @@ TOOLING
 
 KEY TAKEAWAYS
 
--
+- After all the changes to the workflow making new additions have become significantly easier.
+- We accumulated a little but more tech debt this build, After this build we'll make a new build resolving these issues
+before we continue development.
 
 ---------------------------------------------------------------------

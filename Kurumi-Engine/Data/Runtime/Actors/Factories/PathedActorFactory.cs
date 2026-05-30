@@ -1,7 +1,7 @@
 using Data.Definitions.Actors.Core;
 using Data.Models.Maps;
-using Data.Runtime.Actors.Controllers.Base;
-using Data.Runtime.Actors.Controllers.Core;
+using Data.Runtime.Maps.Base.Controllers.Base;
+using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Actors.Core;
 
 using Game.Scripts.Library;
@@ -20,7 +20,7 @@ public sealed class PathedActorFactory
     public Actor Create(ActorInfo actorInfo, ActorModel actorModel) 
     {
         Stack<Controller> controllers = [];
-        controllers.Push(new PathedController(canFinish: false, actorInfo.Path) {Interval = actorInfo.MovementSpeed});
+        controllers.Push(new PathedController(canFinish: false, actorInfo.Path) { Interval = actorInfo.MovementSpeed });
         if (actorInfo.ScriptName == null)
         {
             return new Actor(actorInfo, actorModel) 

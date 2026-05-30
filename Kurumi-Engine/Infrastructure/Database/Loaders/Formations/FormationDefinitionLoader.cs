@@ -58,6 +58,36 @@ public sealed class FormationDefinitionLoader : IDataLoader<FormationDefinition>
                 enemies
             );
         }
+
         return formations;
+    }
+
+    /// <summary>
+    /// Lookup index for which enemy formations appear on which maps.
+    /// </summary>
+    /// <returns>A dictionary storing the list of formations IDs on each map.</returns>
+    public IReadOnlyDictionary<string, IReadOnlyList<int>> LoadMapFormationsIndex()
+    {
+        var mapFormations = new Dictionary<string, List<int>>();
+
+        FormationRow[] rows = _formationRepository.LoadAll();
+        foreach (var formationRow in rows) 
+        {
+            var mapName = formationRow.MapName;
+            if (mapFormations.TryGetValue(mapName, out List<int>? value))
+            {
+                value.Add(formationRow.Id);
+            }
+            else
+            {
+                mapFormations[mapName] = [formationRow.Id];
+            }
+        }
+
+        // Turn list to read only.
+        return mapFormations.ToDictionary(
+            kvp => kvp.Key,
+            kvp => (IReadOnlyList<int>)kvp.Value
+        );
     }
 }

@@ -1,15 +1,22 @@
+// Data.
 using Data.Definitions.Actors.Base;
 using Data.Definitions.Maps.Base;
+
 using Data.Runtime.Actors.Core;
-using Data.Runtime.Maps.Base;
+using Data.Runtime.Formations.Core;
+using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Maps.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 using Data.Runtime.Scripts.Execution;
 
+// Engine.
 using Engine.Context.Containers;
 using Engine.Context.Core;
+
 using Engine.Input.Context.Contexts;
+
 using Engine.State.Base;
+using Engine.State.States.Maps.Base;
 using Engine.Systems.Animation.Map.Core;
 using Engine.Systems.Camera;
 using Engine.Systems.Movement.Core;
@@ -17,6 +24,7 @@ using Engine.Systems.Perception.Core;
 using Engine.Systems.Perception.Factories;
 using Engine.Systems.Rendering.Core;
 
+// Game.
 using Game.Scripts.Context.Builder.Core;
 using Game.Scripts.Context.Core;
 
@@ -34,6 +42,9 @@ public sealed class MapState : IGameState
 
     // Party.
     private readonly Party _party;
+
+    // Starting script.
+    private readonly string? _startingScript;
 
     // Cached objects.
     private GameObjects? _gameObjects;
@@ -64,11 +75,12 @@ public sealed class MapState : IGameState
     // Script context.
     private ScriptContext? _mapScriptContext;
 
-    public MapState(GameContext gameContext, StateContext stateContext) 
+    public MapState(GameContext gameContext, StateContext stateContext, string? startingScript) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
         _party = gameContext.GameObjects.Party;
+        _startingScript = startingScript;
     }
 
     public void OnEnter() 
@@ -78,6 +90,13 @@ public sealed class MapState : IGameState
         InitializeMap();
         InitializeInput();
         InitializeCamera();
+
+        // Execute any starting scripts.
+        ExecuteStartingScripts();
+
+        // Check if in range of actors or formations.
+        ExecuteAllOnFindScripts();
+        CheckInRangeFormations();
     }
 
     public void OnExit() {}
@@ -91,18 +110,18 @@ public sealed class MapState : IGameState
             // Get location of party.
             var partyX = _party.XLocation;
             var partyY = _party.YLocation;
-            var facing = _party.Facing;
+            var facing = _party.SpriteState;
 
             // Calculate the location being interacted with.
-            var xChange = facing == (int) Direction.West ? -1 : facing == (int) Direction.East ? 1 : 0;
-            var yChange = facing == (int) Direction.South ? 1 : facing == (int) Direction.North ? -1 : 0;
+            var xChange = facing == (int) SpriteState.West ? -1 : facing == (int) SpriteState.East ? 1 : 0;
+            var yChange = facing == (int) SpriteState.South ? 1 : facing == (int) SpriteState.North ? -1 : 0;
             var targetX = partyX + xChange;
             var targetY = partyY + yChange;
             var newFacing = facing == 
-                (int) Direction.North ? (int) Direction.South 
-                : facing == (int) Direction.East ? (int) Direction.West 
-                : facing == (int) Direction.South ? (int) Direction.North 
-                : (int) Direction.East;
+                (int) SpriteState.North ? (int) SpriteState.South 
+                : facing == (int) SpriteState.East ? (int) SpriteState.West 
+                : facing == (int) SpriteState.South ? (int) SpriteState.North 
+                : (int) SpriteState.East;
 
             // Set new facing direction if the actor turns and activate script.
             var actors = _currentMap!.GetActorsAt(targetX, targetY);
@@ -110,7 +129,7 @@ public sealed class MapState : IGameState
             {
                 if ((int) ActorBehaviour.StationaryDoesNotTurn != actor.Behaviour) 
                 {
-                    actor.Facing = newFacing;
+                    actor.SpriteState = newFacing;
                 }
 
                 // Load potential script and activate.
@@ -136,12 +155,15 @@ public sealed class MapState : IGameState
                 }
             }
 
+            // Check if in range of actors or formations.
             ExecuteAllOnFindScripts();
+            CheckInRangeFormations();
 
             _party.MovingLastFrame = false;
         }
 
         MoveAllActors(deltaTime);
+        UpdateAllFormations(deltaTime);
 
         // Update animations.
         _walkAnimationManager!.Update(deltaTime);
@@ -193,14 +215,19 @@ public sealed class MapState : IGameState
     private void InitializeMap() 
     {
         // Map renderers.
-        _actorRenderer = _gameServices!.ActorRendererFactory.Create(_currentMap!.Actors!);
+        // Cast the list of actors and formations to the map entity shared interface.
+        IEnumerable<IMapEntity> combined = _currentMap!.Actors!.Cast<IMapEntity>().Concat(
+            _currentMap.Formations!.Cast<IMapEntity>()
+        );
+        _actorRenderer = _gameServices!.ActorRendererFactory!.Create([.. combined]);
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create([.. combined], _party);
         _mapAnimationManager = _gameServices.MapAnimationManagerFactory.Create();
         _mapRenderer = _gameServices.MapRendererFactory.Create(
             _currentMap.Tiles, 
             _currentMap.TileSheetName, 
             _currentMap.MapBackgroundArtName
         );
-        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory.Create(_currentMap!.Actors!, _party);
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory.Create([.. combined], _party);
 
         // Party renderer.
         _partyMapRenderer = _gameServices!.PartyMapRendererFactory.Create(_party);
@@ -226,34 +253,115 @@ public sealed class MapState : IGameState
     }
 
     private void MoveAllActors(float deltaTime) {
-        // Move all actors.
-        foreach (var actor in _currentMap!.Actors!) 
+        if (_currentMap!.Actors != null)
         {
-            var controllers = actor.Controllers;
-            if (controllers.Count > 0) 
+            // Move all actors.
+            foreach (var actor in _currentMap!.Actors!) 
             {
-                var currentController = controllers.Peek();
-                // Pop controller if it's finished, otherwise continue updating.
-                if (currentController.IsFinished()) 
+                var controllers = actor.Controllers;
+                if (controllers.Count > 0) 
                 {
-                    actor.PopController();
-                    actor.MaintainFacing = false;
-                }
-                else 
-                {
-                    currentController.Update(deltaTime);
-                    if (currentController.CanMove) 
+                    var currentController = controllers.Peek();
+                    // Pop controller if it's finished, otherwise continue updating.
+                    if (currentController.IsFinished()) 
                     {
-                        // Execute move.
-                        var move = currentController.GetMove(actor);
-                        _movementResolver!.TryMove(actor, move);
-                        currentController.ExecuteMove();
+                        actor.PopController();
+                        actor.MaintainFacing = false;
+                    }
+                    else 
+                    {
+                        currentController.Update(deltaTime);
+                        if (currentController.CanMove) 
+                        {
+                            // Execute move.
+                            var move = currentController.GetMove(actor);
+                            if (move >= 0) 
+                            {
+                                _movementResolver!.TryMove(actor, move);
+                                currentController.ExecuteMove();
 
-                        // Execute on find script.
-                        ExecuteOnFindScript(actor);
+                                // Execute on find script.
+                                ExecuteOnFindScript(actor);
+
+                                // After actor moves visiblity might change.
+                                CheckInRangeFormations();
+                            }
+                        }
                     }
                 }
             }
+        }
+    }
+
+    private void UpdateAllFormations(float deltaTime)
+    {
+        if (_currentMap!.Formations != null)
+        {
+            // Move all formations.
+            foreach (var formation in _currentMap.Formations)
+            {
+                if (!formation.Dead) {
+                    var controller = formation.GetCurrentController();
+                    if (controller != null)
+                    {
+                        controller.Update(deltaTime);
+                        if (controller.CanMove)
+                        {
+                            // Execute move.
+                            var move = controller.GetMove(formation);
+                            if (move >= 0) 
+                            {
+                                // If the formation can execute moves we reset their alert status.
+                                formation.ResetAlertTimer();
+
+                                _movementResolver!.TryMove(formation, move);
+                                controller.ExecuteMove();
+
+                                // Check if the party is in range of the formation.
+                                CheckInRangeFormation(formation);
+
+                                // After formation moves visiblity might change.
+                                ExecuteAllOnFindScripts();
+                            }
+                            // If the formation can not execute any moves increment their alert counter.
+                            else
+                            {
+                                formation.Update(deltaTime);
+                                if (formation.AlertLimitReached)
+                                {
+                                    formation.Alert = false;
+                                    formation.ResetAlertTimer();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void ExecuteStartingScripts()
+    {
+        if (_startingScript != null)
+        {
+            var script = _gameContext.GameServices.ScriptLibrary.GetMapScript(_startingScript);
+            _stateContext.AddExecutingScript(new ScriptExecution(script));
+        }
+    }
+
+    private void CheckInRangeFormations()
+    {
+        foreach (var formation in _currentMap!.Formations!)
+        {
+            CheckInRangeFormation(formation);
+        }
+    }
+
+    private void CheckInRangeFormation(Formation formation) 
+    {
+        if (_visionResolver!.CanSee(formation, _party, formation.TrackingRange))
+        {
+            formation.Alert = true;
         }
     }
 
@@ -284,8 +392,13 @@ public sealed class MapState : IGameState
             _currentMap.TileSheetName, 
             _currentMap.MapBackgroundArtName
         );
-        _actorRenderer = _gameServices.ActorRendererFactory!.Create(_currentMap.Actors!);
-        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create(_currentMap.Actors!, _party);
+
+        // Cast the list of actors and formations to the actor appearance shared interface.
+        IEnumerable<IMapEntity> combined = _currentMap.Actors!.Cast<IMapEntity>().Concat(
+            _currentMap.Formations!.Cast<IMapEntity>()
+        );
+        _actorRenderer = _gameServices.ActorRendererFactory!.Create([.. combined]);
+        _walkAnimationManager = _gameServices.WalkAnimationManagerFactory!.Create([.. combined], _party);
 
         var navigationGrid = _gameServices.NavigationGridFactory!.Create(_currentMap);
         var visionResolverFactory = new VisionResolverFactory(navigationGrid);

@@ -1,4 +1,4 @@
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 
 using Engine.Input.Base;
 using Engine.Input.Context.Base;

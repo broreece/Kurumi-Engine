@@ -1,7 +1,9 @@
-using Engine.Context.Containers;
+// Engine.
 using Engine.Context.Core;
+
 using Engine.State.Base;
 
+// Game.
 using Game.Scripts.Context.Builder.Base;
 using Game.Scripts.Context.Capabilities.Base;
 using Game.Scripts.Context.Capabilities.Implementations.Maps;
@@ -28,6 +30,7 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
     {
         var capabilityContainer = new CapabilityContainer();
         var variableTable = new VariableTable();
+
         var gameObjects = _gameContext.GameObjects;
         var gameData = _gameContext.GameData;
 

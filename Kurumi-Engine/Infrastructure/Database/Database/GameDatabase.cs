@@ -234,13 +234,14 @@ public sealed class GameDatabase
             stat => stat.Id
         );
 
-        // Load a lookup table for stat short name indexes where the stat short name is the key.
-        StatShortNameIndex = statNameLoader.LoadStatShortNameIndex();
-
         TileRegistry = new Registry<Tile>(
             tileLoader.LoadAll(),
             tile => tile.Id
         );
+
+        // Load lookup indexes.
+        StatShortNameIndex = statNameLoader.LoadStatShortNameIndex();
+        MapFormationsIndex = formationDefinitionLoader.LoadMapFormationsIndex();
     }
 
     public Registry<AbilityDefinition> AbilityRegistry { get; }
@@ -261,5 +262,7 @@ public sealed class GameDatabase
     public Registry<StatusDefinition> StatusRegistry { get; }
     public Registry<Tile> TileRegistry { get; }
 
+    // Lookup indexes.
     public IReadOnlyDictionary<string, int> StatShortNameIndex { get; }
+    public IReadOnlyDictionary<string, IReadOnlyList<int>> MapFormationsIndex { get; }
 }

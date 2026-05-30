@@ -1,5 +1,5 @@
 using Config.Runtime.Battle;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 using Engine.Assets.Base;
 using Engine.Assets.Core;
 using Engine.Systems.Rendering.Base;

@@ -5,5 +5,5 @@ namespace Data.Runtime.Spatials;
 /// </summary>
 public interface IFacingPositionProvider : IPositionProvider 
 {
-    public int Facing { get; }
+    public int SpriteState { get; }
 }

@@ -1,9 +1,13 @@
+// Data.
 using Data.Runtime.Formations.Core;
-using Data.Runtime.Party.Core;
+using Data.Runtime.Parties.Core;
 
+// Engine.
 using Engine.Context.Core;
+
 using Engine.State.Base;
 
+// Game.
 using Game.Scripts.Context.Builder.Base;
 using Game.Scripts.Context.Capabilities.Base;
 using Game.Scripts.Context.Capabilities.Implementations.Battle;
