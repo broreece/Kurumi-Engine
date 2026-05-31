@@ -45,16 +45,18 @@ public sealed class FormationDefinitionLoader : IDataLoader<FormationDefinition>
             }
 
             formations[index] = _formationDefinitionFactory.Create(
-                id,
-                row.ReturnX,
-                row.ReturnY,
-                row.SearchTimer,
-                row.ItemPoolId,
-                row.OnFoundActorInfoId,
-                row.DefaultActorInfoId,
-                row.MapName,
-                row.OnLoseScript,
-                row.OnWinScript,
+                id, 
+                row.MapName, 
+                row.ReturnX, 
+                row.ReturnY, 
+                row.SearchTimer, 
+                row.ItemPoolId, 
+                row.OnFoundActorInfoId, 
+                row.DefaultActorInfoId, 
+                row.BackgroundMusicName, 
+                row.BackgroundArtName, 
+                row.OnLoseScript, 
+                row.OnWinScript, 
                 enemies
             );
         }

@@ -1,5 +1,7 @@
+// System.
 using System.Text.Json;
 
+// Game.
 using Game.Scripts.Exceptions;
 using Game.Scripts.Base;
 using Game.Scripts.Serialization;
@@ -80,13 +82,7 @@ public sealed class ScriptDataConverter
                 ) { NextStep = nextStep };
 
             case "StartBattle":
-                string backgroundMusicName = parameters["BackgroundMusicName"].GetString()
-                    ?? throw new ScriptStepException("Start battle 'BackgroundMusicName' parameter not found.");
-                string backgroundArtName = parameters["BackgroundArtName"].GetString()
-                    ?? throw new ScriptStepException("Start battle 'BackgroundArtName' parameter not found.");
                 return new StartBattle(
-                    backgroundMusicName, 
-                    backgroundArtName, 
                     parameters["EnemyFormationID"].GetInt32()
                 ) { NextStep = nextStep};
 

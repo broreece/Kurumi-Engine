@@ -79,6 +79,10 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
         set => _formationModel.Dead = value;
     }
 
+    public string BackgroundMusicName => _formationDefinition.BackgroundMusicName;
+
+    public string BackgroundArtName => _formationDefinition.BackgroundArtName;
+
     // Formations are passable only if they are dead.
     public bool Passable => Dead;
 
@@ -99,7 +103,7 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
 
     public bool BelowParty => Dead || (Alert ? _onFoundActor.BelowParty : _defaultActor.BelowParty);
 
-    public bool SeeThrough => Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough;
+    public bool SeeThrough => Dead || (Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough);
 
     public int MovementSpeed => Alert ? _onFoundActor.MovementSpeed : _defaultActor.MovementSpeed;
 

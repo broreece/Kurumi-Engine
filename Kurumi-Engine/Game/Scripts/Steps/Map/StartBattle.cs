@@ -8,15 +8,10 @@ namespace Game.Scripts.Steps.Map;
 
 public sealed class StartBattle : ScriptStep 
 {
-    private readonly string _backgroundMusicName;
-    private readonly string _backgroundArtName;
-
     private readonly int _enemyFormationId;
 
-    public StartBattle(string backgroundMusicName, string backgroundArtName, int enemyFormationId) : base() 
+    public StartBattle(int enemyFormationId) : base() 
     {
-        _backgroundMusicName = backgroundMusicName;
-        _backgroundArtName = backgroundArtName;
         _enemyFormationId = enemyFormationId;
     }
 
@@ -24,9 +19,6 @@ public sealed class StartBattle : ScriptStep
     {
         var battleStartRequest = new BattleStartRequest() 
         {
-            BackgroundMusicName = _backgroundMusicName, 
-            BattleBackgroundArtName = _backgroundArtName, 
-            
             EnemyFormationId = _enemyFormationId
         };
         IBattleActions battleActions = scriptContext.GetCapability<IBattleActions>();

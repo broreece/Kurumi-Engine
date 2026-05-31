@@ -3,6 +3,7 @@ using Data.Definitions.Actors.Base;
 using Data.Definitions.Maps.Base;
 
 using Data.Runtime.Actors.Core;
+using Data.Runtime.Formations.Base;
 using Data.Runtime.Formations.Core;
 using Data.Runtime.Maps.Base.Change;
 using Data.Runtime.Maps.Core;
@@ -154,6 +155,9 @@ public sealed class MapState : IGameState
                     _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
                 }
             }
+
+            // Check if any formation is beside the party.
+            CheckAnyFormationBesideParty();
 
             // Check if in range of actors or formations.
             ExecuteAllOnFindScripts();
@@ -307,6 +311,8 @@ public sealed class MapState : IGameState
                         controller.Update(deltaTime);
                         if (controller.CanMove)
                         {
+                            CheckFormationBesideParty(formation);
+
                             // Execute move.
                             var move = controller.GetMove(formation);
                             if (move >= 0) 
@@ -382,6 +388,43 @@ public sealed class MapState : IGameState
         {
             _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
         }
+    }
+
+    private void CheckAnyFormationBesideParty()
+    {
+        for (int direction = -1; direction < 2; direction += 2)
+        {
+            var xFormation = _currentMap!.GetFormationAt(_party.XLocation + direction, _party.YLocation);
+            var yFormation = _currentMap!.GetFormationAt(_party.XLocation, _party.YLocation + direction);
+            if (xFormation != null && !xFormation.Dead) 
+            {
+                StartBattle(xFormation);
+            } 
+            else if (yFormation != null && !yFormation.Dead)
+            {
+                StartBattle(yFormation);
+            }
+        }
+    }
+
+    private void CheckFormationBesideParty(Formation formation)
+    {
+        var xDifference = formation.XLocation - _party.XLocation;
+        var yDifference = formation.YLocation - _party.YLocation;
+        if ((xDifference >= -1 && xDifference <= 1 && yDifference == 0) ||
+            (yDifference >= -1 && yDifference <= 1 && xDifference == 0))
+        {
+            StartBattle(formation);
+        }
+    }
+
+    private void StartBattle(Formation formation)
+    {
+        var battleStartRequest = new BattleStartRequest() 
+        {
+            Formation = formation
+        };
+        _gameObjects!.BattleStartRequest = battleStartRequest;
     }
 
     private void HandleMapChangeRequest(MapChangeRequest mapChangeRequest) 

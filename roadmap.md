@@ -167,21 +167,6 @@ enemy formation finds the party.
 
 ---
 
-## (EFE-01) Enemy formation encounters. ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 2 ###
-### Impact: 4 ###
-
-**Description:** Currently battles only start to scripts, we should make it so if a formation catches the party the 
-battle will start.
-
-**Steps:**
-- In map state when getting a move from the formations if the formation is exactly 1 tile away from the party instead
-    of getting a move we should force a battle to start.
-
----
-
 ## Refinement milestone reached.
 
 ---

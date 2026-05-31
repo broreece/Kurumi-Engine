@@ -17,8 +17,7 @@ and scalable.
 ## Development Status
 
 Pursuit build is currently in progress, it is focused on:
-- Battles can now start and end with dynamic scripts.
-- Further sprite additions for actors to include a dead state for after battle enemy formations.
+- Enhancing the battle state for displaying damage text and allowing multi-hit moves.
 
 ---
 

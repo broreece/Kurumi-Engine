@@ -17,8 +17,23 @@ public sealed class ItemRepository
 
     public ItemRow[] LoadAll() {
         using SqliteDataReader sqlReader = _databaseService.Query(
-            @"SELECT id, name, description, script, usable_in_battle, usable_in_menu, targets_party, targets_enemies, targets_all, consume_on_use, sprite_name, price, weight
-                FROM items"
+            @"
+            SELECT
+                id,
+                name,
+                description,
+                script,
+                usable_in_battle,
+                usable_in_menu,
+                targets_party,
+                targets_enemies,
+                targets_all,
+                consume_on_use,
+                sprite_name,
+                price,
+                weight
+            FROM items
+            "
         );
         var rows = new List<ItemRow>();
         while (sqlReader.Read()) 

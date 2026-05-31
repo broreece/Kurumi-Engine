@@ -18,8 +18,17 @@ public sealed class EquipmentRepository
     public EquipmentRow[] LoadAll() 
     {
         using SqliteDataReader sqlReader = _databaseService.Query(
-            @"SELECT id, item_id, equipment_type, equipment_slot, accuracy_modifier, evasion_modifier, turn_effect_script
-                FROM equipment"
+            @"
+            SELECT
+                id,
+                item_id,
+                equipment_type,
+                equipment_slot,
+                accuracy_modifier,
+                evasion_modifier,
+                turn_effect_script
+            FROM equipment
+            "
         );
         var rows = new List<EquipmentRow>();
         while (sqlReader.Read()) 

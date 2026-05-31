@@ -18,8 +18,21 @@ public sealed class StatusRepository
     public StatusRow[] LoadAll() 
     {
         using SqliteDataReader sqlReader = _databaseService.Query(
-            @"SELECT id, name, description, sprite_name, priority, accuracy_modifier, evasion_modifier, turn_length, cure_at_battle_end, can_act, turn_effect_script
-                FROM statuses"
+            @"
+            SELECT
+                id,
+                name,
+                description,
+                sprite_name,
+                priority,
+                accuracy_modifier,
+                evasion_modifier,
+                turn_length,
+                cure_at_battle_end,
+                can_act,
+                turn_effect_script
+            FROM statuses
+            "
         );
         var rows = new List<StatusRow>();
         while (sqlReader.Read()) 
