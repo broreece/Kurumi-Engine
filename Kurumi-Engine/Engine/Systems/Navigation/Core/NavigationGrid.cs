@@ -1,9 +1,13 @@
+// Data.
 using Data.Definitions.Maps.Core;
+
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Spatials;
 
+// Engine.
 using Engine.Systems.Navigation.Base;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 
 namespace Engine.Systems.Navigation.Core;

@@ -6,13 +6,15 @@ public sealed class FormationDefinitionFactory
 {
     public FormationDefinition Create(
         int id, 
+        string mapName, 
         int returnX, 
         int returnY, 
         int searchTimer, 
         int itemPoolId, 
         int onFoundActorInfoId, 
         int defaultActorInfoId, 
-        string mapName, 
+        string backgroundMusicName, 
+        string backgroundArtName, 
         string? onLoseScript, 
         string? onWinScript, 
         IReadOnlyList<int> enemies) 
@@ -20,13 +22,15 @@ public sealed class FormationDefinitionFactory
         return new FormationDefinition()
         {
             Id = id, 
+            MapName = mapName, 
             ReturnX = returnX, 
             ReturnY = returnY, 
             SearchTimer = searchTimer, 
             ItemPoolId = itemPoolId, 
             OnFoundActorInfoId = onFoundActorInfoId, 
             DefaultActorInfoId = defaultActorInfoId, 
-            MapName = mapName, 
+            BackgroundMusicName = backgroundMusicName, 
+            BackgroundArtName = backgroundArtName, 
             OnLoseScript = onLoseScript, 
             OnWinScript = onWinScript, 
             Enemies = enemies
