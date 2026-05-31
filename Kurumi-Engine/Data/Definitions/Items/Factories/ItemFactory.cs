@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Items.Core;
 
 namespace Data.Definitions.Items.Factories;
@@ -12,12 +13,13 @@ public sealed class ItemFactory
         string? scriptName, 
         string name, 
         string description, 
-        bool usableInBattle, 
-        bool usableInMenu, 
-        bool targetsParty, 
-        bool targetsEnemies, 
+        bool useableInBattle, 
+        bool useableInMenu, 
+        bool defaultTargetParty, 
+        bool randomTarget, 
         bool targetsAll, 
-        bool consumeOnUse) 
+        bool consumeOnUse
+    ) 
     {
         return new Item() 
         {
@@ -28,10 +30,10 @@ public sealed class ItemFactory
             ScriptName = scriptName, 
             Name = name, 
             Description = description, 
-            UsableInBattle = usableInBattle, 
-            UsableInMenu = usableInMenu, 
-            TargetsParty = targetsParty, 
-            TargetsEnemies = targetsEnemies, 
+            UseableInBattle = useableInBattle, 
+            UseableInMenu = useableInMenu, 
+            DefaultTargetParty = defaultTargetParty, 
+            RandomTarget = randomTarget, 
             TargetsAll = targetsAll, 
             ConsumeOnUse = consumeOnUse
         };

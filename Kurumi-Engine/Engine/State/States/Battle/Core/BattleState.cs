@@ -197,21 +197,25 @@ public sealed class BattleState : IGameState, IBattleMenu
     {
         if (_targetSelector)
         {
-            var nextTargetIndex = _currentTargetIndex;
-
-            do
+            // Check we are not targetting a special target.
+            if (_currentTargetIndex >= 0)
             {
-                nextTargetIndex ++;
-                
-                if (nextTargetIndex >= _party.Size + _formation.Enemies.Count)
-                {
-                    nextTargetIndex = _currentTargetIndex;
-                    break;
-                }
-            }
-            while (!IsValidTarget(nextTargetIndex));
+                var nextTargetIndex = _currentTargetIndex;
 
-            _currentTargetIndex = nextTargetIndex;
+                do
+                {
+                    nextTargetIndex ++;
+                    
+                    if (nextTargetIndex >= _party.Size + _formation.Enemies.Count)
+                    {
+                        nextTargetIndex = _currentTargetIndex;
+                        break;
+                    }
+                }
+                while (!IsValidTarget(nextTargetIndex));
+
+                _currentTargetIndex = nextTargetIndex;
+            }
         }
         else
         {
@@ -223,21 +227,25 @@ public sealed class BattleState : IGameState, IBattleMenu
     {
         if (_targetSelector)
         {
-            var nextTargetIndex = _currentTargetIndex;
-
-            do
+            // Check we are not targetting a special target.
+            if (_currentTargetIndex >= 0)
             {
-                nextTargetIndex --;
-                
-                if (nextTargetIndex < 0)
-                {
-                    nextTargetIndex = _currentTargetIndex;
-                    break;
-                }
-            }
-            while (!IsValidTarget(nextTargetIndex));
+                var nextTargetIndex = _currentTargetIndex;
 
-            _currentTargetIndex = nextTargetIndex;
+                do
+                {
+                    nextTargetIndex --;
+                    
+                    if (nextTargetIndex < 0)
+                    {
+                        nextTargetIndex = _currentTargetIndex;
+                        break;
+                    }
+                }
+                while (!IsValidTarget(nextTargetIndex));
+
+                _currentTargetIndex = nextTargetIndex;
+            }
         }
         else
         {

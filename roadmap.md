@@ -48,10 +48,12 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Pursuit
+## Milestone: Refinement
 **Focus areas:**
 
-- Focused on improving the battle actions.
+- A smaller milestone as some of the tasks were finished during the pursuit work.
+- Focused on improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
+- Addition of missing UI state and config for party movement, (Also making party movement smoother).
 
 ---
 
@@ -61,20 +63,12 @@ Tickets will also display a brief description, a set of planned steps for comple
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:** Allow multiple target attack, damage display and more dynamic enemy targetting.
+**Description:** Display basic damage text.
 
 **Steps:** 
-- Implement additional attack options: (Low Priority)
-    - Implement party wide attacks.
-    - Implement enemy group wide attacks.
-    - Implement random enemy hit attacks.
 - Implement damage text:
     - Used to exist in forge.
     - Create custom config declaring it's font type, size and maybe a offset.
-- Implement function to load the index of the first healthy party member when generating the first choices in a 
-    battle scene:
-    - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
-    same in both.
 
 ---
 

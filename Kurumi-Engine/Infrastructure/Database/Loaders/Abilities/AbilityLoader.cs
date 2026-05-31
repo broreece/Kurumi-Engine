@@ -25,13 +25,17 @@ public sealed class AbilityLoader : IDataLoader<AbilityDefinition>
         {
             var row = rows[index];
             abilities[index] = _abilityFactory.Create(
-                row.Id,
-                row.Name,
-                row.Description,
-                row.ScriptName,
-                row.ElementId,
-                row.Cost,
-                row.UsesMp,
+                row.Id, 
+                row.Name, 
+                row.Description, 
+                row.ScriptName, 
+                row.ElementId, 
+                row.Cost, 
+                row.UsesMp, 
+                row.UseableInMenu, 
+                row.DefaultTargetParty, 
+                row.RandomTarget, 
+                row.TargetsAll, 
                 row.BattleSpriteAnimationName
             );
         }

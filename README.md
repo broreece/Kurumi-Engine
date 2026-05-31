@@ -16,8 +16,9 @@ and scalable.
 
 ## Development Status
 
-Pursuit build is currently in progress, it is focused on:
-- Enhancing the battle state for displaying damage text and allowing multi-hit moves.
+Refinement build is currently in progress, it is focused on:
+- Improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
+- Addition of missing UI state and config for party movement, (Also making party movement smoother).
 
 ---
 
@@ -104,7 +105,7 @@ Kurumi-Engine/
 │   ├── State/
 │   ├── Systems/
 │   └── UI/
-│   Core engine architecture and reusable systems.
+│   Core engine architecture and reuseable systems.
 │
 ├── Game/
 │   ├── Maps/

@@ -12,11 +12,11 @@ public sealed class Item
 
     public required string? ScriptName { get; init; }
 
-    public required bool UsableInBattle { get; init; }
-    public required bool UsableInMenu { get; init; }
+    public required bool UseableInBattle { get; init; }
+    public required bool UseableInMenu { get; init; }
 
-    public required bool TargetsParty { get; init; }
-    public required bool TargetsEnemies { get; init; }
+    public required bool DefaultTargetParty { get; init; }
+    public required bool RandomTarget { get; init; }
     public required bool TargetsAll { get; init; }
 
     public required bool ConsumeOnUse { get; init; }

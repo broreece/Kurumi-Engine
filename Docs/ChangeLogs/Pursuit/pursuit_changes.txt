@@ -1,6 +1,6 @@
 KURUMI ENGINE – BUILD CHANGE DOCUMENT
 Build: Pursuit
-Status: In Progress
+Status: Finished
 
 ---------------------------------------------------------------------
 
@@ -39,6 +39,8 @@ BATTLE
 - When battles end; on win or on lose scripts execute allowing for more script interactions such as flags being set
     etc.
 - Battles can now start if a formation encounters the party.
+- Damage is now displayed to improve debugging experience and provide base for future refinement.
+- Attacks can now target randomly, all party members, all enemies or everyone.
 
 ---------------------------------------------------------------------
 
@@ -56,5 +58,7 @@ KEY TAKEAWAYS
     before we continue development.
 - Some of the tasks I had originally penned for a refinement release I moved to pursuit. Mainly the ones involving 
     formations, encountering or reconstruction.
+- Whilst the change log is small the result of this build is huge, it effectively allows real gameplay involving
+    enemy formations chasing the player, battle now working fully.
 
 ---------------------------------------------------------------------

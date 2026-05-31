@@ -1,11 +1,17 @@
+// Config.
 using Config.Runtime.Battle;
 
+// Data.
 using Data.Definitions.Entities.Abilities.Core;
+
 using Data.Runtime.Entities.Core;
 
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Systems.Rendering.Base;
+
 using Engine.UI.Components.Core;
 using Engine.UI.Components.Factories;
 using Engine.UI.Data.Content;
@@ -13,8 +19,10 @@ using Engine.UI.Data.Content.Layout;
 using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 
+// External libraries.
 using SFML.System;
 
 namespace Game.UI.Views;

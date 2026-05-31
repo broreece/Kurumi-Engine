@@ -10,9 +10,9 @@ namespace Engine.Systems.Statuses.Core;
 /// </summary>
 public sealed class StatusResolver 
 {
-    public void TryApplyStatus(IHasStatuses statusableObject, Status newStatus) 
+    public void TryApplyStatus(IHasStatuses statuseableObject, Status newStatus) 
     {
-        var statuses = statusableObject.GetStatuses();
+        var statuses = statuseableObject.GetStatuses();
 
         // Check if we can apply the statuses based on priorites.
         if (CanApply(statuses, newStatus)) 
@@ -20,12 +20,12 @@ public sealed class StatusResolver
             // Resolve any erasure rules of statuses.
             if ((StatusPriority) newStatus.Priority != StatusPriority.CanStack) 
             {
-                statusableObject.ClearStatuses();
-                statusableObject.AddStatus(newStatus);
+                statuseableObject.ClearStatuses();
+                statuseableObject.AddStatus(newStatus);
             }
             else 
             {
-                statusableObject.AddStatus(newStatus);
+                statuseableObject.AddStatus(newStatus);
             }
         }
     }
