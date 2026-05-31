@@ -8,10 +8,6 @@ namespace Data.Runtime.Formations.Base;
 /// </summary>
 public sealed class BattleStartRequest 
 {
-    public required string BackgroundMusicName { get; init; }
-
-    public required string BattleBackgroundArtName { get; init; }
-
     // Formation property is used for formation encounters, enemy formation ID property is used for scripted battles.
     public int EnemyFormationId { get; init; }
 

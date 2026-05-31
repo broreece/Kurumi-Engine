@@ -59,9 +59,6 @@ public sealed class BattleState : IGameState, IBattleMenu
     // Enemy formation.
     private readonly Formation _formation;
 
-    // Battle variable.
-    private readonly BattleStartRequest _battle;
-
     // UI elements.
     private readonly UIElement _uiRoot;
     private readonly BattleView _view;
@@ -115,7 +112,6 @@ public sealed class BattleState : IGameState, IBattleMenu
         _stateContext = stateContext;
         _party = party;
         _currentTargetIndex = party.Size;
-        _battle = battle;
 
         var gameData = _gameContext.GameData;
         var gameServices = _gameContext.GameServices;
@@ -345,7 +341,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         gameWindow.SetView(_camera.View);
 
         // Renderers.
-        _battleRenderer = gameServices.BattleRendererFactory.Create(_battle.BattleBackgroundArtName);
+        _battleRenderer = gameServices.BattleRendererFactory.Create(_formation.BackgroundArtName);
         _enemyRenderer = gameServices.EnemyRendererFactory.Create(_formation);
         _partyBattleRenderer = gameServices.PartyBattleRendererFactory.Create(_party);
 

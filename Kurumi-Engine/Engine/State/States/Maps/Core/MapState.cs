@@ -422,9 +422,6 @@ public sealed class MapState : IGameState
     {
         var battleStartRequest = new BattleStartRequest() 
         {
-            BackgroundMusicName = formation.BackgroundMusicName, 
-            BattleBackgroundArtName = formation.BackgroundArtName, 
-                                    
             Formation = formation
         };
         _gameObjects!.BattleStartRequest = battleStartRequest;
