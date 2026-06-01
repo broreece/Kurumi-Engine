@@ -32,7 +32,7 @@ public sealed class HpMpActions : IHpMpActions
             (_formation ?? throw new FormationNotFoundException("The target formation of a health change effect was " + 
                 "not set")).GetEntityAt(target.Index);
         
-        var value = _damageCalculator.Evaluate(formula, userStats.GetStats(), targetStats.GetStats());
+        var value = _damageCalculator.Evaluate(formula, userStats.Stats, targetStats.Stats);
         if (reduceHp && value > 0)
         {
             if (canKo)

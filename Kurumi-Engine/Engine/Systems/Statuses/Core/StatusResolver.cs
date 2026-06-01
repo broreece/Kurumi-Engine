@@ -12,7 +12,7 @@ public sealed class StatusResolver
 {
     public void TryApplyStatus(IHasStatuses statuseableObject, Status newStatus) 
     {
-        var statuses = statuseableObject.GetStatuses();
+        var statuses = statuseableObject.Statuses;
 
         // Check if we can apply the statuses based on priorites.
         if (CanApply(statuses, newStatus)) 
