@@ -50,7 +50,7 @@ public sealed class HpMpActions : IHpMpActions
         {
             targetStats.CurrentHP += value;
             // Ensure HP is not higher then max HP.
-            targetStats.CurrentHP = targetStats.CurrentHP > targetStats.GetMaxHp() ? targetStats.GetMaxHp() :
+            targetStats.CurrentHP = targetStats.CurrentHP > targetStats.MaxHp ? targetStats.MaxHp :
                 targetStats.CurrentHP;
         }
     }

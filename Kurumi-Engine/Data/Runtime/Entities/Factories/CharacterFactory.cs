@@ -1,5 +1,8 @@
+// Data.
 using Data.Definitions.Entities.Core;
+
 using Data.Models.Characters;
+
 using Data.Runtime.Entities.Core;
 
 namespace Data.Runtime.Entities.Factories;

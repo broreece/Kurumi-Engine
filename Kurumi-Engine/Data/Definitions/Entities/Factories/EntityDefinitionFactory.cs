@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Entities.Core;
 
 namespace Data.Definitions.Entities.Factories;
@@ -13,7 +14,8 @@ public sealed class EntityDefinitionFactory
         int[] stats, 
         int[] elementalResistances, 
         int[] statusResistances, 
-        List<int> baseAbilities) 
+        List<int> baseAbilities
+    ) 
     {
         return new EntityDefinition()
         {

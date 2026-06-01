@@ -4,7 +4,7 @@ namespace Engine.Systems.Statuses.Interfaces;
 
 public interface IHasStatuses 
 {
-    public IList<Status> GetStatuses();
+    public IList<Status> Statuses { get; }
 
     public void ClearStatuses();
 

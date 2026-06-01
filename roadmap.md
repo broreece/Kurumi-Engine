@@ -90,22 +90,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (LFBU-01) Seperate large functions into sub functions ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 3 ###
-### Impact: 1 ###
-
-**Description:** To better apply to CRUD principles we should seperate out the large functions in the code into sub
-functions.
-
-**Steps:**
-- Search code for largest functions and break them up (E.G: Map Factories "Create" function).
-- Also whilst refractoring ensure that any using statements are correctly spaced based on type and then subtype;
-    if all main types match.
-
----
-
 ## (PF-01) Run a profiler on the code ##
 ### Complexity: 2 ###
 ### Independent: 1 ###

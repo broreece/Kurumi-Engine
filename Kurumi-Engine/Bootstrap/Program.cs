@@ -10,20 +10,25 @@ using Data.Runtime.Parties.Factory;
 
 // Engine.
 using Engine.Assets.Core;
+
 using Engine.Context.Containers;
 using Engine.Context.Core;
+
 using Engine.Input.Context.Core;
 using Engine.Input.Mapper;
 using Engine.Input.System;
+
 using Engine.State.Base;
 using Engine.State.Core;
 using Engine.State.States.Battle.Core;
 using Engine.State.States.Maps.Core;
+
 using Engine.Systems.Animation.Map.Factories;
 using Engine.Systems.Combat.Factories;
 using Engine.Systems.Movement.Factories;
 using Engine.Systems.Navigation.Factories;
 using Engine.Systems.Rendering.Factories;
+
 using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
@@ -31,12 +36,15 @@ using Engine.UI.Render;
 using Game.Maps.Loader;
 using Game.Maps.Registry;
 using Game.Maps.Services;
+
 using Game.Scripts.Library;
 
 // Infrastructure.
 using Infrastructure.Database.Database;
+
 using Infrastructure.Persistance.Base;
 using Infrastructure.Persistance.Services;
+
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
