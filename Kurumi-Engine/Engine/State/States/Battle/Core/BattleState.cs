@@ -74,7 +74,7 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     // Current selection indexes.
     private int _currentCharacterIndex = 0;
-    private int _currentSelectionIndex = 0;
+    private int _currentSelectionIndex;
     private int _currentTargetIndex;
 
     // Current turn count.
@@ -265,24 +265,26 @@ public sealed class BattleState : IGameState, IBattleMenu
     private int GetFirstValidEnemyTarget()
     {
         int enemyIndex = 0;
+
         do
         {
             enemyIndex ++;
         }
         while (enemyIndex < _formation.GetAmountOfLivingEnemies() + 1 && 
             _formation.GetEntityAt(enemyIndex).CurrentHP == 0);
+            
         return enemyIndex;
     }
 
     private int GetFirstValidPartyTarget()
     {
         int characterIndex = 0;
-        do
+        
+        while (characterIndex < _party.Size - 1 && _party.Characters[characterIndex].CurrentHP == 0)
         {
-            characterIndex ++;
+            characterIndex++;
         }
-        while (characterIndex < _party.Size &&
-            _party.Characters[characterIndex].CurrentHP == 0);
+
         return characterIndex;
     }
 
@@ -315,6 +317,46 @@ public sealed class BattleState : IGameState, IBattleMenu
         else
         {
             _targetSelector = true;
+            var currentCharacter = _party.Characters[_currentCharacterIndex];
+            var abilities = currentCharacter.GetAbilityIDs();
+            if (_currentSelectionIndex < abilities.Count)
+            {
+                var ability = _abilityRegistry.Get(abilities[_currentSelectionIndex]);
+                bool targetsParty = ability.DefaultTargetParty;
+                bool targetsAll = ability.TargetsAll;
+                bool randomTarget = ability.RandomTarget;
+
+                if (targetsParty)
+                {
+                    if (targetsAll)
+                    {
+                        _currentTargetIndex = (int) BattleTargets.AllPartyMembers;
+                    }
+                    else if (randomTarget)
+                    {
+                        _currentTargetIndex = (int) BattleTargets.RandomPartyMember;
+                    }
+                    else
+                    {
+                        _currentTargetIndex = GetFirstValidPartyTarget();
+                    }
+                }
+                else
+                {
+                    if (targetsAll)
+                    {
+                        _currentTargetIndex = (int) BattleTargets.AllEnemies;
+                    }
+                    else if (randomTarget)
+                    {
+                        _currentTargetIndex = (int) BattleTargets.RandomEnemy;
+                    }
+                    else
+                    {
+                        _currentTargetIndex = GetFirstValidEnemyTarget();
+                    }
+                }
+            }
         }
     }
 
@@ -446,35 +488,80 @@ public sealed class BattleState : IGameState, IBattleMenu
         while (_actions.Count > 0)
         {
             BattleAction action = _actions.Dequeue();
-            Execute(action);
+            var targets = GetTargets(action.TargetIndex);
+            ExecuteActionOnTargets(action, targets);
         }
         
         _currentTurn ++;
         _targetSelector = false;
     }
 
-    private void Execute(BattleAction action)
+    private IReadOnlyList<int> GetTargets(int targetIndex)
     {
-        var script = _scriptLibrary!.GetEntityScript(action.ScriptName);
-        EntityIndex user, target;
+        var targets = new List<int>();
+        var random = new Random();
 
-        // Account for random attack indexes.
-        var targetIndex = action.TargetIndex;
         switch (targetIndex)
         {
             case (int) BattleTargets.RandomPartyMember:
                 // Generate a random alive party member, keep trying to ensure the party member is alive.
-                var random = new Random();
                 do
                 {
                     targetIndex = random.Next(0, _party.Size);
                 }
-                while (_party.Characters[targetIndex].CurrentHP <= 0);
+                while (_party.Characters[targetIndex].CurrentHP < 0);
+
+                targets.Add(targetIndex);
+
+                break;
+
+            case (int) BattleTargets.RandomEnemy:
+                // Generate a random alive enemy, keep trying to ensure the enemy is alive.
+                do
+                {
+                    targetIndex = random.Next(0, _formation.Enemies.Count);
+                }
+                while (_formation.GetAmountOfLivingEnemies() >= 1 && 
+                    _formation.GetEntityAt(targetIndex).CurrentHP < 0);
+
+                targets.Add(targetIndex + _party.Size);
+
+                break;
+
+            case (int) BattleTargets.AllEnemies:
+                // Store all alive enemy indexes inside a list.
+                for (int enemyIndex = 0; enemyIndex < _formation.Enemies.Count; enemyIndex ++)
+                {
+                    if (_formation.GetEntityAt(enemyIndex).CurrentHP > 0)
+                    {
+                        targets.Add(enemyIndex + _party.Size);
+                    }
+                }
+
+                break;
+
+            case (int) BattleTargets.AllPartyMembers:
+                // Store all alive party member indexes inside a list.
+                for (int partyIndex = 0; partyIndex < _party.Size; partyIndex ++)
+                {
+                    if (_party.Characters[partyIndex].CurrentHP > 0)
+                    {
+                        targets.Add(partyIndex);
+                    }
+                }
+
                 break;
 
             default:
                 break;
         }
+
+        return targets;
+    }
+
+    private void ExecuteActionOnTargets(BattleAction action, IReadOnlyList<int> targetIndexes)
+    {
+        EntityIndex user, target;
 
         // Check if the user is an enemy or not.
         if (action.IsEnemy)
@@ -494,25 +581,32 @@ public sealed class BattleState : IGameState, IBattleMenu
             };
         }
 
-        // If target is enemy.
-        if (action.TargetIndex >= _party.Size)
+        foreach (var targetIndex in targetIndexes)
         {
-            target = new EntityIndex() 
-            { 
-                Index = targetIndex - _party.Size, 
-                EntityType = EntityType.Enemy 
-            };
+            // If target is enemy.
+            if (targetIndex >= _party.Size)
+            {
+                target = new EntityIndex() 
+                { 
+                    Index = targetIndex - _party.Size, 
+                    EntityType = EntityType.Enemy 
+                };
+            }
+            else
+            {
+                target = new EntityIndex() 
+                { 
+                    Index = targetIndex,  
+                    EntityType = EntityType.Character 
+                };
+            }
+            ExecuteAction(user, target, action.ScriptName);
         }
-        else
-        {
-            target = new EntityIndex() 
-            { 
-                Index = targetIndex,  
-                EntityType = EntityType.Character 
-            };
-        }
+    }
 
-        // Add user and target to script context.
+    private void ExecuteAction(EntityIndex user, EntityIndex target, string scriptName) {
+        var script = _scriptLibrary!.GetEntityScript(scriptName);
+
         _battleScriptContext!.SetVariable(ScriptVariables.User, user);
         _battleScriptContext.SetVariable(ScriptVariables.Target, target);
 
@@ -553,8 +647,6 @@ public sealed class BattleState : IGameState, IBattleMenu
             _gameContext.GameObjects.BattleEndRequest = new BattleEndRequest() { Script = _formation.OnWinScript };
         }
     }
-
-    private int GetNumberOfTargets() => _party.Size + _formation.GetAmountOfLivingEnemies();
 
     private int GetNumberOfOptions()
     {
