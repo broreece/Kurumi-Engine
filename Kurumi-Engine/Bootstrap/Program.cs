@@ -169,7 +169,8 @@ public static class Program
         SaveData saveData, 
         SaveService saveService, 
         Party party,
-        GameWindow gameWindow) 
+        GameWindow gameWindow
+    ) 
     {
         // Map services
         var mapRegistryPath = Path.Combine(paths.RegistryRoot, "map_registry.json");
@@ -203,7 +204,9 @@ public static class Program
                 new PathedActorFactory(scriptLibrary),
                 new RandomActorFactory(scriptLibrary), 
                 new SmartTrackingActorFactory(scriptLibrary), 
-                party));
+                party
+            )
+        );
 
         // System factories.
         var damageCalculatorFactory = new DamageCalculatorFactory(database.StatShortNameIndex);
@@ -294,7 +297,6 @@ public static class Program
             EnemyRendererFactory = enemyRendererFactory,
             FormationFactory = formationFactory,
             PartyBattleRendererFactory = partyBattleRendererFactory
-
         };
     }
 
@@ -317,7 +319,8 @@ public static class Program
         InputSystem inputSystem, 
         StateManager stateManager, 
         GameContext gameContext,
-        StateContext stateContext) 
+        StateContext stateContext
+    ) 
     {
         var clock = new Clock();
         var gameObjects = gameContext.GameObjects;

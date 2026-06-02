@@ -54,6 +54,7 @@ TOOLING
 CODE
 
 - Did a minor refractor where in file headers we specified the imports using a fixed comment structure.
+- Broke up the map state functions to better fit SOLID principles and improve modulality.
 
 ---------------------------------------------------------------------
 
