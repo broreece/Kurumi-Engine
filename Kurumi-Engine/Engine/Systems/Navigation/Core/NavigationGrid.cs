@@ -88,7 +88,8 @@ public sealed class NavigationGrid
         return true;
     }
 
-    private bool NotPartyLocation(int xLocation, int yLocation) {
+    private bool NotPartyLocation(int xLocation, int yLocation) 
+    {
         return xLocation != _partyPosition.XLocation || yLocation != _partyPosition.YLocation;
     }
 }

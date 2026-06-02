@@ -1,3 +1,4 @@
+// External libraries.
 using SFML.Window;
 
 namespace Engine.Input.System;

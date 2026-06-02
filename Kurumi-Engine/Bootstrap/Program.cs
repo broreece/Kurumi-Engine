@@ -66,7 +66,7 @@ public static class Program
         var configProvider = gameData.ConfigProvider;
         var gameConfig = configProvider.GameConfig;
 
-        var saveService = new SaveService(paths.SavePath);
+        var saveService = new SaveService();
         var saveData = saveService.LoadNewSaveData();
         var partyFactory = new PartyFactory(
             saveData.Characters, 
@@ -119,10 +119,6 @@ public static class Program
                 "Assets", 
                 "Registry"
             ),
-            SavePath = Path.Combine(
-                baseDir, 
-                "Saves"
-            ), 
             ConfigPath = Path.Combine(
                 baseDir, 
                 "Config", 
@@ -357,7 +353,6 @@ public static class Program
     private sealed class Paths 
     {
         public required string RegistryRoot { get; init; }
-        public required string SavePath { get; init; }
         public required string ConfigPath { get; init; }
     }
 

@@ -1,8 +1,12 @@
+// Data.
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Core;
 using Data.Runtime.Parties.Core;
 
+// Engine.
 using Engine.Systems.Combat.Core;
+
+// Game.
 using Game.Scripts.Context.Capabilities.Exceptions;
 using Game.Scripts.Context.Capabilities.Interfaces.Entity;
 

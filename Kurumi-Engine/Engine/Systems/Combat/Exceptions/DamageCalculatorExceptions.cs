@@ -1,3 +1,4 @@
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
 
 namespace Engine.Assets.Exceptions;
@@ -7,7 +8,7 @@ namespace Engine.Assets.Exceptions;
 /// </summary>
 public sealed class DamageCalculatorException : EngineException 
 {
-    public DamageCalculatorException(string message) : base(message) {}
-
     public override ExceptionSeverity Severity => ExceptionSeverity.Error;
+
+    public DamageCalculatorException(string message) : base(message) {}
 }

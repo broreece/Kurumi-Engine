@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Actors.Core;
 using Data.Definitions.Actors.Factories;
 using Data.Definitions.Entities.Abilities.Core;
@@ -13,6 +14,7 @@ using Data.Definitions.Items.Factories;
 using Data.Definitions.Maps.Core;
 using Data.Definitions.Maps.Factories;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 using Infrastructure.Database.Factories;
 using Infrastructure.Database.Loaders.Abilities;

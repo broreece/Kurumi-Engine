@@ -1,3 +1,4 @@
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
 
 namespace Game.Scripts.Exceptions;
@@ -7,7 +8,7 @@ namespace Game.Scripts.Exceptions;
 /// </summary>
 public sealed class ScriptStepException : EngineException 
 {
-    public ScriptStepException(string message) : base(message) {}
-
     public override ExceptionSeverity Severity => ExceptionSeverity.Error;
+
+    public ScriptStepException(string message) : base(message) {}
 }

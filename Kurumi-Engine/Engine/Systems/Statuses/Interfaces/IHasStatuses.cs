@@ -1,3 +1,4 @@
+// Data.
 using Data.Runtime.Entities.Statuses.Core;
 
 namespace Engine.Systems.Statuses.Interfaces;

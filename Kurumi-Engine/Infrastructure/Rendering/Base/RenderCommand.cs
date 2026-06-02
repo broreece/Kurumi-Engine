@@ -1,5 +1,7 @@
+// Engine.
 using Engine.Systems.Rendering.Base;
 
+// External libraries.
 using SFML.Graphics;
 
 namespace Infrastructure.Rendering.Base;

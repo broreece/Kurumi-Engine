@@ -1,6 +1,8 @@
+// Engine.
 using Engine.UI.Components.Base;
 using Engine.UI.Layout.Base;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -10,7 +12,8 @@ public sealed class TextComponent : IUIComponent
 {
     private readonly Text _text;
 
-    internal TextComponent(Text text) {
+    internal TextComponent(Text text) 
+    {
         _text = text;
     }
 

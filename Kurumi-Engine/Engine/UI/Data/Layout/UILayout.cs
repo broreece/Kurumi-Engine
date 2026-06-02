@@ -1,3 +1,4 @@
+// External libraries.
 using SFML.System;
 
 namespace Engine.UI.Data.Content.Layout;

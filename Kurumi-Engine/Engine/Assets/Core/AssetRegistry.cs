@@ -1,10 +1,14 @@
+// System libraries.
 using System.Text.Json;
 
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Exceptions;
 
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
 
+// External libraries.
 using SFML.Graphics;
 
 namespace Engine.Assets.Core;
@@ -63,6 +67,7 @@ public sealed class AssetRegistry
             json = File.ReadAllText(fontRegistryPath);
             var fontStringDictionary = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? 
                 throw new JsonFileException($"JSON file: {fontRegistryPath} is corrupted or incorrect format");
+                
             _fonts = [];
             foreach (var jsonDictionaryPair in fontStringDictionary) {
                 _fonts.Add(jsonDictionaryPair.Key, new Font(Path.Combine(

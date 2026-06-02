@@ -1,11 +1,17 @@
+// Engine.
 using Engine.Input.Mapper;
+
 using Engine.State.Base;
+
 using Engine.UI.Render;
 
+// Game/
 using Game.UI.Overlays.Base;
 
+// Infrastructure.
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.System;
 
 namespace Engine.State.Core;
@@ -35,7 +41,8 @@ public sealed class StateManager
         InputMapper inputMapper, 
         RenderSystem renderSystem,
         UIRenderSystem uIRenderSystem,
-        Vector2u displaySize) 
+        Vector2u displaySize
+    ) 
     {
         _currentState = currentState;
         _currentState.OnEnter();
@@ -110,7 +117,8 @@ public sealed class StateManager
             }
         }
 
-        if (stateInputValid) {
+        if (stateInputValid) 
+        {
             _stateContext.InputContextManager.Update(inputState);
         }
 

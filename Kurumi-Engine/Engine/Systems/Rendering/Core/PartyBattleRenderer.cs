@@ -30,7 +30,8 @@ public sealed class PartyBattleRenderer
     internal PartyBattleRenderer(
         RenderSystem renderSystem, 
         PartyMemberBattleRenderData[] partyMemberBattleRenderData, 
-        CharacterBattleSpriteConfig characterBattleSpriteConfig)
+        CharacterBattleSpriteConfig characterBattleSpriteConfig
+    )
     {
         _renderSystem = renderSystem;
         _partyMemberBattleRenderData = partyMemberBattleRenderData;

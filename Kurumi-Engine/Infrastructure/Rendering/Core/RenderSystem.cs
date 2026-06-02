@@ -1,3 +1,4 @@
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 
 namespace Infrastructure.Rendering.Core;
@@ -23,7 +24,8 @@ public sealed class RenderSystem
         _commands.Sort((a, b) => {
             int layerCompare = a.Layer.CompareTo(b.Layer);
         
-            if (layerCompare != 0) {
+            if (layerCompare != 0) 
+            {
                 return layerCompare;
             }
 

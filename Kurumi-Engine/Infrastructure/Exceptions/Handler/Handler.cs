@@ -1,5 +1,9 @@
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
+
 using Infrastructure.Loging;
+
+// External Libraries.
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
@@ -75,10 +79,10 @@ public static class Handler
                     break;
             }
         }
-        else {
+        else 
+        {
             var message = $@"{exception.Message}";
-            var stackMessage = $@"
-                Stack: {exception.StackTrace}";
+            var stackMessage = $@"Stack: {exception.StackTrace}";
             Logger.LogFatal($"{message}{stackMessage}");
             DisplayErrorMessage(message);
             // TODO: (LI-01) Close game window here.

@@ -51,6 +51,12 @@ TOOLING
 
 ---------------------------------------------------------------------
 
+CODE
+
+- Did a minor refractor where in file headers we specified the imports using a fixed comment structure.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - After all the changes to the workflow making new additions have become significantly easier.

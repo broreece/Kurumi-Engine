@@ -1,4 +1,4 @@
-// System.
+// System libraries.
 using System.Text.Json;
 
 // Game.

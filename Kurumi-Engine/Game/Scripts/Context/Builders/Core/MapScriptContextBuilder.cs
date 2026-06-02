@@ -36,21 +36,26 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
 
         // Construct capability container.
         capabilityContainer.SetCapability(typeof(IBattleActions), new BattleActions(gameObjects));
+
         capabilityContainer.SetCapability(
             typeof(IMapNavigationActions), 
             new MapNavigationActions(gameObjects)
         );
+
         capabilityContainer.SetCapability(
             typeof(IMovementActions), 
             new MovementActions(gameObjects.CurrentMap, gameObjects.Party)
         );
+
         capabilityContainer.SetCapability(typeof(IGameStateActions), new GameStateActions(
             gameObjects.SaveData.GameVariables
         ));
+
         capabilityContainer.SetCapability(typeof(IPartyStatusActions), new PartyStatusActions(
             gameObjects.Party,
             gameData.GameDatabase.StatusRegistry
         ));
+        
         capabilityContainer.SetCapability(typeof(IUIActions), new UIActions(
             _stateContext,
             gameData.AssetRegistry, 

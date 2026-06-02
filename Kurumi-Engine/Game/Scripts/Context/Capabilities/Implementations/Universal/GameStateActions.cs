@@ -1,5 +1,7 @@
+// Data.
 using Data.Models.Variables;
 
+// Game.
 using Game.Scripts.Context.Capabilities.Exceptions;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 

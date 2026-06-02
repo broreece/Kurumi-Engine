@@ -1,6 +1,13 @@
+// Config.
 using Config.Core;
+
+// Engine.
 using Engine.Assets.Core;
+
+// Game.
 using Game.Scripts.Library;
+
+// Infrastructure.
 using Infrastructure.Database.Database;
 
 namespace Engine.Context.Containers;

@@ -1,5 +1,8 @@
+// Data.
 using Data.Definitions.Formations.Core;
 using Data.Definitions.Formations.Factories;
+
+// Infrastructure.
 using Infrastructure.Database.Interfaces;
 using Infrastructure.Database.Repositories.Core.Formations;
 using Infrastructure.Database.Repositories.Rows.Formations;

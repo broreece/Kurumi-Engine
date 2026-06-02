@@ -1,5 +1,7 @@
+// Data.
 using Data.Runtime.Formations.Core;
 
+// Game.
 using Game.Scripts.Context.Capabilities.Interfaces.Battle;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Battle;

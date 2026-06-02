@@ -1,3 +1,4 @@
+// Infrastructure.
 using Infrastructure.Database.Base;
 
 namespace Infrastructure.Database.Factories;
