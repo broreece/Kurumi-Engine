@@ -39,7 +39,6 @@ BATTLE
 - When battles end; on win or on lose scripts execute allowing for more script interactions such as flags being set
     etc.
 - Battles can now start if a formation encounters the party.
-- Damage is now displayed to improve debugging experience and provide base for future refinement.
 - Attacks can now target randomly, all party members, all enemies or everyone.
 
 ---------------------------------------------------------------------

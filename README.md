@@ -19,6 +19,7 @@ and scalable.
 Refinement build is currently in progress, it is focused on:
 - Improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
 - Addition of missing UI state and config for party movement, (Also making party movement smoother).
+- Displaying damage during battle state.
 
 ---
 

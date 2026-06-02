@@ -57,9 +57,9 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (BSE-02) Battle scene enhancements 2 ##
-### Complexity: 3 ###
-### Independent: 3 ###
+## (DD-01) Display damage text ##
+### Complexity: 2 ###
+### Independent: 2 ###
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
@@ -69,10 +69,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 - Implement damage text:
     - Used to exist in forge.
     - Create custom config declaring it's font type, size and maybe a offset.
-
----
-
-## Pursuit milestone reached.
 
 ---
 
