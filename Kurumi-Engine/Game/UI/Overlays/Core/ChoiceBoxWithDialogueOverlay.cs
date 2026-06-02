@@ -1,9 +1,14 @@
+// Config.
 using Config.Runtime.Defaults;
 
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Input.Base;
+
 using Engine.Systems.Rendering.Base;
+
 using Engine.UI.Components.Core;
 using Engine.UI.Components.Factories;
 using Engine.UI.Data.Content;
@@ -11,8 +16,10 @@ using Engine.UI.Data.Content.Layout;
 using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 
+// Game.
 using Game.UI.Overlays.Base;
 
+// External libraries.
 using SFML.System;
 
 namespace Game.UI.Overlays.Core;
@@ -41,7 +48,8 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         TextWindowDefaults textWindowDefaults, 
         ChoiceBoxDefaults choiceBoxDefaults,
         IReadOnlyList<string> choices,
-        string text)
+        string text
+    )
     {
         // Component factories.
         var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
@@ -110,6 +118,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
 
             RenderLayer = RenderLayer.UIText
         };
+
         var textWindowElement = new UIElement()
         {
             UIComponent = windowComponent,
@@ -149,6 +158,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
             });
             choiceIndex ++;
         }
+
         _selectionElement = new UIElement()
         {
             UIComponent = selectionComponent,
@@ -163,6 +173,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
 
             RenderLayer = RenderLayer.UISelectionBox
         };
+        
         var choiceWindowElement = new UIElement()
         {
             UIComponent = choiceWindowComponent,

@@ -1,5 +1,7 @@
+// Data.
 using Data.Runtime.Spatials;
 
+// Utility.
 using Utils.Finishable;
 
 namespace Data.Runtime.Maps.Base.Controllers.Base;
@@ -16,11 +18,11 @@ public abstract class Controller : IFinishable
 
     public bool CanMove => _elapsedTime >= Interval;
 
-    // Overriden by pathed controllers which can allow finishing of movements.
-    public virtual bool IsFinished() => false;
-
     // Overriden by tracked controllers which return true.
     public virtual bool IsTrackedController => false;
+
+    // Overriden by pathed controllers which can allow finishing of movements.
+    public virtual bool IsFinished() => false;
 
     public void Update(float deltaTime) =>_elapsedTime += deltaTime;
 

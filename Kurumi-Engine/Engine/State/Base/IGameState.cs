@@ -1,3 +1,4 @@
+// Game.
 using Game.Scripts.Context.Core;
 
 namespace Engine.State.Base;

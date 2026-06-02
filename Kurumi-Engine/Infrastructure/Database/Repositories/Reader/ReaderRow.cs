@@ -1,3 +1,4 @@
+// External libraries.
 using Microsoft.Data.Sqlite;
 
 namespace Infrastructure.Database.Repositories.Base;

@@ -1,10 +1,14 @@
+// Data.
 using Data.Definitions.Actors.Core;
+
 using Data.Models.Maps;
+
 using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Actors.Core;
 using Data.Runtime.Spatials;
 
+// Game.
 using Game.Scripts.Library;
 
 namespace Data.Runtime.Actors.Factories;
@@ -25,6 +29,7 @@ public sealed class DumbTrackingActorFactory
         { 
             Interval = actorInfo.MovementSpeed 
         });
+
         if (actorInfo.ScriptName == null)
         {
             return new Actor(actorInfo, actorModel) 
@@ -33,6 +38,7 @@ public sealed class DumbTrackingActorFactory
                 Script = null
             };
         }
+        
         return new Actor(actorInfo, actorModel)
         {
             Controllers = controllers,

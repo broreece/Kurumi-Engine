@@ -1,9 +1,17 @@
+// Config.
 using Config.Runtime.Battle;
+
+// Data.
 using Data.Runtime.Formations.Core;
+
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Systems.Rendering.Base;
 using Engine.Systems.Rendering.Core;
+
+// Infrastructure.
 using Infrastructure.Rendering.Core;
 
 namespace Engine.Systems.Rendering.Factories;
@@ -19,7 +27,8 @@ public sealed class EnemyRendererFactory
     public EnemyRendererFactory(
         AssetRegistry assetRegistry, 
         RenderSystem renderSystem, 
-        EnemyBattleSpriteConfig enemyBattleSpriteConfig)
+        EnemyBattleSpriteConfig enemyBattleSpriteConfig
+    )
     {
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;

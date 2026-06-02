@@ -122,8 +122,13 @@ public sealed class VisionResolver
     /// <returns>If there is a clear line of sight between viewer and target.</returns>
     /// <exception cref="PerceptionException">Exception thrown if a target isn't in range of the view even after passing
     /// pre-checks for being in range.</exception>
-    private bool ClearSight(int distance, int peripheralDistance, int viewerLocation, int viewerPeriphery, 
-        int targetLocation) 
+    private bool ClearSight(
+        int distance, 
+        int peripheralDistance, 
+        int viewerLocation, 
+        int viewerPeriphery, 
+        int targetLocation
+        ) 
         {
         // Use a for loop that goes either in positive or negative range based on distance.
         var step = distance > 0 ? 1 : -1;

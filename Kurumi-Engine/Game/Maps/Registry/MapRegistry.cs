@@ -1,5 +1,7 @@
+// System libraries.
 using System.Text.Json;
 
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
 
 namespace Game.Maps.Registry;

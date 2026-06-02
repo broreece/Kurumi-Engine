@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Entities.Core;
 
 namespace Data.Definitions.Entities.Factories;
@@ -10,7 +11,8 @@ public sealed class CharacterDefinitionFactory
         string fieldSprite, 
         string menuSprite, 
         string name, 
-        string description) 
+        string description
+    ) 
     {
         return new CharacterDefinition()
         {

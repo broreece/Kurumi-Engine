@@ -1,5 +1,7 @@
+// System libraries.
 using System.Text.Json;
 
+// Infrastructure.
 using Infrastructure.Persistance.Base;
 using Infrastructure.Persistance.Exceptions;
 
@@ -11,7 +13,7 @@ public sealed class SaveService
     
     private readonly JsonSerializerOptions _options;
 
-    public SaveService(string savePath) 
+    public SaveService() 
     {
         _options = new JsonSerializerOptions() { WriteIndented = true };
         _saveRootPath = Path.Combine(

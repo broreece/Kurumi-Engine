@@ -1,5 +1,8 @@
+// Data.
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Maps.Factories;
+
+// Game.
 using Game.Maps.Loader;
 using Game.Maps.Registry;
 
@@ -21,7 +24,8 @@ public sealed class MapService
         _mapFactory = mapFactory;
     }
 
-    public Map LoadMap(string mapName) {
+    public Map LoadMap(string mapName) 
+    {
         var path = _registry.GetMapFileName(mapName);
         return _mapFactory.Create(_loader.LoadMap(path));
     }

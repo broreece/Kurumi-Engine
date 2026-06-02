@@ -1,5 +1,7 @@
+// Engine.
 using Engine.UI.Layout.Base;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 

@@ -1,4 +1,6 @@
+// Data.
 using Data.Definitions.Entities.Statuses.Core;
+
 using Data.Runtime.Entities.Statuses.Core;
 
 namespace Data.Runtime.Entities.Statuses.Factories;

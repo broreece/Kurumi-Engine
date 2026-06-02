@@ -1,8 +1,9 @@
-namespace Data.Definitions.Entities.Statuses.Factories;
-
+// Data.
 using Data.Definitions.Entities.Statuses.Core;
 using Data.Definitions.Modifiers.Base;
 using Data.Definitions.Modifiers.Core;
+
+namespace Data.Definitions.Entities.Statuses.Factories;
 
 public sealed class StatusDefinitionFactory 
 {
@@ -22,7 +23,8 @@ public sealed class StatusDefinitionFactory
         IReadOnlyDictionary<int, int> elements, 
         IReadOnlyList<int> sealedAbilitySets, 
         IReadOnlyList<int> sealedAbilities, 
-        IReadOnlyList<int> addedAbilities) 
+        IReadOnlyList<int> addedAbilities
+    ) 
     {
 
         // Create a dictionary for the modifications so it's faster to access then looping and checking types.
@@ -33,17 +35,17 @@ public sealed class StatusDefinitionFactory
             SealedAbilities = sealedAbilities, 
             AddedAbilities = addedAbilities
         });
-        entityModifiers.Add(ModifierType.Element, new ElementModifier() {Elements = elements});
+        entityModifiers.Add(ModifierType.Element, new ElementModifier() { Elements = elements });
         entityModifiers.Add(ModifierType.HitChance, new HitChanceModifier() 
         {
             AccuracyModifier = accuracy, 
             EvasionModifier = evasion
         });
-        entityModifiers.Add(ModifierType.Stat, new StatModifier() {Stats = stats});
+        entityModifiers.Add(ModifierType.Stat, new StatModifier() { Stats = stats });
 
         if (turnEffectScriptName != null) 
         {
-            entityModifiers.Add(ModifierType.TurnEffect, new TurnEffect() {TurnScriptName = turnEffectScriptName});
+            entityModifiers.Add(ModifierType.TurnEffect, new TurnEffect() { TurnScriptName = turnEffectScriptName });
         }
             
         return new StatusDefinition()

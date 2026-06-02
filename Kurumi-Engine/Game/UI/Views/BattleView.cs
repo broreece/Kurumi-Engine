@@ -226,7 +226,7 @@ public sealed class BattleView
             {
                 var character = _partyMembers[partyIndex];
                 _partyTextComponents[partyIndex].SetText($"{character.Name} HP: {character.CurrentHP} / " +
-                    $"{character.GetMaxHp()}, MP: {character.CurrentMP}: {character.MaxMP}");
+                    $"{character.MaxHp}, MP: {character.CurrentMP}: {character.MaxMP}");
             }
         }
 
@@ -238,7 +238,7 @@ public sealed class BattleView
         var choiceIndex = 0;
 
         // Base abilities.
-        foreach (var id in currentCharacter.GetAbilityIDs())
+        foreach (var id in currentCharacter.AbilityIDs)
         {
             TextData textData = new() { Text = _abilityRegistry.Get(id).Name };
             var textComponent = _textComponentFactory.Create(textData, _textStyle);
@@ -260,7 +260,7 @@ public sealed class BattleView
         }
 
         // Ability sets.
-        foreach (var keyValuePair in currentCharacter.GetAbilitySetIDs())
+        foreach (var keyValuePair in currentCharacter.AbilitySetIDs)
         {
             var abilitySetId = keyValuePair.Key;
             TextData textData = new() { Text = _abilitySetRegistry.Get(abilitySetId).Name };

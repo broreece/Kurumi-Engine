@@ -1,9 +1,16 @@
+// Config.
 using Config.Runtime.Battle;
+
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Systems.Rendering.Core;
+
+// Infrastructure.
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -22,7 +29,8 @@ public sealed class BattleRendererFactory
         AssetRegistry assetRegistry, 
         RenderSystem renderSystem,
         BattleBackgroundSpriteConfig battleBackgroundSpriteConfig,
-        Vector2u displaySize)
+        Vector2u displaySize
+    )
     {
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;

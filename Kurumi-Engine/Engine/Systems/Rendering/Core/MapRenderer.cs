@@ -1,12 +1,22 @@
+// Config.
 using Config.Runtime.Map;
+
+// Data.
 using Data.Definitions.Maps.Core;
+
 using Data.Models.Maps;
+
+// Engine.
 using Engine.Systems.Animation.Map.Base;
 using Engine.Systems.Rendering.Base;
+
+// Infrastructure.
 using Infrastructure.Database.Base;
+
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -34,7 +44,8 @@ public sealed class MapRenderer
         IReadOnlyList<TileModel> tiles, 
         Texture tileSheetTexture, 
         Texture animatedTileSheetTexture,
-        Texture mapBackgroundTexture) 
+        Texture mapBackgroundTexture
+    ) 
     {
         _renderSystem = renderSystem;
         _tileRegistry = tileRegistry;

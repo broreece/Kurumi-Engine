@@ -1,3 +1,4 @@
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
 
 namespace Infrastructure.Persistance.Exceptions;
@@ -7,7 +8,7 @@ namespace Infrastructure.Persistance.Exceptions;
 /// </summary>
 public sealed class SaveFileException : EngineException 
 {
-    public SaveFileException(string message) : base(message) {}
-
     public override ExceptionSeverity Severity => ExceptionSeverity.Fatal;
+
+    public SaveFileException(string message) : base(message) {}
 }

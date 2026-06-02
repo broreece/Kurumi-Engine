@@ -1,15 +1,19 @@
+// System libraries.
 using System.Text.Json;
 
+// Data.
 using Data.Models.Maps;
 
+// Game.
 using Game.Maps.Exceptions;
 
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
 
 namespace Game.Maps.Loader;
 
 /// <summary>
-/// Can load a new map state using a passed map name.
+/// Loads a new map state using a passed map name.
 /// </summary>
 public sealed class MapLoader 
 {

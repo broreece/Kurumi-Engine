@@ -1,3 +1,4 @@
+// Engine.
 using Engine.Systems.Animation.Map.Base;
 
 namespace Engine.Systems.Animation.Map.Core;
@@ -21,7 +22,8 @@ public sealed class MapAnimationManager : ITileFrameAccessor
         _tileFrameDuration = tileFrameDuration;
     }
 
-    public void Update(float deltaTime) {
+    public void Update(float deltaTime) 
+    {
         _tileTimer += deltaTime;
 
         while (_tileTimer >= _tileFrameDuration) {

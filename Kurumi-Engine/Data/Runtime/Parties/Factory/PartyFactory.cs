@@ -1,10 +1,14 @@
+// Data.
 using Data.Definitions.Entities.Core;
+
 using Data.Models.Characters;
 using Data.Models.Party;
+
 using Data.Runtime.Entities.Core;
 using Data.Runtime.Entities.Factories;
 using Data.Runtime.Parties.Core;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 
 namespace Data.Runtime.Parties.Factory;
@@ -22,7 +26,8 @@ public sealed class PartyFactory
         Dictionary<int, CharacterModel> characterModels, 
         Registry<CharacterDefinition> characterRegistry, 
         int maxPartySize,
-        int agilityIndex)
+        int agilityIndex
+    )
     {
         _characterModels = characterModels;
         _characterRegistry = characterRegistry;
@@ -44,6 +49,6 @@ public sealed class PartyFactory
                 _characterModels[characterId]
             );
         }
-        return new Party() {Characters = characters, PartyModel = partyModel, Inventory = inventory};
+        return new Party() { Characters = characters, PartyModel = partyModel, Inventory = inventory };
     }
 }

@@ -1,9 +1,18 @@
+// Config.
 using Config.Runtime.Map;
+
+// Data.
 using Data.Definitions.Maps.Core;
+
 using Data.Models.Maps;
+
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Systems.Rendering.Core;
+
+// Infrastructure.
 using Infrastructure.Database.Base;
 using Infrastructure.Rendering.Core;
 
@@ -37,14 +46,17 @@ public sealed class MapRendererFactory
             AssetType.TileSpriteSheets, 
             tileSheetName
         );
+
         var animatedTileSheetTexture = _assetRegistry.GetTexture(
             AssetType.AnimatedTileSpriteSheets, 
             tileSheetName
         );
+
         var mapBackgroundTexture = _assetRegistry.GetTexture(
             AssetType.MapBackgroundArt, 
             mapBackgroundName
         );
+        
         return new MapRenderer(
             _renderSystem, 
             _tileRegistry, 

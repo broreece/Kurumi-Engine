@@ -1,6 +1,9 @@
+// Data.
 using Data.Definitions.Entities.Statuses.Base;
+
 using Data.Runtime.Entities.Statuses.Core;
 
+// Engine.
 using Engine.Systems.Statuses.Interfaces;
 
 namespace Engine.Systems.Statuses.Core;
@@ -12,7 +15,7 @@ public sealed class StatusResolver
 {
     public void TryApplyStatus(IHasStatuses statuseableObject, Status newStatus) 
     {
-        var statuses = statuseableObject.GetStatuses();
+        var statuses = statuseableObject.Statuses;
 
         // Check if we can apply the statuses based on priorites.
         if (CanApply(statuses, newStatus)) 

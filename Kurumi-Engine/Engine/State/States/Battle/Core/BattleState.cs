@@ -295,7 +295,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         {
             // Check for abilities.
             var currentCharacter = _party.Characters[_currentCharacterIndex];
-            var abilities = currentCharacter.GetAbilityIDs();
+            var abilities = currentCharacter.AbilityIDs;
             if (_currentSelectionIndex < abilities.Count)
             {
                 _queuedActions.Push((new BattleAction()
@@ -318,7 +318,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         {
             _targetSelector = true;
             var currentCharacter = _party.Characters[_currentCharacterIndex];
-            var abilities = currentCharacter.GetAbilityIDs();
+            var abilities = currentCharacter.AbilityIDs;
             if (_currentSelectionIndex < abilities.Count)
             {
                 var ability = _abilityRegistry.Get(abilities[_currentSelectionIndex]);
@@ -553,6 +553,7 @@ public sealed class BattleState : IGameState, IBattleMenu
                 break;
 
             default:
+                targets.Add(targetIndex);
                 break;
         }
 
@@ -651,7 +652,7 @@ public sealed class BattleState : IGameState, IBattleMenu
     private int GetNumberOfOptions()
     {
         var currentCharacter = _party.Characters[_currentCharacterIndex];
-        var numberOfOptions = currentCharacter.GetAbilityIDs().Count + currentCharacter.GetAbilitySetIDs().Count;
+        var numberOfOptions = currentCharacter.AbilityIDs.Count + currentCharacter.AbilitySetIDs.Count;
         if (_itemsEnabled)
         {
             numberOfOptions ++;

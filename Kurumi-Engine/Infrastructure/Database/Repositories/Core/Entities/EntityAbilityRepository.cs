@@ -1,7 +1,9 @@
+// Infrastructure.
 using Infrastructure.Database.Repositories.Base;
 using Infrastructure.Database.Repositories.Rows.Entities;
 using Infrastructure.Database.Services;
 
+// External libraries.
 using Microsoft.Data.Sqlite;
 
 namespace Infrastructure.Database.Repositories.Core.Entities;

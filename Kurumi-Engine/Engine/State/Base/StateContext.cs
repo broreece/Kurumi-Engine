@@ -1,10 +1,14 @@
+// Data.
 using Data.Runtime.Scripts.Execution;
 using Data.Runtime.Scripts.Scheduler;
 
+// Engine.
 using Engine.Input.Context.Core;
 
+// Game.
 using Game.UI.Overlays.Base;
 
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 
 namespace Engine.State.Base;

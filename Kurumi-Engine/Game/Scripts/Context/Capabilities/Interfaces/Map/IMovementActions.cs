@@ -1,5 +1,7 @@
+// Game.
 using Game.Scripts.Context.Capabilities.Base;
 
+// Utility.
 using Utils.Finishable;
 
 namespace Game.Scripts.Context.Capabilities.Interfaces.Map;
@@ -11,7 +13,8 @@ public interface IMovementActions : ICapability
         bool lockMovement, 
         bool instant, 
         string actorKey, 
-        List<int> path);
+        List<int> path
+    );
 
     public IFinishable ForceMoveParty(bool keepDirection, bool instant, IReadOnlyList<int> path);
 }

@@ -1,6 +1,9 @@
+// Data.
 using Data.Definitions.Formations.Core;
+
 using Data.Runtime.Formations.Core;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 
 namespace Data.Runtime.Formations.Factories;

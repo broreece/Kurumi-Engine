@@ -1,7 +1,11 @@
+// Engine.
 using Engine.Systems.Rendering.Base;
+
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -22,7 +26,8 @@ public sealed class ActorRenderer
         RenderSystem renderSystem, 
         IReadOnlyList<ActorRenderData> actorRenderData, 
         int tileWidth, 
-        int tileHeight) 
+        int tileHeight
+    ) 
     {
 
         this.renderSystem = renderSystem;

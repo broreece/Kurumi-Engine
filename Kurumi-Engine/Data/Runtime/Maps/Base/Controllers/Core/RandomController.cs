@@ -1,3 +1,4 @@
+// Data.
 using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Spatials;
 
@@ -10,6 +11,7 @@ namespace Data.Runtime.Maps.Base.Controllers.Core;
 public sealed class RandomController : Controller 
 {
     private bool _initialized;
+    
     private int _fixedActorInterval;
 
     public override void ExecuteMove() 

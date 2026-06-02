@@ -1,3 +1,4 @@
+// Engine.
 using Engine.Assets.Exceptions;
 
 namespace Engine.Systems.Combat.Core;
@@ -79,11 +80,13 @@ public sealed class DamageCalculator
     /// <returns>A list of tokens and variables E.G: ["(","a.atk","-","b.def",")"]</returns>
     private List<string> Tokenize(string formula) 
     {
-        List<string> tokens = [];
-        string current = "";
+        var tokens = new List<string>();
+        var current = "";
 
-        foreach (var character in formula.Replace(" ", "")) {
-            if ("+-*/^()".Contains(character)) {
+        foreach (var character in formula.Replace(" ", "")) 
+        {
+            if ("+-*/^()".Contains(character)) 
+            {
                 // If finished building a variable push it into the token stack.
                 if (current.Length > 0) {
                     tokens.Add(current);
@@ -99,7 +102,8 @@ public sealed class DamageCalculator
         }
 
         // Add edge case operator.
-        if (current.Length > 0) {
+        if (current.Length > 0) 
+        {
             tokens.Add(current);
         }
 
@@ -118,7 +122,7 @@ public sealed class DamageCalculator
     private int ResolveVariable(string token, IReadOnlyList<int> userStats, IReadOnlyList<int> targetStats) 
     {
         // Token here has to be '.' as we use it to seperate entity and stat such as 'a.atk'
-        string[] parts = token.Split('.');
+        var parts = token.Split('.');
 
         if (parts.Length != 2) 
         {

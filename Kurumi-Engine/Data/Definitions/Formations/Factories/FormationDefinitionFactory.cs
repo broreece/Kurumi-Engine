@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Formations.Core;
 
 namespace Data.Definitions.Formations.Factories;
@@ -17,7 +18,8 @@ public sealed class FormationDefinitionFactory
         string backgroundArtName, 
         string? onLoseScript, 
         string? onWinScript, 
-        IReadOnlyList<int> enemies) 
+        IReadOnlyList<int> enemies
+    ) 
     {
         return new FormationDefinition()
         {

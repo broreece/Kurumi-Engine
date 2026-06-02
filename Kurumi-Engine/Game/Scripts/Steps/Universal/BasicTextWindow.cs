@@ -1,7 +1,9 @@
+// Game.
 using Game.Scripts.Base;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 using Game.Scripts.Context.Core;
 
+// Utility.
 using Utils.Finishable;
 
 namespace Game.Scripts.Steps.Universal;
@@ -12,7 +14,8 @@ public sealed class BasicTextWindow : ScriptStep
 
     private IFinishable? _textWindow;
 
-    public BasicTextWindow(IReadOnlyList<string> pages) : base() {
+    public BasicTextWindow(IReadOnlyList<string> pages) : base() 
+    {
         _pages = pages;
     }
 
