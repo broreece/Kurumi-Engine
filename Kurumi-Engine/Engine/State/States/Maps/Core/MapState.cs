@@ -104,66 +104,15 @@ public sealed class MapState : IGameState
 
     public void Update(float deltaTime) 
     {
-        // Handle requested interactions.
-        if (_stateContext.InputContextManager.GetGameplayContext()!.InteractRequested) 
-        {
-            _stateContext.InputContextManager.GetGameplayContext()!.InteractRequested = false;
-            // Get location of party.
-            var partyX = _party.XLocation;
-            var partyY = _party.YLocation;
-            var facing = _party.SpriteState;
-
-            // Calculate the location being interacted with.
-            var xChange = facing == (int) SpriteState.West ? -1 : facing == (int) SpriteState.East ? 1 : 0;
-            var yChange = facing == (int) SpriteState.South ? 1 : facing == (int) SpriteState.North ? -1 : 0;
-            var targetX = partyX + xChange;
-            var targetY = partyY + yChange;
-            var newFacing = facing == 
-                (int) SpriteState.North ? (int) SpriteState.South 
-                : facing == (int) SpriteState.East ? (int) SpriteState.West 
-                : facing == (int) SpriteState.South ? (int) SpriteState.North 
-                : (int) SpriteState.East;
-
-            // Set new facing direction if the actor turns and activate script.
-            var actors = _currentMap!.GetActorsAt(targetX, targetY);
-            foreach (var actor in actors) 
-            {
-                if ((int) ActorBehaviour.StationaryDoesNotTurn != actor.Behaviour) 
-                {
-                    actor.SpriteState = newFacing;
-                }
-
-                // Load potential script and activate.
-                if (actor.OnAction && actor.Script != null) 
-                {
-                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
-                }
-            }
-        }
+        HandleInteractions();
 
         // Handle on touch and on find scripts.
         var isCurrentlyMoving = _party.MovementProgress < 1f;
         var movementJustFinished = !isCurrentlyMoving && _party.MovingLastFrame;
+
         if (movementJustFinished) 
         {
-            // Activate any on touch scripts on the tile.
-            var actors = _currentMap!.GetActorsAt(_party.XLocation, _party.YLocation);
-            foreach (var actor in actors) 
-            {
-                if (actor.OnTouch && actor.Script != null) 
-                {
-                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
-                }
-            }
-
-            // Check if any formation is beside the party.
-            CheckAnyFormationBesideParty();
-
-            // Check if in range of actors or formations.
-            ExecuteAllOnFindScripts();
-            CheckInRangeFormations();
-
-            _party.MovingLastFrame = false;
+            HandlePartyMovementFinished();
         }
 
         MoveAllActors(deltaTime);
@@ -173,20 +122,9 @@ public sealed class MapState : IGameState
         _walkAnimationManager!.Update(deltaTime);
         _mapAnimationManager!.Update(deltaTime);
 
-        // Update camera's location.
-        float interpolatedX = _party.LastX + (_party.PartyModel.XLocation - _party.LastX) * _party.MovementProgress;
-        float interpolatedY = _party.LastY + (_party.PartyModel.YLocation - _party.LastY) * _party.MovementProgress;
+        UpdateCamera();
 
-        float worldX = interpolatedX * _tileWidth + _tileWidth / 2f;
-        float worldY = interpolatedY * _tileHeight + _tileHeight / 2f;
-
-        _camera!.Follow(worldX, worldY, _currentMap!.Width * _tileWidth, _currentMap.Height * _tileHeight);
-        _stateContext.GameWindow.SetView(_camera.View);
-
-        // Update the renderers and render.
-        _mapRenderer!.Update(_mapAnimationManager, _camera.View);
-        _actorRenderer!.Update(_camera.View);
-        _partyMapRenderer!.Update(_camera.View);
+        UpdateRenderers();
 
         if (_gameObjects!.MapChangeRequest != null) 
         {
@@ -256,6 +194,90 @@ public sealed class MapState : IGameState
         _stateContext.GameWindow.SetView(_camera.View);
     }
 
+    private void HandleInteractions()
+    {
+        if (_stateContext.InputContextManager.GetGameplayContext()!.InteractRequested) 
+        {
+            _stateContext.InputContextManager.GetGameplayContext()!.InteractRequested = false;
+            
+            // Get location of party.
+            var partyX = _party.XLocation;
+            var partyY = _party.YLocation;
+            var facing = _party.SpriteState;
+
+            // Calculate the location being interacted with.
+            var xChange = facing == (int) SpriteState.West ? -1 : facing == (int) SpriteState.East ? 1 : 0;
+            var yChange = facing == (int) SpriteState.South ? 1 : facing == (int) SpriteState.North ? -1 : 0;
+            var targetX = partyX + xChange;
+            var targetY = partyY + yChange;
+            var newFacing = facing == 
+                (int) SpriteState.North ? (int) SpriteState.South 
+                : facing == (int) SpriteState.East ? (int) SpriteState.West 
+                : facing == (int) SpriteState.South ? (int) SpriteState.North 
+                : (int) SpriteState.East;
+
+            // Set new facing direction if the actor turns and activate script.
+            var actors = _currentMap!.GetActorsAt(targetX, targetY);
+
+            foreach (var actor in actors) 
+            {
+                if ((int) ActorBehaviour.StationaryDoesNotTurn != actor.Behaviour) 
+                {
+                    actor.SpriteState = newFacing;
+                }
+
+                // Load potential script and activate.
+                if (actor.OnAction && actor.Script != null) 
+                {
+                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
+                }
+            }
+        }
+    }
+
+    private void HandlePartyMovementFinished()
+    {
+        ExecuteOnTouchScripts();
+
+        CheckAnyFormationBesideParty();
+
+        ExecuteAllOnFindScripts();
+        CheckInRangeFormations();
+
+        _party.MovingLastFrame = false;
+    }
+
+    private void ExecuteOnTouchScripts()
+    {
+        var actors = _currentMap!.GetActorsAt(_party.XLocation, _party.YLocation);
+        foreach (var actor in actors) 
+        {
+            if (actor.OnTouch && actor.Script != null) 
+            {
+                _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
+            }
+        }
+    }
+
+    private void UpdateCamera()
+    {
+        float interpolatedX = _party.LastX + (_party.PartyModel.XLocation - _party.LastX) * _party.MovementProgress;
+        float interpolatedY = _party.LastY + (_party.PartyModel.YLocation - _party.LastY) * _party.MovementProgress;
+
+        float worldX = interpolatedX * _tileWidth + _tileWidth / 2f;
+        float worldY = interpolatedY * _tileHeight + _tileHeight / 2f;
+
+        _camera!.Follow(worldX, worldY, _currentMap!.Width * _tileWidth, _currentMap.Height * _tileHeight);
+        _stateContext.GameWindow.SetView(_camera.View);
+    }
+
+    private void UpdateRenderers()
+    {
+        _mapRenderer!.Update(_mapAnimationManager!, _camera!.View);
+        _actorRenderer!.Update(_camera.View);
+        _partyMapRenderer!.Update(_camera.View);
+    }
+
     private void MoveAllActors(float deltaTime) {
         if (_currentMap!.Actors != null)
         {
@@ -305,41 +327,46 @@ public sealed class MapState : IGameState
             foreach (var formation in _currentMap.Formations)
             {
                 if (!formation.Dead) {
-                    var controller = formation.GetCurrentController();
-                    if (controller != null)
+                    UpdateFormation(formation, deltaTime);
+                }
+            }
+        }
+    }
+
+    private void UpdateFormation(Formation formation, float deltaTime) 
+    {
+        var controller = formation.GetCurrentController();
+        if (controller != null)
+        {
+            controller.Update(deltaTime);
+            if (controller.CanMove)
+            {
+                CheckFormationBesideParty(formation);
+
+                // Execute move.
+                var move = controller.GetMove(formation);
+                if (move >= 0)
+                {
+                    // If the formation can execute moves we reset their alert status.
+                    formation.ResetAlertTimer();
+
+                    _movementResolver!.TryMove(formation, move);
+                    controller.ExecuteMove();
+
+                    // Check if the party is in range of the formation.
+                    CheckInRangeFormation(formation);
+
+                    // After formation moves visiblity might change.
+                    ExecuteAllOnFindScripts();
+                }
+                // If the formation can not execute any moves increment their alert counter.
+                else
+                {
+                    formation.Update(deltaTime);
+                    if (formation.AlertLimitReached)
                     {
-                        controller.Update(deltaTime);
-                        if (controller.CanMove)
-                        {
-                            CheckFormationBesideParty(formation);
-
-                            // Execute move.
-                            var move = controller.GetMove(formation);
-                            if (move >= 0) 
-                            {
-                                // If the formation can execute moves we reset their alert status.
-                                formation.ResetAlertTimer();
-
-                                _movementResolver!.TryMove(formation, move);
-                                controller.ExecuteMove();
-
-                                // Check if the party is in range of the formation.
-                                CheckInRangeFormation(formation);
-
-                                // After formation moves visiblity might change.
-                                ExecuteAllOnFindScripts();
-                            }
-                            // If the formation can not execute any moves increment their alert counter.
-                            else
-                            {
-                                formation.Update(deltaTime);
-                                if (formation.AlertLimitReached)
-                                {
-                                    formation.Alert = false;
-                                    formation.ResetAlertTimer();
-                                }
-                            }
-                        }
+                        formation.Alert = false;
+                        formation.ResetAlertTimer();
                     }
                 }
             }

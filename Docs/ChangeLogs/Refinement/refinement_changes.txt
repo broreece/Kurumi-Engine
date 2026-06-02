@@ -1,0 +1,22 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Refinement
+Status: In-progress
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Pursuit' release.
+
+'Refinement' focused on improving performance via reducing data loading, using a profiler to find bottlenecks and 
+making the party movement configurable and smoother:
+
+-
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+-
+
+---------------------------------------------------------------------

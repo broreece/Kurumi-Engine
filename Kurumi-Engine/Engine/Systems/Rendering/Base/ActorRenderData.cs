@@ -1,3 +1,4 @@
+// External libraries.
 using SFML.Graphics;
 
 namespace Engine.Systems.Rendering.Base;

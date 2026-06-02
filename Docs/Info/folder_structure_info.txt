@@ -49,7 +49,7 @@ Contains no gameplay logic.
 
 Engine
 
-Contains core runtime architecture and reusable systems.
+Contains core runtime architecture and reuseable systems.
 
 - Responsible for HOW the game runs
 - Contains NO game-specific logic
@@ -95,7 +95,7 @@ States:
 Engine/Systems
 
 - Engine-level systems only
-- Must be reusable and not game-specific
+- Must be reuseable and not game-specific
 
 ---------------------------------------------------------------------
 

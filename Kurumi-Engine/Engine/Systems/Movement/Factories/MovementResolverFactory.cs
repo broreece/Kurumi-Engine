@@ -1,8 +1,14 @@
+// Data.
 using Data.Definitions.Maps.Core;
+
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Spatials;
+
+// Engine.
 using Engine.Systems.Movement.Core;
 using Engine.Systems.Navigation.Factories;
+
+// Infrastructure.
 using Infrastructure.Database.Base;
 
 namespace Engine.Systems.Movement.Factories;

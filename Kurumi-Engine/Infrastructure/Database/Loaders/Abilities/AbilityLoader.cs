@@ -1,5 +1,8 @@
+// Data.
 using Data.Definitions.Entities.Abilities.Core;
 using Data.Definitions.Entities.Abilities.Factories;
+
+// Infrastructure.
 using Infrastructure.Database.Interfaces;
 using Infrastructure.Database.Repositories.Core.Abilities;
 using Infrastructure.Database.Repositories.Rows.Abilities;
@@ -25,13 +28,17 @@ public sealed class AbilityLoader : IDataLoader<AbilityDefinition>
         {
             var row = rows[index];
             abilities[index] = _abilityFactory.Create(
-                row.Id,
-                row.Name,
-                row.Description,
-                row.ScriptName,
-                row.ElementId,
-                row.Cost,
-                row.UsesMp,
+                row.Id, 
+                row.Name, 
+                row.Description, 
+                row.ScriptName, 
+                row.ElementId, 
+                row.Cost, 
+                row.UsesMp, 
+                row.UseableInMenu, 
+                row.DefaultTargetParty, 
+                row.RandomTarget, 
+                row.TargetsAll, 
                 row.BattleSpriteAnimationName
             );
         }

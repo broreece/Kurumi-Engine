@@ -1,5 +1,8 @@
+// Data.
 using Data.Definitions.Maps.Core;
 using Data.Definitions.Maps.Factories;
+
+// Infrastructure.
 using Infrastructure.Database.Interfaces;
 using Infrastructure.Database.Repositories.Core.Tiles;
 using Infrastructure.Database.Repositories.Rows.Tiles;

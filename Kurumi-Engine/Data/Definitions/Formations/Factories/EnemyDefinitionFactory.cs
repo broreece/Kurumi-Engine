@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Formations.Core;
 
 namespace Data.Definitions.Formations.Factories;
@@ -11,7 +12,8 @@ public sealed class EnemyDefinitionFactory
         int yLocation, 
         int mainPart, 
         string? onKillScript, 
-        IReadOnlyList<int> battleScripts) 
+        IReadOnlyList<int> battleScripts
+    ) 
     {
         return new EnemyDefinition()
         {

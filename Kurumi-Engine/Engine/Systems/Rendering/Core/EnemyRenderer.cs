@@ -1,12 +1,19 @@
+// Config.
 using Config.Runtime.Battle;
 
+// Data.
 using Data.Runtime.Formations.Core;
+
+// Engine.
+using Engine.State.States.Battle.Base;
 
 using Engine.Systems.Rendering.Base;
 
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -58,9 +65,23 @@ public sealed class EnemyRenderer
                     ),
                 };
 
-                // Send to render list.
-                RenderStates renderState = selectedEnemyIndex == currentEnemyIndex && targetSelector ? 
-                    new(BlendMode.Add) : RenderStates.Default;
+                // Apply render state based on if selected.
+                // Array of party selection indexes.
+                int[] enemyHighlightedStates = [
+                    (int) BattleTargets.RandomEnemy, 
+                    (int) BattleTargets.AllPartyAndAllEnemies, 
+                    (int) BattleTargets.AllEnemies
+                ];
+                RenderStates renderState;
+                if (enemyHighlightedStates.Contains(selectedEnemyIndex))
+                {
+                    renderState = new(BlendMode.Add);
+                }
+                else {
+                    renderState = selectedEnemyIndex == currentEnemyIndex && targetSelector ? 
+                        new(BlendMode.Add) : RenderStates.Default;
+                }
+
                 _renderSystem.Submit(new RenderCommand() 
                 {
                     Layer = RenderLayer.BaseEnemyLayer, 

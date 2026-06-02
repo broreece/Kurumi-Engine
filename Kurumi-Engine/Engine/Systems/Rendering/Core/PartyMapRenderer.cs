@@ -1,9 +1,17 @@
+// Config.
 using Config.Runtime.Map;
+
+// Data.
 using Data.Runtime.Parties.Core;
+
+// Engine.
 using Engine.Systems.Rendering.Base;
+
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -30,7 +38,8 @@ public sealed class PartyMapRenderer
         Party party, 
         Texture partyTexture, 
         int tileWidth, 
-        int tileHeight) 
+        int tileHeight
+    ) 
     {
         _renderSystem = renderSystem;
         _characterFieldSpriteConfig = characterFieldSpriteConfig;

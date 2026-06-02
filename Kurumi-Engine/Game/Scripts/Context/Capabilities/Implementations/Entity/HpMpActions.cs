@@ -1,8 +1,12 @@
+// Data.
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Formations.Core;
 using Data.Runtime.Parties.Core;
 
+// Engine.
 using Engine.Systems.Combat.Core;
+
+// Game.
 using Game.Scripts.Context.Capabilities.Exceptions;
 using Game.Scripts.Context.Capabilities.Interfaces.Entity;
 
@@ -32,7 +36,7 @@ public sealed class HpMpActions : IHpMpActions
             (_formation ?? throw new FormationNotFoundException("The target formation of a health change effect was " + 
                 "not set")).GetEntityAt(target.Index);
         
-        var value = _damageCalculator.Evaluate(formula, userStats.GetStats(), targetStats.GetStats());
+        var value = _damageCalculator.Evaluate(formula, userStats.Stats, targetStats.Stats);
         if (reduceHp && value > 0)
         {
             if (canKo)
@@ -50,7 +54,7 @@ public sealed class HpMpActions : IHpMpActions
         {
             targetStats.CurrentHP += value;
             // Ensure HP is not higher then max HP.
-            targetStats.CurrentHP = targetStats.CurrentHP > targetStats.GetMaxHp() ? targetStats.GetMaxHp() :
+            targetStats.CurrentHP = targetStats.CurrentHP > targetStats.MaxHp ? targetStats.MaxHp :
                 targetStats.CurrentHP;
         }
     }

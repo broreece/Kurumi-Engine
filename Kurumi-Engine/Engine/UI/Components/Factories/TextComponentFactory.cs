@@ -1,8 +1,11 @@
+// Engine.
 using Engine.Assets.Core;
+
 using Engine.UI.Components.Core;
 using Engine.UI.Data.Content;
 using Engine.UI.Data.Style;
 
+// External libraries.
 using SFML.Graphics;
 
 namespace Engine.UI.Components.Factories;

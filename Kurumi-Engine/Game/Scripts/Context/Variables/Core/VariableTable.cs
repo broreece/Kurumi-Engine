@@ -1,3 +1,4 @@
+// Game.
 using Game.Scripts.Context.Variables.Base;
 using Game.Scripts.Context.Variables.Exceptions;
 

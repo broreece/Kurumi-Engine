@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Items.Core;
 using Data.Definitions.Modifiers.Base;
 using Data.Definitions.Modifiers.Core;
@@ -18,7 +19,8 @@ public sealed class EquipmentFactory
         IReadOnlyDictionary<int, int> elements, 
         IReadOnlyList<int> sealedAbilitySets, 
         IReadOnlyList<int> sealedAbilities, 
-        IReadOnlyList<int> addedAbilities) 
+        IReadOnlyList<int> addedAbilities
+    ) 
     {
         // Create a dictionary for the modifications so it's faster to access then looping and checking types.
         Dictionary<ModifierType, IEntityModifier> entityModifiers = [];
@@ -28,25 +30,24 @@ public sealed class EquipmentFactory
             SealedAbilities = sealedAbilities, 
             AddedAbilities = addedAbilities
         });
-        entityModifiers.Add(ModifierType.Element, new ElementModifier() {Elements = elements});
+        entityModifiers.Add(ModifierType.Element, new ElementModifier() { Elements = elements });
         entityModifiers.Add(ModifierType.HitChance, new HitChanceModifier() 
         {
             AccuracyModifier = accuracy, 
             EvasionModifier = evasion
         });
-        entityModifiers.Add(ModifierType.Stat, new StatModifier() {Stats = stats});
+        entityModifiers.Add(ModifierType.Stat, new StatModifier() { Stats = stats });
 
         if (turnEffectScript != null) 
         {
-            entityModifiers.Add(ModifierType.TurnEffect, new TurnEffect() {TurnScriptName = turnEffectScript});
+            entityModifiers.Add(ModifierType.TurnEffect, new TurnEffect() { TurnScriptName = turnEffectScript });
         }
 
         return new Equipment()
         {
             Id = id, 
             ItemId = itemId, 
-            EquipmentSlotId = 
-            equipmentSlotId, 
+            EquipmentSlotId = equipmentSlotId, 
             EquipmentTypeId = equipmentTypeId, 
             EntityModifiers = entityModifiers
         };

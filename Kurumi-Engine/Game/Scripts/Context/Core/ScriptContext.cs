@@ -1,3 +1,4 @@
+// Game.
 using Game.Scripts.Context.Capabilities.Base;
 using Game.Scripts.Context.Variables.Base;
 using Game.Scripts.Context.Variables.Core;
@@ -18,7 +19,7 @@ public sealed class ScriptContext {
 
     public void SetCapability(Type type, ICapability capability) => _capabilityContainer.SetCapability(type, capability);
 
-    public T GetVariable<T>(ScriptVariableKey<T> key) => _variableTable.GetVariable<T>(key);
+    public T GetVariable<T>(ScriptVariableKey<T> key) => _variableTable.GetVariable(key);
 
     public void SetVariable<T>(ScriptVariableKey<T> key, T variable) => _variableTable.SetVariable(key, variable);
 }

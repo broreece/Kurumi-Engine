@@ -1,4 +1,7 @@
+// Data.
 using Data.Runtime.Maps.Base.Change;
+
+// Game.
 using Game.Scripts.Context.Capabilities.Base;
 
 namespace Game.Scripts.Context.Capabilities.Interfaces.Map;

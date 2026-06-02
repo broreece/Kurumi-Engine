@@ -1,9 +1,14 @@
+// Config.
 using Config.Runtime.Defaults;
 
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Input.Base;
+
 using Engine.Systems.Rendering.Base;
+
 using Engine.UI.Components.Core;
 using Engine.UI.Components.Factories;
 using Engine.UI.Data.Content;
@@ -11,8 +16,10 @@ using Engine.UI.Data.Content.Layout;
 using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 
+// Game.
 using Game.UI.Overlays.Base;
 
+// External libraries.
 using SFML.System;
 
 namespace Game.UI.Overlays.Core;
@@ -35,7 +42,8 @@ public sealed class DialogueOverlay : IUIOverlay
     public DialogueOverlay(
         AssetRegistry assetRegistry, 
         TextWindowDefaults textWindowDefaults, 
-        IReadOnlyList<string> pages) 
+        IReadOnlyList<string> pages
+    ) 
     {
         // Component factories.
         var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
@@ -105,11 +113,13 @@ public sealed class DialogueOverlay : IUIOverlay
 
     public void Advance() 
     {
-        if (_currentPage < _pages.Count - 1) {
+        if (_currentPage < _pages.Count - 1) 
+        {
             _currentPage ++;
             _textComponent.SetText(_pages[_currentPage]);
         }
-        else {
+        else 
+        {
             _isFinished = true;
         }
     }

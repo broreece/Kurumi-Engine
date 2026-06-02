@@ -1,10 +1,12 @@
+// Data.
 using Data.Definitions.Actors.Core;
 
 namespace Data.Definitions.Actors.Factories;
 
 public sealed class ActorInfoFactory 
 {
-    public ActorInfo Create(int id, 
+    public ActorInfo Create(
+        int id, 
         int spriteId, 
         int behaviour, 
         int movementSpeed, 
@@ -17,7 +19,8 @@ public sealed class ActorInfoFactory
         bool auto, 
         bool onAction, 
         bool onFind, 
-        IReadOnlyList<int> path) 
+        IReadOnlyList<int> path
+    ) 
     {
         return new ActorInfo() 
         {

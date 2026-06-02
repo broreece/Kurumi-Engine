@@ -1,5 +1,7 @@
+// Config.
 using Config.Runtime.Game;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;

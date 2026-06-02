@@ -1,4 +1,7 @@
+// Data.
 using Data.Definitions.Maps.Base;
+
+// Engine.
 using Engine.Systems.Navigation.Core;
 
 namespace Engine.Systems.Pathfinding;

@@ -13,4 +13,9 @@ public sealed class AbilityDefinition
     public required string? ScriptName { get; init; }
 
     public required bool UsesMp { get; init; }
+    public required bool UseableInMenu { get; init; }
+
+    public required bool DefaultTargetParty { get; init; }
+    public required bool RandomTarget { get; init; }
+    public required bool TargetsAll { get; init; }
 }

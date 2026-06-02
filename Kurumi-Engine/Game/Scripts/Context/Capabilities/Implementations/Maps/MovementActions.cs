@@ -1,10 +1,14 @@
+// Data.
 using Data.Definitions.Maps.Base;
+
 using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Parties.Core;
 
+// Game.
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 
+// Utility.
 using Utils.Finishable;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Maps;
@@ -26,7 +30,8 @@ public sealed class MovementActions : IMovementActions
         bool lockMovement, 
         bool instant, 
         string actorKey, 
-        List<int> path) 
+        List<int> path
+    ) 
     {
         var actor = _map.GetActor(actorKey);
         actor.MaintainFacing = keepDirection;

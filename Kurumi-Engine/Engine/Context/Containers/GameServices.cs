@@ -1,17 +1,25 @@
+// Data.
 using Data.Runtime.Formations.Factories;
 
+// Engine.
 using Engine.Input.Mapper;
+
 using Engine.Systems.Animation.Map.Factories;
 using Engine.Systems.Combat.Core;
 using Engine.Systems.Movement.Factories;
 using Engine.Systems.Navigation.Factories;
 using Engine.Systems.Rendering.Factories;
+
 using Engine.UI.Render;
 
+// Game.
 using Game.Maps.Services;
+
 using Game.Scripts.Library;
 
+// Infrastructure.
 using Infrastructure.Persistance.Services;
+
 using Infrastructure.Rendering.Core;
 
 namespace Engine.Context.Containers;

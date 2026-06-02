@@ -48,37 +48,27 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Pursuit
+## Milestone: Refinement
 **Focus areas:**
 
-- Focused on improving the battle actions.
+- A smaller milestone as some of the tasks were finished during the pursuit work.
+- Focused on improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
+- Addition of missing UI state and config for party movement, (Also making party movement smoother).
 
 ---
 
-## (BSE-02) Battle scene enhancements 2 ##
-### Complexity: 3 ###
-### Independent: 3 ###
+## (DD-01) Display damage text ##
+### Complexity: 2 ###
+### Independent: 2 ###
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:** Allow multiple target attack, damage display and more dynamic enemy targetting.
+**Description:** Display basic damage text.
 
 **Steps:** 
-- Implement additional attack options: (Low Priority)
-    - Implement party wide attacks.
-    - Implement enemy group wide attacks.
-    - Implement random enemy hit attacks.
 - Implement damage text:
     - Used to exist in forge.
     - Create custom config declaring it's font type, size and maybe a offset.
-- Implement function to load the index of the first healthy party member when generating the first choices in a 
-    battle scene:
-    - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
-    same in both.
-
----
-
-## Pursuit milestone reached.
 
 ---
 
@@ -93,35 +83,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Steps:**
 - In formation definition loader and state short name loader create new fields to store the loaded data.
 - Update the index getter functions to utilize the stored fields.
-
----
-
-## (LFBU-01) Seperate large functions into sub functions ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 3 ###
-### Impact: 1 ###
-
-**Description:** To better apply to CRUD principles we should seperate out the large functions in the code into sub
-functions.
-
-**Steps:**
-- Search code for largest functions and break them up (E.G: Map Factories "Create" function).
-- Also whilst refractoring ensure that any using statements are correctly spaced based on type and then subtype;
-    if all main types match.
-
----
-
-## (PF-01) Run a profiler on the code ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:** We should start using a profiler to check where our code is heaviest.
-
-**Steps:**
-- Utilize 'Visual Studio Performance Profiler'.
 
 ---
 

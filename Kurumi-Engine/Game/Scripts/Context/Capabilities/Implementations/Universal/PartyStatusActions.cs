@@ -1,11 +1,16 @@
+// Data.
 using Data.Definitions.Entities.Statuses.Core;
+
 using Data.Runtime.Entities.Statuses.Factories;
 using Data.Runtime.Parties.Core;
 
+// Engine.
 using Engine.Systems.Statuses.Core;
 
+// Game.
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Universal;

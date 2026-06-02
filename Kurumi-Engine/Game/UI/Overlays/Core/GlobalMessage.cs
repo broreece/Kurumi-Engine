@@ -1,17 +1,24 @@
+// Config.
 using Config.Runtime.Defaults;
 
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Input.Base;
+
 using Engine.Systems.Rendering.Base;
+
 using Engine.UI.Components.Factories;
 using Engine.UI.Data.Content;
 using Engine.UI.Data.Content.Layout;
 using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 
+// Game.
 using Game.UI.Overlays.Base;
 
+// External libraries.
 using SFML.System;
 
 namespace Game.UI.Overlays.Core;
@@ -30,7 +37,8 @@ public sealed class GlobalMessage : IUIOverlay
         AssetRegistry assetRegistry, 
         GlobalMessageDefaults globalMessageDefaults, 
         int timeLimit, 
-        string message)
+        string message
+    )
     {
         // Component factories.
         var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);

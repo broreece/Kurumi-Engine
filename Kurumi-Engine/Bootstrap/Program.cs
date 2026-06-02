@@ -10,20 +10,25 @@ using Data.Runtime.Parties.Factory;
 
 // Engine.
 using Engine.Assets.Core;
+
 using Engine.Context.Containers;
 using Engine.Context.Core;
+
 using Engine.Input.Context.Core;
 using Engine.Input.Mapper;
 using Engine.Input.System;
+
 using Engine.State.Base;
 using Engine.State.Core;
 using Engine.State.States.Battle.Core;
 using Engine.State.States.Maps.Core;
+
 using Engine.Systems.Animation.Map.Factories;
 using Engine.Systems.Combat.Factories;
 using Engine.Systems.Movement.Factories;
 using Engine.Systems.Navigation.Factories;
 using Engine.Systems.Rendering.Factories;
+
 using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
@@ -31,12 +36,15 @@ using Engine.UI.Render;
 using Game.Maps.Loader;
 using Game.Maps.Registry;
 using Game.Maps.Services;
+
 using Game.Scripts.Library;
 
 // Infrastructure.
 using Infrastructure.Database.Database;
+
 using Infrastructure.Persistance.Base;
 using Infrastructure.Persistance.Services;
+
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
@@ -58,7 +66,7 @@ public static class Program
         var configProvider = gameData.ConfigProvider;
         var gameConfig = configProvider.GameConfig;
 
-        var saveService = new SaveService(paths.SavePath);
+        var saveService = new SaveService();
         var saveData = saveService.LoadNewSaveData();
         var partyFactory = new PartyFactory(
             saveData.Characters, 
@@ -111,10 +119,6 @@ public static class Program
                 "Assets", 
                 "Registry"
             ),
-            SavePath = Path.Combine(
-                baseDir, 
-                "Saves"
-            ), 
             ConfigPath = Path.Combine(
                 baseDir, 
                 "Config", 
@@ -165,7 +169,8 @@ public static class Program
         SaveData saveData, 
         SaveService saveService, 
         Party party,
-        GameWindow gameWindow) 
+        GameWindow gameWindow
+    ) 
     {
         // Map services
         var mapRegistryPath = Path.Combine(paths.RegistryRoot, "map_registry.json");
@@ -199,7 +204,9 @@ public static class Program
                 new PathedActorFactory(scriptLibrary),
                 new RandomActorFactory(scriptLibrary), 
                 new SmartTrackingActorFactory(scriptLibrary), 
-                party));
+                party
+            )
+        );
 
         // System factories.
         var damageCalculatorFactory = new DamageCalculatorFactory(database.StatShortNameIndex);
@@ -290,7 +297,6 @@ public static class Program
             EnemyRendererFactory = enemyRendererFactory,
             FormationFactory = formationFactory,
             PartyBattleRendererFactory = partyBattleRendererFactory
-
         };
     }
 
@@ -313,7 +319,8 @@ public static class Program
         InputSystem inputSystem, 
         StateManager stateManager, 
         GameContext gameContext,
-        StateContext stateContext) 
+        StateContext stateContext
+    ) 
     {
         var clock = new Clock();
         var gameObjects = gameContext.GameObjects;
@@ -349,7 +356,6 @@ public static class Program
     private sealed class Paths 
     {
         public required string RegistryRoot { get; init; }
-        public required string SavePath { get; init; }
         public required string ConfigPath { get; init; }
     }
 

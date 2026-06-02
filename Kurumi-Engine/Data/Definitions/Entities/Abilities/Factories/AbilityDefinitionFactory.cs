@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Entities.Abilities.Core;
 
 namespace Data.Definitions.Entities.Abilities.Factories;
@@ -10,9 +11,14 @@ public sealed class AbilityDefinitionFactory
         string description, 
         string? scriptName, 
         int elementId, 
-        int cost,
+        int cost, 
         bool usesMp, 
-        string spriteName) 
+        bool useableInMenu, 
+        bool defaultTargetParty, 
+        bool randomTarget, 
+        bool targetsAll, 
+        string spriteName
+    ) 
     {
         return new AbilityDefinition()
         {
@@ -23,6 +29,10 @@ public sealed class AbilityDefinitionFactory
             ElementId = elementId, 
             Cost = cost, 
             UsesMp = usesMp, 
+            UseableInMenu = useableInMenu, 
+            DefaultTargetParty = defaultTargetParty, 
+            RandomTarget = randomTarget, 
+            TargetsAll = targetsAll, 
             SpriteName = spriteName
         };
     }

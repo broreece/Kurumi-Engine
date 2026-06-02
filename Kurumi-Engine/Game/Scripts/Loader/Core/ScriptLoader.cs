@@ -1,9 +1,12 @@
+// System libraries.
 using System.Text.Json;
 
+// Game.
 using Game.Scripts.Loader.Base;
 using Game.Scripts.Loader.Exceptions;
 using Game.Scripts.Serialization;
 
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
 
 namespace Game.Scripts.Loader.Core;
@@ -11,7 +14,8 @@ namespace Game.Scripts.Loader.Core;
 /// <summary>
 /// Loads the JSON script data from a specified file.
 /// </summary>
-public sealed class ScriptLoader {
+public sealed class ScriptLoader 
+{
     private readonly ScriptRegistry _registry;
 
     public ScriptLoader(ScriptRegistry registry) 
