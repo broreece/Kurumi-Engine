@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Formations.Core;
 
 namespace Data.Definitions.Formations.Factories;

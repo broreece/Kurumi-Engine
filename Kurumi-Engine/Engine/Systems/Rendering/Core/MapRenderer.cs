@@ -1,12 +1,22 @@
+// Config.
 using Config.Runtime.Map;
+
+// Data.
 using Data.Definitions.Maps.Core;
+
 using Data.Models.Maps;
+
+// Engine.
 using Engine.Systems.Animation.Map.Base;
 using Engine.Systems.Rendering.Base;
+
+// Infrastructure.
 using Infrastructure.Database.Base;
+
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -34,7 +44,8 @@ public sealed class MapRenderer
         IReadOnlyList<TileModel> tiles, 
         Texture tileSheetTexture, 
         Texture animatedTileSheetTexture,
-        Texture mapBackgroundTexture) 
+        Texture mapBackgroundTexture
+    ) 
     {
         _renderSystem = renderSystem;
         _tileRegistry = tileRegistry;
@@ -62,6 +73,7 @@ public sealed class MapRenderer
             new RenderCommand() 
             {
                 Layer = RenderLayer.BackgroundLayer, 
+                SubmissionIndex = 0, 
                 Drawable = backgroundSprite, 
                 States = RenderStates.Default,
                 View = view
@@ -76,7 +88,14 @@ public sealed class MapRenderer
         // Loop for each static tile in the map.
         foreach (var tileModel in _tiles) 
         {
-            var tileObjects = tileModel.Objects.Select(_tileRegistry.Get).ToList();
+            // Load list of tile objects from model.
+            var tileObjects = new List<Tile>();
+            foreach (var objectId in tileModel.Objects)
+            {
+                tileObjects.Add(_tileRegistry.Get(objectId));
+            }
+
+            int tileIndex = 0;
             foreach (var currentTile in tileObjects) 
             {
                 if (!currentTile.Animated) 
@@ -105,12 +124,14 @@ public sealed class MapRenderer
                         new RenderCommand() 
                         {
                             Layer = RenderLayer.TileLayer, 
+                            SubmissionIndex = tileIndex, 
                             Drawable = sprite, 
-                            States = RenderStates.Default,
+                            States = RenderStates.Default, 
                             View = view
                         }
                     );
                 }
+                tileIndex ++;
             }
         }
 
@@ -147,6 +168,7 @@ public sealed class MapRenderer
                         new RenderCommand() 
                         {
                             Layer = RenderLayer.AnimatedTileLayer, 
+                            SubmissionIndex = 0, 
                             Drawable = sprite, 
                             States = RenderStates.Default,
                             View = view

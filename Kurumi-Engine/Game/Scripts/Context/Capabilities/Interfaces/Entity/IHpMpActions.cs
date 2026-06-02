@@ -1,4 +1,7 @@
+// Data.
 using Data.Runtime.Entities.Base;
+
+// Game.
 using Game.Scripts.Context.Capabilities.Base;
 
 namespace Game.Scripts.Context.Capabilities.Interfaces.Entity;

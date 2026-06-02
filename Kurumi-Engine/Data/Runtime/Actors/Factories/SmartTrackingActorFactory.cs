@@ -1,12 +1,17 @@
+// Data.
 using Data.Definitions.Actors.Core;
+
 using Data.Models.Maps;
-using Data.Runtime.Actors.Controllers.Base;
-using Data.Runtime.Actors.Controllers.Core;
+
+using Data.Runtime.Maps.Base.Controllers.Base;
+using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Actors.Core;
 using Data.Runtime.Spatials;
 
+// Engine.
 using Engine.Systems.Navigation.Core;
 
+// Game.
 using Game.Scripts.Library;
 
 namespace Data.Runtime.Actors.Factories;
@@ -24,10 +29,15 @@ public sealed class SmartTrackingActorFactory
         ActorInfo actorInfo, 
         ActorModel actorModel, 
         IPositionProvider target, 
-        NavigationGrid navigationGrid) 
+        NavigationGrid navigationGrid
+    ) 
     {
         Stack<Controller> controllers = [];
-        controllers.Push(new SmartTrackingController(target, navigationGrid) {Interval = actorInfo.MovementSpeed});
+        controllers.Push(new SmartTrackingController(target, navigationGrid, actorInfo.TrackingRange) 
+        { 
+            Interval = actorInfo.MovementSpeed 
+        });
+
         if (actorInfo.ScriptName == null)
         {
             return new Actor(actorInfo, actorModel) 
@@ -36,6 +46,7 @@ public sealed class SmartTrackingActorFactory
                 Script = null
             };
         }
+        
         return new Actor(actorInfo, actorModel) 
         {
             Controllers = controllers,

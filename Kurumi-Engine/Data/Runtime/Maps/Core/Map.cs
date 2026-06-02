@@ -1,18 +1,29 @@
+// Data.
 using Data.Models.Maps;
 using Data.Runtime.Actors.Core;
+using Data.Runtime.Formations.Core;
 using Data.Runtime.Maps.Exceptions;
+
+// Engine.
+using Engine.Systems.Navigation.Base;
 
 namespace Data.Runtime.Maps.Core;
 
 public sealed class Map 
 {
     private readonly MapModel _mapModel;
+
     private readonly IReadOnlyDictionary<(int, int), TileModel> _tileDictionary;
 
-    private Dictionary<(int, int), List<Actor>>? _actorDictionary;
-    private Dictionary<string, Actor>? _actorStringDictionary;
+    private Dictionary<(int, int), Formation> _formationLocationDictionary = [];
+    private Dictionary<int, Formation> _formationIdDictionary = [];
 
-    public IReadOnlyList<Actor>? Actors { get; private set; }
+    private Dictionary<(int, int), List<Actor>> _actorDictionary = [];
+    private Dictionary<string, Actor> _actorStringDictionary = [];
+
+    // Formations, actors and the collision objects list used for navigation grids.
+    public IReadOnlyList<Formation> Formations { get; private set; } = [];
+    public IReadOnlyList<Actor> Actors { get; private set; } = [];
 
     public int Width => _mapModel.Width;
 
@@ -31,15 +42,32 @@ public sealed class Map
     }
 
     /// <summary>
+    /// Function used after the map's creation to set the formations in the map.
+    /// </summary>
+    /// <param name="formations">The list of all formations.</param>
+    /// <param name="formationLocationDictionary">The dictionary of formations at each location.</param>
+    /// <param name="formationIdDictionary">The dictionary of formations using their ID as keys.</param>
+    public void SetFormations(
+        IReadOnlyList<Formation> formations, 
+        Dictionary<(int, int), Formation> formationLocationDictionary,
+        Dictionary<int, Formation> formationIdDictionary
+    )
+    {
+        Formations = formations;
+        _formationLocationDictionary = formationLocationDictionary;
+        _formationIdDictionary = formationIdDictionary;
+    }
+
+    /// <summary>
     /// Function used after the map's creation to set the actors in the map.
     /// </summary>
-    /// <param name="actors">The list of all actors/</param>
+    /// <param name="actors">The list of all actors.</param>
     /// <param name="actorDictionary">The dictionary of actors at each location.</param>
     /// <param name="actorStringDictionary">The dictionary of actors including their string keys.</param>
     public void SetActors(
         IReadOnlyList<Actor> actors, 
         Dictionary<(int, int), List<Actor>> actorDictionary,
-        Dictionary<string, Actor>? actorStringDictionary
+        Dictionary<string, Actor> actorStringDictionary
     ) 
     {
         Actors = actors;
@@ -49,18 +77,39 @@ public sealed class Map
 
     public void AddActorTo(Actor actor, int xLocation, int yLocation) 
     {
-        if (!_actorDictionary!.ContainsKey((xLocation, yLocation))) 
+        if (!_actorDictionary.ContainsKey((xLocation, yLocation))) 
         {
             _actorDictionary[(xLocation, yLocation)] = [];
         }
         _actorDictionary![(xLocation, yLocation)].Add(actor);
     }
 
+    public void AddFormationTo(Formation formation, int xLocation, int yLocation) 
+    {
+        if (!_formationLocationDictionary.ContainsKey((xLocation, yLocation))) 
+        {
+            _formationLocationDictionary[(xLocation, yLocation)] = formation;
+        }
+        else
+        {
+            throw new FormationAlreadyPresentException("A formation was already found at location: " +
+                $"{xLocation}, {yLocation} on map: {_mapModel.MachineName}");
+        }
+    }
+
     public void RemoveActorAt(Actor actor, int xLocation, int yLocation) 
     {
-        if (_actorDictionary!.ContainsKey((xLocation, yLocation))) 
+        if (_actorDictionary.ContainsKey((xLocation, yLocation))) 
         {
             _actorDictionary[(xLocation, yLocation)].Remove(actor);
+        }
+    }
+
+    public void RemoveFormationAt(int xLocation, int yLocation) 
+    {
+        if (_formationLocationDictionary.ContainsKey((xLocation, yLocation))) 
+        {
+            _formationLocationDictionary.Remove((xLocation, yLocation));
         }
     }
 
@@ -73,13 +122,43 @@ public sealed class Map
         return [];
     }
 
+    public Formation? GetFormationAt(int xLocation, int yLocation) 
+    {
+        if (_formationLocationDictionary.ContainsKey((xLocation, yLocation))) 
+        {
+            return _formationLocationDictionary[(xLocation, yLocation)];
+        }
+        return null;
+    }
+
     public IReadOnlyList<Actor> GetActorsAt(int xLocation, int yLocation) 
     {
-        if (_actorDictionary!.ContainsKey((xLocation, yLocation))) 
+        if (_actorDictionary.ContainsKey((xLocation, yLocation))) 
         {
             return _actorDictionary[(xLocation, yLocation)];
         }
         return [];
+    }
+
+    /// <summary>
+    /// Function that returns a list of the potential collision objects at a provided location.
+    /// </summary>
+    /// <param name="xLocation">The X location being checked.</param>
+    /// <param name="yLocation">The Y location being checked.</param>
+    /// <returns>A list of collisionable objects at the provided location.</returns>
+    public IReadOnlyList<ICollisionObject> GetCollisionObjectsAt(int xLocation, int yLocation)
+    {
+        // Make the base actors.
+        List<ICollisionObject> collisionObjects = [.. GetActorsAt(xLocation, yLocation).Cast<ICollisionObject>()];
+
+        // Add the formation if found.
+        var potentialFormation = GetFormationAt(xLocation, yLocation);
+        if (potentialFormation != null)
+        {
+            collisionObjects.Add(potentialFormation);
+        }
+
+        return collisionObjects;
     }
 
     public Actor GetActor(string key)

@@ -38,7 +38,7 @@ This table defines the visual and animation data associated with each actor spri
 Design Intent
 Actors are designed to be:
 - Data-driven — Fully defined via database and map configuration
-- Reusable — The same actor definition can be instantiated in multiple contexts
+- Reuseable — The same actor definition can be instantiated in multiple contexts
 - Script-integrated — Behavior is driven through script hooks rather than hardcoded logic
 
 Guiding Principle

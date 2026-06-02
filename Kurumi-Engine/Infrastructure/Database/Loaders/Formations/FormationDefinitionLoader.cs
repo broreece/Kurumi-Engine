@@ -1,5 +1,8 @@
+// Data.
 using Data.Definitions.Formations.Core;
 using Data.Definitions.Formations.Factories;
+
+// Infrastructure.
 using Infrastructure.Database.Interfaces;
 using Infrastructure.Database.Repositories.Core.Formations;
 using Infrastructure.Database.Repositories.Rows.Formations;
@@ -45,19 +48,51 @@ public sealed class FormationDefinitionLoader : IDataLoader<FormationDefinition>
             }
 
             formations[index] = _formationDefinitionFactory.Create(
-                id,
-                row.ReturnX,
-                row.ReturnY,
-                row.SearchTimer,
-                row.ItemPoolId,
-                row.OnFoundActorInfoId,
-                row.DefaultActorInfoId,
-                row.MapName,
-                row.OnLoseScript,
-                row.OnWinScript,
+                id, 
+                row.MapName, 
+                row.ReturnX, 
+                row.ReturnY, 
+                row.SearchTimer, 
+                row.ItemPoolId, 
+                row.OnFoundActorInfoId, 
+                row.DefaultActorInfoId, 
+                row.BackgroundMusicName, 
+                row.BackgroundArtName, 
+                row.OnLoseScript, 
+                row.OnWinScript, 
                 enemies
             );
         }
+
         return formations;
+    }
+
+    /// <summary>
+    /// Lookup index for which enemy formations appear on which maps.
+    /// </summary>
+    /// <returns>A dictionary storing the list of formations IDs on each map.</returns>
+    public IReadOnlyDictionary<string, IReadOnlyList<int>> LoadMapFormationsIndex()
+    {
+        var mapFormations = new Dictionary<string, List<int>>();
+
+        FormationRow[] rows = _formationRepository.LoadAll();
+        foreach (var formationRow in rows) 
+        {
+            var mapName = formationRow.MapName;
+            if (mapFormations.TryGetValue(mapName, out List<int>? value))
+            {
+                value.Add(formationRow.Id);
+            }
+            else
+            {
+                mapFormations[mapName] = [formationRow.Id];
+            }
+        }
+
+        // Turn list to read only.
+        return mapFormations.ToDictionary(
+            kvp => kvp.Key,
+            kvp => (IReadOnlyList<int>)kvp.Value
+        );
     }
 }

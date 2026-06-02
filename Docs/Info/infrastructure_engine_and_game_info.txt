@@ -9,7 +9,7 @@ ARCHITECTURE OVERVIEW
 The project is divided into three primary layers:
 
 Infrastructure → External systems and data handling
-Engine         → Core runtime architecture and reusable systems
+Engine         → Core runtime architecture and reuseable systems
 Game           → Gameplay logic and content
 
 Dependency Flow:
@@ -49,7 +49,7 @@ Infrastructure may prepare and transport data, but it must NEVER influence gamep
 ---------------------------------------------------------------------
 
 Engine
-Engine contains the core runtime architecture and reusable systems.
+Engine contains the core runtime architecture and reuseable systems.
 
 Characteristics:
 - Does NOT contain gameplay logic
@@ -105,6 +105,6 @@ Use these rules when placing new functionality:
 
 1. Does it interact with external systems (files, DB, rendering API)? → Infrastructure
 
-2. Is it a reusable runtime system (input, state, UI framework)? → Engine
+2. Is it a reuseable runtime system (input, state, UI framework)? → Engine
 
 3. Does it define gameplay behavior or game content? → Game

@@ -1,5 +1,4 @@
-using Data.Runtime.Actors.Core;
-
+// External libraries.
 using SFML.Graphics;
 
 namespace Engine.Systems.Rendering.Base;
@@ -11,5 +10,5 @@ public readonly struct ActorRenderData
 
     public required Texture Texture { get; init; }
     
-    public required Actor Actor { get; init; }
+    public required IActorAppearance Actor { get; init; }
 }

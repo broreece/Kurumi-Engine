@@ -1,10 +1,14 @@
+// Data.
 using Data.Definitions.Maps.Base;
-using Data.Runtime.Actors.Controllers.Core;
-using Data.Runtime.Maps.Core;
-using Data.Runtime.Party.Core;
 
+using Data.Runtime.Maps.Base.Controllers.Core;
+using Data.Runtime.Maps.Core;
+using Data.Runtime.Parties.Core;
+
+// Game.
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 
+// Utility.
 using Utils.Finishable;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Maps;
@@ -26,7 +30,8 @@ public sealed class MovementActions : IMovementActions
         bool lockMovement, 
         bool instant, 
         string actorKey, 
-        List<int> path) 
+        List<int> path
+    ) 
     {
         var actor = _map.GetActor(actorKey);
         actor.MaintainFacing = keepDirection;
@@ -47,19 +52,19 @@ public sealed class MovementActions : IMovementActions
             {
                 switch (movement)
                 {
-                    case (int) Direction.North:
+                    case (int) SpriteState.North:
                         yPositionChange --;
                         break;
 
-                    case (int) Direction.East:
+                    case (int) SpriteState.East:
                         xPositionChange ++;
                         break;
 
-                    case (int) Direction.South:
+                    case (int) SpriteState.South:
                         yPositionChange ++;
                         break;
 
-                    case (int) Direction.West:
+                    case (int) SpriteState.West:
                         xPositionChange --;
                         break;
 

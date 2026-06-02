@@ -1,6 +1,8 @@
+// Engine.
 using Engine.Input.Base;
 using Engine.Input.System;
 
+// External libraries.
 using SFML.Window;
 
 namespace Engine.Input.Mapper;

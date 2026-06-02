@@ -3,6 +3,7 @@ bin/
 .vscode
 obj
 Kurumi-Engine.sln
+Kurumi-Engine.code-workspace
 
 # - Ignore tracking file
 .VSCodeCounter

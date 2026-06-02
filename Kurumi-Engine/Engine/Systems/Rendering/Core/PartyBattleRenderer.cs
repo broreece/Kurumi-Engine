@@ -1,8 +1,16 @@
+// Config.
 using Config.Runtime.Battle;
+
+// Engine.
+using Engine.State.States.Battle.Base;
+
 using Engine.Systems.Rendering.Base;
+
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -22,7 +30,8 @@ public sealed class PartyBattleRenderer
     internal PartyBattleRenderer(
         RenderSystem renderSystem, 
         PartyMemberBattleRenderData[] partyMemberBattleRenderData, 
-        CharacterBattleSpriteConfig characterBattleSpriteConfig)
+        CharacterBattleSpriteConfig characterBattleSpriteConfig
+    )
     {
         _renderSystem = renderSystem;
         _partyMemberBattleRenderData = partyMemberBattleRenderData;
@@ -55,12 +64,29 @@ public sealed class PartyBattleRenderer
                     )
                 };
 
-                // Send to render list.
-                RenderStates renderState = selectedCharacterIndex == currentCharacterIndex && targetSelector ? 
-                    new(BlendMode.Add) : RenderStates.Default;
+                // Apply render state based on if selected.
+                // Array of party selection indexes.
+                int[] partyHighlightedStates = [
+                    (int) BattleTargets.RandomPartyMember, 
+                    (int) BattleTargets.AllPartyAndAllEnemies, 
+                    (int) BattleTargets.AllPartyMembers
+                ];
+                RenderStates renderState;
+                if (partyHighlightedStates.Contains(selectedCharacterIndex))
+                {
+                    renderState = new(BlendMode.Add);
+                }
+                // Check if the individual party member is selected.
+                else 
+                {
+                    renderState = selectedCharacterIndex == currentCharacterIndex && targetSelector ? 
+                        new(BlendMode.Add) : RenderStates.Default;
+                }
+
                 _renderSystem.Submit(new RenderCommand() 
                 {
                     Layer = RenderLayer.PartyBattleLayer, 
+                    SubmissionIndex = 0, 
                     Drawable = sprite, 
                     States = renderState,
                     View = view

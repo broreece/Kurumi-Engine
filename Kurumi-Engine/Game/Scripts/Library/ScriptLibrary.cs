@@ -1,3 +1,4 @@
+// Game.
 using Game.Scripts.Core;
 using Game.Scripts.Factories;
 using Game.Scripts.Loader.Base;

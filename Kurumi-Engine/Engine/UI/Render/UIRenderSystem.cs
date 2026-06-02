@@ -1,10 +1,13 @@
+// Engine.
 using Engine.UI.Elements;
 using Engine.UI.Layout.Base;
 using Engine.UI.Layout.Core;
 
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -46,7 +49,8 @@ public sealed class UIRenderSystem
         RenderSystem renderSystem, 
         Vector2u displaySize, 
         Vector2u windowSize, 
-        Vector2f parentPosition) 
+        Vector2f parentPosition
+    ) 
     {
         // Calculate the transform.
         var component = element.UIComponent;
@@ -95,9 +99,10 @@ public sealed class UIRenderSystem
 
             renderSystem.Submit(new RenderCommand()
             {
-                Layer = element.RenderLayer,
-                States = RenderStates.Default,
-                Drawable = drawable,
+                Layer = element.RenderLayer, 
+                SubmissionIndex = 0, 
+                States = RenderStates.Default, 
+                Drawable = drawable, 
                 View = view
             });
         }
@@ -126,7 +131,8 @@ public sealed class UIRenderSystem
     private static Vector2f VirtualToScreenPosition(
         Vector2f virtualPosition,
         Vector2u displaySize,
-        Vector2u windowSize)
+        Vector2u windowSize
+    )
     {
         float scaleX = (float) windowSize.X / displaySize.X;
         float scaleY = (float) windowSize.Y / displaySize.Y;

@@ -1,3 +1,4 @@
+// System libraries.
 using System.Text.Json;
 
 namespace Game.Scripts.Serialization;

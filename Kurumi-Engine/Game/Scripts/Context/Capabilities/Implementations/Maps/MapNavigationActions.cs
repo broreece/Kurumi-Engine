@@ -1,5 +1,10 @@
-using Data.Runtime.Maps.Base;
+// Data.
+using Data.Runtime.Maps.Base.Change;
+
+// Engine.
 using Engine.Context.Containers;
+
+// Game.
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 
 namespace Game.Scripts.Context.Capabilities.Implementations.Maps;

@@ -1,7 +1,11 @@
+// Engine.
 using Engine.Systems.Rendering.Base;
+
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 
 namespace Engine.Systems.Rendering.Core;
@@ -28,6 +32,7 @@ public sealed class BattleRenderer
             new RenderCommand() 
             {
                 Layer = RenderLayer.BackgroundLayer, 
+                SubmissionIndex = 0, 
                 Drawable = _backgroundSprite, 
                 States = RenderStates.Default,
                 View = view

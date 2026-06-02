@@ -1,3 +1,4 @@
+// Data.
 using Data.Runtime.Entities.Base;
 
 namespace Game.Scripts.Context.Variables.Base;

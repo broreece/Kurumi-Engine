@@ -1,7 +1,7 @@
 namespace Engine.Input.Context.Base;
 
 /// <summary>
-/// Allow access to if the confirm action is queued.
+/// Allows access to actions related to universal button inputs.
 /// </summary>
 public interface IGameplayInputContext : IInputContext 
 {

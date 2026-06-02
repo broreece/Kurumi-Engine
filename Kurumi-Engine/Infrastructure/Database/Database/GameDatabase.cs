@@ -1,3 +1,4 @@
+// Data.
 using Data.Definitions.Actors.Core;
 using Data.Definitions.Actors.Factories;
 using Data.Definitions.Entities.Abilities.Core;
@@ -13,6 +14,7 @@ using Data.Definitions.Items.Factories;
 using Data.Definitions.Maps.Core;
 using Data.Definitions.Maps.Factories;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 using Infrastructure.Database.Factories;
 using Infrastructure.Database.Loaders.Abilities;
@@ -234,13 +236,14 @@ public sealed class GameDatabase
             stat => stat.Id
         );
 
-        // Load a lookup table for stat short name indexes where the stat short name is the key.
-        StatShortNameIndex = statNameLoader.LoadStatShortNameIndex();
-
         TileRegistry = new Registry<Tile>(
             tileLoader.LoadAll(),
             tile => tile.Id
         );
+
+        // Load lookup indexes.
+        StatShortNameIndex = statNameLoader.LoadStatShortNameIndex();
+        MapFormationsIndex = formationDefinitionLoader.LoadMapFormationsIndex();
     }
 
     public Registry<AbilityDefinition> AbilityRegistry { get; }
@@ -261,5 +264,7 @@ public sealed class GameDatabase
     public Registry<StatusDefinition> StatusRegistry { get; }
     public Registry<Tile> TileRegistry { get; }
 
+    // Lookup indexes.
     public IReadOnlyDictionary<string, int> StatShortNameIndex { get; }
+    public IReadOnlyDictionary<string, IReadOnlyList<int>> MapFormationsIndex { get; }
 }

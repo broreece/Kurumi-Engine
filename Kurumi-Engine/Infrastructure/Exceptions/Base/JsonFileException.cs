@@ -5,7 +5,7 @@ namespace Infrastructure.Exceptions.Base;
 /// </summary>
 public sealed class JsonFileException : EngineException 
 {
-    public JsonFileException(string message) : base(message) {}
-
     public override ExceptionSeverity Severity => ExceptionSeverity.Fatal;
+
+    public JsonFileException(string message) : base(message) {}
 }

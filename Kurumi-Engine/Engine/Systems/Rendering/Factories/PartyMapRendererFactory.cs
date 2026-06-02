@@ -1,10 +1,20 @@
+// Config.
 using Config.Runtime.Map;
+
+// Data.
 using Data.Definitions.Entities.Core;
-using Data.Runtime.Party.Core;
+
+using Data.Runtime.Parties.Core;
+
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Systems.Rendering.Core;
+
+// Infrastructure.
 using Infrastructure.Database.Base;
+
 using Infrastructure.Rendering.Core;
 
 namespace Engine.Systems.Rendering.Factories;
@@ -27,7 +37,8 @@ public sealed class PartyMapRendererFactory
         Registry<CharacterDefinition> characterRegistry,
         CharacterFieldSpriteConfig characterFieldSpriteConfig,
         int tileWidth,
-        int tileHeight)
+        int tileHeight
+    )
     {
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;
@@ -39,7 +50,7 @@ public sealed class PartyMapRendererFactory
 
     public PartyMapRenderer Create(Party party)
     {
-        string partySpriteFilePath = _characterRegistry.Get(party.PartyModel.PartyMembers[0]).FieldSprite;
+        var partySpriteFilePath = _characterRegistry.Get(party.PartyModel.PartyMembers[0]).FieldSprite;
         var partyTexture = _assetRegistry.GetTexture(AssetType.CharacterFieldSpriteSheets, partySpriteFilePath);
 
         return new PartyMapRenderer(
@@ -48,6 +59,7 @@ public sealed class PartyMapRendererFactory
             party,
             partyTexture,
             _tileWidth,
-            _tileHeight);
+            _tileHeight
+        );
     }
 }

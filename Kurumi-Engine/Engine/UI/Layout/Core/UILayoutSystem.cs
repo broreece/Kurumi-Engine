@@ -1,6 +1,8 @@
+// Engine.
 using Engine.UI.Data.Content.Layout;
 using Engine.UI.Layout.Base;
 
+// External libraries.
 using SFML.System;
 
 namespace Engine.UI.Layout.Core;

@@ -5,7 +5,7 @@ namespace Infrastructure.Exceptions.Base;
 /// </summary>
 public sealed class RegistryFormatException : EngineException 
 {
-    public RegistryFormatException(string message) : base(message) {}
-
     public override ExceptionSeverity Severity => ExceptionSeverity.Fatal;
+
+    public RegistryFormatException(string message) : base(message) {}
 }

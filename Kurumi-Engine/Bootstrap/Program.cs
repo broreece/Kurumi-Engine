@@ -1,41 +1,52 @@
-// Engine classes.
+// Config.
 using Config.Core;
 
+// Data.
 using Data.Runtime.Actors.Factories;
 using Data.Runtime.Formations.Factories;
 using Data.Runtime.Maps.Factories;
-using Data.Runtime.Party.Core;
-using Data.Runtime.Party.Factory;
+using Data.Runtime.Parties.Core;
+using Data.Runtime.Parties.Factory;
 
+// Engine.
 using Engine.Assets.Core;
+
 using Engine.Context.Containers;
 using Engine.Context.Core;
+
 using Engine.Input.Context.Core;
 using Engine.Input.Mapper;
 using Engine.Input.System;
+
 using Engine.State.Base;
 using Engine.State.Core;
 using Engine.State.States.Battle.Core;
 using Engine.State.States.Maps.Core;
+
 using Engine.Systems.Animation.Map.Factories;
 using Engine.Systems.Combat.Factories;
 using Engine.Systems.Movement.Factories;
 using Engine.Systems.Navigation.Factories;
 using Engine.Systems.Rendering.Factories;
+
 using Engine.UI.Layout.Core;
 using Engine.UI.Render;
 
+// Game.
 using Game.Maps.Loader;
 using Game.Maps.Registry;
 using Game.Maps.Services;
+
 using Game.Scripts.Library;
 
+// Infrastructure.
 using Infrastructure.Database.Database;
+
 using Infrastructure.Persistance.Base;
 using Infrastructure.Persistance.Services;
+
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
-
 
 // External libraries.
 using SFML.System;
@@ -55,7 +66,7 @@ public static class Program
         var configProvider = gameData.ConfigProvider;
         var gameConfig = configProvider.GameConfig;
 
-        var saveService = new SaveService(paths.SavePath);
+        var saveService = new SaveService();
         var saveData = saveService.LoadNewSaveData();
         var partyFactory = new PartyFactory(
             saveData.Characters, 
@@ -64,7 +75,7 @@ public static class Program
             gameConfig.AgilityStatIndex
         );
         var party = partyFactory.Create(saveData.Party, saveData.Inventory);
-        var gameServices = BuildGameServices(paths, input, gameData, saveService, party, window);
+        var gameServices = BuildGameServices(paths, input, gameData, saveData, saveService, party, window);
 
         var gameObjects = BuildGameObjects(gameServices, saveData, party);
 
@@ -86,7 +97,7 @@ public static class Program
             (uint) configProvider.DisplayConfig.ViewHeight 
         );
         var stateManager = new StateManager(
-            new MapState(gameContext, stateContext), 
+            new MapState(gameContext, stateContext, startingScript: null), 
             stateContext, 
             gameServices.InputMapper,
             gameServices.RenderSystem,
@@ -108,10 +119,6 @@ public static class Program
                 "Assets", 
                 "Registry"
             ),
-            SavePath = Path.Combine(
-                baseDir, 
-                "Saves"
-            ), 
             ConfigPath = Path.Combine(
                 baseDir, 
                 "Config", 
@@ -159,27 +166,47 @@ public static class Program
         Paths paths, 
         InputBundle input, 
         GameData gameData, 
+        SaveData saveData, 
         SaveService saveService, 
         Party party,
-        GameWindow gameWindow) 
+        GameWindow gameWindow
+    ) 
     {
         // Map services
         var mapRegistryPath = Path.Combine(paths.RegistryRoot, "map_registry.json");
         var scriptLibrary = gameData.ScriptLibrary;
         var tileRegistry = gameData.GameDatabase.TileRegistry;
         var database = gameData.GameDatabase;
+        var configProvider = gameData.ConfigProvider;
+
+        var formationFactory = new FormationFactory(
+            party, 
+            database.ActorInfoRegistry,
+            database.EnemyDefinitionRegistry, 
+            database.EnemyBattleScriptRegistry, 
+            database.EntityDefinitionRegistry,
+            configProvider.GameConfig.AgilityStatIndex
+        );
 
         MapService mapService = new(
             new MapRegistry(mapRegistryPath), 
             new MapLoader(), 
-            new MapFactory(database.ActorInfoRegistry, 
-            tileRegistry, 
-            new ActorFactory(scriptLibrary), 
-            new DumbTrackingActorFactory(scriptLibrary), 
-            new PathedActorFactory(scriptLibrary),
-            new RandomActorFactory(scriptLibrary), 
-            new SmartTrackingActorFactory(scriptLibrary), 
-            party));
+
+            new MapFactory(
+                formationFactory,
+                database.MapFormationsIndex,
+                saveData.Formations,
+                database.FormationRegistry,
+                database.ActorInfoRegistry, 
+                tileRegistry, 
+                new ActorFactory(scriptLibrary), 
+                new DumbTrackingActorFactory(scriptLibrary), 
+                new PathedActorFactory(scriptLibrary),
+                new RandomActorFactory(scriptLibrary), 
+                new SmartTrackingActorFactory(scriptLibrary), 
+                party
+            )
+        );
 
         // System factories.
         var damageCalculatorFactory = new DamageCalculatorFactory(database.StatShortNameIndex);
@@ -189,7 +216,6 @@ public static class Program
 
         // Map factories.
         var assetRegistry = gameData.AssetRegistry;
-        var configProvider = gameData.ConfigProvider;
         var tileConfig = configProvider.TileSheetConfig;
         var animatedTileConfig = configProvider.AnimatedTileSheetConfig;
         var characterFieldSpriteConfig = configProvider.CharacterFieldSpriteConfig;
@@ -239,12 +265,6 @@ public static class Program
             renderSystem, 
             configProvider.EnemyBattleSpriteConfig
         );
-        var formationFactory = new FormationFactory(
-            database.EnemyDefinitionRegistry, 
-            database.EnemyBattleScriptRegistry, 
-            database.EntityDefinitionRegistry,
-            configProvider.GameConfig.AgilityStatIndex
-        );
         var partyBattleRendererFactory = new PartyBattleRendererFactory(
             assetRegistry, 
             renderSystem,
@@ -277,7 +297,6 @@ public static class Program
             EnemyRendererFactory = enemyRendererFactory,
             FormationFactory = formationFactory,
             PartyBattleRendererFactory = partyBattleRendererFactory
-
         };
     }
 
@@ -300,7 +319,8 @@ public static class Program
         InputSystem inputSystem, 
         StateManager stateManager, 
         GameContext gameContext,
-        StateContext stateContext) 
+        StateContext stateContext
+    ) 
     {
         var clock = new Clock();
         var gameObjects = gameContext.GameObjects;
@@ -318,6 +338,11 @@ public static class Program
                 ));
                 gameObjects.BattleStartRequest = null;
             }
+            else if (gameObjects.BattleEndRequest != null)
+            {
+                stateManager.ChangeState(new MapState(gameContext, stateContext, gameObjects.BattleEndRequest.Script));
+                gameObjects.BattleEndRequest = null;
+            }
 
             window.DispatchEvents();
 
@@ -331,7 +356,6 @@ public static class Program
     private sealed class Paths 
     {
         public required string RegistryRoot { get; init; }
-        public required string SavePath { get; init; }
         public required string ConfigPath { get; init; }
     }
 

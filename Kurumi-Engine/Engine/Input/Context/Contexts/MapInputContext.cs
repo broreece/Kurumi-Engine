@@ -1,7 +1,10 @@
-using Data.Runtime.Party.Core;
+// Data.
+using Data.Runtime.Parties.Core;
 
+// Engine.
 using Engine.Input.Base;
 using Engine.Input.Context.Base;
+
 using Engine.Systems.Movement.Core;
 
 namespace Engine.Input.Context.Contexts;
@@ -26,7 +29,8 @@ public class MapInputContext : IGameplayInputContext
     public void Handle(InputState input) 
     {
         // Check if the party is not on a pathed movement, if they are on a pathed movement check if it's finished.
-        if (_party.PathedController == null || _party.PathedController.IsFinished()) {
+        if (_party.PathedController == null || _party.PathedController.IsFinished()) 
+        {
             if (_party.PathedController != null && _party.PathedController.IsFinished()) 
             {
                 _party.PathedController = null;

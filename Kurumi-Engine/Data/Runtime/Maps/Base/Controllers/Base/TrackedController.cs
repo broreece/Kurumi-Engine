@@ -1,6 +1,7 @@
+// Data.
 using Data.Runtime.Spatials;
 
-namespace Data.Runtime.Actors.Controllers.Base;
+namespace Data.Runtime.Maps.Base.Controllers.Base;
 
 /// <summary>
 /// Represents an actor with a target location. The movement strategy used to reach that location is defined by 

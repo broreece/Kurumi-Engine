@@ -48,101 +48,59 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Pursuit
+## Milestone: Refinement
 **Focus areas:**
 
-- Focused on enemy formations and battle.
-- Allowing enemy formations to appear on the map.
-- Enemy formations can switch controller based on if they spot the party.
-- Battles can now start and end with dynamic scripts.
-- Further sprite additions for actors to include a dead state for after battle enemy formations.
+- A smaller milestone as some of the tasks were finished during the pursuit work.
+- Focused on improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
+- Addition of missing UI state and config for party movement, (Also making party movement smoother).
 
 ---
 
-## (EFMI-01) AI and enemy formation map data implementation ##
-### Complexity: 5 ###
-### Independent: 5 ###
-### Momentum: 4 ###
-### Impact: 5 ###
-
-**Description:** This task is focused on finishing all implementation of enemy formations on the map. This will allow 
-enemy formation interaction a core part of the gameplay loop.
-
-**Steps:**
-- Implement a max limit on the smart tracking events:
-    - For normal smart tracking events perhaps no limit is fine, hard code a value like 0 to reference infinite range.
-    - If the distance is greater then the limit throw the error to not move.
-- Load enemy formations on new maps in map scene or in the map class: (High Priority)
-    - When loading a map into map scene loop through enemy formations file and place enemy formations in the map by 
-    creating them.
-- Create clocks for each enemy formation on a map: (High Priority)
-    - Each enemy formation we create and place on the map create 2 clocks to control movement and determine when they 
-    give up chasing the party.
-- Implement the AI switching when found and check against the timer when to turn off the found flag: (High Priority)
-    - When we check each map event also check each enemy formation on the map in the "onFound" trigger, if found set 
-    found flag to true. 
-    - In the movement function we check each enemy formation, if the found flag is set to true we use it's other AI to 
-    determine movement.
-    - Each frame the party is in the on found events range we reset the chase clock, if the chase clock reaches the 
-    limit we turn found to false.
-- Implement when battle formations die they can be found dead on map and appear under the player: (Mid Priority)
-    - If party is victorous in battle set the enemy formations "dead" flag to true.
-    - On the map scene when loading sprites for enemy formations check if dead use unique sprite.
-    - When checking if a tile is passable check if the tile is passable, if all events are passable and then if there 
-    is an enemy formation on the
-    tile they are dead.
-
----
-
-## (BSE-03) Battle scene enhancements 3 ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Minor enhancements to make the battles more dynamic, allow multiple target attack, damage display and 
-more dynamic enemy targetting.
-
-**Steps:** 
-- Implement additional attack options: (Low Priority)
-    - Implement party wide attacks.
-    - Implement enemy group wide attacks.
-    - Implement random enemy hit attacks.
-- Implement damage text:
-    - Used to exist in forge.
-    - Create custom config declaring it's font type, size and maybe a offset.
-- Implement function to load the index of the first healthy party member when generating the first choices in a 
-    battle scene:
-    - Might have to check how this logic will work around the battle state ensure that the state and scene stay the 
-    same in both.
-
----
-
-## (BSE-02) Battle scene enhacements 2 ##
+## (DD-01) Display damage text ##
 ### Complexity: 2 ###
 ### Independent: 2 ###
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:**
-Allow battle scenes to end either in victory of fail.
+**Description:** Display basic damage text.
+
+**Steps:** 
+- Implement damage text:
+    - Used to exist in forge.
+    - Create custom config declaring it's font type, size and maybe a offset.
+
+---
+
+## (LIE-01) Lookup indexes enhancement ##
+### Complexity: 1 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** In loaders that also load index lookups we should store values after inital load to prevent re-loading
 
 **Steps:**
-- Implement defeat bool function: (Low Priority).
-    - Check if the enemy formation has a "OnLoseEvent", if so execute the event.
-    - If not we'll add a TODO to create a game over scene.
-- Implement victory bool function: (Low Priority)
-    - If all enemies are dead return to previous scene.
-    - If the event had a "OnWinEvent" execute it after returning to the scene.
-    - Make sure we always check defeat before victory.
+- In formation definition loader and state short name loader create new fields to store the loaded data.
+- Update the index getter functions to utilize the stored fields.
 
 ---
 
-## Pursuit milestone reached.
+## (ASE-01) Actor scripts stored in enemy formations should execute on find. ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Description:** Actor scripts stored in formations are never executed. We want the on find script to execute if the
+enemy formation finds the party.
+
+**Steps:**
+- Edit the map state function that triggers when an enemy formation finds the party to activate it's stored script.
 
 ---
 
-## Add text window with namebox and choice box ##
+## (TNCB-01) Add text window with namebox (and choice box) ##
 ### Complexity: 1 ###
 ### Independent: 1 ###
 ### Momentum: 2 ###
@@ -151,8 +109,26 @@ Allow battle scenes to end either in victory of fail.
 **Description:** Create the ability to add a new text window with namebox and choice box.
 
 **Steps:**
-- Add a new UI State inherit from dialogue with choice state and then add a namebox component.
-- Create a new script that performs the same function as the previous one but also loads the name box defaults.
+- Add the new UI view using our existing windows as examples.
+- Create a new script that can open this UI view (Ensure freezing takes place the same as choice box).
+
+---
+
+## (MSC-01) Party movement speed config. ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Description:** We don't have a hard coded movement speed, we need to fix this and store it in the party class.
+
+**Steps:**
+- Create new config for the movement speed.
+- Update the movement controls so holding buttons will continue movement.
+
+---
+
+## Refinement milestone reached.
 
 ---
 
@@ -409,19 +385,6 @@ the database.
 ---
 
 # Unplaned tickets:
-
----
-
-## Make a tiled application modification to output in our format ##
-### Complexity: 3 ###
-### Independent: 1 ###
-### Momentum: 4 ###
-### Impact: 3 ###
-
-**Description:** Currently we have a messy way to convert files using a python script. Yets just modify the tiled 
-application to do the work for us.
-
-**Steps:** N/A
 
 ---
 

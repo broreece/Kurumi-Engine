@@ -1,3 +1,4 @@
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 

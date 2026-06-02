@@ -1,7 +1,10 @@
+// System libraries.
 using System.Text.Json;
 
+// Game.
 using Game.Scripts.Loader.Exceptions;
 
+// Infrastructure.
 using Infrastructure.Exceptions.Base;
 
 namespace Game.Scripts.Loader.Base;

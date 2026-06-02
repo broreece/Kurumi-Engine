@@ -1,9 +1,14 @@
+// Data.
 using Data.Definitions.Actors.Core;
-using Data.Runtime.Actors.Core;
+
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Systems.Rendering.Base;
 using Engine.Systems.Rendering.Core;
+
+// Infrastructure.
 using Infrastructure.Database.Base;
 using Infrastructure.Rendering.Core;
 
@@ -24,7 +29,8 @@ public sealed class ActorRendererFactory
         Registry<ActorSprite> actorSpriteRegistry, 
         RenderSystem renderSystem, 
         int tileWidth, 
-        int tileHeight) 
+        int tileHeight
+    ) 
     {   
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;
@@ -33,11 +39,12 @@ public sealed class ActorRendererFactory
         _tileHeight = tileHeight;
     }
 
-    public ActorRenderer Create(IReadOnlyList<Actor> actors) 
+    public ActorRenderer Create(IReadOnlyList<IActorAppearance> actors) 
     {
         // Load actor render data.
         var actorRenderData = new List<ActorRenderData>();
-        foreach (var actor in actors) {
+        foreach (var actor in actors) 
+        {
             var actorSprite = _actorSpriteRegistry.Get(actor.SpriteId);
 
             // Load actor texture.

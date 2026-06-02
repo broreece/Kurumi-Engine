@@ -1,7 +1,10 @@
+// Engine.
 using Engine.Systems.Rendering.Base;
+
 using Engine.UI.Components.Base;
 using Engine.UI.Data.Content.Layout;
 
+// External libraries.
 using SFML.System;
 
 namespace Engine.UI.Elements;
@@ -9,7 +12,8 @@ namespace Engine.UI.Elements;
 /// <summary>
 /// Contains the component, layout, local offset provided by parent and children of the UI element.
 /// </summary>
-public sealed class UIElement {
+public sealed class UIElement 
+{
     public required IUIComponent UIComponent { get; init; }
 
     public required UILayout Layout { get; set; }

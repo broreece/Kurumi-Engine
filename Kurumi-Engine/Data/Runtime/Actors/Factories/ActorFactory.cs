@@ -1,8 +1,12 @@
+// Data.
 using Data.Definitions.Actors.Core;
+
 using Data.Models.Maps;
-using Data.Runtime.Actors.Controllers.Base;
+
+using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Actors.Core;
 
+// Game.
 using Game.Scripts.Library;
 
 namespace Data.Runtime.Actors.Factories;
@@ -22,6 +26,7 @@ public sealed class ActorFactory
     public Actor Create(ActorInfo actorInfo, ActorModel actorModel) 
     {
         var controllers = new Stack<Controller>();
+        
         if (actorInfo.ScriptName == null) 
         {
             return new Actor(actorInfo, actorModel) 
@@ -30,6 +35,7 @@ public sealed class ActorFactory
                 Script = null
             };
         }
+
         return new Actor(actorInfo, actorModel) 
         {
             Controllers = controllers,

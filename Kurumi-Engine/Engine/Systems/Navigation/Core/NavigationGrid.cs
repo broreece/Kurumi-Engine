@@ -1,7 +1,13 @@
+// Data.
 using Data.Definitions.Maps.Core;
-using Data.Runtime.Actors.Core;
+
 using Data.Runtime.Maps.Core;
 using Data.Runtime.Spatials;
+
+// Engine.
+using Engine.Systems.Navigation.Base;
+
+// Infrastructure.
 using Infrastructure.Database.Base;
 
 namespace Engine.Systems.Navigation.Core;
@@ -26,7 +32,7 @@ public sealed class NavigationGrid
     public bool IsNavigable(int xLocation, int yLocation) 
     {
         var tileObjects = _map.GetTileObjectsAt(xLocation, yLocation);
-        var actors = _map.GetActorsAt(xLocation, yLocation);
+        var actors = _map.GetCollisionObjectsAt(xLocation, yLocation);
 
         return InMapRange(xLocation, yLocation) && IsTilePassable(tileObjects) && AreActorsPassable(actors) && 
             NotPartyLocation(xLocation, yLocation);
@@ -35,7 +41,7 @@ public sealed class NavigationGrid
     public bool IsLocationSeeThrough(int xLocation, int yLocation)
     {
         var tileObjects = _map.GetTileObjectsAt(xLocation, yLocation);
-        var actors = _map.GetActorsAt(xLocation, yLocation);
+        var actors = _map.GetCollisionObjectsAt(xLocation, yLocation);
         foreach (int tileObject in tileObjects) 
         {
             if (!_tileRegistry.Get(tileObject).SeeThrough) 
@@ -70,7 +76,7 @@ public sealed class NavigationGrid
         return true;
     }
 
-    private bool AreActorsPassable(IReadOnlyList<Actor> actors) 
+    private bool AreActorsPassable(IReadOnlyList<ICollisionObject> actors) 
     {
         foreach (var actor in actors) 
         {
@@ -82,7 +88,8 @@ public sealed class NavigationGrid
         return true;
     }
 
-    private bool NotPartyLocation(int xLocation, int yLocation) {
+    private bool NotPartyLocation(int xLocation, int yLocation) 
+    {
         return xLocation != _partyPosition.XLocation || yLocation != _partyPosition.YLocation;
     }
 }

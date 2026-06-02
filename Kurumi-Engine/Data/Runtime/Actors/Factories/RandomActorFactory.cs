@@ -1,9 +1,13 @@
+// Data.
 using Data.Definitions.Actors.Core;
+
 using Data.Models.Maps;
-using Data.Runtime.Actors.Controllers.Base;
-using Data.Runtime.Actors.Controllers.Core;
+
+using Data.Runtime.Maps.Base.Controllers.Base;
+using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Actors.Core;
 
+// Game.
 using Game.Scripts.Library;
 
 namespace Data.Runtime.Actors.Factories;
@@ -20,7 +24,8 @@ public sealed class RandomActorFactory
     public Actor Create(ActorInfo actorInfo, ActorModel actorModel) 
     {
         Stack<Controller> controllers = [];
-        controllers.Push(new RandomController() {Interval = actorInfo.MovementSpeed});
+        controllers.Push(new RandomController() { Interval = actorInfo.MovementSpeed });
+
         if (actorInfo.ScriptName == null)
         {
             return new Actor(actorInfo, actorModel) 
@@ -29,6 +34,7 @@ public sealed class RandomActorFactory
                 Script = null
             };
         }
+        
         return new Actor(actorInfo, actorModel) 
         {
             Controllers = controllers,

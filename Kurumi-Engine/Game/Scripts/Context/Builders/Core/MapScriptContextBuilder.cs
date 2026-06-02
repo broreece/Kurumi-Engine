@@ -1,7 +1,9 @@
-using Engine.Context.Containers;
+// Engine.
 using Engine.Context.Core;
+
 using Engine.State.Base;
 
+// Game.
 using Game.Scripts.Context.Builder.Base;
 using Game.Scripts.Context.Capabilities.Base;
 using Game.Scripts.Context.Capabilities.Implementations.Maps;
@@ -28,26 +30,32 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
     {
         var capabilityContainer = new CapabilityContainer();
         var variableTable = new VariableTable();
+
         var gameObjects = _gameContext.GameObjects;
         var gameData = _gameContext.GameData;
 
         // Construct capability container.
         capabilityContainer.SetCapability(typeof(IBattleActions), new BattleActions(gameObjects));
+
         capabilityContainer.SetCapability(
             typeof(IMapNavigationActions), 
             new MapNavigationActions(gameObjects)
         );
+
         capabilityContainer.SetCapability(
             typeof(IMovementActions), 
             new MovementActions(gameObjects.CurrentMap, gameObjects.Party)
         );
+
         capabilityContainer.SetCapability(typeof(IGameStateActions), new GameStateActions(
             gameObjects.SaveData.GameVariables
         ));
+
         capabilityContainer.SetCapability(typeof(IPartyStatusActions), new PartyStatusActions(
             gameObjects.Party,
             gameData.GameDatabase.StatusRegistry
         ));
+        
         capabilityContainer.SetCapability(typeof(IUIActions), new UIActions(
             _stateContext,
             gameData.AssetRegistry, 

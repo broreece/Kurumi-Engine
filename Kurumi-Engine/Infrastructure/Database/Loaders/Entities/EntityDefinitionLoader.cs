@@ -1,5 +1,8 @@
+// Data.
 using Data.Definitions.Entities.Core;
 using Data.Definitions.Entities.Factories;
+
+// Infrastructure.
 using Infrastructure.Database.Interfaces;
 using Infrastructure.Database.Repositories.Core.Entities;
 using Infrastructure.Database.Repositories.Rows.Entities;

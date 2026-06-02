@@ -1,5 +1,8 @@
-using Data.Runtime.Actors.Core;
-using Data.Runtime.Party.Core;
+// Data.
+using Data.Runtime.Parties.Core;
+using Data.Runtime.Spatials;
+
+// Engine.
 using Engine.Systems.Animation.Map.Core;
 
 namespace Engine.Systems.Animation.Map.Factories;
@@ -15,8 +18,8 @@ public sealed class WalkAnimationManagerFactory
         _partyWalkAnimationLength = partyWalkAnimationLength;
     }
 
-    public WalkAnimationManager Create(IReadOnlyList<Actor> actors, Party party)
+    public WalkAnimationManager Create(IReadOnlyList<IWalkable> walkableEntities, Party party)
     {
-        return new WalkAnimationManager(actors, party, _walkAnimationFrames, _partyWalkAnimationLength);
+        return new WalkAnimationManager(walkableEntities, party, _walkAnimationFrames, _partyWalkAnimationLength);
     }
 }

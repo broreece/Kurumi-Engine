@@ -16,11 +16,10 @@ and scalable.
 
 ## Development Status
 
-Pursuit build is currently in progress, it is focused on:
-- Allowing enemy formations to appear on the map.
-- Enemy formations can switch controller based on if they spot the party.
-- Battles can now start and end with dynamic scripts.
-- Further sprite additions for actors to include a dead state for after battle enemy formations.
+Refinement build is currently in progress, it is focused on:
+- Improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
+- Addition of missing UI state and config for party movement, (Also making party movement smoother).
+- Displaying damage during battle state.
 
 ---
 
@@ -31,8 +30,7 @@ as **RPG Maker**.
 
 Key ideas:
 
-- **Minimal engine magic**
-- **Deterministic step-based script logic in map and battle**
+- **Minimal engine magic, should be easy to use without large changes**
 - **Engine follows SOLID principles and .NET coding standards**
 
 The engine aims to keep any gameplay logic outside of scripts **explicit and readable**. If any user wanted to edit the 
@@ -47,9 +45,8 @@ Current engine capabilities include:
 ### Core Systems
 - Script-driven event system applying on both overworld and battles
 - Actor AI controllers allowing dynamic changing of AI movement patterns
-- 2D grid tile-based map navigation
 - Modular UI state system that allows for blocking and non blocking UI elements
-- Enemy formations are being implemented to persist across saves and affect the game world
+- Enemy formations persist across saves and affect the game world
 
 ---
 
@@ -109,7 +106,7 @@ Kurumi-Engine/
 │   ├── State/
 │   ├── Systems/
 │   └── UI/
-│   Core engine architecture and reusable systems.
+│   Core engine architecture and reuseable systems.
 │
 ├── Game/
 │   ├── Maps/
@@ -134,20 +131,29 @@ Kurumi-Engine/
 | Technology | Purpose |
 |-----------|--------|
 | **C# (.NET 8)** | Core engine development |
+| **Python 3.11** | Additional scripts handled in the tooling repo |
 | **SFML.NET** | Rendering, window management, and input handling |
 | **SQLite** | Static game definitions (items, enemies, etc.) |
 | **YAML** | Configuration files |
-| **JSON** | Dynamic save data and scripts |
+| **JSON** | Dynamic save data, custom map and script formats |
 | **Git** | Version control and development workflow |
 | **Xunit** | Unit tests |
+
+---
+
+## Tooling
+
+Official tooling and asset pipeline utilities are maintained separately in:
+- https://github.com/broreece/Kurumi-Tools
+
+This includes:
+- Tiled map conversion
 
 ---
 
 ## Project Goals
 
 - Build a **modular RPG engine architecture** with clear system boundaries and clean and readable code.
-- Implement actors, scripts and enemy formations such that they act in tandem to be able to create dynamic gameplay 
-with no adjustments to code.
 - The engine should be highly scalable, simple to use but allows growth smoothly.
 
 ---

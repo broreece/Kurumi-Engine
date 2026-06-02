@@ -1,11 +1,20 @@
+// Config.
 using Config.Runtime.Battle;
-using Data.Runtime.Party.Core;
+
+// Data.
+using Data.Runtime.Parties.Core;
+
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Systems.Rendering.Base;
 using Engine.Systems.Rendering.Core;
+
+// Infrastructure.
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 
 namespace Engine.Systems.Rendering.Factories;
@@ -22,7 +31,7 @@ public sealed class PartyBattleRendererFactory
         AssetRegistry assetRegistry, 
         RenderSystem renderSystem,
         CharacterBattleSpriteConfig characterBattleSpriteConfig
-        )
+    )
     {
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;

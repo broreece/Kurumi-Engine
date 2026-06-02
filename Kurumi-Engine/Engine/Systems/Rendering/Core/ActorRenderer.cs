@@ -1,7 +1,11 @@
+// Engine.
 using Engine.Systems.Rendering.Base;
+
+// Infrastructure.
 using Infrastructure.Rendering.Base;
 using Infrastructure.Rendering.Core;
 
+// External libraries.
 using SFML.Graphics;
 using SFML.System;
 
@@ -22,7 +26,8 @@ public sealed class ActorRenderer
         RenderSystem renderSystem, 
         IReadOnlyList<ActorRenderData> actorRenderData, 
         int tileWidth, 
-        int tileHeight) 
+        int tileHeight
+    ) 
     {
 
         this.renderSystem = renderSystem;
@@ -49,7 +54,7 @@ public sealed class ActorRenderer
 
             var textureRect = new IntRect(
                 actor.WalkAnimationFrame * actorWidth, 
-                actor.Facing * actorHeight, 
+                actor.SpriteState * actorHeight, 
                 actorWidth, 
                 actorHeight
             );
@@ -64,6 +69,7 @@ public sealed class ActorRenderer
 
             renderSystem.Submit(new RenderCommand() { 
                 Layer = layer, 
+                SubmissionIndex = 0, 
                 Drawable = sprite, 
                 States = RenderStates.Default, 
                 View = view

@@ -1,10 +1,11 @@
+// External libraries.
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace Config.Loader;
 
 /// <summary>
-/// Contains functionality to load and deserialize 
+/// Contains functionality to load and deserialize the config yaml files.
 /// </summary>
 public static class ConfigLoader 
 {

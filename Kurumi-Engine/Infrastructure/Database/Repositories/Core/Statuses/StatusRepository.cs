@@ -1,7 +1,9 @@
+// Infrastructure.
 using Infrastructure.Database.Repositories.Base;
 using Infrastructure.Database.Repositories.Rows.Statuses;
 using Infrastructure.Database.Services;
 
+// External libraries.
 using Microsoft.Data.Sqlite;
 
 namespace Infrastructure.Database.Repositories.Core.Statuses;
@@ -18,8 +20,21 @@ public sealed class StatusRepository
     public StatusRow[] LoadAll() 
     {
         using SqliteDataReader sqlReader = _databaseService.Query(
-            @"SELECT id, name, description, sprite_name, priority, accuracy_modifier, evasion_modifier, turn_length, cure_at_battle_end, can_act, turn_effect_script
-                FROM statuses"
+            @"
+            SELECT
+                id,
+                name,
+                description,
+                sprite_name,
+                priority,
+                accuracy_modifier,
+                evasion_modifier,
+                turn_length,
+                cure_at_battle_end,
+                can_act,
+                turn_effect_script
+            FROM statuses
+            "
         );
         var rows = new List<StatusRow>();
         while (sqlReader.Read()) 

@@ -1,3 +1,4 @@
+// Game.
 using Game.Scripts.Context.Capabilities.Exceptions;
 
 namespace Game.Scripts.Context.Capabilities.Base;
@@ -15,8 +16,7 @@ public sealed class CapabilityContainer
     /// <exception cref="MissingCapabilityException">Exception thrown if a capability is not found.</exception>
     public T GetCapability<T>() where T : class, ICapability 
     {
-        return _capabilities.TryGetValue(typeof(T), out var capability) ? 
-            (T) capability : 
+        return _capabilities.TryGetValue(typeof(T), out var capability) ? (T) capability : 
         throw new MissingCapabilityException($"The capability {typeof(T)} was not found in the capability dictionary.");
     }
 

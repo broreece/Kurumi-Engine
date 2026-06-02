@@ -1,11 +1,17 @@
+// Config.
 using Config.Runtime.Battle;
 
+// Data.
 using Data.Definitions.Entities.Abilities.Core;
+
 using Data.Runtime.Entities.Core;
 
+// Engine.
 using Engine.Assets.Base;
 using Engine.Assets.Core;
+
 using Engine.Systems.Rendering.Base;
+
 using Engine.UI.Components.Core;
 using Engine.UI.Components.Factories;
 using Engine.UI.Data.Content;
@@ -13,8 +19,10 @@ using Engine.UI.Data.Content.Layout;
 using Engine.UI.Data.Style;
 using Engine.UI.Elements;
 
+// Infrastructure.
 using Infrastructure.Database.Base;
 
+// External libraries.
 using SFML.System;
 
 namespace Game.UI.Views;
@@ -218,7 +226,7 @@ public sealed class BattleView
             {
                 var character = _partyMembers[partyIndex];
                 _partyTextComponents[partyIndex].SetText($"{character.Name} HP: {character.CurrentHP} / " +
-                    $"{character.GetMaxHp()}, MP: {character.CurrentMP}: {character.MaxMP}");
+                    $"{character.MaxHp}, MP: {character.CurrentMP}: {character.MaxMP}");
             }
         }
 
@@ -230,7 +238,7 @@ public sealed class BattleView
         var choiceIndex = 0;
 
         // Base abilities.
-        foreach (var id in currentCharacter.GetAbilityIDs())
+        foreach (var id in currentCharacter.AbilityIDs)
         {
             TextData textData = new() { Text = _abilityRegistry.Get(id).Name };
             var textComponent = _textComponentFactory.Create(textData, _textStyle);
@@ -252,7 +260,7 @@ public sealed class BattleView
         }
 
         // Ability sets.
-        foreach (var keyValuePair in currentCharacter.GetAbilitySetIDs())
+        foreach (var keyValuePair in currentCharacter.AbilitySetIDs)
         {
             var abilitySetId = keyValuePair.Key;
             TextData textData = new() { Text = _abilitySetRegistry.Get(abilitySetId).Name };

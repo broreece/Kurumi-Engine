@@ -1,7 +1,8 @@
-using Data.Runtime.Actors.Controllers.Base;
+// Data.
+using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Spatials;
 
-namespace Data.Runtime.Actors.Controllers.Core;
+namespace Data.Runtime.Maps.Base.Controllers.Core;
 
 /// <summary>
 /// Controller that moves an actor randomly. It maintains a base movement interval, which is reset after each move.
@@ -9,16 +10,20 @@ namespace Data.Runtime.Actors.Controllers.Core;
 /// </summary>
 public sealed class RandomController : Controller 
 {
-    private readonly int _fixedActorInterval;
-
-    public RandomController() 
-    {
-        _fixedActorInterval = Interval;
-    }
+    private bool _initialized;
+    
+    private int _fixedActorInterval;
 
     public override void ExecuteMove() 
     {
+        if (!_initialized)
+        {
+            _fixedActorInterval = Interval;
+            _initialized = true;
+        }
+
         Interval = _fixedActorInterval;
+        
         base.ExecuteMove();
     }
 

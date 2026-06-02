@@ -16,4 +16,6 @@ public interface IWalkable
     public int LastX { get; }
 
     public int LastY { get; }
+
+    public int MovementSpeed { get; }
 }

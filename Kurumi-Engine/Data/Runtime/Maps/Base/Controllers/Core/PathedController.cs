@@ -1,14 +1,17 @@
-using Data.Runtime.Actors.Controllers.Base;
+// Data.
+using Data.Runtime.Maps.Base.Controllers.Base;
 using Data.Runtime.Spatials;
 
-namespace Data.Runtime.Actors.Controllers.Core;
+namespace Data.Runtime.Maps.Base.Controllers.Core;
 
 public sealed class PathedController : Controller 
 {
     private readonly bool _canFinish;
+    
     private readonly IReadOnlyList<int> _actorPath;
 
     private int _currentPathStepIndex = 0;
+
     private bool _finished = false;
 
     public PathedController(bool canFinish, IReadOnlyList<int> actorPath) 

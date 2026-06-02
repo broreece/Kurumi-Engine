@@ -1,7 +1,9 @@
+// Infrastructure.
 using Infrastructure.Database.Repositories.Base;
 using Infrastructure.Database.Repositories.Rows.Actors;
 using Infrastructure.Database.Services;
 
+// External libraries.
 using Microsoft.Data.Sqlite;
 
 namespace Infrastructure.Database.Repositories.Core.Actors;
@@ -18,8 +20,23 @@ public sealed class ActorInfoRepository
     public ActorInfoRow[] LoadAll() 
     {
         using SqliteDataReader sqlReader = _databaseService.Query(
-            @"SELECT id, behaviour, sprite_id, movement_speed, tracking_range, below_party, passable, see_through, on_touch, auto, on_action, on_find, script_name
-                FROM actors"
+            @"
+            SELECT
+                id,
+                behaviour,
+                sprite_id,
+                movement_speed,
+                tracking_range,
+                below_party,
+                passable,
+                see_through,
+                on_touch,
+                auto,
+                on_action,
+                on_find,
+                script_name
+            FROM actors
+            "
         );
         var rows = new List<ActorInfoRow>();
         while (sqlReader.Read()) 
