@@ -20,7 +20,7 @@ public sealed class TileRepository
     public TileRow[] LoadAll() 
     {
         using SqliteDataReader sqlReader = _databaseService.Query(
-            @"SELECT id, art_id, animated, passable, see_through
+            @"SELECT id, art_id, animated, passable, pathway, see_through
                 FROM tiles"
         );
         var rows = new List<TileRow>();
@@ -30,10 +30,11 @@ public sealed class TileRepository
             // Add each row then return the array of all rows.
             rows.Add(new TileRow() 
             {
-                Id = reader.GetInt(Col.Id),
-                ArtId = reader.GetInt(Col.ArtId),
-                Animated = reader.GetBool(Col.Animated),
-                Passable = reader.GetBool(Col.Passable),
+                Id = reader.GetInt(Col.Id), 
+                ArtId = reader.GetInt(Col.ArtId), 
+                Animated = reader.GetBool(Col.Animated), 
+                Passable = reader.GetBool(Col.Passable), 
+                Pathway = reader.GetBool(Col.Pathway), 
                 SeeThrough = reader.GetBool(Col.SeeThrough)
             });
         }
@@ -46,6 +47,7 @@ public sealed class TileRepository
         public const int ArtId = 1;
         public const int Animated = 2;
         public const int Passable = 3;
-        public const int SeeThrough = 4;
+        public const int Pathway = 4;
+        public const int SeeThrough = 5;
     }
 }

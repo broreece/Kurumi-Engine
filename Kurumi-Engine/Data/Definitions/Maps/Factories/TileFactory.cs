@@ -5,8 +5,16 @@ namespace Data.Definitions.Maps.Factories;
 
 public sealed class TileFactory 
 {
-    public Tile Create(int id, int artId, bool animated, bool passable, bool seeThrough) 
+    public Tile Create(int id, int artId, bool animated, bool passable, bool pathway, bool seeThrough) 
     {
-        return new Tile() { Id = id, ArtId = artId, Animated = animated, Passable = passable, SeeThrough = seeThrough };
+        return new Tile() 
+        { 
+            Id = id, 
+            ArtId = artId, 
+            Animated = animated, 
+            Passable = passable, 
+            Pathway = pathway,
+            SeeThrough = seeThrough 
+        };
     }
 }

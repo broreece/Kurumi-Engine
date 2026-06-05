@@ -66,14 +66,23 @@ public sealed class NavigationGrid
 
     private bool IsTilePassable(IReadOnlyList<int> tileObjects) 
     {
+        bool passable = tileObjects.Count > 0;
+        bool pathway = false;
         foreach (int tileObject in tileObjects) 
         {
-            if (!_tileRegistry.Get(tileObject).Passable) 
+            pathway = _tileRegistry.Get(tileObject).Pathway;
+            if (!_tileRegistry.Get(tileObject).Passable)
             {
-                return false;
+                passable = false;
+                // If pathway is blocked by an above object remove it's pathway status.
+                pathway = false;
+            }
+            else
+            {
+                passable = passable && true;
             }
         }
-        return true;
+        return pathway || passable;
     }
 
     private bool AreActorsPassable(IReadOnlyList<ICollisionObject> actors) 

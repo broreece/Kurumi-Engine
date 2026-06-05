@@ -28,10 +28,11 @@ public sealed class TileLoader : IDataLoader<Tile>
         {
             var row = rows[index];
             tiles[index] = _tileFactory.Create(
-                row.Id,
-                row.ArtId,
-                row.Animated,
-                row.Passable,
+                row.Id, 
+                row.ArtId, 
+                row.Animated, 
+                row.Passable, 
+                row.Pathway, 
                 row.SeeThrough
             );
         }
