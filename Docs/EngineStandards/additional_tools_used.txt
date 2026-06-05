@@ -1,0 +1,52 @@
+# Development Tools
+During development of the Kurumi Engine, several external tools are used to provide full control over asset creation,
+ database management, and map authoring. This page documents the software currently used by the project.
+
+## Tiled
+
+**Source:**
+https://github.com/mapeditor/tiled
+
+**Description:**
+Tiled is an open source map editor that allows creation of tile-based maps using a supplied tileset. Tiled exports maps
+ in a custom JSON format which is converted into Kurumi's internal map format using the converter available in the 
+ Kurumi Tools repository:
+
+https://github.com/broreece/Kurumi-Tools
+
+**Additional Comments:**
+When using Tiled alongside the Kurumi Tools map converter, a custom `Actor` type should be created within Tiled 
+containing the expected properties used by the converter. Failure to do so may result in actors being imported 
+incorrectly.
+
+---
+
+## DB Browser for SQLite
+
+**Source:**
+https://github.com/sqlitebrowser/sqlitebrowser
+
+**Description:**
+DB Browser for SQLite is an open source application used to view, edit, and manage SQLite databases. It is used during 
+development to maintain the Kurumi game database.
+
+**Additional Comments:**
+When exporting database schemas, field ordering may be altered automatically. This can make database changes difficult 
+to review in source control due to large unrelated diffs.
+
+Known issue:
+https://github.com/sqlitebrowser/sqlitebrowser/issues/3611
+
+---
+
+## LibreSprite
+
+**Source:**
+https://github.com/LibreSprite/LibreSprite
+
+**Description:**
+LibreSprite is an open source pixel art editor derived from the original Aseprite codebase prior to Aseprite becoming 
+proprietary. It is used for creating sprites, tilesets, animations, and other graphical assets used by the engine.
+
+**Additional Comments:**
+No additional configuration is currently required when using LibreSprite with the project.

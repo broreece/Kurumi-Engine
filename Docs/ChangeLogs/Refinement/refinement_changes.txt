@@ -11,7 +11,14 @@ This document outlines the architectural and system-level changes made since the
 'Refinement' focused on improving performance via reducing data loading, using a profiler to find bottlenecks and 
 making the party movement configurable and smoother:
 
--
+- Tiles are more dynamic.
+
+---------------------------------------------------------------------
+
+TILES
+
+- Tiles can now include pathways allowing tiles to be placed over unpassable tiles and allowing party walking
+    over these.
 
 ---------------------------------------------------------------------
 
