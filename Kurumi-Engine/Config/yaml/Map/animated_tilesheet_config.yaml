@@ -1,2 +1,2 @@
-animation_interval: 1
-animated_tile_frames: 2
+animated_tile_frames: 12
+animation_interval: 0.08

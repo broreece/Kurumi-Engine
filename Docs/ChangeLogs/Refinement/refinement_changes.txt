@@ -11,7 +11,13 @@ This document outlines the architectural and system-level changes made since the
 'Refinement' focused on improving performance via reducing data loading, using a profiler to find bottlenecks and 
 making the party movement configurable and smoother:
 
-- Tiles are more dynamic.
+- Tiles and actors are more dynamic.
+
+---------------------------------------------------------------------
+
+ACTORS
+
+- Actor passability can now be updated and are stored in the map data instead of database.
 
 ---------------------------------------------------------------------
 
@@ -24,6 +30,6 @@ TILES
 
 KEY TAKEAWAYS
 
--
+- We ended up doing substantial changes that were not ticketed to allow actors to become passable.
 
 ---------------------------------------------------------------------

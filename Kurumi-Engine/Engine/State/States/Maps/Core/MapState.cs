@@ -167,6 +167,7 @@ public sealed class MapState : IGameState
         _mapRenderer = _gameServices.MapRendererFactory.Create(
             _currentMap.Tiles, 
             _currentMap.TileSheetName, 
+            _currentMap.AnimatedTileSheetName, 
             _currentMap.MapBackgroundArtName
         );
         _walkAnimationManager = _gameServices.WalkAnimationManagerFactory.Create([.. combined], _party);
@@ -460,6 +461,7 @@ public sealed class MapState : IGameState
         _mapRenderer = _gameServices.MapRendererFactory!.Create(
             _currentMap.Tiles, 
             _currentMap.TileSheetName, 
+            _currentMap.AnimatedTileSheetName, 
             _currentMap.MapBackgroundArtName
         );
 

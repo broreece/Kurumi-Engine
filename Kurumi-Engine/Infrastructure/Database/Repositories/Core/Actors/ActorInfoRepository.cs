@@ -28,7 +28,6 @@ public sealed class ActorInfoRepository
                 movement_speed,
                 tracking_range,
                 below_party,
-                passable,
                 see_through,
                 on_touch,
                 auto,
@@ -45,19 +44,18 @@ public sealed class ActorInfoRepository
             // Add each row then return the array of all rows.
             rows.Add(new ActorInfoRow() 
             {
-                Id = reader.GetInt(Col.Id),
-                Behaviour = reader.GetInt(Col.Behaviour),
-                SpriteId = reader.GetInt(Col.SpriteId),
-                MovementSpeed = reader.GetInt(Col.MovementSpeed),
-                TrackingRange = reader.GetInt(Col.TrackingRange),
-                BelowParty = reader.GetBool(Col.BelowParty),
-                Passable = reader.GetBool(Col.Passable),
-                SeeThrough = reader.GetBool(Col.SeeThrough),
-                OnTouch = reader.GetBool(Col.OnTouch),
-                Auto = reader.GetBool(Col.Auto),
-                OnAction = reader.GetBool(Col.OnAction),
-                OnFind = reader.GetBool(Col.OnFind),
-                ScriptName = reader.GetNullableString(Col.ScriptName),
+                Id = reader.GetInt(Col.Id), 
+                Behaviour = reader.GetInt(Col.Behaviour), 
+                SpriteId = reader.GetInt(Col.SpriteId), 
+                MovementSpeed = reader.GetInt(Col.MovementSpeed), 
+                TrackingRange = reader.GetInt(Col.TrackingRange), 
+                BelowParty = reader.GetBool(Col.BelowParty), 
+                SeeThrough = reader.GetBool(Col.SeeThrough), 
+                OnTouch = reader.GetBool(Col.OnTouch), 
+                Auto = reader.GetBool(Col.Auto), 
+                OnAction = reader.GetBool(Col.OnAction), 
+                OnFind = reader.GetBool(Col.OnFind), 
+                ScriptName = reader.GetNullableString(Col.ScriptName), 
             });
         }
         return [.. rows];
@@ -71,12 +69,11 @@ public sealed class ActorInfoRepository
         public const int MovementSpeed = 3;
         public const int TrackingRange = 4;
         public const int BelowParty = 5;
-        public const int Passable = 6;
-        public const int SeeThrough = 7;
-        public const int OnTouch = 8;
-        public const int Auto = 9;
-        public const int OnAction = 10;
-        public const int OnFind = 11;
-        public const int ScriptName = 12;
+        public const int SeeThrough = 6;
+        public const int OnTouch = 7;
+        public const int Auto = 8;
+        public const int OnAction = 9;
+        public const int OnFind = 10;
+        public const int ScriptName = 11;
     }
 }

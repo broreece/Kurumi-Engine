@@ -48,19 +48,18 @@ public sealed class ActorInfoLoader : IDataLoader<ActorInfo>
             }
 
             actorInfo[index] = _actorInfoFactory.Create(
-                id,
-                row.SpriteId,
-                row.Behaviour,
-                row.MovementSpeed,
-                row.TrackingRange,
-                row.ScriptName,
-                row.BelowParty,
-                row.Passable,
-                row.SeeThrough,
-                row.OnTouch,
-                row.Auto,
-                row.OnAction,
-                row.OnFind,
+                id, 
+                row.SpriteId, 
+                row.Behaviour, 
+                row.MovementSpeed, 
+                row.TrackingRange, 
+                row.ScriptName, 
+                row.BelowParty, 
+                row.SeeThrough, 
+                row.OnTouch, 
+                row.Auto, 
+                row.OnAction, 
+                row.OnFind, 
                 path
             );
         }

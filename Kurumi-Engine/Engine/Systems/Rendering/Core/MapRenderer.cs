@@ -105,7 +105,7 @@ public sealed class MapRenderer
 
                     // Load the tile art.
                     var artId = currentTile.ArtId;
-                    var tileSheetX = artId % tilesWide;
+                    var tileSheetX = (artId % tilesWide) - 1;
                     var tileSheetY = artId / tilesWide;
 
                     var textureRect = new IntRect(

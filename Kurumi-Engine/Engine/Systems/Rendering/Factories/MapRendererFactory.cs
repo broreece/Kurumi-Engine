@@ -40,7 +40,12 @@ public sealed class MapRendererFactory
         _tileSheetConfig = tileSheetConfig;
     }
 
-    public MapRenderer Create(IReadOnlyList<TileModel> tiles, string tileSheetName, string mapBackgroundName) 
+    public MapRenderer Create(
+        IReadOnlyList<TileModel> tiles, 
+        string tileSheetName, 
+        string animatedTileSheetName, 
+        string mapBackgroundName
+    ) 
     {
         var tileSheetTexture = _assetRegistry.GetTexture(
             AssetType.TileSpriteSheets, 
@@ -49,7 +54,7 @@ public sealed class MapRendererFactory
 
         var animatedTileSheetTexture = _assetRegistry.GetTexture(
             AssetType.AnimatedTileSpriteSheets, 
-            tileSheetName
+            animatedTileSheetName
         );
 
         var mapBackgroundTexture = _assetRegistry.GetTexture(

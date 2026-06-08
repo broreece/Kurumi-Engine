@@ -11,7 +11,6 @@ public sealed class ActorInfo
     public required string? ScriptName { get; init; }
 
     public required bool BelowParty { get; init; }
-    public required bool Passable { get; init; }
     public required bool SeeThrough { get; init; }
     
     public required bool OnTouch { get; init; }

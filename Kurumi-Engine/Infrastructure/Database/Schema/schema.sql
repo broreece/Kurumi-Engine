@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS "equipment_elements" (
 	"equipment_id"	INTEGER NOT NULL,
 	"element_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
 	FOREIGN KEY("equipment_id") REFERENCES "equipment"("id"),
+	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
 	PRIMARY KEY("equipment_id","element_id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_stats" (
@@ -83,9 +83,9 @@ CREATE TABLE IF NOT EXISTS "enemy_formation_enemies" (
 	"y_location"	INTEGER NOT NULL,
 	"main_part"	INTEGER NOT NULL,
 	"on_kill_script"	TEXT,
-	FOREIGN KEY("enemy_formation_id") REFERENCES "enemy_formations"("id"),
-	FOREIGN KEY("enemy_id") REFERENCES "entities"("id"),
 	FOREIGN KEY("main_part") REFERENCES "enemy_formation_enemies"("id"),
+	FOREIGN KEY("enemy_id") REFERENCES "entities"("id"),
+	FOREIGN KEY("enemy_formation_id") REFERENCES "enemy_formations"("id"),
 	PRIMARY KEY("id")
 );
 CREATE TABLE IF NOT EXISTS "equipment" (
@@ -96,9 +96,9 @@ CREATE TABLE IF NOT EXISTS "equipment" (
 	"accuracy_modifier"	INTEGER NOT NULL,
 	"evasion_modifier"	INTEGER NOT NULL,
 	"turn_effect_script"	TEXT,
-	FOREIGN KEY("item_id") REFERENCES "items"("id"),
 	FOREIGN KEY("equipment_type") REFERENCES "equipment_types"("id"),
 	FOREIGN KEY("equipment_slot") REFERENCES "equipment_slots"("id"),
+	FOREIGN KEY("item_id") REFERENCES "items"("id"),
 	PRIMARY KEY("id","item_id")
 );
 CREATE TABLE IF NOT EXISTS "equipment_statuses" (
@@ -145,8 +145,8 @@ CREATE TABLE IF NOT EXISTS "entity_elements" (
 	"entity_id"	INTEGER NOT NULL,
 	"element_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
 	FOREIGN KEY("entity_id") REFERENCES "entities"("id"),
+	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
 	PRIMARY KEY("entity_id","element_id")
 );
 CREATE TABLE IF NOT EXISTS "entity_stats" (
@@ -161,8 +161,8 @@ CREATE TABLE IF NOT EXISTS "entity_statuses" (
 	"entity_id"	INTEGER NOT NULL,
 	"status_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
-	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
 	FOREIGN KEY("entity_id") REFERENCES "entities"("id"),
+	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
 	PRIMARY KEY("entity_id","status_id")
 );
 CREATE TABLE IF NOT EXISTS "statuses" (
@@ -191,8 +191,8 @@ CREATE TABLE IF NOT EXISTS "status_ability_sets" (
 	"status_id"	INTEGER NOT NULL,
 	"ability_set_id"	INTEGER NOT NULL,
 	"sealed"	INTEGER NOT NULL,
-	FOREIGN KEY("ability_set_id") REFERENCES "ability_sets"("id"),
 	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
+	FOREIGN KEY("ability_set_id") REFERENCES "ability_sets"("id"),
 	PRIMARY KEY("status_id","ability_set_id")
 );
 CREATE TABLE IF NOT EXISTS "status_elements" (
@@ -208,8 +208,8 @@ CREATE TABLE IF NOT EXISTS "status_stats" (
 	"stat_id"	INTEGER NOT NULL,
 	"value"	INTEGER NOT NULL,
 	FOREIGN KEY("status_id") REFERENCES "statuses"("id"),
-	FOREIGN KEY("stat_id") REFERENCES "stats"("id"),
-	PRIMARY KEY("status_id","stat_id")
+	PRIMARY KEY("status_id","stat_id"),
+	FOREIGN KEY("stat_id") REFERENCES "stats"("id")
 );
 CREATE TABLE IF NOT EXISTS "enemy_formation_enemy_battle_scripts" (
 	"id"	INTEGER NOT NULL,
@@ -218,25 +218,8 @@ CREATE TABLE IF NOT EXISTS "enemy_formation_enemy_battle_scripts" (
 	"target"	INTEGER NOT NULL,
 	"start_turn"	INTEGER NOT NULL,
 	"frequency"	INTEGER NOT NULL,
-	FOREIGN KEY("enemy_formation_enemy_id") REFERENCES "enemy_formation_enemies"("id"),
-	PRIMARY KEY("id")
-);
-CREATE TABLE IF NOT EXISTS "actors" (
-	"id"	INTEGER NOT NULL UNIQUE,
-	"behaviour"	INTEGER NOT NULL,
-	"sprite_id"	INTEGER NOT NULL,
-	"movement_speed"	INTEGER NOT NULL,
-	"tracking_range"	NUMERIC NOT NULL,
-	"below_party"	INTEGER NOT NULL,
-	"passable"	INTEGER NOT NULL,
-	"see_through"	INTEGER NOT NULL,
-	"on_touch"	INTEGER NOT NULL,
-	"auto"	INTEGER NOT NULL,
-	"on_action"	INTEGER NOT NULL,
-	"on_find"	INTEGER NOT NULL,
-	"script_name"	TEXT,
-	FOREIGN KEY("sprite_id") REFERENCES "actor_sprites"("id"),
-	PRIMARY KEY("id" AUTOINCREMENT)
+	PRIMARY KEY("id"),
+	FOREIGN KEY("enemy_formation_enemy_id") REFERENCES "enemy_formation_enemies"("id")
 );
 CREATE TABLE IF NOT EXISTS "enemy_formations" (
 	"id"	INTEGER NOT NULL UNIQUE,
@@ -251,9 +234,9 @@ CREATE TABLE IF NOT EXISTS "enemy_formations" (
 	"background_art_name"	TEXT NOT NULL,
 	"on_lose_script"	TEXT,
 	"on_win_script"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT),
 	FOREIGN KEY("default_actor_info_id") REFERENCES "actors"("id"),
-	FOREIGN KEY("item_pool_id") REFERENCES "item_pools"("id"),
-	PRIMARY KEY("id" AUTOINCREMENT)
+	FOREIGN KEY("item_pool_id") REFERENCES "item_pools"("id")
 );
 CREATE TABLE IF NOT EXISTS "abilities" (
 	"id"	INTEGER NOT NULL UNIQUE,
@@ -268,8 +251,8 @@ CREATE TABLE IF NOT EXISTS "abilities" (
 	"random_target"	INTEGER NOT NULL,
 	"targets_all"	INTEGER NOT NULL,
 	"battle_sprite_animation_name"	TEXT NOT NULL,
-	FOREIGN KEY("element_id") REFERENCES "elements"("id"),
-	PRIMARY KEY("id" AUTOINCREMENT)
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("element_id") REFERENCES "elements"("id")
 );
 CREATE TABLE IF NOT EXISTS "items" (
 	"id"	INTEGER NOT NULL UNIQUE,
@@ -295,5 +278,21 @@ CREATE TABLE IF NOT EXISTS "tiles" (
 	"pathway"	INTEGER NOT NULL,
 	"see_through"	INTEGER NOT NULL,
 	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "actors" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"behaviour"	INTEGER NOT NULL,
+	"sprite_id"	INTEGER NOT NULL,
+	"movement_speed"	INTEGER NOT NULL,
+	"tracking_range"	INTEGER NOT NULL,
+	"below_party"	INTEGER NOT NULL,
+	"see_through"	INTEGER NOT NULL,
+	"on_touch"	INTEGER NOT NULL,
+	"auto"	INTEGER NOT NULL,
+	"on_action"	INTEGER NOT NULL,
+	"on_find"	INTEGER NOT NULL,
+	"script_name"	TEXT,
+	PRIMARY KEY("id" AUTOINCREMENT),
+	FOREIGN KEY("sprite_id") REFERENCES "actor_sprites"("id")
 );
 COMMIT;

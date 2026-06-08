@@ -42,7 +42,7 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
 
     public int TrackingRange => _actorInfo.TrackingRange;
 
-    public bool Passable => _actorInfo.Passable;
+    public bool Passable => _actorModel.Passable;
 
     public bool OnTouch => _actorInfo.OnTouch;
 

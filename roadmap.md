@@ -132,6 +132,87 @@ enemy formation finds the party.
 
 ---
 
+## (GM-01) Re-introduce the game menu ##
+### Complexity: 4 ###
+### Independent: 3 ###
+### Momentum: 3 ###
+### Impact: 4 ###
+
+**Description:** We removed the game menu (Escape in game) we should reintroduce it so that the player can
+see paryt member information and items.
+
+**Steps:**
+- It might be worth checking our previous menu work to create this again.
+
+---
+
+## (IP-01) Item pool implementation ##
+### Complexity: 3 ###
+### Independent: 2 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Allow item pool containers, granting dynamic rogue like features in the engine.
+
+**Steps:**
+- Load item pools in database:
+    - We already have a database table representing item pools, We need to create an item pool dictionary.
+    - The key is the item pool ID, the value is the list of possible item IDs in the pool.
+    - Create a script step that adds a random item from an item pool to the inventory.
+
+---
+
+## (DEMO-01) Create demonstration video ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 4.5 ###
+### Impact: 3 ###
+
+**Description:**
+Create a small demonstration scenario showcasing key engine capabilities.
+
+**Steps:**
+- Make a basic sewer map demonstrating getting a key, using the key to unlock an iron gate.
+- Display avoiding the enemy, perhaps get caught and result in a fight.
+
+---
+
+## Visualization milestone reached.
+
+---
+
+## (SAVE-01) Validate saving ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 1 ###
+### Impact: 1 ###
+
+**Description:** Because menu has been removed we haven't tested persistance in a while validate this works.
+
+---
+
+## (SAVE-02) Saving should update actor positions ##
+### Complexity: 3 ###
+### Independent: 3 ###
+### Momentum: 3 ###
+### Impact: 1 ###
+
+**Description:** By allowing saving of actor positions and facing direction it will remove the need for us to add
+additional auto scripts in maps.
+
+**Steps:**
+- Currently in map files we have the actor information at the bottom of the file.
+- The issue is that these actor information should be saveable but the maps will never change:
+    - This is inefficent as we shouldn't be re-writting the maps every save.
+- We should consider changing the system structure such that map actors are saveable files stored in different files
+- We'll need to update our converter tool as well for this.
+
+---
+
+## Persistance milestone reached.
+
+---
+
 ## (ASE-01) Additional script enhancements ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
@@ -181,23 +262,6 @@ enemy formation finds the party.
 
 ---
 
-## Create demonstration video ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 4.5 ###
-### Impact: 3 ###
-
-**Description:**
-Create a small demonstration scenario showcasing key engine capabilities.
-
-**Steps:**
-- The first video should show two actors having forced movements, the player can still move during this time, then one 
-actor continues with a speech, this should go directly into a cutscene.
-- The second video should demonstrate enemy formations, they chase the player for the player to escape. The game is then 
-saved and when loaded the enemy formation persists on the map.
-
----
-
 ## Add custom stun status and status changes ##
 ### Complexity: 2 ###
 ### Independent: 3 ###
@@ -224,23 +288,6 @@ the database.
     - Add new field in table of database.
     - Add new field into class of status.cs.
     - When loading statuses in database.cs add new field.
-
----
-
-## Item pool implementation ##
-### Complexity: 3 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Allow item pool containers, granting dynamic rogue like features in the engine.
-
-**Steps:**
-- Load item pools in database: (Mid Priority)
-    - We already have a database table representing item pools, We need to create an item pool 2D list of ints.
-    - The 1st index is the item pool id, the second index is the item ids in the list.
-    - Create a map scene event step that adds a random item from an item pool to the inventory, display a text window 
-    displaying the name of the item as well.
 
 ---
 

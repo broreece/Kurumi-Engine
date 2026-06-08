@@ -9,7 +9,6 @@ public sealed class ActorInfoRow
     public required int TrackingRange { get; init; }
 
     public required bool BelowParty { get; init; }
-    public required bool Passable { get; init; }
     public required bool SeeThrough { get; init; }
 
     public required bool OnTouch { get; init; }

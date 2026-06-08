@@ -33,6 +33,8 @@ public sealed class Map
 
     public string TileSheetName => _mapModel.TileSheetName;
 
+    public string AnimatedTileSheetName => _mapModel.AnimatedTileSheetName;
+
     public string MapBackgroundArtName => _mapModel.BackgroundArtName;
 
     internal Map(MapModel mapModel, IReadOnlyDictionary<(int, int), TileModel> tileDictionary) 
