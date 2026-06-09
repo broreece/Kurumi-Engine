@@ -82,7 +82,7 @@ public sealed class StateManager
             {
                 uIOverlay.Update(deltaTime);
                 _uiRenderSystem.Render(
-                    uIOverlay.GetUIElement(), 
+                    uIOverlay.UIElement, 
                     _renderSystem, 
                     _displaySize, 
                     _stateContext.GameWindow.Size
@@ -91,7 +91,7 @@ public sealed class StateManager
 
             // Load top UI element, check if finished, if so remove it, else check if it should handle the input state.
             IUIOverlay top = _stateContext.UIOverlays.Peek();
-            if (top.TakesControl())
+            if (top.TakesControl)
             {
                 stateInputValid = false;
                 top.HandleInput(inputState);
@@ -113,7 +113,7 @@ public sealed class StateManager
             }
             else
             {
-                script.Update(_currentState.GetScriptContext());
+                script.Update(_currentState.ScriptContext);
             }
         }
 

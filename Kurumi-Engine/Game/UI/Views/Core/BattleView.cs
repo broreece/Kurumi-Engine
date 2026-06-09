@@ -25,7 +25,7 @@ using Infrastructure.Database.Base;
 // External libraries.
 using SFML.System;
 
-namespace Game.UI.Views;
+namespace Game.UI.Views.Core;
 
 public sealed class BattleView
 {
@@ -59,12 +59,12 @@ public sealed class BattleView
     // Elements.
     public UIElement UIElement { get; }
 
-    public BattleView(
+    internal BattleView(
         AssetRegistry assetRegistry, 
         Registry<AbilityDefinition> abilityRegistry, 
-        Registry<NamedData> abilitySetRegistry,
+        Registry<NamedData> abilitySetRegistry, 
         BattleWindowConfig battleWindowConfig, 
-        PartyChoicesConfig partyChoicesConfig,
+        PartyChoicesConfig partyChoicesConfig, 
         Character[] partyMembers
     )
     {
@@ -80,7 +80,7 @@ public sealed class BattleView
 
         var windowStyle = new SpriteStyle() { SpriteArt = battleWindowName };
         var selectionStyle = new SpriteStyle() { SpriteArt = selectionName };
-        _textStyle = new TextStyle() { FontSize = fontSize, FontArt = fontArt};
+        _textStyle = new TextStyle() { FontSize = fontSize, FontArt = fontArt };
 
         // Component factories.
         _spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
@@ -111,7 +111,7 @@ public sealed class BattleView
                 UIComponent = component,
                 Layout = new UILayout() 
                 {
-                    Position = new Vector2f(0, partyIndex * _spacing),
+                    Position = new Vector2f(0, partyIndex * _spacing), 
                     Size = new Vector2f(1, 1)
                 },
 
@@ -190,7 +190,7 @@ public sealed class BattleView
             LocalOffset = new Vector2f(0, 0),
             Children =
             [
-                infoWindowElement,
+                infoWindowElement, 
                 _selectionWindowElement
             ],
 
@@ -215,7 +215,7 @@ public sealed class BattleView
 
         _selectionElement.Layout = new UILayout()
         {
-            Position = new Vector2f(xLocation, yLocation + (choiceChange * _spacing)),
+            Position = new Vector2f(xLocation, yLocation + (choiceChange * _spacing)), 
             Size = _selectionElement.Layout.Size
         };
 
@@ -248,13 +248,13 @@ public sealed class BattleView
                 Layout = new UILayout()
                 {
                     Position = new Vector2f(0, 0), 
-                    Size = new Vector2f(1, 1),
+                    Size = new Vector2f(1, 1), 
                 },
 
-                LocalOffset = new Vector2f(0, _spacing * choiceIndex),
-                Children = [],
+                LocalOffset = new Vector2f(0, _spacing * choiceIndex), 
+                Children = [], 
 
-                RenderLayer = RenderLayer.UIText
+                RenderLayer = RenderLayer.UIText 
             });
             choiceIndex ++;
         }
@@ -267,18 +267,19 @@ public sealed class BattleView
             var textComponent = _textComponentFactory.Create(textData, _textStyle);
             choiceTextElements.Add(new UIElement()
             {
-                UIComponent = textComponent,
+                UIComponent = textComponent, 
                 Layout = new UILayout()
                 {
                     Position = new Vector2f(0, 0), 
-                    Size = new Vector2f(1, 1),
+                    Size = new Vector2f(1, 1), 
                 },
 
-                LocalOffset = new Vector2f(0, _spacing * choiceIndex),
-                Children = [],
+                LocalOffset = new Vector2f(0, _spacing * choiceIndex), 
+                Children = [], 
 
-                RenderLayer = RenderLayer.UIText
+                RenderLayer = RenderLayer.UIText 
             });
+            
             choiceIndex ++;
         }
 
@@ -289,41 +290,41 @@ public sealed class BattleView
             var textComponent = _textComponentFactory.Create(textData, _textStyle);
             choiceTextElements.Add(new UIElement()
             {
-                UIComponent = textComponent,
+                UIComponent = textComponent, 
                 Layout = new UILayout()
                 {
                     Position = new Vector2f(0, 0), 
-                    Size = new Vector2f(1, 1),
+                    Size = new Vector2f(1, 1), 
                 },
 
-                LocalOffset = new Vector2f(0, _spacing * choiceIndex),
-                Children = [],
+                LocalOffset = new Vector2f(0, _spacing * choiceIndex), 
+                Children = [], 
 
-                RenderLayer = RenderLayer.UIText
+                RenderLayer = RenderLayer.UIText 
             });
+
             choiceIndex ++;
         }
-        {
-            
-        }
+
         if (_partyChoicesConfig.RunAwayEnabled)
         {
             TextData textData = new() { Text = _partyChoicesConfig.RunAwayText };
             var textComponent = _textComponentFactory.Create(textData, _textStyle);
             choiceTextElements.Add(new UIElement()
             {
-                UIComponent = textComponent,
+                UIComponent = textComponent, 
                 Layout = new UILayout()
                 {
                     Position = new Vector2f(0, 0), 
-                    Size = new Vector2f(1, 1),
+                    Size = new Vector2f(1, 1), 
                 },
 
-                LocalOffset = new Vector2f(0, _spacing * choiceIndex),
-                Children = [],
+                LocalOffset = new Vector2f(0, _spacing * choiceIndex), 
+                Children = [], 
 
-                RenderLayer = RenderLayer.UIText
+                RenderLayer = RenderLayer.UIText 
             });
+
             choiceIndex ++;
         }
 

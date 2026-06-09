@@ -39,6 +39,10 @@ public sealed class DialogueOverlay : IUIOverlay
     private bool _isFinished = false;
     private int _currentPage = 0;
 
+    public UIElement UIElement => _uiElement;
+
+    public bool TakesControl => true;
+
     public DialogueOverlay(
         AssetRegistry assetRegistry, 
         TextWindowDefaults textWindowDefaults, 
@@ -124,9 +128,5 @@ public sealed class DialogueOverlay : IUIOverlay
         }
     }
 
-    public UIElement GetUIElement() => _uiElement;
-
     public bool IsFinished() => _isFinished;
-
-    public bool TakesControl() => true;
 }

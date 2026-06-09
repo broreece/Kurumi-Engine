@@ -57,21 +57,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (DD-01) Display damage text ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Display basic damage text.
-
-**Steps:** 
-- Implement damage text:
-    - Used to exist in forge.
-    - Create custom config declaring it's font type, size and maybe a offset.
-
----
-
 ## (LIE-01) Lookup indexes enhancement ##
 ### Complexity: 1 ###
 ### Independent: 1 ###
@@ -174,6 +159,21 @@ Create a small demonstration scenario showcasing key engine capabilities.
 **Steps:**
 - Make a basic sewer map demonstrating getting a key, using the key to unlock an iron gate.
 - Display avoiding the enemy, perhaps get caught and result in a fight.
+
+---
+
+## (DD-02) Enhance battle text ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Damage text is currently static and sits at a fixed location, we should make it to be based on the 
+    entity being affected.
+
+**Steps:** 
+- Based on the target we should place damage text directly over the entity.
+- Ensure that if a new action starts the existing battle text list is emptied.
 
 ---
 

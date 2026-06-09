@@ -28,8 +28,16 @@ TILES
 
 ---------------------------------------------------------------------
 
+BATTLE
+
+- Damage is now displayed in battles.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - We ended up doing substantial changes that were not ticketed to allow actors to become passable.
+- As development is ongoing I've been making changes actively to reduce tech debt, in this release in particular I've
+    went back to create factories for game states to reduce passing the same parameters constantly.
 
 ---------------------------------------------------------------------

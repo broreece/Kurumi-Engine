@@ -8,11 +8,11 @@ namespace Engine.State.Base;
 /// </summary>
 public interface IGameState 
 {
+    public ScriptContext ScriptContext { get; }
+
     public void OnEnter();
 
     public void OnExit();
 
     public void Update(float deltaTime);
-
-    public ScriptContext GetScriptContext();
 }

@@ -20,7 +20,7 @@ public sealed class ConfigProvider
 
     // Battle config.
     public BattleBackgroundSpriteConfig BattleBackgroundSpriteConfig { get; }
-    public BattleSceneConfig BattleSceneConfig { get; }
+    public BattleTextConfig BattleTextConfig { get; }
     public BattleWindowConfig BattleWindowConfig { get; }
     public CharacterBattleSpriteConfig CharacterBattleSpriteConfig { get; }
     public EnemyBattleSpriteConfig EnemyBattleSpriteConfig { get; }
@@ -63,7 +63,7 @@ public sealed class ConfigProvider
             "Battle", 
             "battle_background_sprite_config.yaml"
         );
-        BattleSceneConfig = LoadConfig<BattleSceneConfig>("Battle", "battle_scene_config.yaml");
+        BattleTextConfig = LoadConfig<BattleTextConfig>("Battle", "battle_text_config.yaml");
         BattleWindowConfig = LoadConfig<BattleWindowConfig>("Battle", "battle_window_config.yaml");
         CharacterBattleSpriteConfig = LoadConfig<CharacterBattleSpriteConfig>(
             "Battle", 

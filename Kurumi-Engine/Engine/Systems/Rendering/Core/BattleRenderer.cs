@@ -1,4 +1,6 @@
 // Engine.
+using Engine.State.States.Battle.Text.Core;
+
 using Engine.Systems.Rendering.Base;
 
 // Infrastructure.
@@ -19,14 +21,44 @@ public sealed class BattleRenderer
 
     private readonly Sprite _backgroundSprite;
 
-    internal BattleRenderer(RenderSystem renderSystem, Sprite backgroundSprite)
+    private readonly Font _battleTextFont;
+
+    private readonly IList<BattleText> _battleTexts;
+
+    internal BattleRenderer(
+        RenderSystem renderSystem, 
+        Sprite backgroundSprite, 
+        Font battleTextFont, 
+        IList<BattleText> battleTexts
+    )
     {
         _renderSystem = renderSystem;
         _backgroundSprite = backgroundSprite;
+        _battleTextFont = battleTextFont;
+        _battleTexts = battleTexts;
     }
 
-    public void Update(View view)
+    public void Update(View view, float deltaTime)
     {
+        foreach (BattleText battleText in _battleTexts)
+        {
+            battleText.Update(deltaTime);
+            if (!battleText.Finished)
+            {
+                var text = new Text(battleText.Text, _battleTextFont, battleText.FontSize);
+                _renderSystem.Submit(
+                    new RenderCommand()
+                    {
+                        Layer = RenderLayer.UIText, 
+                        SubmissionIndex = 0, 
+                        Drawable = text, 
+                        States = RenderStates.Default, 
+                        View = view 
+                    }
+                );
+            }
+        }
+
         // Send to render list.
         _renderSystem.Submit(
             new RenderCommand() 

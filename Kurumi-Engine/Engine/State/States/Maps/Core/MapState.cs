@@ -76,7 +76,9 @@ public sealed class MapState : IGameState
     // Script context.
     private ScriptContext? _mapScriptContext;
 
-    public MapState(GameContext gameContext, StateContext stateContext, string? startingScript) 
+    public ScriptContext ScriptContext => _mapScriptContext!;
+
+    internal MapState(GameContext gameContext, StateContext stateContext, string? startingScript) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
@@ -132,8 +134,6 @@ public sealed class MapState : IGameState
             _gameObjects.MapChangeRequest = null;
         }
     }
-
-    public ScriptContext GetScriptContext() => _mapScriptContext!;
 
     private void CacheDependencies() 
     {
