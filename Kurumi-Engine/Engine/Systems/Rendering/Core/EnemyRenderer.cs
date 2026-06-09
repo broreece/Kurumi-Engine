@@ -35,7 +35,8 @@ public sealed class EnemyRenderer
         RenderSystem renderSystem, 
         Formation formation,
         IReadOnlyList<EnemyRenderData> enemyRenderData,
-        EnemyBattleSpriteConfig enemyBattleSpriteConfig)
+        EnemyBattleSpriteConfig enemyBattleSpriteConfig
+    )
     {
         _renderSystem = renderSystem;
         _formation = formation;
@@ -53,16 +54,16 @@ public sealed class EnemyRenderer
                 var enemySprite = new Sprite(enemyRenderData.Texture)
                 {
                     TextureRect = new IntRect(
-                        0,
-                        0,
-                        _enemyBattleSpriteConfig.Width,
+                        0, 
+                        0, 
+                        _enemyBattleSpriteConfig.Width, 
                         _enemyBattleSpriteConfig.Height
-                    ),
-                    Position = new Vector2f(enemyRenderData.XLocation, enemyRenderData.YLocation),
+                    ), 
+                    Position = new Vector2f(enemyRenderData.XLocation, enemyRenderData.YLocation), 
                     Scale = new Vector2f(
-                        _enemyBattleSpriteConfig.WidthScale,
+                        _enemyBattleSpriteConfig.WidthScale, 
                         _enemyBattleSpriteConfig.HeightScale
-                    ),
+                    ) 
                 };
 
                 // Apply render state based on if selected.
@@ -85,10 +86,10 @@ public sealed class EnemyRenderer
                 _renderSystem.Submit(new RenderCommand() 
                 {
                     Layer = RenderLayer.BaseEnemyLayer, 
-                    SubmissionIndex = 0, 
+                    SubmissionIndex = currentEnemyIndex, 
                     Drawable = enemySprite, 
-                    States = renderState,
-                    View = view
+                    States = renderState, 
+                    View = view 
                 });
             }
             currentEnemyIndex ++;

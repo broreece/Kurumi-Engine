@@ -25,7 +25,7 @@ using Infrastructure.Database.Base;
 // External libraries.
 using SFML.System;
 
-namespace Game.UI.Views;
+namespace Game.UI.Views.Core;
 
 public sealed class BattleView
 {
@@ -59,7 +59,7 @@ public sealed class BattleView
     // Elements.
     public UIElement UIElement { get; }
 
-    public BattleView(
+    internal BattleView(
         AssetRegistry assetRegistry, 
         Registry<AbilityDefinition> abilityRegistry, 
         Registry<NamedData> abilitySetRegistry, 

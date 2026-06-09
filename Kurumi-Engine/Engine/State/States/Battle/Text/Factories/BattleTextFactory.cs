@@ -18,14 +18,14 @@ public sealed class BattleTextFactory
 
     public BattleText Create(string text, int xLocation, int yLocation, BattleTextType textType)
     {
-        return new BattleText() 
+        return new BattleText(_battleTextConfig.BattleDisplayLength) 
         { 
             FontName = _battleTextConfig.BattleFontName, 
             Text = text, 
+            FontSize = (uint) _battleTextConfig.BattleFontSize, 
             XLocation = xLocation, 
             YLocation = yLocation, 
-            TextType = textType, 
-            Timer = _battleTextConfig.BattleDisplayLength 
+            TextType = textType 
         };
     }
 }

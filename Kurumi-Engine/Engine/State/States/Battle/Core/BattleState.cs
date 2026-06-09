@@ -16,6 +16,9 @@ using Engine.Input.Context.Contexts;
 using Engine.State.Base;
 using Engine.State.States.Battle.Base;
 using Engine.State.States.Battle.Exceptions;
+using Engine.State.States.Battle.Text.Base;
+using Engine.State.States.Battle.Text.Core;
+using Engine.State.States.Battle.Text.Factories;
 
 using Engine.Systems.Camera;
 using Engine.Systems.Rendering.Core;
@@ -29,7 +32,8 @@ using Game.Scripts.Context.Core;
 using Game.Scripts.Context.Variables.Base;
 using Game.Scripts.Library;
 
-using Game.UI.Views;
+using Game.UI.Views.Core;
+using Game.UI.Views.Factories;
 
 // Infrastructure.
 using Infrastructure.Database.Base;
@@ -65,6 +69,12 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     // UI renderer.
     private readonly UIRenderSystem _uiRenderSystem;
+
+    // Battle text factory.
+    private readonly BattleTextFactory _battleTextFactory;
+
+    // List of battle text.
+    private readonly IList<BattleText> _battleText = [];
 
     // Cached config.
     private readonly int _maxChoicesPerPage;
@@ -112,12 +122,16 @@ public sealed class BattleState : IGameState, IBattleMenu
         GameContext gameContext, 
         StateContext stateContext, 
         Party party, 
+        BattleTextFactory battleTextFactory, 
+        BattleViewFactory battleViewFactory, 
         BattleStartRequest battle
     ) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
         _party = party;
+        _battleTextFactory = battleTextFactory;
+
         _currentTargetIndex = party.Size;
 
         var gameData = _gameContext.GameData;
@@ -135,14 +149,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         _itemsEnabled = partyChoicesConfig.ItemsEnabled;
         _runAwayEnabled = partyChoicesConfig.RunAwayEnabled;
 
-        _view = new BattleView(
-            gameData.AssetRegistry, 
-            _abilityRegistry,
-            database.AbilitySetRegistry,
-            battleWindowConfig,
-            partyChoicesConfig,
-            party.Characters
-        );
+        _view = battleViewFactory.Create(party.Characters);
         _uiRoot = _view.UIElement;
         _uiRenderSystem = gameServices.UIRenderSystem;
 
@@ -173,7 +180,7 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     public void Update(float deltaTime)
     {
-        _battleRenderer!.Update(_camera!.View);
+        _battleRenderer!.Update(_camera!.View, deltaTime);
         _enemyRenderer!.Update(_camera.View, _targetSelector, _currentTargetIndex - _party.Size);
         _partyBattleRenderer!.Update(_camera.View, _targetSelector, _currentTargetIndex);
 
@@ -396,7 +403,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         gameWindow.SetView(_camera.View);
 
         // Renderers.
-        _battleRenderer = gameServices.BattleRendererFactory.Create(_formation.BackgroundArtName);
+        _battleRenderer = gameServices.BattleRendererFactory.Create(_formation.BackgroundArtName, _battleText);
         _enemyRenderer = gameServices.EnemyRendererFactory.Create(_formation);
         _partyBattleRenderer = gameServices.PartyBattleRendererFactory.Create(_party);
 
@@ -632,22 +639,35 @@ public sealed class BattleState : IGameState, IBattleMenu
         int damage = beforeHp - afterHp;
         if (damage > 0)
         {
-            // TODO: Add damage text here.
+            // TODO: (DD-02) Correct placement here.
+            _battleText.Add(_battleTextFactory.Create(damage.ToString(), 0, 0, BattleTextType.Damage));
         }
         else
         {
-            // TODO: Add heal text here.
+            // TODO: (DD-02) Correct placement here.
+            _battleText.Add(_battleTextFactory.Create((damage * - 1).ToString(), 0, 0, BattleTextType.Heal));
         }
 
         // Check if target is enemy and died, if they died execute on kill script.
+        // Also check if target is main part of any other body part and kill linked body parts.
         if (target.EntityType == EntityType.Enemy && _formation.GetEntityAt(target.Index).CurrentHP <= 0)
         {
+            // Check for on kill script.
             var onKillScriptName = _formation.Enemies[target.Index].OnKillScript;
             if (onKillScriptName != null)
             {
                 var onKillScript = _scriptLibrary.GetBattleScript(onKillScriptName);
                 var onKillScriptExecution = new ScriptExecution(onKillScript);
                 onKillScriptExecution.RunToPauseOrFinish(_battleScriptContext, _stateContext);
+            }
+
+            // Check for connected body parts.
+            for (int index = 0; index < _formation.Enemies.Count; index ++)
+            {
+                if (_formation.Enemies[index].MainPart - 1 == target.Index)
+                {
+                    _formation.GetEntityAt(index).CurrentHP = 0;
+                }
             }
         }
     }
