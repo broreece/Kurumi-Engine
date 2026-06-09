@@ -395,6 +395,10 @@ public sealed class MapState : IGameState
     {
         if (_visionResolver!.CanSee(formation, _party, formation.TrackingRange))
         {
+            if (formation.OnFind && formation.Script != null && !formation.Alert)
+            {
+                _stateContext.AddExecutingScript(new ScriptExecution(formation.Script));
+            }
             formation.Alert = true;
         }
     }

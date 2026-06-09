@@ -205,10 +205,11 @@ public static class Program
 
         var formationFactory = new FormationFactory(
             party, 
-            database.ActorInfoRegistry,
+            database.ActorInfoRegistry, 
             database.EnemyDefinitionRegistry, 
             database.EnemyBattleScriptRegistry, 
-            database.EntityDefinitionRegistry,
+            database.EntityDefinitionRegistry, 
+            scriptLibrary, 
             configProvider.GameConfig.AgilityStatIndex
         );
 
