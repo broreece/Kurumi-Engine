@@ -35,6 +35,7 @@ public sealed class ConfigProvider
     // Game config.
     public GameConfig GameConfig { get; }
     public GameWindowConfig GameWindowConfig { get; }
+    public PartyMovementConfig PartyMovementConfig { get; }
 
     // Map config.
     public AnimatedTileSheetConfig AnimatedTileSheetConfig { get; }
@@ -81,6 +82,7 @@ public sealed class ConfigProvider
         // Game config.
         GameConfig = LoadConfig<GameConfig>("Game", "game_config.yaml");
         GameWindowConfig = LoadConfig<GameWindowConfig>("Game", "game_window_config.yaml");
+        PartyMovementConfig = LoadConfig<PartyMovementConfig>("Game", "party_movement_config.yaml");
 
         // Map config.
         AnimatedTileSheetConfig = LoadConfig<AnimatedTileSheetConfig>("Map", "animated_tilesheet_config.yaml");

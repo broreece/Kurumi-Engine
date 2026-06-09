@@ -70,20 +70,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (MSC-01) Party movement speed config. ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:** We don't have a hard coded movement speed, we need to fix this and store it in the party class.
-
-**Steps:**
-- Create new config for the movement speed.
-- Update the movement controls so holding buttons will continue movement.
-
----
-
 ## Refinement milestone reached.
 
 ---

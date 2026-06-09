@@ -77,7 +77,7 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
     // Actor movement functions.
     public int SpriteId => _actorInfo.SpriteId;
 
-    public int MovementSpeed => _actorInfo.MovementSpeed;
+    public float MovementSpeed => _actorInfo.MovementSpeed;
 
     internal Actor(ActorInfo actorInfo, ActorModel actorModel)
     {

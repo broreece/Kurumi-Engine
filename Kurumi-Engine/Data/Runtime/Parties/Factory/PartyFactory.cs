@@ -36,7 +36,7 @@ public sealed class PartyFactory
         _characterFactory = new CharacterFactory(agilityIndex);
     }
 
-    public Party Create(PartyModel partyModel, Dictionary<int, int> inventory) 
+    public Party Create(PartyModel partyModel, Dictionary<int, int> inventory, float movementSpeed) 
     {
         // Load the character models from the save data's character dictionary.
         var characters = new Character[_maxPartySize];
@@ -49,6 +49,11 @@ public sealed class PartyFactory
                 _characterModels[characterId]
             );
         }
-        return new Party() { Characters = characters, PartyModel = partyModel, Inventory = inventory };
+        return new Party() { 
+            Characters = characters, 
+            PartyModel = partyModel, 
+            Inventory = inventory, 
+            MovementSpeed = movementSpeed 
+        };
     }
 }

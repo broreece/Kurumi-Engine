@@ -11,19 +11,16 @@ public sealed class WalkAnimationManager
     private readonly Party _party;
 
     private readonly int _walkAnimationFrames;
-    private readonly float _partyWalkAnimationLength;
 
     internal WalkAnimationManager(
         IReadOnlyList<IWalkable> walkableEntities, 
         Party party, 
-        int walkAnimationFrames, 
-        float partyWalkAnimationLength
+        int walkAnimationFrames
     ) 
     {
         _walkableEntities = walkableEntities;
         _party = party;
         _walkAnimationFrames = walkAnimationFrames;
-        _partyWalkAnimationLength = partyWalkAnimationLength;
     }
 
     public void Update(float deltaTime) 
@@ -35,7 +32,7 @@ public sealed class WalkAnimationManager
         }
 
         // Update party.
-        UpdateWalkableEntity(_party, _partyWalkAnimationLength, deltaTime);
+        UpdateWalkableEntity(_party, _party.MovementSpeed, deltaTime);
     }
 
     /// <summary>

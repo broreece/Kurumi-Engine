@@ -77,7 +77,11 @@ public static class Program
             gameConfig.MaxPartySize,
             gameConfig.AgilityStatIndex
         );
-        var party = partyFactory.Create(saveData.Party, saveData.Inventory);
+        var party = partyFactory.Create(
+            saveData.Party, 
+            saveData.Inventory, 
+            configProvider.PartyMovementConfig.BaseMovementSpeed
+        );
         var gameServices = BuildGameServices(paths, input, gameData, saveData, saveService, party, window);
 
         var gameObjects = BuildGameObjects(gameServices, saveData, party);
@@ -273,8 +277,7 @@ public static class Program
             tileConfig.Height
         );
         var walkAnimationManagerFactory = new WalkAnimationManagerFactory(
-            characterFieldSpriteConfig.WalkAnimationFrames,
-            characterFieldSpriteConfig.WalkAnimationSpeed
+            characterFieldSpriteConfig.WalkAnimationFrames
         );
 
         // Battle factories.
