@@ -28,6 +28,12 @@ TILES
 
 ---------------------------------------------------------------------
 
+BATTLE
+
+- Damage is now displayed in battles.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - We ended up doing substantial changes that were not ticketed to allow actors to become passable.

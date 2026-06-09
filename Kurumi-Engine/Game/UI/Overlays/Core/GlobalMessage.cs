@@ -33,6 +33,10 @@ public sealed class GlobalMessage : IUIOverlay
 
     // TODO: (UI-01) - Implement timer here.
 
+    public bool TakesControl => false;
+
+    public UIElement UIElement => _uiElement;
+
     public GlobalMessage(
         AssetRegistry assetRegistry, 
         GlobalMessageDefaults globalMessageDefaults, 
@@ -76,20 +80,20 @@ public sealed class GlobalMessage : IUIOverlay
 
         _uiElement = new UIElement()
         {
-            UIComponent = windowComponent,
+            UIComponent = windowComponent, 
             Layout = new UILayout() 
             { 
                 Position = new Vector2f(xLocation, yLocation), 
                 Size = new Vector2f(width, height) 
-            },
+            }, 
             
-            LocalOffset = new Vector2f(0, 0),
+            LocalOffset = new Vector2f(0, 0), 
             Children =
             [
                 textUIElement,
-            ],
+            ], 
 
-            RenderLayer = RenderLayer.UIWindow
+            RenderLayer = RenderLayer.UIWindow 
         };
     }
 
@@ -104,9 +108,5 @@ public sealed class GlobalMessage : IUIOverlay
     /// <param name="inputState">The current input state of the game.</param>
     public void HandleInput(InputState inputState) {}
 
-    public UIElement GetUIElement() => _uiElement;
-
     public bool IsFinished() => _isFinished;
-
-    public bool TakesControl() => false;
 }

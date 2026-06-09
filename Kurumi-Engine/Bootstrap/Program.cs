@@ -20,8 +20,8 @@ using Engine.Input.System;
 
 using Engine.State.Base;
 using Engine.State.Core;
-using Engine.State.States.Battle.Core;
-using Engine.State.States.Maps.Core;
+using Engine.State.States.Battle.Factories;
+using Engine.State.States.Maps.Factories;
 
 using Engine.Systems.Animation.Map.Factories;
 using Engine.Systems.Combat.Factories;
@@ -96,8 +96,13 @@ public static class Program
             (uint) configProvider.DisplayConfig.ViewWidth, 
             (uint) configProvider.DisplayConfig.ViewHeight 
         );
+
+        // Create state factories.
+        var mapStateFactory = new MapStateFactory(gameContext, stateContext);
+        var battleStateFactory = new BattleStateFactory(gameContext, stateContext, party);
+
         var stateManager = new StateManager(
-            new MapState(gameContext, stateContext, startingScript: null), 
+            mapStateFactory.Create(startingScript: null), 
             stateContext, 
             gameServices.InputMapper,
             gameServices.RenderSystem,
@@ -105,7 +110,7 @@ public static class Program
             displaySize
         );
 
-        RunGameLoop(window, input.System, stateManager, gameContext, stateContext);
+        RunGameLoop(window, input.System, stateManager, gameContext, stateContext, mapStateFactory, battleStateFactory);
     }
 
     private static Paths BuildPaths() 
@@ -318,8 +323,10 @@ public static class Program
         GameWindow window, 
         InputSystem inputSystem, 
         StateManager stateManager, 
-        GameContext gameContext,
-        StateContext stateContext
+        GameContext gameContext, 
+        StateContext stateContext, 
+        MapStateFactory mapStateFactory, 
+        BattleStateFactory battleStateFactory
     ) 
     {
         var clock = new Clock();
@@ -330,17 +337,12 @@ public static class Program
             // Process state changes if requested.
             if (gameObjects.BattleStartRequest != null)
             {
-                stateManager.ChangeState(new BattleState(
-                    gameContext, 
-                    stateContext, 
-                    gameContext.GameObjects.Party, 
-                    gameObjects.BattleStartRequest
-                ));
+                stateManager.ChangeState(battleStateFactory.Create(gameObjects.BattleStartRequest));
                 gameObjects.BattleStartRequest = null;
             }
             else if (gameObjects.BattleEndRequest != null)
             {
-                stateManager.ChangeState(new MapState(gameContext, stateContext, gameObjects.BattleEndRequest.Script));
+                stateManager.ChangeState(mapStateFactory.Create(gameObjects.BattleEndRequest.Script));
                 gameObjects.BattleEndRequest = null;
             }
 

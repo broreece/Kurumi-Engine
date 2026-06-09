@@ -41,6 +41,10 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
     // Stored config.
     private int _spacing;
 
+    public UIElement UIElement => _uiElement;
+
+    public bool TakesControl => true;
+
     public bool YesSelected => _currentChoice == 0;
 
     public ChoiceBoxWithDialogueOverlay(
@@ -256,9 +260,5 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         }
     }
 
-    public UIElement GetUIElement() => _uiElement;
-
     public bool IsFinished() => _isFinished;
-
-    public bool TakesControl() => true;
 }

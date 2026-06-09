@@ -106,7 +106,14 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     private bool LostBattle => _party.LeadersHp == 0;
 
-    public BattleState(GameContext gameContext, StateContext stateContext, Party party, BattleStartRequest battle) 
+    public ScriptContext ScriptContext => _battleScriptContext!;
+
+    internal BattleState(
+        GameContext gameContext, 
+        StateContext stateContext, 
+        Party party, 
+        BattleStartRequest battle
+    ) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
@@ -180,8 +187,6 @@ public sealed class BattleState : IGameState, IBattleMenu
             _stateContext.GameWindow.Size    
         );
     }
-
-    public ScriptContext GetScriptContext() => _battleScriptContext!;
 
     public void MoveUp()
     {
@@ -584,6 +589,7 @@ public sealed class BattleState : IGameState, IBattleMenu
 
         foreach (var targetIndex in targetIndexes)
         {
+            IStats targetStats;
             // If target is enemy.
             if (targetIndex >= _party.Size)
             {
@@ -592,6 +598,7 @@ public sealed class BattleState : IGameState, IBattleMenu
                     Index = targetIndex - _party.Size, 
                     EntityType = EntityType.Enemy 
                 };
+                targetStats = _formation.GetEntityAt(targetIndex - _party.Size);
             }
             else
             {
@@ -600,12 +607,17 @@ public sealed class BattleState : IGameState, IBattleMenu
                     Index = targetIndex,  
                     EntityType = EntityType.Character 
                 };
+                targetStats = _party.Characters[targetIndex];
             }
-            ExecuteAction(user, target, action.ScriptName);
+            ExecuteAction(user, target, action.ScriptName, targetStats);
         }
     }
 
-    private void ExecuteAction(EntityIndex user, EntityIndex target, string scriptName) {
+    private void ExecuteAction(EntityIndex user, EntityIndex target, string scriptName, IStats targetStats) 
+    {
+        // Load target HP before executing action.
+        int beforeHp = targetStats.CurrentHP;
+
         var script = _scriptLibrary!.GetEntityScript(scriptName);
 
         _battleScriptContext!.SetVariable(ScriptVariables.User, user);
@@ -614,6 +626,18 @@ public sealed class BattleState : IGameState, IBattleMenu
         // Add to executing scripts.
         var scriptExceution = new ScriptExecution(script);
         scriptExceution.RunToPauseOrFinish(_battleScriptContext, _stateContext);
+
+        // Load damage text.
+        int afterHp = targetStats.CurrentHP;
+        int damage = beforeHp - afterHp;
+        if (damage > 0)
+        {
+            // TODO: Add damage text here.
+        }
+        else
+        {
+            // TODO: Add heal text here.
+        }
 
         // Check if target is enemy and died, if they died execute on kill script.
         if (target.EntityType == EntityType.Enemy && _formation.GetEntityAt(target.Index).CurrentHP <= 0)
