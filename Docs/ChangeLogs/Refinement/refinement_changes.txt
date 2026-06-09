@@ -12,6 +12,7 @@ This document outlines the architectural and system-level changes made since the
 making the party movement configurable and smoother:
 
 - Tiles and actors are more dynamic.
+- Game movement is smoother now, the player can hold the movement direction to continue moving in the direction held.
 
 ---------------------------------------------------------------------
 
@@ -31,6 +32,13 @@ TILES
 BATTLE
 
 - Damage is now displayed in battles.
+
+---------------------------------------------------------------------
+
+MOVEMENT
+
+- If the movement keys are held the party will continue to move.
+- Base movement speed is now configurable.
 
 ---------------------------------------------------------------------
 

@@ -112,7 +112,7 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
 
     public bool SeeThrough => Dead || (Alert ? _onFoundActor.SeeThrough : _defaultActor.SeeThrough);
 
-    public int MovementSpeed => Alert ? _onFoundActor.MovementSpeed : _defaultActor.MovementSpeed;
+    public float MovementSpeed => Alert ? _onFoundActor.MovementSpeed : _defaultActor.MovementSpeed;
 
     // The stored entity data of formations.
     public required IReadOnlyList<StoredEntityData> StoredEntityData { get; init; }

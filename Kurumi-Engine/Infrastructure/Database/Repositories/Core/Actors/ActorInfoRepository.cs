@@ -25,8 +25,8 @@ public sealed class ActorInfoRepository
                 id,
                 behaviour,
                 sprite_id,
-                movement_speed,
                 tracking_range,
+                movement_speed,
                 below_party,
                 see_through,
                 on_touch,
@@ -47,8 +47,8 @@ public sealed class ActorInfoRepository
                 Id = reader.GetInt(Col.Id), 
                 Behaviour = reader.GetInt(Col.Behaviour), 
                 SpriteId = reader.GetInt(Col.SpriteId), 
-                MovementSpeed = reader.GetInt(Col.MovementSpeed), 
                 TrackingRange = reader.GetInt(Col.TrackingRange), 
+                MovementSpeed = reader.GetFloat(Col.MovementSpeed), 
                 BelowParty = reader.GetBool(Col.BelowParty), 
                 SeeThrough = reader.GetBool(Col.SeeThrough), 
                 OnTouch = reader.GetBool(Col.OnTouch), 
@@ -66,8 +66,8 @@ public sealed class ActorInfoRepository
         public const int Id = 0;
         public const int Behaviour = 1;
         public const int SpriteId = 2;
-        public const int MovementSpeed = 3;
-        public const int TrackingRange = 4;
+        public const int TrackingRange = 3;
+        public const int MovementSpeed = 4;
         public const int BelowParty = 5;
         public const int SeeThrough = 6;
         public const int OnTouch = 7;

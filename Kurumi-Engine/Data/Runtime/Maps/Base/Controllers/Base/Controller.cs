@@ -14,7 +14,7 @@ public abstract class Controller : IFinishable
 {
     private float _elapsedTime = 0;
 
-    public required int Interval { get; set; }
+    public required float Interval { get; set; }
 
     public bool CanMove => _elapsedTime >= Interval;
 
