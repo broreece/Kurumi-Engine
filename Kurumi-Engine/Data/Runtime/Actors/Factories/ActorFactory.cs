@@ -27,19 +27,10 @@ public sealed class ActorFactory
     {
         var controllers = new Stack<Controller>();
         
-        if (actorInfo.ScriptName == null) 
-        {
-            return new Actor(actorInfo, actorModel) 
-            {
-                Controllers = controllers,
-                Script = null
-            };
-        }
-
         return new Actor(actorInfo, actorModel) 
         {
-            Controllers = controllers,
-            Script = _scriptLibrary.GetMapScript(actorInfo.ScriptName)
+            Controllers = controllers, 
+            Script = actorInfo.ScriptName == null ? null : _scriptLibrary.GetMapScript(actorInfo.ScriptName) 
         };
     }
 }

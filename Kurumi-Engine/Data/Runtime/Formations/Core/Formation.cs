@@ -14,6 +14,9 @@ using Engine.State.States.Maps.Base;
 
 using Engine.Systems.Navigation.Base;
 
+// Game.
+using Game.Scripts.Core;
+
 namespace Data.Runtime.Formations.Core;
 
 public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePositionProvider, ICollisionObject 
@@ -34,6 +37,8 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
 
     // Alert timer of the formation.
     private float _alertTimer;
+
+    public required Script? Script { get; init; }
 
     // The current state of the formation.
     public bool Alert { get; set; } = false;
@@ -87,6 +92,8 @@ public sealed class Formation : IFacingPositionProvider, IMapEntity, IMutablePos
     public bool Passable => Dead;
 
     public bool AlertLimitReached => _alertTimer >= _formationDefinition.SearchTimer;
+
+    public bool OnFind => _defaultActor.OnFind;
 
     // Information regarding the formations scripts.
     public string? OnWinScript => _formationDefinition.OnWinScript;

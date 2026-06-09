@@ -52,22 +52,7 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - A smaller milestone as some of the tasks were finished during the pursuit work.
-- Focused on improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
 - Addition of missing UI state and config for party movement, (Also making party movement smoother).
-
----
-
-## (ASE-01) Actor scripts stored in enemy formations should execute on find. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:** Actor scripts stored in formations are never executed. We want the on find script to execute if the
-enemy formation finds the party.
-
-**Steps:**
-- Edit the map state function that triggers when an enemy formation finds the party to activate it's stored script.
 
 ---
 

@@ -18,6 +18,9 @@ using Data.Runtime.Parties.Core;
 // Engine.
 using Engine.Systems.Navigation.Core;
 
+// Game.
+using Game.Scripts.Library;
+
 // Infrastructure.
 using Infrastructure.Database.Base;
 
@@ -38,13 +41,16 @@ public sealed class FormationFactory
     private readonly EnemyFactory _enemyFactory;
     private readonly EntityFactory _entityFactory;
 
+    private readonly ScriptLibrary _scriptLibrary;
+
     public FormationFactory
     (
         Party party, 
         Registry<ActorInfo> actorInfoRegsitry, 
-        Registry<EnemyDefinition> enemyDefinitionRegistry,
-        Registry<EnemyBattleScript> enemyBattleScriptRegistry,
-        Registry<EntityDefinition> entityDefinitionRegistry,
+        Registry<EnemyDefinition> enemyDefinitionRegistry, 
+        Registry<EnemyBattleScript> enemyBattleScriptRegistry, 
+        Registry<EntityDefinition> entityDefinitionRegistry, 
+        ScriptLibrary scriptLibrary, 
         int agilityIndex
     )
     {
@@ -54,6 +60,8 @@ public sealed class FormationFactory
 
         _enemyDefinitionRegistry = enemyDefinitionRegistry;
         _entityDefinitionRegistry = entityDefinitionRegistry;
+
+        _scriptLibrary = scriptLibrary;
 
         _enemyFactory = new EnemyFactory(enemyBattleScriptRegistry);
         _entityFactory = new EntityFactory(agilityIndex);
@@ -116,7 +124,11 @@ public sealed class FormationFactory
             onFoundController, 
             entities, 
             enemies
-        ) { StoredEntityData = storedEntityData };
+        ) 
+        { 
+            StoredEntityData = storedEntityData, 
+            Script = defaultActor.ScriptName == null ? null : _scriptLibrary.GetMapScript(defaultActor.ScriptName) 
+        };
     }
 
     /// <summary>
