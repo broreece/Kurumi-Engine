@@ -12,6 +12,9 @@ public sealed class StatNameLoader : IDataLoader<TwoNamedData>
     private readonly StatNameRepository _statNameRepository;
     private readonly TwoNamedDataFactory _statNameFactory;
 
+    // Index.
+    private readonly Dictionary<string, int> _statShortNamesIndex = [];
+
     public StatNameLoader(StatNameRepository statNameRepository, TwoNamedDataFactory statNameFactory) 
     {
         _statNameRepository = statNameRepository;
@@ -25,11 +28,17 @@ public sealed class StatNameLoader : IDataLoader<TwoNamedData>
         for (var index = 0; index < rows.Length; index ++) 
         {
             var row = rows[index];
+            var id = row.Id;
+            var shortName = row.ShortName;
+
             statNames[index] = _statNameFactory.Create(
-                row.Id,
-                row.Name,
-                row.ShortName
+                id, 
+                row.Name, 
+                shortName
             );
+
+            // Update index.
+            _statShortNamesIndex[shortName.ToLower()] = id;
         }
         return statNames;
     }
@@ -39,12 +48,6 @@ public sealed class StatNameLoader : IDataLoader<TwoNamedData>
     /// </summary>
     /// <returns>A dictionary where the stat short name is the key and the ID is the value.</returns>
     public IReadOnlyDictionary<string, int> LoadStatShortNameIndex() {
-        StatRow[] rows = _statNameRepository.LoadAll();
-        var statShortNames = new Dictionary<string, int>();
-        foreach (var row in rows) 
-        {
-            statShortNames[row.ShortName.ToLower()] = row.Id;
-        }
-        return statShortNames;
+        return _statShortNamesIndex;
     }
 }
