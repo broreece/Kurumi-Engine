@@ -57,20 +57,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (LIE-01) Lookup indexes enhancement ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** In loaders that also load index lookups we should store values after inital load to prevent re-loading
-
-**Steps:**
-- In formation definition loader and state short name loader create new fields to store the loaded data.
-- Update the index getter functions to utilize the stored fields.
-
----
-
 ## (ASE-01) Actor scripts stored in enemy formations should execute on find. ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
