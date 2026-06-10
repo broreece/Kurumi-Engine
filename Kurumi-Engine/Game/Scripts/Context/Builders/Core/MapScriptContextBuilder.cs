@@ -1,13 +1,11 @@
 // Engine.
 using Engine.Context.Core;
 
-using Engine.State.Base;
-
 // Game.
 using Game.Scripts.Context.Builder.Base;
 using Game.Scripts.Context.Capabilities.Base;
 using Game.Scripts.Context.Capabilities.Implementations.Maps;
-using Game.Scripts.Context.Capabilities.Implementations.Universal;
+using Game.Scripts.Context.Capabilities.Implementations.Universal.Core;
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 using Game.Scripts.Context.Core;
@@ -17,13 +15,20 @@ namespace Game.Scripts.Context.Builder.Core;
 
 public sealed class MapScriptContextBuilder : IScriptContextBuilder 
 {
+    // Contexts.
     private readonly GameContext _gameContext;
-    private readonly StateContext _stateContext;
 
-    public MapScriptContextBuilder(GameContext gameContext, StateContext stateContext) 
+    // Factories.
+    private readonly UIActionsFactory _uiActionsFactory;
+
+    internal MapScriptContextBuilder(
+        GameContext gameContext, 
+        UIActionsFactory uiActionsFactory
+    ) 
     {
         _gameContext = gameContext;
-        _stateContext = stateContext;
+
+        _uiActionsFactory = uiActionsFactory;
     }
 
     public ScriptContext BuildScriptContext() 
@@ -56,11 +61,7 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
             gameData.GameDatabase.StatusRegistry
         ));
         
-        capabilityContainer.SetCapability(typeof(IUIActions), new UIActions(
-            _stateContext,
-            gameData.AssetRegistry, 
-            gameData.ConfigProvider
-        ));
+        capabilityContainer.SetCapability(typeof(IUIActions), _uiActionsFactory.Create());
 
         return new ScriptContext(capabilityContainer, variableTable);
     }

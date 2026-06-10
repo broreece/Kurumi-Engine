@@ -43,7 +43,7 @@ public sealed class DialogueOverlay : IUIOverlay
 
     public bool TakesControl => true;
 
-    public DialogueOverlay(
+    internal DialogueOverlay(
         AssetRegistry assetRegistry, 
         TextWindowDefaults textWindowDefaults, 
         IReadOnlyList<string> pages
@@ -97,7 +97,7 @@ public sealed class DialogueOverlay : IUIOverlay
             LocalOffset = new Vector2f(0, 0),
             Children =
             [
-                textUIElement,
+                textUIElement
             ],
 
             RenderLayer = RenderLayer.UIWindow

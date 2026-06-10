@@ -37,7 +37,7 @@ public sealed class GlobalMessage : IUIOverlay
 
     public UIElement UIElement => _uiElement;
 
-    public GlobalMessage(
+    internal GlobalMessage(
         AssetRegistry assetRegistry, 
         GlobalMessageDefaults globalMessageDefaults, 
         int timeLimit, 

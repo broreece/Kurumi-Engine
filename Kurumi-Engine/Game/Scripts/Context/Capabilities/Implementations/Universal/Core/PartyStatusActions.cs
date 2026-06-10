@@ -13,7 +13,7 @@ using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 // Infrastructure.
 using Infrastructure.Database.Base;
 
-namespace Game.Scripts.Context.Capabilities.Implementations.Universal;
+namespace Game.Scripts.Context.Capabilities.Implementations.Universal.Core;
 
 public sealed class PartyStatusActions : IPartyStatusActions 
 {

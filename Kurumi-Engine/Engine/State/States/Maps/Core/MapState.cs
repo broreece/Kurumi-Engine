@@ -26,7 +26,7 @@ using Engine.Systems.Perception.Factories;
 using Engine.Systems.Rendering.Core;
 
 // Game.
-using Game.Scripts.Context.Builder.Core;
+using Game.Scripts.Context.Builder.Factories;
 using Game.Scripts.Context.Core;
 
 namespace Engine.State.States.Maps.Core;
@@ -46,6 +46,9 @@ public sealed class MapState : IGameState
 
     // Starting script.
     private readonly string? _startingScript;
+
+    // Context builder.
+    private readonly MapScriptContextBuilderFactory _mapScriptContextBuilderFactory;
 
     // Cached objects.
     private GameObjects? _gameObjects;
@@ -78,11 +81,17 @@ public sealed class MapState : IGameState
 
     public ScriptContext ScriptContext => _mapScriptContext!;
 
-    internal MapState(GameContext gameContext, StateContext stateContext, string? startingScript) 
+    internal MapState(
+        GameContext gameContext, 
+        StateContext stateContext, 
+        MapScriptContextBuilderFactory mapScriptContextBuilderFactory, 
+        string? startingScript
+    ) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
         _party = gameContext.GameObjects.Party;
+        _mapScriptContextBuilderFactory = mapScriptContextBuilderFactory;
         _startingScript = startingScript;
     }
 
@@ -150,7 +159,7 @@ public sealed class MapState : IGameState
         _tileHeight = tileConfig.Height;
 
         // Map script context.
-        var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext, _stateContext);
+        var mapScriptContextBuilder = _mapScriptContextBuilderFactory.Create();
         _mapScriptContext = mapScriptContextBuilder.BuildScriptContext();
     }
 

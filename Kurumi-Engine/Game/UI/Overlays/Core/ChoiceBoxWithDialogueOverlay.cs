@@ -47,11 +47,11 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
 
     public bool YesSelected => _currentChoice == 0;
 
-    public ChoiceBoxWithDialogueOverlay(
+    internal ChoiceBoxWithDialogueOverlay(
         AssetRegistry assetRegistry, 
         TextWindowDefaults textWindowDefaults, 
-        ChoiceBoxDefaults choiceBoxDefaults,
-        IReadOnlyList<string> choices,
+        ChoiceBoxDefaults choiceBoxDefaults, 
+        IReadOnlyList<string> choices, 
         string text
     )
     {

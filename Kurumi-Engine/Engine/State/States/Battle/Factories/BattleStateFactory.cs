@@ -10,6 +10,8 @@ using Engine.State.States.Battle.Core;
 using Engine.State.States.Battle.Text.Factories;
 
 // Game.
+using Game.Scripts.Context.Builder.Factories;
+
 using Game.UI.Views.Factories;
 
 namespace Engine.State.States.Battle.Factories;
@@ -27,12 +29,16 @@ public sealed class BattleStateFactory
     private readonly BattleTextFactory _battleTextFactory;
     private readonly BattleViewFactory _battleViewFactory;
 
+    // Script context builder factory.
+    private readonly BattleScriptContextBuilderFactory _battleScriptContextBuilderFactory;
+
     public BattleStateFactory(
         GameContext gameContext, 
         StateContext stateContext, 
         Party party, 
         BattleTextFactory battleTextFactory, 
-        BattleViewFactory battleViewFactory
+        BattleViewFactory battleViewFactory, 
+        BattleScriptContextBuilderFactory battleScriptContextBuilderFactory
     )
     {
         _gameContext = gameContext;
@@ -40,10 +46,19 @@ public sealed class BattleStateFactory
         _party = party;
         _battleTextFactory = battleTextFactory;
         _battleViewFactory = battleViewFactory;
+        _battleScriptContextBuilderFactory = battleScriptContextBuilderFactory;
     }
 
     public BattleState Create(BattleStartRequest battle)
     {
-        return new BattleState(_gameContext, _stateContext, _party, _battleTextFactory, _battleViewFactory, battle);
+        return new BattleState(
+            _gameContext, 
+            _stateContext, 
+            _party, 
+            _battleTextFactory, 
+            _battleViewFactory, 
+            _battleScriptContextBuilderFactory, 
+            battle
+        );
     }
 }

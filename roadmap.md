@@ -48,29 +48,12 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Refinement
+## Milestone: Visualization
 **Focus areas:**
 
-- A smaller milestone as some of the tasks were finished during the pursuit work.
-- Addition of missing UI state and config for party movement, (Also making party movement smoother).
-
----
-
-## (TNCB-01) Add text window with namebox (and choice box) ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:** Create the ability to add a new text window with namebox and choice box.
-
-**Steps:**
-- Add the new UI view using our existing windows as examples.
-- Create a new script that can open this UI view (Ensure freezing takes place the same as choice box).
-
----
-
-## Refinement milestone reached.
+- Re-implementation of the game's menu.
+- Addition of items and an item display in the menu.
+- Creation of a demo video for the capabilities of the engine.
 
 ---
 

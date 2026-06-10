@@ -27,7 +27,7 @@ using Engine.UI.Elements;
 using Engine.UI.Render;
 
 // Game.
-using Game.Scripts.Context.Builder.Core;
+using Game.Scripts.Context.Builder.Factories;
 using Game.Scripts.Context.Core;
 using Game.Scripts.Context.Variables.Base;
 using Game.Scripts.Library;
@@ -72,6 +72,9 @@ public sealed class BattleState : IGameState, IBattleMenu
 
     // Battle text factory.
     private readonly BattleTextFactory _battleTextFactory;
+
+    // Context builder.
+    private readonly BattleScriptContextBuilderFactory _battleScriptContextBuilderFactory;
 
     // List of battle text.
     private readonly IList<BattleText> _battleText = [];
@@ -124,6 +127,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         Party party, 
         BattleTextFactory battleTextFactory, 
         BattleViewFactory battleViewFactory, 
+        BattleScriptContextBuilderFactory battleScriptContextBuilderFactory, 
         BattleStartRequest battle
     ) 
     {
@@ -131,6 +135,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         _stateContext = stateContext;
         _party = party;
         _battleTextFactory = battleTextFactory;
+        _battleScriptContextBuilderFactory = battleScriptContextBuilderFactory;
 
         _currentTargetIndex = party.Size;
 
@@ -408,12 +413,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         _partyBattleRenderer = gameServices.PartyBattleRendererFactory.Create(_party);
 
         // Battle script context and script library.
-        var battleScriptContextBuilder = new BattleScriptContextBuilder(
-            _gameContext, 
-            _stateContext, 
-            _party, 
-            _formation
-        );
+        var battleScriptContextBuilder = _battleScriptContextBuilderFactory.Create(_formation);
         _battleScriptContext = battleScriptContextBuilder.BuildScriptContext();
         _scriptLibrary = gameServices.ScriptLibrary;
     }

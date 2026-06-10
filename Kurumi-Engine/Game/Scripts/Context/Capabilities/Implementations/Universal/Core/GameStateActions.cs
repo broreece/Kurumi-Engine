@@ -5,7 +5,7 @@ using Data.Models.Variables;
 using Game.Scripts.Context.Capabilities.Exceptions;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 
-namespace Game.Scripts.Context.Capabilities.Implementations.Universal;
+namespace Game.Scripts.Context.Capabilities.Implementations.Universal.Core;
 
 public sealed class GameStateActions : IGameStateActions 
 {

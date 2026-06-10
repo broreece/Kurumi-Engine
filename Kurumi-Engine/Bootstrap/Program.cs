@@ -38,8 +38,11 @@ using Game.Maps.Loader;
 using Game.Maps.Registry;
 using Game.Maps.Services;
 
+using Game.Scripts.Context.Builder.Factories;
+using Game.Scripts.Context.Capabilities.Implementations.Universal.Core;
 using Game.Scripts.Library;
 
+using Game.UI.Overlays.Factories;
 using Game.UI.Views.Factories;
 
 // Infrastructure.
@@ -105,23 +108,48 @@ public static class Program
 
         // Create state factories and their dependencies.
         var gameDatabase = gameData.GameDatabase;
+        var assetRegistry = gameData.AssetRegistry;
 
         var battleTextFactory = new BattleTextFactory(configProvider.BattleTextConfig);
         var battleViewFactory = new BattleViewFactory(
-            gameData.AssetRegistry, 
+            assetRegistry, 
             gameDatabase.AbilityRegistry, 
             gameDatabase.AbilitySetRegistry, 
             configProvider.BattleWindowConfig, 
             configProvider.PartyChoicesConfig
         );
 
-        var mapStateFactory = new MapStateFactory(gameContext, stateContext);
+        var textWindowDefaults = configProvider.TextWindowDefaults;
+
+        var choiceBoxWithDialogueOverlayFactory = new ChoiceBoxWithDialogueOverlayFactory(
+            assetRegistry, 
+            textWindowDefaults, 
+            configProvider.ChoiceBoxDefaults
+        );
+        var dialogueOverlayFactory = new DialogueOverlayFactory(assetRegistry, textWindowDefaults);
+        var globalMessageFactory = new GlobalMessageFactory(assetRegistry, configProvider.GlobalMessageDefaults);
+        var uiActionsFactory = new UIActionsFactory(
+            stateContext, 
+            choiceBoxWithDialogueOverlayFactory, 
+            dialogueOverlayFactory, 
+            globalMessageFactory
+        );
+
+        var mapScriptContextBuilderFactory = new MapScriptContextBuilderFactory(gameContext, uiActionsFactory);
+        var battleScriptContextBuilderFactory = new BattleScriptContextBuilderFactory(
+            gameContext, 
+            party, 
+            uiActionsFactory
+        );
+
+        var mapStateFactory = new MapStateFactory(gameContext, stateContext, mapScriptContextBuilderFactory);
         var battleStateFactory = new BattleStateFactory(
             gameContext, 
             stateContext, 
             party, 
             battleTextFactory, 
-            battleViewFactory
+            battleViewFactory, 
+            battleScriptContextBuilderFactory
         );
 
         var stateManager = new StateManager(

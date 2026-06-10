@@ -5,14 +5,12 @@ using Data.Runtime.Parties.Core;
 // Engine.
 using Engine.Context.Core;
 
-using Engine.State.Base;
-
 // Game.
 using Game.Scripts.Context.Builder.Base;
 using Game.Scripts.Context.Capabilities.Base;
 using Game.Scripts.Context.Capabilities.Implementations.Battle;
 using Game.Scripts.Context.Capabilities.Implementations.Entity;
-using Game.Scripts.Context.Capabilities.Implementations.Universal;
+using Game.Scripts.Context.Capabilities.Implementations.Universal.Core;
 using Game.Scripts.Context.Capabilities.Interfaces.Battle;
 using Game.Scripts.Context.Capabilities.Interfaces.Entity;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
@@ -25,7 +23,6 @@ public sealed class BattleScriptContextBuilder : IScriptContextBuilder
 {
     // Contexts.
     private readonly GameContext _gameContext;
-    private readonly StateContext _stateContext;
 
     // Party.
     private readonly Party _party;
@@ -33,16 +30,19 @@ public sealed class BattleScriptContextBuilder : IScriptContextBuilder
     // Enemy formation.
     private readonly Formation _formation;
 
-    public BattleScriptContextBuilder(
+    // Factories.
+    private readonly UIActionsFactory _uiActionsFactory;
+
+    internal BattleScriptContextBuilder(
         GameContext gameContext, 
-        StateContext stateContext, 
         Party party, 
+        UIActionsFactory uiActionsFactory, 
         Formation formation
     ) 
     {
         _gameContext = gameContext;
-        _stateContext = stateContext;
         _party = party;
+        _uiActionsFactory = uiActionsFactory;
         _formation = formation;
     }
 
@@ -51,14 +51,8 @@ public sealed class BattleScriptContextBuilder : IScriptContextBuilder
         var capabilityContainer = new CapabilityContainer();
         var variableTable = new VariableTable();
 
-        var gameData = _gameContext.GameData;
-
         // Construct capability container.
-        capabilityContainer.SetCapability(typeof(IUIActions), new UIActions(
-            _stateContext,
-            gameData.AssetRegistry, 
-            gameData.ConfigProvider
-        ));
+        capabilityContainer.SetCapability(typeof(IUIActions), _uiActionsFactory.Create());
         capabilityContainer.SetCapability(typeof(IActiveBattleActions), new ActiveBattleActions(_formation));
         capabilityContainer.SetCapability(typeof(IHpMpActions), new HpMpActions(
             _party, 
