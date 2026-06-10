@@ -11,7 +11,7 @@ public sealed class GameStateActions : IGameStateActions
 {
     private readonly GameVariables _gameVariables;
 
-    public GameStateActions(GameVariables gameVariables)
+    internal GameStateActions(GameVariables gameVariables)
     {
         _gameVariables = gameVariables;
     }

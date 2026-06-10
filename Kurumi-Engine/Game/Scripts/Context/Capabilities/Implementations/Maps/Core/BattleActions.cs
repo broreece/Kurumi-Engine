@@ -7,13 +7,13 @@ using Engine.Context.Containers;
 // Game.
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 
-namespace Game.Scripts.Context.Capabilities.Implementations.Maps;
+namespace Game.Scripts.Context.Capabilities.Implementations.Maps.Core;
 
 public sealed class BattleActions : IBattleActions 
 {
     private readonly GameObjects _gameObjects;
 
-    public BattleActions(GameObjects gameObjects) 
+    internal BattleActions(GameObjects gameObjects) 
     {
         _gameObjects = gameObjects;
     }

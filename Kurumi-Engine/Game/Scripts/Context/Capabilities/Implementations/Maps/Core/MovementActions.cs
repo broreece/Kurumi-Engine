@@ -11,15 +11,15 @@ using Game.Scripts.Context.Capabilities.Interfaces.Map;
 // Utility.
 using Utils.Finishable;
 
-namespace Game.Scripts.Context.Capabilities.Implementations.Maps;
+namespace Game.Scripts.Context.Capabilities.Implementations.Maps.Core;
 
 public sealed class MovementActions : IMovementActions 
 {
-    private readonly Map _map;
-
     private readonly Party _party;
 
-    public MovementActions(Map map, Party party) 
+    private readonly Map _map;
+
+    internal MovementActions(Party party, Map map) 
     {
         _map = map;
         _party = party;

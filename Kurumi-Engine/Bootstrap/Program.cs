@@ -39,6 +39,9 @@ using Game.Maps.Registry;
 using Game.Maps.Services;
 
 using Game.Scripts.Context.Builder.Factories;
+using Game.Scripts.Context.Capabilities.Implementations.Battle.Factories;
+using Game.Scripts.Context.Capabilities.Implementations.Entity.Factories;
+using Game.Scripts.Context.Capabilities.Implementations.Maps.Factories;
 using Game.Scripts.Context.Capabilities.Implementations.Universal.Core;
 using Game.Scripts.Library;
 
@@ -128,6 +131,12 @@ public static class Program
         );
         var dialogueOverlayFactory = new DialogueOverlayFactory(assetRegistry, textWindowDefaults);
         var globalMessageFactory = new GlobalMessageFactory(assetRegistry, configProvider.GlobalMessageDefaults);
+
+        var battleActionsFactory = new BattleActionsFactory(gameObjects);
+        var mapNavigationActionsFactory = new MapNavigationActionsFactory(gameObjects);
+        var movementActionsFactory = new MovementActionsFactory(party);
+        var gameStateActionsFactory = new GameStateActionsFactory(saveData.GameVariables);
+        var partyStatusActionsFactory = new PartyStatusActionsFactory(party, gameDatabase.StatusRegistry);
         var uiActionsFactory = new UIActionsFactory(
             stateContext, 
             choiceBoxWithDialogueOverlayFactory, 
@@ -135,10 +144,21 @@ public static class Program
             globalMessageFactory
         );
 
-        var mapScriptContextBuilderFactory = new MapScriptContextBuilderFactory(gameContext, uiActionsFactory);
-        var battleScriptContextBuilderFactory = new BattleScriptContextBuilderFactory(
+        var activeBattleActionsFactory = new ActiveBattleActionsFactory();
+        var hpMpActionsFactory = new HpMpActionsFactory(party, gameServices.DamageCalculator);
+
+        var mapScriptContextBuilderFactory = new MapScriptContextBuilderFactory(
             gameContext, 
-            party, 
+            battleActionsFactory, 
+            mapNavigationActionsFactory, 
+            movementActionsFactory, 
+            gameStateActionsFactory, 
+            partyStatusActionsFactory, 
+            uiActionsFactory
+        );
+        var battleScriptContextBuilderFactory = new BattleScriptContextBuilderFactory(
+            activeBattleActionsFactory, 
+            hpMpActionsFactory, 
             uiActionsFactory
         );
 

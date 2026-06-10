@@ -24,14 +24,19 @@ public sealed class PartyStatusActions : IPartyStatusActions
     private readonly StatusResolver _statusResolver;
     private readonly StatusFactory _statusFactory;
 
-    public PartyStatusActions(Party party, Registry<StatusDefinition> statusRegistry)
+    internal PartyStatusActions(
+        Party party, 
+        Registry<StatusDefinition> statusRegistry, 
+        StatusResolver statusResolver, 
+        StatusFactory statusFactory
+    )
     {
         _party = party;
 
         _statusRegistry = statusRegistry;
 
-        _statusResolver = new StatusResolver();
-        _statusFactory = new StatusFactory();
+        _statusResolver = statusResolver;
+        _statusFactory = statusFactory;
     }
 
     public void AddStatusToParty(int statusId) 

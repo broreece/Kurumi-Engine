@@ -10,7 +10,7 @@ using Engine.Systems.Combat.Core;
 using Game.Scripts.Context.Capabilities.Exceptions;
 using Game.Scripts.Context.Capabilities.Interfaces.Entity;
 
-namespace Game.Scripts.Context.Capabilities.Implementations.Entity;
+namespace Game.Scripts.Context.Capabilities.Implementations.Entity.Core;
 
 public sealed class HpMpActions : IHpMpActions 
 {
@@ -19,7 +19,7 @@ public sealed class HpMpActions : IHpMpActions
 
     private readonly Formation? _formation;
 
-    public HpMpActions(Party party, DamageCalculator damageCalculator, Formation? formation = null)
+    internal HpMpActions(Party party, DamageCalculator damageCalculator, Formation? formation = null)
     {
         _party = party;
         _damageCalculator = damageCalculator;
