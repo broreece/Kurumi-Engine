@@ -17,6 +17,7 @@ public sealed class UIActions : IUIActions
     // UI overlay factories.
     private readonly ChoiceBoxWithDialogueOverlayFactory _choiceBoxWithDialogueOverlayFactory;
     private readonly DialogueOverlayFactory _dialogueOverlayFactory;
+    private readonly DialogueWithNameBoxOverlayFactory _dialogueWithNameBoxOverlayFactory;
     private readonly GlobalMessageFactory _globalMessageFactory;
 
     // State context.
@@ -25,12 +26,14 @@ public sealed class UIActions : IUIActions
     public UIActions(
         ChoiceBoxWithDialogueOverlayFactory choiceBoxWithDialogueOverlayFactory, 
         DialogueOverlayFactory dialogueOverlayFactory, 
+        DialogueWithNameBoxOverlayFactory dialogueWithNameBoxOverlayFactory, 
         GlobalMessageFactory globalMessageFactory, 
         StateContext stateContext
     )
     {
         _choiceBoxWithDialogueOverlayFactory = choiceBoxWithDialogueOverlayFactory;
         _dialogueOverlayFactory = dialogueOverlayFactory;
+        _dialogueWithNameBoxOverlayFactory = dialogueWithNameBoxOverlayFactory;
         _globalMessageFactory = globalMessageFactory;
 
         _stateContext = stateContext;
@@ -39,6 +42,13 @@ public sealed class UIActions : IUIActions
     public IFinishable OpenBasicTextWindow(IReadOnlyList<string> pages) 
     {
         var dialogueOverlay = _dialogueOverlayFactory.Create(pages);
+        _stateContext.PushUIOverlay(dialogueOverlay);
+        return dialogueOverlay;
+    }
+
+    public IFinishable OpenTextWindowWithNameBox(IReadOnlyList<string> pages, string name) 
+    {
+        var dialogueOverlay = _dialogueWithNameBoxOverlayFactory.Create(pages, name);
         _stateContext.PushUIOverlay(dialogueOverlay);
         return dialogueOverlay;
     }
@@ -57,10 +67,5 @@ public sealed class UIActions : IUIActions
         );
         _stateContext.PushUIOverlay(choiceBoxWithDialogueOverlay);
         return choiceBoxWithDialogueOverlay;
-    }
-
-    public void OpenTextWindowWithNameBox(string text, string name) 
-    {
-        // TODO: Implement here.
     }
 }

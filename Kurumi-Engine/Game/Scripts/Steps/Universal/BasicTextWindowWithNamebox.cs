@@ -5,18 +5,19 @@ using Game.Scripts.Context.Core;
 
 namespace Game.Scripts.Steps.Universal;
 
-public sealed class ShowWindowWithTextAndNamebox : ScriptStep {
-    private readonly string _text, _name;
+public sealed class BasicTextWindowWithNameBox : ScriptStep {
+    private readonly IReadOnlyList<string> _pages;
+    private readonly string _name;
 
-    public ShowWindowWithTextAndNamebox(string text, string name) : base() 
+    public BasicTextWindowWithNameBox(IReadOnlyList<string> pages, string name) : base() 
     {
-        _text = text;
+        _pages = pages;
         _name = name;
     }
 
     public override void Activate(ScriptContext scriptContext) 
     {
         IUIActions uiActions = scriptContext.GetCapability<IUIActions>();
-        uiActions.OpenTextWindowWithNameBox(_text, _name);
+        uiActions.OpenTextWindowWithNameBox(_pages, _name);
     }
 }

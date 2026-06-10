@@ -84,7 +84,7 @@ public sealed class ScriptDataConverter
             case "StartBattle":
                 return new StartBattle(
                     parameters["EnemyFormationID"].GetInt32()
-                ) { NextStep = nextStep};
+                ) { NextStep = nextStep };
 
             // Universal steps:
             case "BasicTextWindow":
@@ -93,9 +93,25 @@ public sealed class ScriptDataConverter
                 foreach (var item in basicTextWindowPagesElement.EnumerateArray()) 
                 {
                     basicTextWindowPages.Add(item.GetString() 
-                    ?? throw new ScriptStepException("Basic text window 'Pages' parameter not found."));
+                        ?? throw new ScriptStepException("Basic text window 'Pages' parameter not found."));
                 }
                 return new BasicTextWindow(basicTextWindowPages) { NextStep = nextStep };
+
+            case "BasicTextWindowWithNameBox":
+                string basicTextWindowWithNameBoxName = parameters["Name"].GetString() 
+                    ?? throw new ScriptStepException("basic text window with namebox 'Name' parameter not found.");
+
+                JsonElement basicTextWindowWithNameboxPagesElement = parameters["Pages"];
+                var basicTextWindowWithNameboxPages = new List<string>();
+                foreach (var item in basicTextWindowWithNameboxPagesElement.EnumerateArray()) 
+                {
+                    basicTextWindowWithNameboxPages.Add(item.GetString() 
+                        ?? throw new ScriptStepException("Basic text window with name box 'Pages' parameter not found."));
+                }
+                return new BasicTextWindowWithNameBox(basicTextWindowWithNameboxPages, basicTextWindowWithNameBoxName) 
+                { 
+                    NextStep = nextStep 
+                };
 
             case "ChoiceBoxWithText":
                 string choiceBoxWithTextNextIfFalse = parameters["NextIfFalse"].GetString()

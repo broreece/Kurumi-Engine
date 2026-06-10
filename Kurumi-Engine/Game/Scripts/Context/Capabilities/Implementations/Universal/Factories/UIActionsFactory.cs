@@ -11,6 +11,7 @@ public sealed class UIActionsFactory
     // UI overlay factories.
     private readonly ChoiceBoxWithDialogueOverlayFactory _choiceBoxWithDialogueOverlayFactory;
     private readonly DialogueOverlayFactory _dialogueOverlayFactory;
+    private readonly DialogueWithNameBoxOverlayFactory _dialogueWithNameBoxOverlayFactory;
     private readonly GlobalMessageFactory _globalMessageFactory;
 
     // State context.
@@ -20,11 +21,13 @@ public sealed class UIActionsFactory
         StateContext stateContext, 
         ChoiceBoxWithDialogueOverlayFactory choiceBoxWithDialogueOverlayFactory, 
         DialogueOverlayFactory dialogueOverlayFactory, 
+        DialogueWithNameBoxOverlayFactory dialogueWithNameBoxOverlayFactory, 
         GlobalMessageFactory globalMessageFactory
     )
     {
         _choiceBoxWithDialogueOverlayFactory = choiceBoxWithDialogueOverlayFactory;
         _dialogueOverlayFactory = dialogueOverlayFactory;
+        _dialogueWithNameBoxOverlayFactory = dialogueWithNameBoxOverlayFactory;
         _globalMessageFactory = globalMessageFactory;
 
         _stateContext = stateContext;
@@ -35,6 +38,7 @@ public sealed class UIActionsFactory
         return new UIActions(
             _choiceBoxWithDialogueOverlayFactory, 
             _dialogueOverlayFactory, 
+            _dialogueWithNameBoxOverlayFactory, 
             _globalMessageFactory, 
             _stateContext
         );

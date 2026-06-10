@@ -130,6 +130,11 @@ public static class Program
             configProvider.ChoiceBoxDefaults
         );
         var dialogueOverlayFactory = new DialogueOverlayFactory(assetRegistry, textWindowDefaults);
+        var dialogueWithNameBoxOverlayFactory = new DialogueWithNameBoxOverlayFactory(
+            assetRegistry, 
+            configProvider.NameBoxDefaults, 
+            textWindowDefaults
+        );
         var globalMessageFactory = new GlobalMessageFactory(assetRegistry, configProvider.GlobalMessageDefaults);
 
         var battleActionsFactory = new BattleActionsFactory(gameObjects);
@@ -141,6 +146,7 @@ public static class Program
             stateContext, 
             choiceBoxWithDialogueOverlayFactory, 
             dialogueOverlayFactory, 
+            dialogueWithNameBoxOverlayFactory, 
             globalMessageFactory
         );
 

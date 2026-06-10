@@ -1,4 +1,9 @@
+window_name: "template"
+font_name: "template"
+
+font_size: 12
+
 width: 20
 height: 8
-x: 51
-y: 400
+x: 10
+y: 178
