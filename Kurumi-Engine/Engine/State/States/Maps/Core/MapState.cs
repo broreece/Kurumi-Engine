@@ -115,23 +115,26 @@ public sealed class MapState : IGameState
 
     public void Update(float deltaTime) 
     {
-        HandleInteractions();
+        // Check if game is paused.
+        if (!_stateContext.IsPaused()) {
+            // Handle on touch and on find scripts.
+            var isCurrentlyMoving = _party.MovementProgress < 1f;
+            var movementJustFinished = !isCurrentlyMoving && _party.MovingLastFrame;
 
-        // Handle on touch and on find scripts.
-        var isCurrentlyMoving = _party.MovementProgress < 1f;
-        var movementJustFinished = !isCurrentlyMoving && _party.MovingLastFrame;
+            HandleInteractions();
 
-        if (movementJustFinished) 
-        {
-            HandlePartyMovementFinished();
+            if (movementJustFinished) 
+            {
+                HandlePartyMovementFinished();
+            }
+
+            MoveAllActors(deltaTime);
+            UpdateAllFormations(deltaTime);
+
+            // Update animations.
+            _walkAnimationManager!.Update(deltaTime);
+            _mapAnimationManager!.Update(deltaTime);
         }
-
-        MoveAllActors(deltaTime);
-        UpdateAllFormations(deltaTime);
-
-        // Update animations.
-        _walkAnimationManager!.Update(deltaTime);
-        _mapAnimationManager!.Update(deltaTime);
 
         UpdateCamera();
 

@@ -29,7 +29,6 @@ public sealed class ActorRenderer
         int tileHeight
     ) 
     {
-
         this.renderSystem = renderSystem;
         this.actorRenderData = actorRenderData;
         this.tileWidth = tileWidth;
