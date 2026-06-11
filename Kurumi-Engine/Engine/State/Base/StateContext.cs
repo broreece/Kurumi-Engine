@@ -32,4 +32,16 @@ public sealed class StateContext : IScriptScheduler
     public void PushUIOverlay(IUIOverlay newUIOverlay) => UIOverlays.Push(newUIOverlay);
 
     public void PopUIOverlay() => UIOverlays.Pop();
+
+    public bool IsPaused()
+    {
+        foreach (IUIOverlay uiOverlay in UIOverlays)
+        {
+            if (uiOverlay.TakesControl)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

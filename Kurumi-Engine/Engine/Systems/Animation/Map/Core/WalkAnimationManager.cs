@@ -52,7 +52,7 @@ public sealed class WalkAnimationManager
             while (walkableEntity.AnimationTimer >= frameDuration) 
             {
                 // If current walk frame is final walk frame end the walk animation.
-                if (walkableEntity.WalkAnimationFrame == _walkAnimationFrames) 
+                if (walkableEntity.WalkAnimationFrame >= _walkAnimationFrames - 1) 
                 {
                     // Set this to 1 in case it exceed 1 value.
                     walkableEntity.MovementProgress = 1f;
@@ -64,7 +64,7 @@ public sealed class WalkAnimationManager
                 {
                     walkableEntity.WalkAnimationFrame ++;
                 }
-                walkableEntity.AnimationTimer = 0;
+                walkableEntity.AnimationTimer -= frameDuration;;
             }
         }
         else 

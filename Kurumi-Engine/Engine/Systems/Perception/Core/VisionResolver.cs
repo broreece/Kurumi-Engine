@@ -14,7 +14,7 @@ namespace Engine.Systems.Perception.Core;
 /// </summary>
 public sealed class VisionResolver 
 {
-    private const int PeripheralRange = 2;
+    private const int PeripheralRange = 1;
 
     private readonly NavigationGrid _navigationGrid;
 
