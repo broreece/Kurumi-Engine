@@ -105,7 +105,7 @@ public sealed class MapRenderer
 
                     // Load the tile art.
                     var artId = currentTile.ArtId;
-                    var tileSheetX = artId % tilesWide;
+                    var tileSheetX = (artId % tilesWide) - 1;
                     var tileSheetY = artId / tilesWide;
 
                     var textureRect = new IntRect(
@@ -138,6 +138,7 @@ public sealed class MapRenderer
         // Loop for each animated tile in the map.
         foreach (var tileModel in _tiles) 
         {
+            int tileIndex = 0;
             var tileObjects = tileModel.Objects.Select(_tileRegistry.Get).ToList();
             foreach (var currentTile in tileObjects) 
             {
@@ -147,7 +148,7 @@ public sealed class MapRenderer
                     var yLocation = tileModel.Y;
 
                     // Load the tile art.
-                    var artId = currentTile.ArtId;
+                    var artId = currentTile.ArtId - 1;
                     var tileSheetX = tileFrameAccessor.GetTileAnimationFrame();
                     var tileSheetY = artId;
 
@@ -168,7 +169,7 @@ public sealed class MapRenderer
                         new RenderCommand() 
                         {
                             Layer = RenderLayer.AnimatedTileLayer, 
-                            SubmissionIndex = 0, 
+                            SubmissionIndex = tileIndex, 
                             Drawable = sprite, 
                             States = RenderStates.Default,
                             View = view
@@ -176,6 +177,7 @@ public sealed class MapRenderer
                     );
                 }
             }
+            tileIndex ++;
         }
     }
 }

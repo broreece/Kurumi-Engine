@@ -11,19 +11,16 @@ public sealed class WalkAnimationManager
     private readonly Party _party;
 
     private readonly int _walkAnimationFrames;
-    private readonly float _partyWalkAnimationLength;
 
     internal WalkAnimationManager(
         IReadOnlyList<IWalkable> walkableEntities, 
         Party party, 
-        int walkAnimationFrames, 
-        float partyWalkAnimationLength
+        int walkAnimationFrames
     ) 
     {
         _walkableEntities = walkableEntities;
         _party = party;
         _walkAnimationFrames = walkAnimationFrames;
-        _partyWalkAnimationLength = partyWalkAnimationLength;
     }
 
     public void Update(float deltaTime) 
@@ -35,7 +32,7 @@ public sealed class WalkAnimationManager
         }
 
         // Update party.
-        UpdateWalkableEntity(_party, _partyWalkAnimationLength, deltaTime);
+        UpdateWalkableEntity(_party, _party.MovementSpeed, deltaTime);
     }
 
     /// <summary>
@@ -55,7 +52,7 @@ public sealed class WalkAnimationManager
             while (walkableEntity.AnimationTimer >= frameDuration) 
             {
                 // If current walk frame is final walk frame end the walk animation.
-                if (walkableEntity.WalkAnimationFrame == _walkAnimationFrames) 
+                if (walkableEntity.WalkAnimationFrame >= _walkAnimationFrames - 1) 
                 {
                     // Set this to 1 in case it exceed 1 value.
                     walkableEntity.MovementProgress = 1f;
@@ -67,7 +64,7 @@ public sealed class WalkAnimationManager
                 {
                     walkableEntity.WalkAnimationFrame ++;
                 }
-                walkableEntity.AnimationTimer = 0;
+                walkableEntity.AnimationTimer -= frameDuration;;
             }
         }
         else 

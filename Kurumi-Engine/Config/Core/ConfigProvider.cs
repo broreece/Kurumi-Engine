@@ -20,7 +20,7 @@ public sealed class ConfigProvider
 
     // Battle config.
     public BattleBackgroundSpriteConfig BattleBackgroundSpriteConfig { get; }
-    public BattleSceneConfig BattleSceneConfig { get; }
+    public BattleTextConfig BattleTextConfig { get; }
     public BattleWindowConfig BattleWindowConfig { get; }
     public CharacterBattleSpriteConfig CharacterBattleSpriteConfig { get; }
     public EnemyBattleSpriteConfig EnemyBattleSpriteConfig { get; }
@@ -35,6 +35,7 @@ public sealed class ConfigProvider
     // Game config.
     public GameConfig GameConfig { get; }
     public GameWindowConfig GameWindowConfig { get; }
+    public PartyMovementConfig PartyMovementConfig { get; }
 
     // Map config.
     public AnimatedTileSheetConfig AnimatedTileSheetConfig { get; }
@@ -63,7 +64,7 @@ public sealed class ConfigProvider
             "Battle", 
             "battle_background_sprite_config.yaml"
         );
-        BattleSceneConfig = LoadConfig<BattleSceneConfig>("Battle", "battle_scene_config.yaml");
+        BattleTextConfig = LoadConfig<BattleTextConfig>("Battle", "battle_text_config.yaml");
         BattleWindowConfig = LoadConfig<BattleWindowConfig>("Battle", "battle_window_config.yaml");
         CharacterBattleSpriteConfig = LoadConfig<CharacterBattleSpriteConfig>(
             "Battle", 
@@ -81,6 +82,7 @@ public sealed class ConfigProvider
         // Game config.
         GameConfig = LoadConfig<GameConfig>("Game", "game_config.yaml");
         GameWindowConfig = LoadConfig<GameWindowConfig>("Game", "game_window_config.yaml");
+        PartyMovementConfig = LoadConfig<PartyMovementConfig>("Game", "party_movement_config.yaml");
 
         // Map config.
         AnimatedTileSheetConfig = LoadConfig<AnimatedTileSheetConfig>("Map", "animated_tilesheet_config.yaml");

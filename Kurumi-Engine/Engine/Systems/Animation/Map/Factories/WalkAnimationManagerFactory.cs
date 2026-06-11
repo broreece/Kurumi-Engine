@@ -10,16 +10,14 @@ namespace Engine.Systems.Animation.Map.Factories;
 public sealed class WalkAnimationManagerFactory
 {
     private readonly int _walkAnimationFrames;
-    private readonly float _partyWalkAnimationLength;
     
-    public WalkAnimationManagerFactory(int walkAnimationFrames, float partyWalkAnimationLength)
+    public WalkAnimationManagerFactory(int walkAnimationFrames)
     {
         _walkAnimationFrames = walkAnimationFrames;
-        _partyWalkAnimationLength = partyWalkAnimationLength;
     }
 
     public WalkAnimationManager Create(IReadOnlyList<IWalkable> walkableEntities, Party party)
     {
-        return new WalkAnimationManager(walkableEntities, party, _walkAnimationFrames, _partyWalkAnimationLength);
+        return new WalkAnimationManager(walkableEntities, party, _walkAnimationFrames);
     }
 }

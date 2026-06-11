@@ -15,6 +15,8 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
     
     public required Dictionary<int, int> Inventory { get; init; }
 
+    public required float MovementSpeed { get; init; }
+
     // Walk animation variables.
     public int LastX { get; set; }
     public int LastY { get; set; }
@@ -51,9 +53,6 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
         get => PartyModel.Facing;
         set => PartyModel.Facing = value;
     }
-
-    // TODO: (MSC-01) Implement new config here.
-    public int MovementSpeed => 1;
 
     /// <summary>
     /// Function that starts the movement of the party.

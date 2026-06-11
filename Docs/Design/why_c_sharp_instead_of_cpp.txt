@@ -1,0 +1,90 @@
+Why Kurumi Engine Uses C# Instead of C++
+
+Most custom game engines, including Unity, Unreal Engine, Godot, and many commercial game development tools, are built 
+using C++. The primary reason is straightforward:
+
+Performance.
+
+To a lesser extent, C++ also provides benefits through native compilation and greater control over low-level system 
+resources. However, performance remains the main reason it is the industry standard.
+
+Given this, a natural question arises:
+Why choose C# instead of C++?
+
+This document outlines the reasoning behind that decision.
+
+1. Development Efficiency and Memory Management
+One of C++'s greatest strengths is direct memory control through heap allocation and raw pointers. This allows highly
+optimized software to be written, but it also places responsibility for memory management entirely on the developer.
+
+While this level of control can improve performance, it increases development complexity and introduces the risk of 
+memory leaks, dangling pointers, and other memory-related issues.
+
+C# uses automatic garbage collection, removing the need for manual memory management in most cases. This significantly 
+reduces development overhead, improves maintainability, and eliminates an entire class of common programming errors. 
+The time saved can instead be invested in developing gameplay features and engine functionality.
+
+2. Performance Requirements of the Engine
+
+Although C++ generally offers superior raw performance, the Kurumi Engine has been designed around lightweight 
+architecture from the beginning.
+
+As of the Pursuit build:
+
+CPU usage averages below 1%
+Total memory consumption remains below 120 MB
+Heap usage averages approximately 10 MB
+
+These measurements were taken on low-end hardware.
+
+Given the engine's already modest resource requirements, any additional performance gains achieved through a C++ 
+rewrite would likely provide little practical benefit to the end user. The engine is not intended for embedded systems 
+or performance-critical operating system components; it is designed to run on modern PCs and consoles that can 
+comfortably handle its workload.
+
+In this context, development speed and maintainability provide greater value than marginal performance improvements.
+
+3. Strong Built-In Ecosystem
+The engine currently relies on a small number of external dependencies.
+
+The primary graphics library is SFML, which is itself written in C++, meaning this choice would remain unchanged 
+regardless of the engine language.
+
+For data storage, the engine utilizes Microsoft's Microsoft.Data.Sqlite package. This provides a lightweight, modern, 
+and well-supported interface for SQLite without requiring the additional setup often associated with native C++ 
+database libraries.
+
+Similarly, the engine uses System.Text.Json for JSON serialization and deserialization. This functionality is included 
+within the .NET ecosystem and provides a simple, reliable solution for data processing. In C++, equivalent 
+functionality would typically require additional third-party dependencies.
+
+The .NET ecosystem allows the engine to remain lightweight while reducing external dependency management.
+
+4. Language Features and Developer Productivity
+
+C# provides a number of features that improve both development speed and code quality.
+These include:
+
+Strong type safety
+Generics that reduce boilerplate code
+Modern language features and tooling
+Faster iteration during development
+Excellent debugging support
+Mature profiling and diagnostic tools
+
+The .NET tooling ecosystem makes it easier to identify performance bottlenecks, diagnose issues, and maintain code 
+over the long term.
+
+For a project maintained by a small team, these advantages contribute directly to development velocity and overall 
+project sustainability.
+
+Conclusion
+
+C++ remains the best choice when absolute performance and low-level system control are the primary objectives. However, 
+Kurumi Engine prioritizes maintainability, rapid development, reliability, and ease of iteration.
+
+Given the engine's lightweight design and modest hardware requirements, the practical performance difference between C# 
+and C++ is unlikely to be noticeable to players. The productivity gains, safety features, and modern tooling provided by 
+C# offer greater long-term value for the project.
+
+For these reasons, C# was chosen as the foundation of the Kurumi Engine.

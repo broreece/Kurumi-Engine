@@ -1,13 +1,11 @@
 // Engine.
 using Engine.Context.Core;
 
-using Engine.State.Base;
-
 // Game.
 using Game.Scripts.Context.Builder.Base;
 using Game.Scripts.Context.Capabilities.Base;
-using Game.Scripts.Context.Capabilities.Implementations.Maps;
-using Game.Scripts.Context.Capabilities.Implementations.Universal;
+using Game.Scripts.Context.Capabilities.Implementations.Maps.Factories;
+using Game.Scripts.Context.Capabilities.Implementations.Universal.Core;
 using Game.Scripts.Context.Capabilities.Interfaces.Map;
 using Game.Scripts.Context.Capabilities.Interfaces.Universal;
 using Game.Scripts.Context.Core;
@@ -17,13 +15,37 @@ namespace Game.Scripts.Context.Builder.Core;
 
 public sealed class MapScriptContextBuilder : IScriptContextBuilder 
 {
+    // Contexts.
     private readonly GameContext _gameContext;
-    private readonly StateContext _stateContext;
 
-    public MapScriptContextBuilder(GameContext gameContext, StateContext stateContext) 
+    // Factories.
+    private readonly BattleActionsFactory _battleActionsFactory;
+    private readonly MapNavigationActionsFactory _mapNavigationActionsFactory;
+    private readonly MovementActionsFactory _movementActionsFactory;    
+
+    private readonly GameStateActionsFactory _gameStateActionsFactory;
+    private readonly PartyStatusActionsFactory _partyStatusActionsFactory;
+    private readonly UIActionsFactory _uiActionsFactory;
+
+    internal MapScriptContextBuilder(
+        GameContext gameContext, 
+        BattleActionsFactory battleActionsFactory, 
+        MapNavigationActionsFactory mapNavigationActionsFactory, 
+        MovementActionsFactory movementActionsFactory, 
+        GameStateActionsFactory gameStateActionsFactory, 
+        PartyStatusActionsFactory partyStatusActionsFactory, 
+        UIActionsFactory uiActionsFactory
+    ) 
     {
         _gameContext = gameContext;
-        _stateContext = stateContext;
+
+        _battleActionsFactory = battleActionsFactory;
+        _mapNavigationActionsFactory = mapNavigationActionsFactory;
+        _movementActionsFactory = movementActionsFactory;
+
+        _gameStateActionsFactory = gameStateActionsFactory;
+        _partyStatusActionsFactory = partyStatusActionsFactory;
+        _uiActionsFactory = uiActionsFactory;
     }
 
     public ScriptContext BuildScriptContext() 
@@ -32,35 +54,25 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
         var variableTable = new VariableTable();
 
         var gameObjects = _gameContext.GameObjects;
-        var gameData = _gameContext.GameData;
 
         // Construct capability container.
-        capabilityContainer.SetCapability(typeof(IBattleActions), new BattleActions(gameObjects));
+        capabilityContainer.SetCapability(typeof(IBattleActions), _battleActionsFactory.Create());
 
         capabilityContainer.SetCapability(
             typeof(IMapNavigationActions), 
-            new MapNavigationActions(gameObjects)
+            _mapNavigationActionsFactory.Create()
         );
 
         capabilityContainer.SetCapability(
             typeof(IMovementActions), 
-            new MovementActions(gameObjects.CurrentMap, gameObjects.Party)
+            _movementActionsFactory.Create(gameObjects.CurrentMap)
         );
 
-        capabilityContainer.SetCapability(typeof(IGameStateActions), new GameStateActions(
-            gameObjects.SaveData.GameVariables
-        ));
+        capabilityContainer.SetCapability(typeof(IGameStateActions), _gameStateActionsFactory.Create());
 
-        capabilityContainer.SetCapability(typeof(IPartyStatusActions), new PartyStatusActions(
-            gameObjects.Party,
-            gameData.GameDatabase.StatusRegistry
-        ));
+        capabilityContainer.SetCapability(typeof(IPartyStatusActions), _partyStatusActionsFactory.Create());
         
-        capabilityContainer.SetCapability(typeof(IUIActions), new UIActions(
-            _stateContext,
-            gameData.AssetRegistry, 
-            gameData.ConfigProvider
-        ));
+        capabilityContainer.SetCapability(typeof(IUIActions), _uiActionsFactory.Create());
 
         return new ScriptContext(capabilityContainer, variableTable);
     }

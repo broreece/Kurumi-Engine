@@ -11,4 +11,5 @@ public sealed class ActorModel
     public required int Facing { get; set; }
     
     public required bool Visible { get; set; }
+    public required bool Passable { get; set; }
 }

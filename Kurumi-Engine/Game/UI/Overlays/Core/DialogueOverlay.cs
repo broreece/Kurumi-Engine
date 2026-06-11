@@ -39,7 +39,11 @@ public sealed class DialogueOverlay : IUIOverlay
     private bool _isFinished = false;
     private int _currentPage = 0;
 
-    public DialogueOverlay(
+    public UIElement UIElement => _uiElement;
+
+    public bool TakesControl => true;
+
+    internal DialogueOverlay(
         AssetRegistry assetRegistry, 
         TextWindowDefaults textWindowDefaults, 
         IReadOnlyList<string> pages
@@ -93,7 +97,7 @@ public sealed class DialogueOverlay : IUIOverlay
             LocalOffset = new Vector2f(0, 0),
             Children =
             [
-                textUIElement,
+                textUIElement
             ],
 
             RenderLayer = RenderLayer.UIWindow
@@ -124,9 +128,5 @@ public sealed class DialogueOverlay : IUIOverlay
         }
     }
 
-    public UIElement GetUIElement() => _uiElement;
-
     public bool IsFinished() => _isFinished;
-
-    public bool TakesControl() => true;
 }

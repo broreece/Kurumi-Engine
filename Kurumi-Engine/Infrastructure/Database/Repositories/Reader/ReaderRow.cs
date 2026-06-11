@@ -23,6 +23,13 @@ public readonly struct ReaderRow
     public int GetInt(int col) => _reader.GetInt32(col);
 
     /// <summary>
+    /// Converts a column to a float value.
+    /// </summary>
+    /// <param name="col">The column ID.</param>
+    /// <returns>The float value stored at the column.</returns>
+    public float GetFloat(int col) => (float) _reader.GetDouble(col);
+
+    /// <summary>
     /// Converts a column to an string value.
     /// </summary>
     /// <param name="col">The column ID.</param>

@@ -48,87 +48,108 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Refinement
+## Milestone: Visualization
 **Focus areas:**
 
-- A smaller milestone as some of the tasks were finished during the pursuit work.
-- Focused on improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
-- Addition of missing UI state and config for party movement, (Also making party movement smoother).
+- Re-implementation of the game's menu.
+- Addition of items and an item display in the menu.
+- Creation of a demo video for the capabilities of the engine.
 
 ---
 
-## (DD-01) Display damage text ##
+## (GM-01) Re-introduce the game menu ##
+### Complexity: 4 ###
+### Independent: 3 ###
+### Momentum: 3 ###
+### Impact: 4 ###
+
+**Description:** We removed the game menu (Escape in game) we should reintroduce it so that the player can
+see paryt member information and items.
+
+**Steps:**
+- It might be worth checking our previous menu work to create this again.
+
+---
+
+## (IP-01) Item pool implementation ##
+### Complexity: 3 ###
+### Independent: 2 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Allow item pool containers, granting dynamic rogue like features in the engine.
+
+**Steps:**
+- Load item pools in database:
+    - We already have a database table representing item pools, We need to create an item pool dictionary.
+    - The key is the item pool ID, the value is the list of possible item IDs in the pool.
+    - Create a script step that adds a random item from an item pool to the inventory.
+
+---
+
+## (DEMO-01) Create demonstration video ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 4.5 ###
+### Impact: 3 ###
+
+**Description:**
+Create a small demonstration scenario showcasing key engine capabilities.
+
+**Steps:**
+- Make a basic sewer map demonstrating getting a key, using the key to unlock an iron gate.
+- Display avoiding the enemy, perhaps get caught and result in a fight.
+
+---
+
+## (DD-02) Enhance battle text ##
 ### Complexity: 2 ###
 ### Independent: 2 ###
 ### Momentum: 3 ###
 ### Impact: 3 ###
 
-**Description:** Display basic damage text.
+**Description:** Damage text is currently static and sits at a fixed location, we should make it to be based on the 
+    entity being affected.
 
 **Steps:** 
-- Implement damage text:
-    - Used to exist in forge.
-    - Create custom config declaring it's font type, size and maybe a offset.
+- Based on the target we should place damage text directly over the entity.
+- Ensure that if a new action starts the existing battle text list is emptied.
 
 ---
 
-## (LIE-01) Lookup indexes enhancement ##
-### Complexity: 1 ###
+## Visualization milestone reached.
+
+---
+
+## (SAVE-01) Validate saving ##
+### Complexity: 2 ###
 ### Independent: 1 ###
 ### Momentum: 1 ###
 ### Impact: 1 ###
 
-**Description:** In loaders that also load index lookups we should store values after inital load to prevent re-loading
-
-**Steps:**
-- In formation definition loader and state short name loader create new fields to store the loaded data.
-- Update the index getter functions to utilize the stored fields.
+**Description:** Because menu has been removed we haven't tested persistance in a while validate this works.
 
 ---
 
-## (ASE-01) Actor scripts stored in enemy formations should execute on find. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 2 ###
+## (SAVE-02) Saving should update actor positions ##
+### Complexity: 3 ###
+### Independent: 3 ###
+### Momentum: 3 ###
 ### Impact: 1 ###
 
-**Description:** Actor scripts stored in formations are never executed. We want the on find script to execute if the
-enemy formation finds the party.
+**Description:** By allowing saving of actor positions and facing direction it will remove the need for us to add
+additional auto scripts in maps.
 
 **Steps:**
-- Edit the map state function that triggers when an enemy formation finds the party to activate it's stored script.
+- Currently in map files we have the actor information at the bottom of the file.
+- The issue is that these actor information should be saveable but the maps will never change:
+    - This is inefficent as we shouldn't be re-writting the maps every save.
+- We should consider changing the system structure such that map actors are saveable files stored in different files
+- We'll need to update our converter tool as well for this.
 
 ---
 
-## (TNCB-01) Add text window with namebox (and choice box) ##
-### Complexity: 1 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:** Create the ability to add a new text window with namebox and choice box.
-
-**Steps:**
-- Add the new UI view using our existing windows as examples.
-- Create a new script that can open this UI view (Ensure freezing takes place the same as choice box).
-
----
-
-## (MSC-01) Party movement speed config. ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:** We don't have a hard coded movement speed, we need to fix this and store it in the party class.
-
-**Steps:**
-- Create new config for the movement speed.
-- Update the movement controls so holding buttons will continue movement.
-
----
-
-## Refinement milestone reached.
+## Persistance milestone reached.
 
 ---
 
@@ -181,23 +202,6 @@ enemy formation finds the party.
 
 ---
 
-## Create demonstration video ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 4.5 ###
-### Impact: 3 ###
-
-**Description:**
-Create a small demonstration scenario showcasing key engine capabilities.
-
-**Steps:**
-- The first video should show two actors having forced movements, the player can still move during this time, then one 
-actor continues with a speech, this should go directly into a cutscene.
-- The second video should demonstrate enemy formations, they chase the player for the player to escape. The game is then 
-saved and when loaded the enemy formation persists on the map.
-
----
-
 ## Add custom stun status and status changes ##
 ### Complexity: 2 ###
 ### Independent: 3 ###
@@ -224,23 +228,6 @@ the database.
     - Add new field in table of database.
     - Add new field into class of status.cs.
     - When loading statuses in database.cs add new field.
-
----
-
-## Item pool implementation ##
-### Complexity: 3 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Allow item pool containers, granting dynamic rogue like features in the engine.
-
-**Steps:**
-- Load item pools in database: (Mid Priority)
-    - We already have a database table representing item pools, We need to create an item pool 2D list of ints.
-    - The 1st index is the item pool id, the second index is the item ids in the list.
-    - Create a map scene event step that adds a random item from an item pool to the inventory, display a text window 
-    displaying the name of the item as well.
 
 ---
 

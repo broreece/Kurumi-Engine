@@ -13,12 +13,17 @@ public sealed class FormationDefinitionLoader : IDataLoader<FormationDefinition>
 {
     private readonly FormationRepository _formationRepository;
     private readonly EnemyRepository _enemyRepository;
+
     private readonly FormationDefinitionFactory _formationDefinitionFactory;
+
+    // Index.
+    private readonly Dictionary<string, IList<int>> _mapFormationsIndex = [];
 
     public FormationDefinitionLoader(
         FormationRepository formationRepository, 
         EnemyRepository enemyRepository, 
-        FormationDefinitionFactory formationDefinitionFactory) 
+        FormationDefinitionFactory formationDefinitionFactory
+    ) 
     {
         _formationRepository = formationRepository;
         _enemyRepository = enemyRepository;
@@ -41,6 +46,8 @@ public sealed class FormationDefinitionLoader : IDataLoader<FormationDefinition>
 
             // Load list of enemies.
             var id = row.Id;
+            var mapName = row.MapName;
+
             var enemies = new List<int>();
             foreach (EnemyRow enemyRow in enemyLookup[id]) 
             {
@@ -49,7 +56,7 @@ public sealed class FormationDefinitionLoader : IDataLoader<FormationDefinition>
 
             formations[index] = _formationDefinitionFactory.Create(
                 id, 
-                row.MapName, 
+                mapName, 
                 row.ReturnX, 
                 row.ReturnY, 
                 row.SearchTimer, 
@@ -62,6 +69,16 @@ public sealed class FormationDefinitionLoader : IDataLoader<FormationDefinition>
                 row.OnWinScript, 
                 enemies
             );
+
+            // Update index.
+            if (_mapFormationsIndex.TryGetValue(mapName, out IList<int>? value))
+            {
+                value.Add(id);
+            }
+            else
+            {
+                _mapFormationsIndex[mapName] = [id];
+            }
         }
 
         return formations;
@@ -73,26 +90,9 @@ public sealed class FormationDefinitionLoader : IDataLoader<FormationDefinition>
     /// <returns>A dictionary storing the list of formations IDs on each map.</returns>
     public IReadOnlyDictionary<string, IReadOnlyList<int>> LoadMapFormationsIndex()
     {
-        var mapFormations = new Dictionary<string, List<int>>();
-
-        FormationRow[] rows = _formationRepository.LoadAll();
-        foreach (var formationRow in rows) 
-        {
-            var mapName = formationRow.MapName;
-            if (mapFormations.TryGetValue(mapName, out List<int>? value))
-            {
-                value.Add(formationRow.Id);
-            }
-            else
-            {
-                mapFormations[mapName] = [formationRow.Id];
-            }
-        }
-
-        // Turn list to read only.
-        return mapFormations.ToDictionary(
-            kvp => kvp.Key,
-            kvp => (IReadOnlyList<int>)kvp.Value
+        return _mapFormationsIndex.ToDictionary(
+            x => x.Key,
+            x => (IReadOnlyList<int>)x.Value
         );
     }
 }

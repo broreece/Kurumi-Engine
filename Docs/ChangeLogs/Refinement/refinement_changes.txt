@@ -11,12 +11,49 @@ This document outlines the architectural and system-level changes made since the
 'Refinement' focused on improving performance via reducing data loading, using a profiler to find bottlenecks and 
 making the party movement configurable and smoother:
 
--
+- Tiles and actors are more dynamic.
+- Game movement is smoother now, the player can hold the movement direction to continue moving in the direction held.
+- Minor database loading improvement on loading and improved developer experience by utilizing factories more.
+
+---------------------------------------------------------------------
+
+ACTORS
+
+- Actor passability can now be updated and are stored in the map data instead of database.
+
+---------------------------------------------------------------------
+
+TILES
+
+- Tiles can now include pathways allowing tiles to be placed over unpassable tiles and allowing party walking
+    over these.
+
+---------------------------------------------------------------------
+
+BATTLE
+
+- Damage is now displayed in battles.
+
+---------------------------------------------------------------------
+
+MOVEMENT
+
+- If the movement keys are held the party will continue to move.
+- Base movement speed is now configurable.
+
+---------------------------------------------------------------------
+
+DEV WORK
+
+- Implemented factories for script implementation, massively reducing the required parameters for various parts
+    of the engine.
 
 ---------------------------------------------------------------------
 
 KEY TAKEAWAYS
 
--
+- We ended up doing substantial changes that were not ticketed to allow actors to become passable.
+- As development is ongoing I've been making changes actively to reduce tech debt, in this release in particular I've
+    went back to create factories for game states to reduce passing the same parameters constantly.
 
 ---------------------------------------------------------------------

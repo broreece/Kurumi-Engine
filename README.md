@@ -16,10 +16,10 @@ and scalable.
 
 ## Development Status
 
-Refinement build is currently in progress, it is focused on:
-- Improving performance via reducing data loading and utilizing a profiler to find bottlenecks.
-- Addition of missing UI state and config for party movement, (Also making party movement smoother).
-- Displaying damage during battle state.
+Visualization build is currently in progress, it is focused on:
+- Re-implementation of the game's menu.
+- Addition of items and an item display in the menu.
+- Creation of a demo video for the capabilities of the engine.
 
 ---
 

@@ -42,7 +42,7 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
 
     public int TrackingRange => _actorInfo.TrackingRange;
 
-    public bool Passable => _actorInfo.Passable;
+    public bool Passable => _actorModel.Passable;
 
     public bool OnTouch => _actorInfo.OnTouch;
 
@@ -77,7 +77,7 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
     // Actor movement functions.
     public int SpriteId => _actorInfo.SpriteId;
 
-    public int MovementSpeed => _actorInfo.MovementSpeed;
+    public float MovementSpeed => _actorInfo.MovementSpeed;
 
     internal Actor(ActorInfo actorInfo, ActorModel actorModel)
     {

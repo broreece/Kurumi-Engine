@@ -10,11 +10,11 @@ namespace Game.UI.Overlays.Base;
 
 public interface IUIOverlay : IFinishable 
 {
+    public UIElement UIElement { get; }
+
+    public bool TakesControl { get; }
+
     public void Update(float deltaTime);
 
     public void HandleInput(InputState inputState);
-
-    public UIElement GetUIElement();
-
-    public bool TakesControl();
 }

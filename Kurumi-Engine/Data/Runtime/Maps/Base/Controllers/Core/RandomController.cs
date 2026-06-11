@@ -12,7 +12,7 @@ public sealed class RandomController : Controller
 {
     private bool _initialized;
     
-    private int _fixedActorInterval;
+    private float _fixedActorInterval;
 
     public override void ExecuteMove() 
     {

@@ -26,7 +26,7 @@ using Engine.Systems.Perception.Factories;
 using Engine.Systems.Rendering.Core;
 
 // Game.
-using Game.Scripts.Context.Builder.Core;
+using Game.Scripts.Context.Builder.Factories;
 using Game.Scripts.Context.Core;
 
 namespace Engine.State.States.Maps.Core;
@@ -46,6 +46,9 @@ public sealed class MapState : IGameState
 
     // Starting script.
     private readonly string? _startingScript;
+
+    // Context builder.
+    private readonly MapScriptContextBuilderFactory _mapScriptContextBuilderFactory;
 
     // Cached objects.
     private GameObjects? _gameObjects;
@@ -76,11 +79,19 @@ public sealed class MapState : IGameState
     // Script context.
     private ScriptContext? _mapScriptContext;
 
-    public MapState(GameContext gameContext, StateContext stateContext, string? startingScript) 
+    public ScriptContext ScriptContext => _mapScriptContext!;
+
+    internal MapState(
+        GameContext gameContext, 
+        StateContext stateContext, 
+        MapScriptContextBuilderFactory mapScriptContextBuilderFactory, 
+        string? startingScript
+    ) 
     {
         _gameContext = gameContext;
         _stateContext = stateContext;
         _party = gameContext.GameObjects.Party;
+        _mapScriptContextBuilderFactory = mapScriptContextBuilderFactory;
         _startingScript = startingScript;
     }
 
@@ -104,23 +115,26 @@ public sealed class MapState : IGameState
 
     public void Update(float deltaTime) 
     {
-        HandleInteractions();
+        // Check if game is paused.
+        if (!_stateContext.IsPaused()) {
+            // Handle on touch and on find scripts.
+            var isCurrentlyMoving = _party.MovementProgress < 1f;
+            var movementJustFinished = !isCurrentlyMoving && _party.MovingLastFrame;
 
-        // Handle on touch and on find scripts.
-        var isCurrentlyMoving = _party.MovementProgress < 1f;
-        var movementJustFinished = !isCurrentlyMoving && _party.MovingLastFrame;
+            HandleInteractions();
 
-        if (movementJustFinished) 
-        {
-            HandlePartyMovementFinished();
+            if (movementJustFinished) 
+            {
+                HandlePartyMovementFinished();
+            }
+
+            MoveAllActors(deltaTime);
+            UpdateAllFormations(deltaTime);
+
+            // Update animations.
+            _walkAnimationManager!.Update(deltaTime);
+            _mapAnimationManager!.Update(deltaTime);
         }
-
-        MoveAllActors(deltaTime);
-        UpdateAllFormations(deltaTime);
-
-        // Update animations.
-        _walkAnimationManager!.Update(deltaTime);
-        _mapAnimationManager!.Update(deltaTime);
 
         UpdateCamera();
 
@@ -132,8 +146,6 @@ public sealed class MapState : IGameState
             _gameObjects.MapChangeRequest = null;
         }
     }
-
-    public ScriptContext GetScriptContext() => _mapScriptContext!;
 
     private void CacheDependencies() 
     {
@@ -150,7 +162,7 @@ public sealed class MapState : IGameState
         _tileHeight = tileConfig.Height;
 
         // Map script context.
-        var mapScriptContextBuilder = new MapScriptContextBuilder(_gameContext, _stateContext);
+        var mapScriptContextBuilder = _mapScriptContextBuilderFactory.Create();
         _mapScriptContext = mapScriptContextBuilder.BuildScriptContext();
     }
 
@@ -167,6 +179,7 @@ public sealed class MapState : IGameState
         _mapRenderer = _gameServices.MapRendererFactory.Create(
             _currentMap.Tiles, 
             _currentMap.TileSheetName, 
+            _currentMap.AnimatedTileSheetName, 
             _currentMap.MapBackgroundArtName
         );
         _walkAnimationManager = _gameServices.WalkAnimationManagerFactory.Create([.. combined], _party);
@@ -394,6 +407,10 @@ public sealed class MapState : IGameState
     {
         if (_visionResolver!.CanSee(formation, _party, formation.TrackingRange))
         {
+            if (formation.OnFind && formation.Script != null && !formation.Alert)
+            {
+                _stateContext.AddExecutingScript(new ScriptExecution(formation.Script));
+            }
             formation.Alert = true;
         }
     }
@@ -460,6 +477,7 @@ public sealed class MapState : IGameState
         _mapRenderer = _gameServices.MapRendererFactory!.Create(
             _currentMap.Tiles, 
             _currentMap.TileSheetName, 
+            _currentMap.AnimatedTileSheetName, 
             _currentMap.MapBackgroundArtName
         );
 
