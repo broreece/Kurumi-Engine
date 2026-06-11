@@ -47,10 +47,7 @@ public sealed class WalkAnimationManager
         {
             float frameDuration = walkAnimationLength / _walkAnimationFrames;
             walkableEntity.AnimationTimer += deltaTime;
-            walkableEntity.MovementProgress = Math.Min(
-                walkableEntity.MovementProgress + deltaTime / frameDuration,
-                1f
-            );
+            walkableEntity.MovementProgress += deltaTime / frameDuration;
  
             while (walkableEntity.AnimationTimer >= frameDuration) 
             {
