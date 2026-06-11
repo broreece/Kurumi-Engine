@@ -310,7 +310,7 @@ public sealed class MapState : IGameState
                     else 
                     {
                         currentController.Update(deltaTime);
-                        if (currentController.CanMove) 
+                        if (currentController.CanMove && !actor.IsMoving) 
                         {
                             // Execute move.
                             var move = currentController.GetMove(actor);
@@ -351,8 +351,9 @@ public sealed class MapState : IGameState
         var controller = formation.GetCurrentController();
         if (controller != null)
         {
+            formation.Update(deltaTime);
             controller.Update(deltaTime);
-            if (controller.CanMove)
+            if (controller.CanMove && !formation.IsMoving)
             {
                 CheckFormationBesideParty(formation);
 
@@ -375,7 +376,6 @@ public sealed class MapState : IGameState
                 // If the formation can not execute any moves increment their alert counter.
                 else
                 {
-                    formation.Update(deltaTime);
                     if (formation.AlertLimitReached)
                     {
                         formation.Alert = false;
