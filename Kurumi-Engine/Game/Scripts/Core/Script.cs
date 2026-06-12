@@ -16,10 +16,6 @@ public sealed class Script
     public string StartingKey { get; }
     public string CurrentKey { get; private set; }
 
-    public bool Waiting => _scriptSteps[CurrentKey].Waiting();
-
-    public string? NextKey => _scriptSteps[CurrentKey].GetNextStep();
-
     internal Script(ScriptData scriptData, ScriptDataConverter scriptDataConverter) 
     {
         foreach (var keyPair in scriptData.Steps)
@@ -37,13 +33,29 @@ public sealed class Script
     /// <param name="stepKey">The key of the desired script step.</param>
     public void Activate(ScriptContext scriptContext, string stepKey) 
     {
+        CurrentKey = stepKey;
         if (stepKey != null) {
-            CurrentKey = stepKey;
             if (_scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep))
             {
                 currentStep.Activate(scriptContext);
             }
         }
+    }
+
+    public string? GetNextKey() { 
+        if (CurrentKey != null && _scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep))
+        {
+            return currentStep.GetNextStep();
+        }
+        return null;
+    }
+
+    public bool IsWaiting() { 
+        if (CurrentKey != null && _scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep))
+        {
+            return currentStep.Waiting();
+        }
+        return false; 
     }
 
     /// <summary>
@@ -52,13 +64,15 @@ public sealed class Script
     /// <returns>If a potential next key exists.</returns>
     public bool PotentialNextKeyExists()
     {
-        if (_scriptSteps[CurrentKey] is ConditionalScriptStep conditionalScriptStep)
+        if (CurrentKey != null && 
+            _scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep) &&
+            currentStep is ConditionalScriptStep conditionalScriptStep)
         {
             if (conditionalScriptStep.NextIfFalse != null)
             {
                 return true;
             }
         }
-        return NextKey == null;
+        return GetNextKey() != null;
     }
 }

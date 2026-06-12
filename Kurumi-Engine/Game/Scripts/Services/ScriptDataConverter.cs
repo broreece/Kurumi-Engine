@@ -54,9 +54,9 @@ public sealed class ScriptDataConverter
                 };
 
             case "ChangeActorState":
-                string actorStateKey = parameters["ActorKey"].GetString()
+                string changeActorStateKey = parameters["ActorKey"].GetString()
                     ?? throw new ScriptStepException("Change actor state 'ActorKey' parameter not found.");
-                return new ChangeActorState(actorStateKey, parameters["ActorState"].GetInt32())
+                return new ChangeActorState(changeActorStateKey, parameters["ActorState"].GetInt32())
                 {
                     NextStep = nextStep 
                 };
@@ -71,6 +71,22 @@ public sealed class ScriptDataConverter
                 )
                 { 
                     NextStep = nextStep
+                };
+
+            case "CheckActorState":
+                string? checkActorStateNextIfFalse = null;
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement checkActorStateValue))
+                {
+                    checkActorStateNextIfFalse = checkActorStateValue.GetString();
+                }
+                string checkActorStateKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Check actor state 'ActorKey' parameter not found.");
+                return new CheckActorState(
+                    checkActorStateKey, 
+                    parameters["ActorState"].GetInt32(), 
+                    checkActorStateNextIfFalse)
+                {
+                    NextStep = nextStep 
                 };
 
             case "ForceMoveActor":
@@ -151,9 +167,9 @@ public sealed class ScriptDataConverter
 
             case "ChoiceBoxWithText":
                 string? choiceBoxWithTextNextIfFalse = null;
-                if (parameters.TryGetValue("NextIfFalse", out JsonElement value))
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement choiceBoxWithTextValue))
                 {
-                    choiceBoxWithTextNextIfFalse = value.GetString();
+                    choiceBoxWithTextNextIfFalse = choiceBoxWithTextValue.GetString();
                 }
 
                 string choiceBoxWithTextText = parameters["Text"].GetString()

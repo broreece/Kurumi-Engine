@@ -21,4 +21,6 @@ public interface IMovementActions : ICapability
     public void ChangeActorState(string actorKey, int state);
 
     public void ChangeActorPassability(string actorKey, bool passability);
+
+    public bool ActorIsInState(string actorKey, int actorState);
 }

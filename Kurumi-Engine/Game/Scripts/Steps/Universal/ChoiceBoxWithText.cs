@@ -16,9 +16,9 @@ public sealed class ChoiceBoxWithText : ConditionalScriptStep
 
     public ChoiceBoxWithText(IReadOnlyList<string> choices, string text, string? nextIfFalse) : base()
     {
-        NextIfFalse = nextIfFalse; 
         _choices = choices;
         _text = text;
+        NextIfFalse = nextIfFalse; 
     }
     
     public override void Activate(ScriptContext scriptContext) 

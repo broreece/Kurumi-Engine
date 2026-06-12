@@ -96,4 +96,10 @@ public sealed class MovementActions : IMovementActions
         var actor = _map.GetActor(actorKey);
         actor.Passable = passability;
     }
+
+    public bool ActorIsInState(string actorKey, int actorState)
+    {
+        var actor = _map.GetActor(actorKey);
+        return actor.SpriteState == actorState;
+    }
 }
