@@ -67,7 +67,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 **Steps:** 
 - Add a new item script step that can remove a fixed item id from the inventory dictionary.
-- Add a new conditional to check if an item exists in the inventory dictionary.
 
 ---
 

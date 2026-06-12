@@ -36,9 +36,9 @@ public sealed class ItemActions : IItemActions
         int itemId = itemIds[random.Next(itemIds.Count)];
 
         // If item already exists in dictionary increment amount, else add it to the dictionary.
-        if (_inventory.ContainsKey(itemId))
+        if (_inventory.TryGetValue(itemId, out int value))
         {
-            _inventory[itemId] = _inventory[itemId] + 1;
+            _inventory[itemId] = value + 1;
         }
         else
         {
@@ -46,5 +46,41 @@ public sealed class ItemActions : IItemActions
         }
 
         return _itemRegistry.Get(itemId).Name;
+    }
+
+    public bool ContainsMoreThenOfItem(int itemId, int compareAmount)
+    {
+        if (_inventory.TryGetValue(itemId, out int amount))
+        {
+            return amount > compareAmount;
+        } 
+        return compareAmount < 0;
+    }
+
+    public bool ContainsLessThenOfItem(int itemId, int compareAmount)
+    {
+        if (_inventory.TryGetValue(itemId, out int amount))
+        {
+            return amount < compareAmount;
+        } 
+        return compareAmount > 0;
+    }
+
+    public bool ContainsSameAmountOfItem(int itemId, int compareAmount)
+    {
+        if (_inventory.TryGetValue(itemId, out int amount))
+        {
+            return amount == compareAmount;
+        } 
+        return compareAmount == 0;
+    }
+
+    public bool ContainsDifferentAmountOfItem(int itemId, int compareAmount)
+    {
+        if (_inventory.TryGetValue(itemId, out int amount))
+        {
+            return amount != compareAmount;
+        } 
+        return compareAmount != 0;
     }
 }
