@@ -242,7 +242,8 @@ public sealed class MapState : IGameState
                 // Load potential script and activate.
                 if (actor.OnAction && actor.Script != null) 
                 {
-                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
+                    var executingScript = new ScriptExecution(actor.Script);
+                    executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
                 }
             }
         }
@@ -267,7 +268,8 @@ public sealed class MapState : IGameState
         {
             if (actor.OnTouch && actor.Script != null) 
             {
-                _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
+                var executingScript = new ScriptExecution(actor.Script);
+                executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
             }
         }
     }
@@ -390,8 +392,10 @@ public sealed class MapState : IGameState
     {
         if (_startingScript != null)
         {
-            var script = _gameContext.GameServices.ScriptLibrary.GetMapScript(_startingScript);
-            _stateContext.AddExecutingScript(new ScriptExecution(script));
+            var executingScript = new ScriptExecution(
+                _gameContext.GameServices.ScriptLibrary.GetMapScript(_startingScript)
+            );
+            executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
         }
     }
 
@@ -409,7 +413,8 @@ public sealed class MapState : IGameState
         {
             if (formation.OnFind && formation.Script != null && !formation.Alert)
             {
-                _stateContext.AddExecutingScript(new ScriptExecution(formation.Script));
+                var executingScript = new ScriptExecution(formation.Script);
+                executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
             }
             formation.Alert = true;
         }
@@ -430,7 +435,8 @@ public sealed class MapState : IGameState
             actor.Script != null && 
             _visionResolver!.CanSee(actor, _party, actor.TrackingRange)) 
         {
-            _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
+            var executingScript = new ScriptExecution(actor.Script);
+            executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
         }
     }
 

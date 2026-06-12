@@ -15,7 +15,7 @@ public sealed class ScriptExecution
 
     public string? CurrentStepKey { get; private set; }
 
-    public bool Finished => CurrentStepKey == null;
+    public bool Finished => CurrentStepKey == null && !Script.PotentialNextKeyExists();
 
     public ScriptExecution(Script script)
     {
@@ -33,12 +33,12 @@ public sealed class ScriptExecution
         {
             if (!_firstStep)
             {
-                CurrentStepKey = Script.NextKey;
+                CurrentStepKey = Script.GetNextKey();
             }
             _firstStep = false;
         }
 
-        if (!Finished && !Script.Waiting)
+        if (!Finished && !Script.IsWaiting())
         {
             Script.Activate(scriptContext, CurrentStepKey!);
         }
@@ -46,12 +46,12 @@ public sealed class ScriptExecution
 
     public void RunToPauseOrFinish(ScriptContext scriptContext, IScriptScheduler scriptScheduler)
     {
-        while (!Finished && !Script.Waiting)
+        while (!Finished && !Script.IsWaiting())
         {
             Script.Activate(scriptContext, CurrentStepKey!);
-            CurrentStepKey = Script.NextKey;
+            CurrentStepKey = Script.GetNextKey();
         }
-        if (!Finished && Script.Waiting)
+        if (!Finished && Script.IsWaiting())
         {
             scriptScheduler.AddExecutingScript(this);
         }

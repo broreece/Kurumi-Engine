@@ -45,12 +45,48 @@ public sealed class ScriptDataConverter
                     };
 
             // Map script steps:
+            case "ChangeActorPassability":
+                string actorPassabilityKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Change actor passability 'ActorKey' parameter not found.");
+                return new ChangeActorPassability(actorPassabilityKey, parameters["ActorPassability"].GetBoolean())
+                {
+                    NextStep = nextStep 
+                };
+
+            case "ChangeActorState":
+                string changeActorStateKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Change actor state 'ActorKey' parameter not found.");
+                return new ChangeActorState(changeActorStateKey, parameters["ActorState"].GetInt32())
+                {
+                    NextStep = nextStep 
+                };
+
             case "ChangeMap":
-                string mapName = parameters["MapName"].GetString()
+                string changeMapName = parameters["MapName"].GetString()
                     ?? throw new ScriptStepException("Change map 'MapName' parameter not found.");
-                return new ChangeMap(mapName, parameters["XLocation"].GetInt32(), parameters["YLocation"].GetInt32())
+                return new ChangeMap(
+                    changeMapName, 
+                    parameters["XLocation"].GetInt32(), 
+                    parameters["YLocation"].GetInt32()
+                )
                 { 
                     NextStep = nextStep
+                };
+
+            case "CheckActorState":
+                string? checkActorStateNextIfFalse = null;
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement checkActorStateValue))
+                {
+                    checkActorStateNextIfFalse = checkActorStateValue.GetString();
+                }
+                string checkActorStateKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Check actor state 'ActorKey' parameter not found.");
+                return new CheckActorState(
+                    checkActorStateKey, 
+                    parameters["ActorState"].GetInt32(), 
+                    checkActorStateNextIfFalse)
+                {
+                    NextStep = nextStep 
                 };
 
             case "ForceMoveActor":
@@ -130,8 +166,11 @@ public sealed class ScriptDataConverter
                 };
 
             case "ChoiceBoxWithText":
-                string choiceBoxWithTextNextIfFalse = parameters["NextIfFalse"].GetString()
-                    ?? throw new ScriptStepException("Choice box with text 'NextIfFalse' parameter not found.");
+                string? choiceBoxWithTextNextIfFalse = null;
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement choiceBoxWithTextValue))
+                {
+                    choiceBoxWithTextNextIfFalse = choiceBoxWithTextValue.GetString();
+                }
 
                 string choiceBoxWithTextText = parameters["Text"].GetString()
                     ?? throw new ScriptStepException("Choice box with text 'Text' parameter not found.");

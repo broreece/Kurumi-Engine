@@ -57,6 +57,20 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
+## (IR-01) Item removal 1 ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 2 ###
+### Impact: 3 ###
+
+**Description:** Implement script step that can remove items for doors.
+
+**Steps:** 
+- Add a new item script step that can remove a fixed item id from the inventory dictionary.
+- Add a new conditional to check if an item exists in the inventory dictionary.
+
+---
+
 ## (GM-01) Re-introduce the game menu ##
 ### Complexity: 4 ###
 ### Independent: 3 ###
@@ -68,6 +82,21 @@ see paryt member information and items.
 
 **Steps:**
 - It might be worth checking our previous menu work to create this again.
+
+---
+
+## (DD-02) Enhance battle text ##
+### Complexity: 2 ###
+### Independent: 2 ###
+### Momentum: 3 ###
+### Impact: 3 ###
+
+**Description:** Damage text is currently static and sits at a fixed location, we should make it to be based on the 
+    entity being affected.
+
+**Steps:** 
+- Based on the target we should place damage text directly over the entity.
+- Ensure that if a new action starts the existing battle text list is emptied.
 
 ---
 
@@ -86,18 +115,17 @@ Create a small demonstration scenario showcasing key engine capabilities.
 
 ---
 
-## (DD-02) Enhance battle text ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
+## (SR-01) Script reformating. ##
+### Complexity: 3 ###
+### Independent: 3 ###
+### Momentum: 2 ###
+### Impact: 1 ###
 
-**Description:** Damage text is currently static and sits at a fixed location, we should make it to be based on the 
-    entity being affected.
+**Description:**
+During this build the script system fought back a lot and It's gotten a bit messy yets fix this.
 
-**Steps:** 
-- Based on the target we should place damage text directly over the entity.
-- Ensure that if a new action starts the existing battle text list is emptied.
+**Steps:**
+- Go through the code checking where we can make improvements.
 
 ---
 

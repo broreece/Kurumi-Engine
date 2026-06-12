@@ -84,4 +84,22 @@ public sealed class MovementActions : IMovementActions
             return controller;
         }
     }
+
+    public void ChangeActorState(string actorKey, int state)
+    {
+        var actor = _map.GetActor(actorKey);
+        actor.SpriteState = state;
+    }
+
+    public void ChangeActorPassability(string actorKey, bool passability)
+    {
+        var actor = _map.GetActor(actorKey);
+        actor.Passable = passability;
+    }
+
+    public bool ActorIsInState(string actorKey, int actorState)
+    {
+        var actor = _map.GetActor(actorKey);
+        return actor.SpriteState == actorState;
+    }
 }

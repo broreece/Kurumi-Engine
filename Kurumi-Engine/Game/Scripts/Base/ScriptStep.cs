@@ -12,4 +12,6 @@ public abstract class ScriptStep
     public virtual string? GetNextStep() => NextStep;
 
     public virtual bool Waiting() => false;
+
+    public virtual bool PossiblePathExists() => NextStep != null;
 }

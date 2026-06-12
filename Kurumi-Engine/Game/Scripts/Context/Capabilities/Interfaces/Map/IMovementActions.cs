@@ -17,4 +17,10 @@ public interface IMovementActions : ICapability
     );
 
     public IFinishable ForceMoveParty(bool keepDirection, bool instant, IReadOnlyList<int> path);
+
+    public void ChangeActorState(string actorKey, int state);
+
+    public void ChangeActorPassability(string actorKey, bool passability);
+
+    public bool ActorIsInState(string actorKey, int actorState);
 }

@@ -12,7 +12,7 @@ namespace Engine.Input.Context.Contexts;
 /// <summary>
 /// Utilizes a movement resolver per map to handle party movements.
 /// </summary>
-public class MapInputContext : IGameplayInputContext 
+public sealed class MapInputContext : IGameplayInputContext 
 {
     private readonly Party _party;
 

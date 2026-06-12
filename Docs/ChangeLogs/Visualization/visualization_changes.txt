@@ -12,6 +12,7 @@ This document outlines the architectural and system-level changes made since the
     of the engine's capabilities up to this build.
 
 - Addition of item pools.
+- Addition of a lot of new script steps.
 
 ---------------------------------------------------------------------
 
@@ -21,14 +22,29 @@ BUG FIXES
 
 ---------------------------------------------------------------------
 
+SCRIPTS
+
+- Scripts can now end on both possible branches for conditional script steps. Previously if the basic "Next" branch
+    ended the script couldn't continue even if a condition allowed "NextIfFalse"
+
+---------------------------------------------------------------------
+
 ITEMS
 
 - Item pools have been implemented allowing a random item from a pool to be added to the parties inventory.
+- Items can now be removed from the inventory via script steps.
+
+---------------------------------------------------------------------
+
+ACTORS
+
+- Script steps exist now to change an actors state, check an actors state or affect passability.
 
 ---------------------------------------------------------------------
 
 KEY TAKEAWAYS
 
-- 
+- In this release we added a lot of new script steps, each one became easier to implement really reflecting how
+    this engine has benefited from clean building.
 
 ---------------------------------------------------------------------
