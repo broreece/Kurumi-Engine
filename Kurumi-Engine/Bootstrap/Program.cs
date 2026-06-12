@@ -141,6 +141,7 @@ public static class Program
         var mapNavigationActionsFactory = new MapNavigationActionsFactory(gameObjects);
         var movementActionsFactory = new MovementActionsFactory(party);
         var gameStateActionsFactory = new GameStateActionsFactory(saveData.GameVariables);
+        var itemActionsFactory = new ItemActionsFactory(saveData.Inventory, gameDatabase.ItemPoolRegistry);
         var partyStatusActionsFactory = new PartyStatusActionsFactory(party, gameDatabase.StatusRegistry);
         var uiActionsFactory = new UIActionsFactory(
             stateContext, 
@@ -159,12 +160,14 @@ public static class Program
             mapNavigationActionsFactory, 
             movementActionsFactory, 
             gameStateActionsFactory, 
+            itemActionsFactory, 
             partyStatusActionsFactory, 
             uiActionsFactory
         );
         var battleScriptContextBuilderFactory = new BattleScriptContextBuilderFactory(
             activeBattleActionsFactory, 
             hpMpActionsFactory, 
+            itemActionsFactory, 
             uiActionsFactory
         );
 

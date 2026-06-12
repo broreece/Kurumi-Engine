@@ -43,6 +43,30 @@ namespace Infrastructure.Database.Database;
 /// </summary>
 public sealed class GameDatabase 
 {
+    // Registries.
+    public Registry<AbilityDefinition> AbilityRegistry { get; }
+    public Registry<NamedData> AbilitySetRegistry { get; }
+    public Registry<ActorInfo> ActorInfoRegistry { get; }
+    public Registry<ActorSprite> ActorSpriteRegistry { get; }
+    public Registry<CharacterDefinition> CharacterRegistry { get; }
+    public Registry<NamedData> ElementNameRegistry { get; }
+    public Registry<EnemyBattleScript> EnemyBattleScriptRegistry { get; }
+    public Registry<EnemyDefinition> EnemyDefinitionRegistry { get; }
+    public Registry<EntityDefinition> EntityDefinitionRegistry { get; }
+    public Registry<Equipment> EquipmentRegistry { get; }
+    public Registry<NamedData> EquipmentSlotNameRegistry { get; }
+    public Registry<NamedData> EquipmentTypeNameRegistry { get; }
+    public Registry<FormationDefinition> FormationRegistry { get; }
+    public Registry<Item> ItemRegistry { get; }
+    public Registry<ItemPool> ItemPoolRegistry { get; }
+    public Registry<TwoNamedData> StatNameRegistry { get; }
+    public Registry<StatusDefinition> StatusRegistry { get; }
+    public Registry<Tile> TileRegistry { get; }
+
+    // Lookup indexes.
+    public IReadOnlyDictionary<string, int> StatShortNameIndex { get; }
+    public IReadOnlyDictionary<string, IReadOnlyList<int>> MapFormationsIndex { get; }
+
     public GameDatabase() 
     {
         // Create service.
@@ -69,6 +93,7 @@ public sealed class GameDatabase
         var equipmentSlotNameFactory = new NamedDataFactory();
         var equipmentTypeNameFactory = new NamedDataFactory();
         var itemFactory = new ItemFactory();
+        var itemPoolFactory = new ItemPoolFactory();
         var statusFactory = new StatusDefinitionFactory();
         var statNameFactory = new TwoNamedDataFactory();
         var tileFactory = new TileFactory();
@@ -144,6 +169,7 @@ public sealed class GameDatabase
             formationDefinitionFactory);
 
         var itemLoader = new ItemLoader(itemRepository, itemFactory);
+        var itemPoolLoader = new ItemPoolLoader(itemPoolRepository, itemPoolItemRepository, itemPoolFactory);
 
         var statusLoader = new StatusLoader(
             statusRepository,
@@ -226,6 +252,11 @@ public sealed class GameDatabase
             item => item.Id
         );
 
+        ItemPoolRegistry = new Registry<ItemPool>(
+            itemPoolLoader.LoadAll(),
+            itemPool => itemPool.Id
+        );
+
         StatusRegistry = new Registry<StatusDefinition>(
             statusLoader.LoadAll(),
             status => status.Id
@@ -245,26 +276,4 @@ public sealed class GameDatabase
         StatShortNameIndex = statNameLoader.LoadStatShortNameIndex();
         MapFormationsIndex = formationDefinitionLoader.LoadMapFormationsIndex();
     }
-
-    public Registry<AbilityDefinition> AbilityRegistry { get; }
-    public Registry<NamedData> AbilitySetRegistry { get; }
-    public Registry<ActorInfo> ActorInfoRegistry { get; }
-    public Registry<ActorSprite> ActorSpriteRegistry { get; }
-    public Registry<CharacterDefinition> CharacterRegistry { get; }
-    public Registry<NamedData> ElementNameRegistry { get; }
-    public Registry<EnemyBattleScript> EnemyBattleScriptRegistry { get; }
-    public Registry<EnemyDefinition> EnemyDefinitionRegistry { get; }
-    public Registry<EntityDefinition> EntityDefinitionRegistry { get; }
-    public Registry<Equipment> EquipmentRegistry { get; }
-    public Registry<NamedData> EquipmentSlotNameRegistry { get; }
-    public Registry<NamedData> EquipmentTypeNameRegistry { get; }
-    public Registry<FormationDefinition> FormationRegistry { get; }
-    public Registry<Item> ItemRegistry { get; }
-    public Registry<TwoNamedData> StatNameRegistry { get; }
-    public Registry<StatusDefinition> StatusRegistry { get; }
-    public Registry<Tile> TileRegistry { get; }
-
-    // Lookup indexes.
-    public IReadOnlyDictionary<string, int> StatShortNameIndex { get; }
-    public IReadOnlyDictionary<string, IReadOnlyList<int>> MapFormationsIndex { get; }
 }

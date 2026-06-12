@@ -39,14 +39,19 @@ public sealed class ScriptDataConverter
                 return new ChangeHp(parameters["ReduceHP"].GetInt32() == 1, 
                     parameters["CanKO"].GetInt32() == 1, 
                     parameters["Formula"].GetString() ?? throw new ScriptStepException("Change HP 'formula' parameter " 
-                        + "not found.")) { NextStep = nextStep};
+                        + "not found.")) 
+                    { 
+                        NextStep = nextStep
+                    };
 
             // Map script steps:
             case "ChangeMap":
                 string mapName = parameters["MapName"].GetString()
                     ?? throw new ScriptStepException("Change map 'MapName' parameter not found.");
                 return new ChangeMap(mapName, parameters["XLocation"].GetInt32(), parameters["YLocation"].GetInt32())
-                    { NextStep = nextStep};
+                { 
+                    NextStep = nextStep
+                };
 
             case "ForceMoveActor":
                 bool forceMoveActorKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
@@ -65,7 +70,10 @@ public sealed class ScriptDataConverter
                     forceMoveActorInstant, 
                     forceMoveActorKey, 
                     forceMoveActorSteps
-                ) { NextStep = nextStep };
+                ) 
+                { 
+                    NextStep = nextStep 
+                };
 
             case "ForceMoveParty":
                 bool forceMovePartyKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
@@ -79,14 +87,19 @@ public sealed class ScriptDataConverter
                     forceMovePartyKeepDirection, 
                     forceMovePartyInstant, 
                     forceMovePartySteps
-                ) { NextStep = nextStep };
+                ) 
+                { 
+                    NextStep = nextStep 
+                };
 
             case "StartBattle":
                 return new StartBattle(
-                    parameters["EnemyFormationID"].GetInt32()
-                ) { NextStep = nextStep };
+                    parameters["EnemyFormationID"].GetInt32()) { NextStep = nextStep };
 
             // Universal steps:
+            case "AddItemFromItemPool":
+                return new AddItemFromPool(parameters["ItemPoolID"].GetInt32()) { NextStep = nextStep };
+
             case "BasicTextWindow":
                 JsonElement basicTextWindowPagesElement = parameters["Pages"];
                 var basicTextWindowPages = new List<string>();
@@ -106,7 +119,10 @@ public sealed class ScriptDataConverter
                 foreach (var item in basicTextWindowWithNameboxPagesElement.EnumerateArray()) 
                 {
                     basicTextWindowWithNameboxPages.Add(item.GetString() 
-                        ?? throw new ScriptStepException("Basic text window with name box 'Pages' parameter not found."));
+                        ?? throw new ScriptStepException(
+                            "Basic text window with name box 'Pages' parameter not found."
+                        )
+                    );
                 }
                 return new BasicTextWindowWithNameBox(basicTextWindowWithNameboxPages, basicTextWindowWithNameBoxName) 
                 { 
@@ -131,12 +147,17 @@ public sealed class ScriptDataConverter
                     choiceBoxWithTextChoices, 
                     choiceBoxWithTextText, 
                     choiceBoxWithTextNextIfFalse
-                ) { NextStep = nextStep };
+                ) 
+                { 
+                    NextStep = nextStep 
+                };
 
             case "DisplayGlobalMessage":
                 return new DisplayGlobalMessage(parameters["TimeLimit"].GetInt32(), parameters["Text"].GetString() 
                     ?? throw new ScriptStepException("Display Global Message 'Text' parameter not found."))
-                    { NextStep = nextStep};
+                    { 
+                        NextStep = nextStep
+                    };
 
             default:
                 throw new ScriptStepException($"Script step: {scriptStepData.Type} does not exist");

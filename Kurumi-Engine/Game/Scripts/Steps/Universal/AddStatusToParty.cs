@@ -7,16 +7,16 @@ namespace Game.Scripts.Steps.Universal;
 
 public sealed class AddStatusToParty : ScriptStep 
 {
-    private readonly int statusId;
+    private readonly int _statusId;
 
     public AddStatusToParty(int statusId) : base() 
     {
-        this.statusId = statusId;
+        _statusId = statusId;
     }
 
     public override void Activate(ScriptContext scriptContext) 
     {
         IPartyStatusActions partyStatusActions = scriptContext.GetCapability<IPartyStatusActions>();
-        partyStatusActions.AddStatusToParty(statusId);
+        partyStatusActions.AddStatusToParty(_statusId);
     }
 }
