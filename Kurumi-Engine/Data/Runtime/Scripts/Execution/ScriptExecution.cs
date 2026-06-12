@@ -15,7 +15,7 @@ public sealed class ScriptExecution
 
     public string? CurrentStepKey { get; private set; }
 
-    public bool Finished => CurrentStepKey == null;
+    public bool Finished => !Script.PotentialNextKeyExists();
 
     public ScriptExecution(Script script)
     {

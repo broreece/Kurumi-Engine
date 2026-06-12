@@ -37,8 +37,28 @@ public sealed class Script
     /// <param name="stepKey">The key of the desired script step.</param>
     public void Activate(ScriptContext scriptContext, string stepKey) 
     {
-        CurrentKey = stepKey;
-        ScriptStep currentStep = _scriptSteps[CurrentKey];
-        currentStep.Activate(scriptContext);
+        if (stepKey != null) {
+            CurrentKey = stepKey;
+            if (_scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep))
+            {
+                currentStep.Activate(scriptContext);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Function used to check if a potential next key exists in cases where a conditional script ends one branch.
+    /// </summary>
+    /// <returns>If a potential next key exists.</returns>
+    public bool PotentialNextKeyExists()
+    {
+        if (_scriptSteps[CurrentKey] is ConditionalScriptStep conditionalScriptStep)
+        {
+            if (conditionalScriptStep.NextIfFalse != null)
+            {
+                return true;
+            }
+        }
+        return NextKey == null;
     }
 }

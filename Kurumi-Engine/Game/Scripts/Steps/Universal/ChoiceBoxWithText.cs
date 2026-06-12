@@ -14,8 +14,9 @@ public sealed class ChoiceBoxWithText : ConditionalScriptStep
 
     private ChoiceBoxWithDialogueOverlay? _choiceBox;
 
-    public ChoiceBoxWithText(IReadOnlyList<string> choices, string text, string? nextIfFalse) : base(nextIfFalse) 
+    public ChoiceBoxWithText(IReadOnlyList<string> choices, string text, string? nextIfFalse) : base()
     {
+        NextIfFalse = nextIfFalse; 
         _choices = choices;
         _text = text;
     }

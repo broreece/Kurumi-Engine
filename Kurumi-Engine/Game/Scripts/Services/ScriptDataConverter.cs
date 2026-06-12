@@ -45,10 +45,30 @@ public sealed class ScriptDataConverter
                     };
 
             // Map script steps:
+            case "ChangeActorPassability":
+                string actorPassabilityKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Change actor passability 'ActorKey' parameter not found.");
+                return new ChangeActorPassability(actorPassabilityKey, parameters["ActorPassability"].GetBoolean())
+                {
+                    NextStep = nextStep 
+                };
+
+            case "ChangeActorState":
+                string actorStateKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Change actor state 'ActorKey' parameter not found.");
+                return new ChangeActorState(actorStateKey, parameters["ActorState"].GetInt32())
+                {
+                    NextStep = nextStep 
+                };
+
             case "ChangeMap":
-                string mapName = parameters["MapName"].GetString()
+                string changeMapName = parameters["MapName"].GetString()
                     ?? throw new ScriptStepException("Change map 'MapName' parameter not found.");
-                return new ChangeMap(mapName, parameters["XLocation"].GetInt32(), parameters["YLocation"].GetInt32())
+                return new ChangeMap(
+                    changeMapName, 
+                    parameters["XLocation"].GetInt32(), 
+                    parameters["YLocation"].GetInt32()
+                )
                 { 
                     NextStep = nextStep
                 };
@@ -130,8 +150,11 @@ public sealed class ScriptDataConverter
                 };
 
             case "ChoiceBoxWithText":
-                string choiceBoxWithTextNextIfFalse = parameters["NextIfFalse"].GetString()
-                    ?? throw new ScriptStepException("Choice box with text 'NextIfFalse' parameter not found.");
+                string? choiceBoxWithTextNextIfFalse = null;
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement value))
+                {
+                    choiceBoxWithTextNextIfFalse = value.GetString();
+                }
 
                 string choiceBoxWithTextText = parameters["Text"].GetString()
                     ?? throw new ScriptStepException("Choice box with text 'Text' parameter not found.");

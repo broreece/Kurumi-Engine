@@ -7,7 +7,7 @@ namespace Game.Scripts.Context.Variables.Core;
 /// <summary>
 /// Contains a dictionary of variables with unique variable keys.
 /// </summary>
-public class VariableTable 
+public sealed class VariableTable 
 {
     private readonly Dictionary<string, object> _variables = [];
 

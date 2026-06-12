@@ -13,7 +13,7 @@ using Engine.State.States.Maps.Base;
 
 namespace Data.Runtime.Actors.Core;
 
-public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvider, ICollisionObject 
+public sealed class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvider, ICollisionObject 
 {
     private readonly ActorInfo _actorInfo;
     private readonly ActorModel _actorModel;
@@ -38,11 +38,14 @@ public class Actor : IFacingPositionProvider, IMapEntity, IMutablePositionProvid
     // Force movement variables.
     public bool MaintainFacing { get; set; } = false;
 
+    public bool Passable {
+        get => _actorModel.Passable;
+        set => _actorModel.Passable = value;
+    }
+
     public int Behaviour => _actorInfo.Behaviour;
 
     public int TrackingRange => _actorInfo.TrackingRange;
-
-    public bool Passable => _actorModel.Passable;
 
     public bool OnTouch => _actorInfo.OnTouch;
 
