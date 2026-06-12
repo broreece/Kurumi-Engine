@@ -24,6 +24,7 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
     private readonly MovementActionsFactory _movementActionsFactory;    
 
     private readonly GameStateActionsFactory _gameStateActionsFactory;
+    private readonly ItemActionsFactory _itemActionsFactory;
     private readonly PartyStatusActionsFactory _partyStatusActionsFactory;
     private readonly UIActionsFactory _uiActionsFactory;
 
@@ -33,6 +34,7 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
         MapNavigationActionsFactory mapNavigationActionsFactory, 
         MovementActionsFactory movementActionsFactory, 
         GameStateActionsFactory gameStateActionsFactory, 
+        ItemActionsFactory itemActionsFactory, 
         PartyStatusActionsFactory partyStatusActionsFactory, 
         UIActionsFactory uiActionsFactory
     ) 
@@ -44,6 +46,7 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
         _movementActionsFactory = movementActionsFactory;
 
         _gameStateActionsFactory = gameStateActionsFactory;
+        _itemActionsFactory = itemActionsFactory;
         _partyStatusActionsFactory = partyStatusActionsFactory;
         _uiActionsFactory = uiActionsFactory;
     }
@@ -69,6 +72,8 @@ public sealed class MapScriptContextBuilder : IScriptContextBuilder
         );
 
         capabilityContainer.SetCapability(typeof(IGameStateActions), _gameStateActionsFactory.Create());
+
+        capabilityContainer.SetCapability(typeof(IItemActions), _itemActionsFactory.Create());
 
         capabilityContainer.SetCapability(typeof(IPartyStatusActions), _partyStatusActionsFactory.Create());
         

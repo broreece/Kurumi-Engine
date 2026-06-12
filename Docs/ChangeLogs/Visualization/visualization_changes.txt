@@ -1,0 +1,34 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Visualization
+Status: In-progress
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Refinement' release.
+
+'Visualization' focused on placing the engine into a presentable state, the main goal here was to make a demonstration
+    of the engine's capabilities up to this build.
+
+- Addition of item pools.
+
+---------------------------------------------------------------------
+
+BUG FIXES
+
+- Fixed an issue where actors or enemy sprites could move before their animation ended resulting in a 'jump'.
+
+---------------------------------------------------------------------
+
+ITEMS
+
+- Item pools have been implemented allowing a random item from a pool to be added to the parties inventory.
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+- 
+
+---------------------------------------------------------------------

@@ -16,11 +16,11 @@ namespace Engine.Systems.Rendering.Core;
 /// </summary>
 public sealed class ActorRenderer 
 {
-    private readonly RenderSystem renderSystem;
-    private readonly IReadOnlyList<ActorRenderData> actorRenderData;
+    private readonly RenderSystem _renderSystem;
+    private readonly IReadOnlyList<ActorRenderData> _actorRenderData;
     
-    private readonly int tileWidth;
-    private readonly int tileHeight;
+    private readonly int _tileWidth;
+    private readonly int _tileHeight;
 
     internal ActorRenderer(
         RenderSystem renderSystem, 
@@ -29,15 +29,15 @@ public sealed class ActorRenderer
         int tileHeight
     ) 
     {
-        this.renderSystem = renderSystem;
-        this.actorRenderData = actorRenderData;
-        this.tileWidth = tileWidth;
-        this.tileHeight = tileHeight;
+        _renderSystem = renderSystem;
+        _actorRenderData = actorRenderData;
+        _tileWidth = tileWidth;
+        _tileHeight = tileHeight;
     }
 
     public void Update(View view) 
     {
-        foreach (var currentActorRenderData in actorRenderData) 
+        foreach (var currentActorRenderData in _actorRenderData) 
         {
             // Cache common variables.
             var actorWidth = currentActorRenderData.Width;
@@ -61,12 +61,12 @@ public sealed class ActorRenderer
             {
                 TextureRect = textureRect,
                 Position = new Vector2f(
-                    interpolatedX * tileWidth + (tileWidth / 2) - (actorWidth / 2),
-                    interpolatedY * tileHeight + tileHeight - actorHeight
+                    interpolatedX * _tileWidth + (_tileWidth / 2) - (actorWidth / 2),
+                    interpolatedY * _tileHeight + _tileHeight - actorHeight
                 )
             };
 
-            renderSystem.Submit(new RenderCommand() { 
+            _renderSystem.Submit(new RenderCommand() { 
                 Layer = layer, 
                 SubmissionIndex = 0, 
                 Drawable = sprite, 

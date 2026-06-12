@@ -1,6 +1,6 @@
 KURUMI ENGINE – BUILD CHANGE DOCUMENT
 Build: Refinement
-Status: In-progress
+Status: Finished
 
 ---------------------------------------------------------------------
 

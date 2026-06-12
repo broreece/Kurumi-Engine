@@ -71,22 +71,6 @@ see paryt member information and items.
 
 ---
 
-## (IP-01) Item pool implementation ##
-### Complexity: 3 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Allow item pool containers, granting dynamic rogue like features in the engine.
-
-**Steps:**
-- Load item pools in database:
-    - We already have a database table representing item pools, We need to create an item pool dictionary.
-    - The key is the item pool ID, the value is the list of possible item IDs in the pool.
-    - Create a script step that adds a random item from an item pool to the inventory.
-
----
-
 ## (DEMO-01) Create demonstration video ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
