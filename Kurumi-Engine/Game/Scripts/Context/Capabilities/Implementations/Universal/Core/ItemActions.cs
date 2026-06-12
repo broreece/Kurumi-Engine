@@ -13,15 +13,21 @@ public sealed class ItemActions : IItemActions
 {
     private readonly IDictionary<int, int> _inventory;
 
+    private readonly Registry<Item> _itemRegistry;
     private readonly Registry<ItemPool> _itemPoolRegistry;
 
-    internal ItemActions(IDictionary<int, int> inventory, Registry<ItemPool> itemPoolRegistry)
+    internal ItemActions(
+        IDictionary<int, int> inventory, 
+        Registry<Item> itemRegistry, 
+        Registry<ItemPool> itemPoolRegistry
+    )
     {
         _inventory = inventory;
+        _itemRegistry = itemRegistry;
         _itemPoolRegistry = itemPoolRegistry;
     }
 
-    public void AddItemFromPool(int poolId) 
+    public string AddItemFromPool(int poolId) 
     {
         var itemIds = _itemPoolRegistry.Get(poolId).ItemIds;
 
@@ -38,5 +44,7 @@ public sealed class ItemActions : IItemActions
         {
             _inventory[itemId] = 1;
         }
+
+        return _itemRegistry.Get(itemId).Name;
     }
 }

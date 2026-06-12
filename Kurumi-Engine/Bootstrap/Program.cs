@@ -141,7 +141,11 @@ public static class Program
         var mapNavigationActionsFactory = new MapNavigationActionsFactory(gameObjects);
         var movementActionsFactory = new MovementActionsFactory(party);
         var gameStateActionsFactory = new GameStateActionsFactory(saveData.GameVariables);
-        var itemActionsFactory = new ItemActionsFactory(saveData.Inventory, gameDatabase.ItemPoolRegistry);
+        var itemActionsFactory = new ItemActionsFactory(
+            saveData.Inventory, 
+            gameDatabase.ItemRegistry, 
+            gameDatabase.ItemPoolRegistry
+        );
         var partyStatusActionsFactory = new PartyStatusActionsFactory(party, gameDatabase.StatusRegistry);
         var uiActionsFactory = new UIActionsFactory(
             stateContext, 
