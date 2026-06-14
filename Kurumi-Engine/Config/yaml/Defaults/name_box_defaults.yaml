@@ -1,7 +1,7 @@
 window_name: "template"
 font_name: "template"
 
-font_size: 24
+font_size: 16
 
 width: 20
 height: 8
@@ -9,4 +9,4 @@ x: 10
 y: 178
 
 text_x_offset: 1
-text_y_offset: 2
+text_y_offset: 3

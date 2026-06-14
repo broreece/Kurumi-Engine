@@ -42,6 +42,12 @@ ACTORS
 
 ---------------------------------------------------------------------
 
+UI & CONFIG
+
+- Text appearing in UI can now have offsets assigned in config.
+
+---------------------------------------------------------------------
+
 KEY TAKEAWAYS
 
 - In this release we added a lot of new script steps, each one became easier to implement really reflecting how

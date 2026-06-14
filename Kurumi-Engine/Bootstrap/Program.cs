@@ -419,7 +419,7 @@ public static class Program
         while (window.IsOpen) 
         {
             // Process state changes if requested.
-            if (gameObjects.BattleStartRequest != null)
+            if (gameObjects.BattleStartRequest != null && stateManager.ReadyToChangeState())
             {
                 stateManager.ChangeState(battleStateFactory.Create(gameObjects.BattleStartRequest));
                 gameObjects.BattleStartRequest = null;

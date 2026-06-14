@@ -231,7 +231,7 @@ public sealed class BattleView
             {
                 var character = _partyMembers[partyIndex];
                 _partyTextComponents[partyIndex].SetText($"{character.Name} HP: {character.CurrentHP} / " +
-                    $"{character.MaxHp}, MP: {character.CurrentMP}: {character.MaxMP}");
+                    $"{character.MaxHp}, MP: {character.CurrentMP} / {character.MaxMP}");
             }
         }
 

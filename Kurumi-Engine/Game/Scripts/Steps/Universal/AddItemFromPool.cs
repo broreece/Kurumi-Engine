@@ -23,7 +23,7 @@ public sealed class AddItemFromPool : ScriptStep
     {
         IItemActions itemActions = scriptContext.GetCapability<IItemActions>();
         IUIActions uiActions = scriptContext.GetCapability<IUIActions>();
-        var itemName = itemActions.AddItemFromPool(_poolId);
+        var itemName = itemActions.AddItemFromPool(_poolId).ToLower();
 
         var pages = new List<string>
         {
