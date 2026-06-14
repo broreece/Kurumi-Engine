@@ -13,5 +13,8 @@ public sealed class ChoiceBoxDefaults
     public required int X { get; init; }
     public required int Y { get; init; }
 
+    public required int TextXOffset { get; init; }
+    public required int TextYOffset { get; init; }
+
     public required int Spacing { get; init; }
 }

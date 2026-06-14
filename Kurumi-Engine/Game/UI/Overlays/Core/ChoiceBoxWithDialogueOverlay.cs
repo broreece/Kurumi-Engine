@@ -98,12 +98,16 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         var textWindowHeight = textWindowDefaults.Height;
         var textWindowXLocation = textWindowDefaults.X;
         var textWindowYLocation = textWindowDefaults.Y;
+        var textWindowXOffset = textWindowDefaults.TextXOffset;
+        var textWindowYOffset = textWindowDefaults.TextYOffset;
         
         var choiceWindowWidth = choiceBoxDefaults.Width;
         var choiceWindowHeight = choiceBoxDefaults.Height;
         var selectionHeight = choiceBoxDefaults.Height / _numberOfChoices;
         var choiceWindowXLocation = choiceBoxDefaults.X;
         var choiceWindowYLocation = choiceBoxDefaults.Y;
+        var choiceWindowXOffset = choiceBoxDefaults.TextXOffset;
+        var choiceWindowYOffset = choiceBoxDefaults.TextYOffset;
         _spacing = choiceBoxDefaults.Spacing;
 
         // Create Elements.
@@ -117,7 +121,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
                 Size = new Vector2f(1, 1) 
             },
             
-            LocalOffset = new Vector2f(0, 0),
+            LocalOffset = new Vector2f(textWindowXOffset, textWindowYOffset),
             Children = [],
 
             RenderLayer = RenderLayer.UIText
@@ -155,7 +159,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
                 Size = new Vector2f(1, 1) 
             },
             
-            LocalOffset = new Vector2f(0, _spacing * choiceIndex),
+            LocalOffset = new Vector2f(choiceWindowXOffset, (_spacing * choiceIndex) + choiceWindowYOffset),
             Children = [],
 
             RenderLayer = RenderLayer.UISelectionBox

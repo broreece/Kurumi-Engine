@@ -72,6 +72,8 @@ public sealed class DialogueOverlay : IUIOverlay
         var height = textWindowDefaults.Height;
         var xLocation = textWindowDefaults.X;
         var yLocation = textWindowDefaults.Y;
+        var textWindowXOffset = textWindowDefaults.TextXOffset;
+        var textWindowYOffset = textWindowDefaults.TextYOffset;
 
         // Create Element.
         var textUIElement = new UIElement()
@@ -79,7 +81,7 @@ public sealed class DialogueOverlay : IUIOverlay
             UIComponent = _textComponent,
             Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
             
-            LocalOffset = new Vector2f(0, 0),
+            LocalOffset = new Vector2f(textWindowXOffset, textWindowYOffset),
             Children = [],
 
             RenderLayer = RenderLayer.UIText

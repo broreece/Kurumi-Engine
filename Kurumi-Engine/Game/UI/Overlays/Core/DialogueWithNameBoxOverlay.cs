@@ -85,10 +85,15 @@ public sealed class DialogueWithNameBoxOverlay : IUIOverlay
         var height = textWindowDefaults.Height;
         var xLocation = textWindowDefaults.X;
         var yLocation = textWindowDefaults.Y;
+        var textXOffset = textWindowDefaults.TextXOffset;
+        var textYOffset = textWindowDefaults.TextYOffset;
+
         var nameWidth = nameBoxDefaults.Width;
         var nameHeight = nameBoxDefaults.Height;
         var nameXLocation = nameBoxDefaults.X;
         var nameYLocation = nameBoxDefaults.Y;
+        var nameTextXOffset = nameBoxDefaults.TextXOffset;
+        var nameTextYOffset = nameBoxDefaults.TextYOffset;
 
         // Create Elements.
         var textUIElement = new UIElement()
@@ -96,7 +101,7 @@ public sealed class DialogueWithNameBoxOverlay : IUIOverlay
             UIComponent = _textComponent,
             Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
             
-            LocalOffset = new Vector2f(0, 0),
+            LocalOffset = new Vector2f(textXOffset, textYOffset),
             Children = [],
 
             RenderLayer = RenderLayer.UIText
@@ -106,7 +111,7 @@ public sealed class DialogueWithNameBoxOverlay : IUIOverlay
             UIComponent = nameTextComponent,
             Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
             
-            LocalOffset = new Vector2f(0, 0),
+            LocalOffset = new Vector2f(nameTextXOffset, nameTextYOffset),
             Children = [],
 
             RenderLayer = RenderLayer.UIText

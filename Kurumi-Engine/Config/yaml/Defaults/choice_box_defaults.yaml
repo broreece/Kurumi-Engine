@@ -9,4 +9,7 @@ height: 11
 x: 160
 y: 170
 
+text_x_offset: 1
+text_y_offset: 2
+
 spacing: 12
