@@ -83,4 +83,19 @@ public sealed class ItemActions : IItemActions
         } 
         return compareAmount != 0;
     }
+
+    public void RemoveItemFromInventory(int itemId, int amount)
+    {
+        if (_inventory.TryGetValue(itemId, out int amountOfItem))
+        {
+            if (amount > amountOfItem)
+            {
+                _inventory.Remove(itemId);
+            }
+            else
+            {
+                _inventory[itemId] = amountOfItem - amount;
+            }
+        }
+    }
 }

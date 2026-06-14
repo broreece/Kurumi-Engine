@@ -57,19 +57,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## (IR-01) Item removal 1 ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 2 ###
-### Impact: 3 ###
-
-**Description:** Implement script step that can remove items for doors.
-
-**Steps:** 
-- Add a new item script step that can remove a fixed item id from the inventory dictionary.
-
----
-
 ## (GM-01) Re-introduce the game menu ##
 ### Complexity: 4 ###
 ### Independent: 3 ###

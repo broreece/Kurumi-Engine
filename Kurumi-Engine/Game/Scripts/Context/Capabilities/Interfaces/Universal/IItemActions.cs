@@ -14,4 +14,6 @@ public interface IItemActions : ICapability
     public bool ContainsSameAmountOfItem(int itemId, int amount);
 
     public bool ContainsDifferentAmountOfItem(int itemId, int amount);
+
+    public void RemoveItemFromInventory(int itemId, int amount);
 }

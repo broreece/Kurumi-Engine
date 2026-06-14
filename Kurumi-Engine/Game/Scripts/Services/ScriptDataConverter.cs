@@ -213,6 +213,12 @@ public sealed class ScriptDataConverter
                         NextStep = nextStep
                     };
 
+            case "RemoveItemFromInventory":
+                return new RemoveItemFromInventory(parameters["ItemID"].GetInt32(), parameters["Amount"].GetInt32()) 
+                { 
+                    NextStep = nextStep 
+                };
+
             default:
                 throw new ScriptStepException($"Script step: {scriptStepData.Type} does not exist");
         }
