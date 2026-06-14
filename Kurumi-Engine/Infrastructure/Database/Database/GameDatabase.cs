@@ -64,8 +64,8 @@ public sealed class GameDatabase
     public Registry<Tile> TileRegistry { get; }
 
     // Lookup indexes.
-    public IReadOnlyDictionary<string, int> StatShortNameIndex { get; }
     public IReadOnlyDictionary<string, IReadOnlyList<int>> MapFormationsIndex { get; }
+    public IReadOnlyDictionary<string, int> StatShortNameIndex { get; }
 
     public GameDatabase() 
     {

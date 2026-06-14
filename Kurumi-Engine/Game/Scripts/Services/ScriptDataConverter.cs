@@ -129,8 +129,7 @@ public sealed class ScriptDataConverter
                 };
 
             case "StartBattle":
-                return new StartBattle(
-                    parameters["EnemyFormationID"].GetInt32()) { NextStep = nextStep };
+                return new StartBattle(parameters["EnemyFormationID"].GetInt32()) { NextStep = nextStep };
 
             // Universal steps:
             case "AddItemFromItemPool":
@@ -161,6 +160,22 @@ public sealed class ScriptDataConverter
                     );
                 }
                 return new BasicTextWindowWithNameBox(basicTextWindowWithNameboxPages, basicTextWindowWithNameBoxName) 
+                { 
+                    NextStep = nextStep 
+                };
+
+            case "CheckItemInInventory":
+                string? checkItemInInventoryNextIfFalse = null;
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement checkItemInInventoryValue))
+                {
+                    checkItemInInventoryNextIfFalse = checkItemInInventoryValue.GetString();
+                }
+                return new CheckItemInInventory(
+                    parameters["ItemID"].GetInt32(), 
+                    parameters["Amount"].GetInt32(), 
+                    parameters["ComparisonOperator"].GetInt32(), 
+                    checkItemInInventoryNextIfFalse
+                ) 
                 { 
                     NextStep = nextStep 
                 };
@@ -197,6 +212,12 @@ public sealed class ScriptDataConverter
                     { 
                         NextStep = nextStep
                     };
+
+            case "RemoveItemFromInventory":
+                return new RemoveItemFromInventory(parameters["ItemID"].GetInt32(), parameters["Amount"].GetInt32()) 
+                { 
+                    NextStep = nextStep 
+                };
 
             default:
                 throw new ScriptStepException($"Script step: {scriptStepData.Type} does not exist");
