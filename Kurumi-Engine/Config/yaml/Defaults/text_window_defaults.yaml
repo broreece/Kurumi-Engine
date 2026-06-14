@@ -7,3 +7,6 @@ width: 90
 height: 25
 x: 10
 y: 200
+
+text_x_offset: 4
+text_y_offset: 4

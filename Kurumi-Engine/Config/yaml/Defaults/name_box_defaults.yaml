@@ -7,3 +7,6 @@ width: 20
 height: 8
 x: 10
 y: 178
+
+text_x_offset: 1
+text_y_offset: 2
