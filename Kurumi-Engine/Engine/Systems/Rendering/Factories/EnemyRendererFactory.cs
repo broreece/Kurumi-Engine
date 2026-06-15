@@ -8,6 +8,8 @@ using Data.Runtime.Formations.Core;
 using Engine.Assets.Base;
 using Engine.Assets.Core;
 
+using Engine.State.States.Battle.Text.Core;
+
 using Engine.Systems.Rendering.Base;
 using Engine.Systems.Rendering.Core;
 
@@ -22,20 +24,23 @@ public sealed class EnemyRendererFactory
 
     private readonly RenderSystem _renderSystem;
 
+    private readonly BattleTextConfig _battleTextConfig;
     private readonly EnemyBattleSpriteConfig _enemyBattleSpriteConfig;
 
     public EnemyRendererFactory(
         AssetRegistry assetRegistry, 
         RenderSystem renderSystem, 
+        BattleTextConfig battleTextConfig, 
         EnemyBattleSpriteConfig enemyBattleSpriteConfig
     )
     {
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;
+        _battleTextConfig = battleTextConfig;
         _enemyBattleSpriteConfig = enemyBattleSpriteConfig;
     }
 
-    public EnemyRenderer Create(Formation formation) 
+    public EnemyRenderer Create(Formation formation, IReadOnlyDictionary<int, BattleText> enemyBattleText) 
     {
         var enemyRenderData = new List<EnemyRenderData>();
         foreach (var storedEntityData in formation.StoredEntityData) 
@@ -54,6 +59,14 @@ public sealed class EnemyRendererFactory
             });
         }
 
-        return new EnemyRenderer(_renderSystem, formation, enemyRenderData, _enemyBattleSpriteConfig);
+        return new EnemyRenderer(
+            _renderSystem, 
+            formation, 
+            enemyRenderData, 
+            enemyBattleText, 
+            _assetRegistry.GetFont(_battleTextConfig.BattleFontName), 
+            _battleTextConfig, 
+            _enemyBattleSpriteConfig
+        );
     }
 }

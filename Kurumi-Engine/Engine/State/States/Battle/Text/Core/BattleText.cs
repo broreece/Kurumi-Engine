@@ -14,9 +14,6 @@ public sealed class BattleText
 
     public required uint FontSize { get; init; }
 
-    public required float XLocation { get; init; }
-    public required float YLocation { get; init; }
-
     public required BattleTextType TextType { get; init; }
 
     public bool Finished => _duration >= _timer;

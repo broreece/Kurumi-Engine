@@ -346,18 +346,19 @@ public static class Program
         var battleRendererFactory = new BattleRendererFactory(
             assetRegistry, 
             renderSystem, 
-            configProvider.BattleTextConfig.BattleFontName, 
             configProvider.BattleBackgroundSpriteConfig,
             new Vector2u((uint) virtualWindowConfig.ViewWidth, (uint) virtualWindowConfig.ViewHeight)
         );
         var enemyRendererFactory = new EnemyRendererFactory(
             assetRegistry, 
             renderSystem, 
+            configProvider.BattleTextConfig, 
             configProvider.EnemyBattleSpriteConfig
         );
         var partyBattleRendererFactory = new PartyBattleRendererFactory(
             assetRegistry, 
-            renderSystem,
+            renderSystem, 
+            configProvider.BattleTextConfig, 
             configProvider.CharacterBattleSpriteConfig
         );
 

@@ -8,6 +8,8 @@ using Data.Runtime.Parties.Core;
 using Engine.Assets.Base;
 using Engine.Assets.Core;
 
+using Engine.State.States.Battle.Text.Core;
+
 using Engine.Systems.Rendering.Base;
 using Engine.Systems.Rendering.Core;
 
@@ -25,20 +27,23 @@ public sealed class PartyBattleRendererFactory
 
     private readonly RenderSystem _renderSystem;
 
+    private readonly BattleTextConfig _battleTextConfig;
     private readonly CharacterBattleSpriteConfig _characterBattleSpriteConfig;
 
     public PartyBattleRendererFactory(
         AssetRegistry assetRegistry, 
-        RenderSystem renderSystem,
+        RenderSystem renderSystem, 
+        BattleTextConfig battleTextConfig, 
         CharacterBattleSpriteConfig characterBattleSpriteConfig
     )
     {
         _assetRegistry = assetRegistry;
         _renderSystem = renderSystem;
+        _battleTextConfig = battleTextConfig;
         _characterBattleSpriteConfig = characterBattleSpriteConfig;
     }
 
-    public PartyBattleRenderer Create(Party party) 
+    public PartyBattleRenderer Create(Party party, IReadOnlyDictionary<int, BattleText> partyBattleText) 
     {
         // Create and pass custom party render data.
         var partyRenderData = new PartyMemberBattleRenderData[party.Characters.Length];
@@ -60,6 +65,13 @@ public sealed class PartyBattleRendererFactory
             index ++;
         }
 
-        return new PartyBattleRenderer(_renderSystem, partyRenderData, _characterBattleSpriteConfig);
+        return new PartyBattleRenderer(
+            _renderSystem, 
+            partyRenderData, 
+            partyBattleText, 
+            _assetRegistry.GetFont(_battleTextConfig.BattleFontName), 
+            _battleTextConfig, 
+            _characterBattleSpriteConfig
+        );
     }
 }

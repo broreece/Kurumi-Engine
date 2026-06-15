@@ -71,21 +71,6 @@ see paryt member information and items.
 
 ---
 
-## (DD-02) Enhance battle text ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Damage text is currently static and sits at a fixed location, we should make it to be based on the 
-    entity being affected.
-
-**Steps:** 
-- Based on the target we should place damage text directly over the entity.
-- Ensure that if a new action starts the existing battle text list is emptied.
-
----
-
 ## (DEMO-01) Create demonstration video ##
 ### Complexity: 2 ###
 ### Independent: 1 ###
@@ -98,6 +83,10 @@ Create a small demonstration scenario showcasing key engine capabilities.
 **Steps:**
 - Make a basic sewer map demonstrating getting a key, using the key to unlock an iron gate.
 - Display avoiding the enemy, perhaps get caught and result in a fight.
+
+---
+
+## Visualization milestone reached.
 
 ---
 
@@ -115,7 +104,27 @@ During this build the script system fought back a lot and It's gotten a bit mess
 
 ---
 
-## Visualization milestone reached.
+## (IR-01) Inventory reformatting. ##
+### Complexity: 3 ###
+### Independent: 3 ###
+### Momentum: 2 ###
+### Impact: 1 ###
+
+**Description:**
+Inventory currently sits as a dictionary<int, int> but this can be made into a custom class.
+
+**Steps:**
+- Create a new inventory class containing the old dictionary.
+- Change the deseralizer from save file to dictionary to the new class.
+- Change existing usages of inventory into new class.
+
+---
+
+
+
+---
+
+## Sharpen milestone reached.
 
 ---
 
