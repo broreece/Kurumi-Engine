@@ -3,6 +3,7 @@ using Config.Runtime.Battle;
 
 // Engine.
 using Engine.State.States.Battle.Base;
+using Engine.State.States.Battle.Text.Core;
 
 using Engine.Systems.Rendering.Base;
 
@@ -25,20 +26,30 @@ public sealed class PartyBattleRenderer
 
     private readonly PartyMemberBattleRenderData[] _partyMemberBattleRenderData;
 
+    private readonly IReadOnlyDictionary<int, BattleText> _partyBattleText;
+    private readonly Font _battleTextFont;
+
+    private readonly BattleTextConfig _battleTextConfig;
     private readonly CharacterBattleSpriteConfig _characterBattleSpriteConfig;
 
     internal PartyBattleRenderer(
         RenderSystem renderSystem, 
         PartyMemberBattleRenderData[] partyMemberBattleRenderData, 
+        IReadOnlyDictionary<int, BattleText> partyBattleText, 
+        Font battleTextFont, 
+        BattleTextConfig battleTextConfig, 
         CharacterBattleSpriteConfig characterBattleSpriteConfig
     )
     {
         _renderSystem = renderSystem;
         _partyMemberBattleRenderData = partyMemberBattleRenderData;
+        _partyBattleText = partyBattleText;
+        _battleTextFont = battleTextFont;
+        _battleTextConfig = battleTextConfig;
         _characterBattleSpriteConfig = characterBattleSpriteConfig;
     }
     
-    public void Update(View view, bool targetSelector, int selectedCharacterIndex)
+    public void Update(View view, bool targetSelector, int selectedCharacterIndex, float deltaTime)
     {
         var currentCharacterIndex = 0;
         foreach (var partyMemberRender in _partyMemberBattleRenderData) 
@@ -93,6 +104,37 @@ public sealed class PartyBattleRenderer
                 });
 
                 currentCharacterIndex ++;
+            }
+        }
+
+        foreach (KeyValuePair<int, BattleText> keyValuePair in _partyBattleText)
+        {
+            int characterIndex = keyValuePair.Key;
+            BattleText battleText = keyValuePair.Value;
+            battleText.Update(deltaTime);
+            if (!battleText.Finished)
+            {
+                
+                var xLocation = _characterBattleSpriteConfig.PartyXPlacement 
+                            + (_characterBattleSpriteConfig.Width * characterIndex)
+                            + _battleTextConfig.XOffset;
+                var yLocation = _characterBattleSpriteConfig.PartyYPlacement + _battleTextConfig.YOffset;
+                var text = new Text(battleText.Text, _battleTextFont, battleText.FontSize) 
+                {
+                    Position = new Vector2f(xLocation, yLocation)
+                };
+
+
+                _renderSystem.Submit(
+                    new RenderCommand()
+                    {
+                        Layer = RenderLayer.UIText, 
+                        SubmissionIndex = 0, 
+                        Drawable = text, 
+                        States = RenderStates.Default, 
+                        View = view 
+                    }
+                );
             }
         }
     }

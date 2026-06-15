@@ -11,6 +11,10 @@ public sealed class Enemy
 
     public int MainPart => _enemyDefinition.MainPart;
 
+    public int XLocation => _enemyDefinition.XLocation;
+
+    public int YLocation => _enemyDefinition.YLocation;
+
     public string? OnKillScript => _enemyDefinition.OnKillScript;
 
     internal Enemy(EnemyDefinition enemyDefinition, IReadOnlyList<EnemyBattleScript> battleScripts)
