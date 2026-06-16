@@ -19,6 +19,7 @@ This document outlines the architectural and system-level changes made since the
 BUG FIXES
 
 - Fixed an issue where actors or enemy sprites could move before their animation ended resulting in a 'jump'.
+- Fixed a bug where if UI opened on the map before a battle started the UI would persist.
 
 ---------------------------------------------------------------------
 

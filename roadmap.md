@@ -52,8 +52,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - Re-implementation of the game's menu.
-- Addition of items and an item display in the menu.
-- Creation of a demo video for the capabilities of the engine.
 
 ---
 
@@ -68,21 +66,6 @@ see paryt member information and items.
 
 **Steps:**
 - It might be worth checking our previous menu work to create this again.
-
----
-
-## (DEMO-01) Create demonstration video ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 4.5 ###
-### Impact: 3 ###
-
-**Description:**
-Create a small demonstration scenario showcasing key engine capabilities.
-
-**Steps:**
-- Make a basic sewer map demonstrating getting a key, using the key to unlock an iron gate.
-- Display avoiding the enemy, perhaps get caught and result in a fight.
 
 ---
 

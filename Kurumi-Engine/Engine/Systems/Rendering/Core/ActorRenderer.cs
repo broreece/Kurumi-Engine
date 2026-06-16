@@ -68,7 +68,7 @@ public sealed class ActorRenderer
 
             _renderSystem.Submit(new RenderCommand() { 
                 Layer = layer, 
-                SubmissionIndex = 0, 
+                SubmissionIndex = (int) interpolatedY, 
                 Drawable = sprite, 
                 States = RenderStates.Default, 
                 View = view

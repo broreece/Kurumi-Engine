@@ -18,8 +18,6 @@ and scalable.
 
 Visualization build is currently in progress, it is focused on:
 - Re-implementation of the game's menu.
-- Addition of items and an item display in the menu.
-- Creation of a demo video for the capabilities of the engine.
 
 ---
 
