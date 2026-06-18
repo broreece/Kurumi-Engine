@@ -165,7 +165,7 @@ public sealed class Map
 
     public Actor GetActor(string key)
     {
-        return _actorStringDictionary!.TryGetValue(key, out var result) ? result : 
+        return _actorStringDictionary.TryGetValue(key, out var result) ? result : 
             throw new ActorNotFoundException($"The map: {key} was not found.");
     }
 }

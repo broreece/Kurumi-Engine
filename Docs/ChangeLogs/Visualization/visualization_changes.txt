@@ -13,6 +13,7 @@ This document outlines the architectural and system-level changes made since the
 
 - Addition of item pools.
 - Addition of a lot of new script steps.
+- Reformatting of map files and actors.
 
 ---------------------------------------------------------------------
 
@@ -40,6 +41,7 @@ ITEMS
 ACTORS
 
 - Script steps exist now to change an actors state, check an actors state or affect passability.
+- Actors are now stored seperately from maps meaning actors can be saved and now result in a map save.
 
 ---------------------------------------------------------------------
 
@@ -53,5 +55,7 @@ KEY TAKEAWAYS
 
 - In this release we added a lot of new script steps, each one became easier to implement really reflecting how
     this engine has benefited from clean building.
+- Before our demo release we had to deal with quite a big issue with actors and persistance as reloading the maps
+    would reload actor states.
 
 ---------------------------------------------------------------------

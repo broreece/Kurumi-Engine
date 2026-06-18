@@ -103,10 +103,6 @@ Inventory currently sits as a dictionary<int, int> but this can be made into a c
 
 ---
 
-
-
----
-
 ## Sharpen milestone reached.
 
 ---
@@ -121,21 +117,18 @@ Inventory currently sits as a dictionary<int, int> but this can be made into a c
 
 ---
 
-## (SAVE-02) Saving should update actor positions ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 3 ###
+## (SAVE-03) Update map converter tool to no longer upload actors. ##
+### Complexity: 2 ###
+### Independent: 1 ###
+### Momentum: 1 ###
 ### Impact: 1 ###
 
-**Description:** By allowing saving of actor positions and facing direction it will remove the need for us to add
-additional auto scripts in maps.
+**Description:** Update map converter tool to no longer upload actors. We can just entirely redo the tool as it'll
+    remove a lot of extra code.
 
 **Steps:**
-- Currently in map files we have the actor information at the bottom of the file.
-- The issue is that these actor information should be saveable but the maps will never change:
-    - This is inefficent as we shouldn't be re-writting the maps every save.
-- We should consider changing the system structure such that map actors are saveable files stored in different files
-- We'll need to update our converter tool as well for this.
+- Update converter tool to only do tiles no longer use objects or actors.
+- We currently store the actor class this can be removed or kept just for keeping track of data.
 
 ---
 
