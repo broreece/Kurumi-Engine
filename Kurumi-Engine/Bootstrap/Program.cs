@@ -283,15 +283,16 @@ public static class Program
             new MapLoader(), 
 
             new MapFactory(
-                formationFactory,
-                database.MapFormationsIndex,
-                saveData.Formations,
-                database.FormationRegistry,
+                formationFactory, 
+                database.MapFormationsIndex, 
+                saveData.Formations, 
+                database.FormationRegistry, 
                 database.ActorInfoRegistry, 
                 tileRegistry, 
+                saveData.Actors, 
                 new ActorFactory(scriptLibrary), 
                 new DumbTrackingActorFactory(scriptLibrary), 
-                new PathedActorFactory(scriptLibrary),
+                new PathedActorFactory(scriptLibrary), 
                 new RandomActorFactory(scriptLibrary), 
                 new SmartTrackingActorFactory(scriptLibrary), 
                 party

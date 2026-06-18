@@ -368,12 +368,6 @@ public sealed class MapState : IGameState
 
                     _movementResolver!.TryMove(formation, move);
                     controller.ExecuteMove();
-
-                    // Check if the party is in range of the formation.
-                    CheckInRangeFormation(formation);
-
-                    // After formation moves visiblity might change.
-                    ExecuteAllOnFindScripts();
                 }
                 // If the formation can not execute any moves increment their alert counter.
                 else
@@ -386,6 +380,11 @@ public sealed class MapState : IGameState
                 }
             }
         }
+        // Check if the party is in range of the formation.
+        CheckInRangeFormation(formation);
+
+        // After formation moves visiblity might change.
+        ExecuteAllOnFindScripts();
     }
 
     private void ExecuteStartingScripts()
