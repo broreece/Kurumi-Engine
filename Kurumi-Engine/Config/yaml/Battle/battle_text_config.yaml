@@ -1,3 +1,8 @@
 battle_font_name: "template"
+
 battle_font_size: 12
-battle_display_length: 5.0
+
+x_offset: -5
+y_offset: -5
+
+battle_display_length: 1.0

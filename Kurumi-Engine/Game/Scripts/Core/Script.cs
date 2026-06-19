@@ -16,10 +16,6 @@ public sealed class Script
     public string StartingKey { get; }
     public string CurrentKey { get; private set; }
 
-    public bool Waiting => _scriptSteps[CurrentKey].Waiting();
-
-    public string? NextKey => _scriptSteps[CurrentKey].GetNextStep();
-
     internal Script(ScriptData scriptData, ScriptDataConverter scriptDataConverter) 
     {
         foreach (var keyPair in scriptData.Steps)
@@ -38,7 +34,45 @@ public sealed class Script
     public void Activate(ScriptContext scriptContext, string stepKey) 
     {
         CurrentKey = stepKey;
-        ScriptStep currentStep = _scriptSteps[CurrentKey];
-        currentStep.Activate(scriptContext);
+        if (stepKey != null) {
+            if (_scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep))
+            {
+                currentStep.Activate(scriptContext);
+            }
+        }
+    }
+
+    public string? GetNextKey() { 
+        if (CurrentKey != null && _scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep))
+        {
+            return currentStep.GetNextStep();
+        }
+        return null;
+    }
+
+    public bool IsWaiting() { 
+        if (CurrentKey != null && _scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep))
+        {
+            return currentStep.Waiting();
+        }
+        return false; 
+    }
+
+    /// <summary>
+    /// Function used to check if a potential next key exists in cases where a conditional script ends one branch.
+    /// </summary>
+    /// <returns>If a potential next key exists.</returns>
+    public bool PotentialNextKeyExists()
+    {
+        if (CurrentKey != null && 
+            _scriptSteps.TryGetValue(CurrentKey, out ScriptStep? currentStep) &&
+            currentStep is ConditionalScriptStep conditionalScriptStep)
+        {
+            if (conditionalScriptStep.NextIfFalse != null)
+            {
+                return true;
+            }
+        }
+        return GetNextKey() != null;
     }
 }

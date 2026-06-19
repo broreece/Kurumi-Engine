@@ -6,6 +6,7 @@ using Data.Runtime.Formations.Core;
 
 // Engine.
 using Engine.State.States.Battle.Base;
+using Engine.State.States.Battle.Text.Core;
 
 using Engine.Systems.Rendering.Base;
 
@@ -29,22 +30,32 @@ public sealed class EnemyRenderer
     private readonly Formation _formation;
     private readonly IReadOnlyList<EnemyRenderData> _enemyRenderData;
 
+    private readonly IReadOnlyDictionary<int, BattleText> _enemyBattleText;
+    private readonly Font _battleTextFont;
+
+    private readonly BattleTextConfig _battleTextConfig;
     private readonly EnemyBattleSpriteConfig _enemyBattleSpriteConfig;
 
     internal EnemyRenderer(
         RenderSystem renderSystem, 
-        Formation formation,
-        IReadOnlyList<EnemyRenderData> enemyRenderData,
+        Formation formation, 
+        IReadOnlyList<EnemyRenderData> enemyRenderData, 
+        IReadOnlyDictionary<int, BattleText> enemyBattleText, 
+        Font battleTextFont, 
+        BattleTextConfig battleTextConfig, 
         EnemyBattleSpriteConfig enemyBattleSpriteConfig
     )
     {
         _renderSystem = renderSystem;
         _formation = formation;
         _enemyRenderData = enemyRenderData;
+        _enemyBattleText = enemyBattleText;
+        _battleTextFont = battleTextFont;
+        _battleTextConfig = battleTextConfig;
         _enemyBattleSpriteConfig = enemyBattleSpriteConfig;
     }
 
-    public void Update(View view, bool targetSelector, int selectedEnemyIndex)
+    public void Update(View view, bool targetSelector, int selectedEnemyIndex, float deltaTime)
     {
         var currentEnemyIndex = 0;
         foreach (var enemyRenderData in _enemyRenderData)
@@ -93,6 +104,34 @@ public sealed class EnemyRenderer
                 });
             }
             currentEnemyIndex ++;
+        }
+
+        foreach (KeyValuePair<int, BattleText> keyValuePair in _enemyBattleText)
+        {
+            int enemyIndex = keyValuePair.Key;
+            BattleText battleText = keyValuePair.Value;
+            battleText.Update(deltaTime);
+            if (!battleText.Finished)
+            {
+
+                var xLocation = _enemyRenderData[enemyIndex].XLocation + _battleTextConfig.XOffset;
+                var yLocation = _enemyRenderData[enemyIndex].YLocation + _battleTextConfig.YOffset;
+                var text = new Text(battleText.Text, _battleTextFont, battleText.FontSize)
+                {
+                    Position = new Vector2f(xLocation, yLocation)
+                };
+
+                _renderSystem.Submit(
+                    new RenderCommand()
+                    {
+                        Layer = RenderLayer.UIText, 
+                        SubmissionIndex = 0, 
+                        Drawable = text, 
+                        States = RenderStates.Default, 
+                        View = view 
+                    }
+                );
+            }
         }
     }
 }

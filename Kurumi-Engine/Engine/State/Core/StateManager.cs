@@ -124,4 +124,13 @@ public sealed class StateManager
 
         _renderSystem.Render();
     }
+
+    /// <summary>
+    /// Function used to determine if the state is ready to be changed.
+    /// </summary>
+    /// <returns>If the state is ready to be changed.</returns>
+    public bool ReadyToChangeState()
+    {
+        return !_stateContext.IsPaused();
+    }
 }

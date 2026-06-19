@@ -9,7 +9,7 @@ namespace Engine.Input.Context.Contexts;
 /// <summary>
 /// Updates a provided battle window based on input's pressed
 /// </summary>
-public class BattleInputContext : IGameplayInputContext 
+public sealed class BattleInputContext : IGameplayInputContext 
 {
     private readonly IBattleMenu _battleMenu;
 

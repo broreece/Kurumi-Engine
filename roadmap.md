@@ -48,12 +48,12 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Visualization
+## Milestone: Sharpen
 **Focus areas:**
 
 - Re-implementation of the game's menu.
-- Addition of items and an item display in the menu.
-- Creation of a demo video for the capabilities of the engine.
+- Refractoring code removing any tech debt in particular in the script system.
+- Expanding test cases.
 
 ---
 
@@ -71,85 +71,17 @@ see paryt member information and items.
 
 ---
 
-## (IP-01) Item pool implementation ##
-### Complexity: 3 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Allow item pool containers, granting dynamic rogue like features in the engine.
-
-**Steps:**
-- Load item pools in database:
-    - We already have a database table representing item pools, We need to create an item pool dictionary.
-    - The key is the item pool ID, the value is the list of possible item IDs in the pool.
-    - Create a script step that adds a random item from an item pool to the inventory.
-
----
-
-## (DEMO-01) Create demonstration video ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 4.5 ###
-### Impact: 3 ###
-
-**Description:**
-Create a small demonstration scenario showcasing key engine capabilities.
-
-**Steps:**
-- Make a basic sewer map demonstrating getting a key, using the key to unlock an iron gate.
-- Display avoiding the enemy, perhaps get caught and result in a fight.
-
----
-
-## (DD-02) Enhance battle text ##
-### Complexity: 2 ###
-### Independent: 2 ###
-### Momentum: 3 ###
-### Impact: 3 ###
-
-**Description:** Damage text is currently static and sits at a fixed location, we should make it to be based on the 
-    entity being affected.
-
-**Steps:** 
-- Based on the target we should place damage text directly over the entity.
-- Ensure that if a new action starts the existing battle text list is emptied.
-
----
-
-## Visualization milestone reached.
-
----
-
-## (SAVE-01) Validate saving ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Because menu has been removed we haven't tested persistance in a while validate this works.
-
----
-
-## (SAVE-02) Saving should update actor positions ##
+## (SR-01) Script reformating. ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
-### Momentum: 3 ###
+### Momentum: 2 ###
 ### Impact: 1 ###
 
-**Description:** By allowing saving of actor positions and facing direction it will remove the need for us to add
-additional auto scripts in maps.
+**Description:**
+During this build the script system fought back a lot and It's gotten a bit messy yets fix this.
 
 **Steps:**
-- Currently in map files we have the actor information at the bottom of the file.
-- The issue is that these actor information should be saveable but the maps will never change:
-    - This is inefficent as we shouldn't be re-writting the maps every save.
-- We should consider changing the system structure such that map actors are saveable files stored in different files
-- We'll need to update our converter tool as well for this.
-
----
-
-## Persistance milestone reached.
+- Go through the code checking where we can make improvements.
 
 ---
 

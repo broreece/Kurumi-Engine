@@ -242,7 +242,8 @@ public sealed class MapState : IGameState
                 // Load potential script and activate.
                 if (actor.OnAction && actor.Script != null) 
                 {
-                    _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
+                    var executingScript = new ScriptExecution(actor.Script);
+                    executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
                 }
             }
         }
@@ -267,7 +268,8 @@ public sealed class MapState : IGameState
         {
             if (actor.OnTouch && actor.Script != null) 
             {
-                _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
+                var executingScript = new ScriptExecution(actor.Script);
+                executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
             }
         }
     }
@@ -310,7 +312,7 @@ public sealed class MapState : IGameState
                     else 
                     {
                         currentController.Update(deltaTime);
-                        if (currentController.CanMove) 
+                        if (currentController.CanMove && !actor.IsMoving) 
                         {
                             // Execute move.
                             var move = currentController.GetMove(actor);
@@ -351,8 +353,9 @@ public sealed class MapState : IGameState
         var controller = formation.GetCurrentController();
         if (controller != null)
         {
+            formation.Update(deltaTime);
             controller.Update(deltaTime);
-            if (controller.CanMove)
+            if (controller.CanMove && !formation.IsMoving)
             {
                 CheckFormationBesideParty(formation);
 
@@ -365,17 +368,10 @@ public sealed class MapState : IGameState
 
                     _movementResolver!.TryMove(formation, move);
                     controller.ExecuteMove();
-
-                    // Check if the party is in range of the formation.
-                    CheckInRangeFormation(formation);
-
-                    // After formation moves visiblity might change.
-                    ExecuteAllOnFindScripts();
                 }
                 // If the formation can not execute any moves increment their alert counter.
                 else
                 {
-                    formation.Update(deltaTime);
                     if (formation.AlertLimitReached)
                     {
                         formation.Alert = false;
@@ -384,14 +380,21 @@ public sealed class MapState : IGameState
                 }
             }
         }
+        // Check if the party is in range of the formation.
+        CheckInRangeFormation(formation);
+
+        // After formation moves visiblity might change.
+        ExecuteAllOnFindScripts();
     }
 
     private void ExecuteStartingScripts()
     {
         if (_startingScript != null)
         {
-            var script = _gameContext.GameServices.ScriptLibrary.GetMapScript(_startingScript);
-            _stateContext.AddExecutingScript(new ScriptExecution(script));
+            var executingScript = new ScriptExecution(
+                _gameContext.GameServices.ScriptLibrary.GetMapScript(_startingScript)
+            );
+            executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
         }
     }
 
@@ -409,7 +412,8 @@ public sealed class MapState : IGameState
         {
             if (formation.OnFind && formation.Script != null && !formation.Alert)
             {
-                _stateContext.AddExecutingScript(new ScriptExecution(formation.Script));
+                var executingScript = new ScriptExecution(formation.Script);
+                executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
             }
             formation.Alert = true;
         }
@@ -430,7 +434,8 @@ public sealed class MapState : IGameState
             actor.Script != null && 
             _visionResolver!.CanSee(actor, _party, actor.TrackingRange)) 
         {
-            _stateContext.AddExecutingScript(new ScriptExecution(actor.Script));
+            var executingScript = new ScriptExecution(actor.Script);
+            executingScript.RunToPauseOrFinish(_mapScriptContext!, _stateContext);
         }
     }
 

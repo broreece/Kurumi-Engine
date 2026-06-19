@@ -16,10 +16,10 @@ and scalable.
 
 ## Development Status
 
-Visualization build is currently in progress, it is focused on:
+Sharpen build is currently in progress, it is focused on:
 - Re-implementation of the game's menu.
-- Addition of items and an item display in the menu.
-- Creation of a demo video for the capabilities of the engine.
+- Refractoring code removing any tech debt in particular in the script system.
+- Expanding test cases.
 
 ---
 

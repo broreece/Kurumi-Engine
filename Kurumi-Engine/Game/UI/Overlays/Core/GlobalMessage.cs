@@ -65,6 +65,8 @@ public sealed class GlobalMessage : IUIOverlay
         var height = globalMessageDefaults.Height;
         var xLocation = globalMessageDefaults.X;
         var yLocation = globalMessageDefaults.Y;
+        var xOffset = globalMessageDefaults.TextXOffset;
+        var yOffset = globalMessageDefaults.TextYOffset;
 
         // Create Element.
         var textUIElement = new UIElement()
@@ -87,7 +89,7 @@ public sealed class GlobalMessage : IUIOverlay
                 Size = new Vector2f(width, height) 
             }, 
             
-            LocalOffset = new Vector2f(0, 0), 
+            LocalOffset = new Vector2f(xOffset, yOffset), 
             Children =
             [
                 textUIElement,

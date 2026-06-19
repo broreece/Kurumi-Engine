@@ -1,9 +1,12 @@
 window_name: "template"
 font_name: "template"
 
-font_size: 12
+font_size: 24
 
 width: 90
 height: 25
 x: 10
 y: 200
+
+text_x_offset: 4
+text_y_offset: 4

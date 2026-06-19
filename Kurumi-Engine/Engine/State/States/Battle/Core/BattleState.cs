@@ -77,7 +77,12 @@ public sealed class BattleState : IGameState, IBattleMenu
     private readonly BattleScriptContextBuilderFactory _battleScriptContextBuilderFactory;
 
     // List of battle text.
-    private readonly IList<BattleText> _battleText = [];
+    private readonly Dictionary<int, BattleText> _partyBattleText = [];
+    private readonly Dictionary<int, BattleText> _enemyBattleText = [];
+
+    // List of actions to be executed in order.
+    private readonly PriorityQueue<BattleAction, int> _actions = new(Comparer<int>.Create((x, y) => y.CompareTo(x)));
+    private readonly Stack<(BattleAction, int)> _queuedActions = [];
 
     // Cached config.
     private readonly int _maxChoicesPerPage;
@@ -110,10 +115,6 @@ public sealed class BattleState : IGameState, IBattleMenu
     // Script context and library.
     private ScriptContext? _battleScriptContext;
     private ScriptLibrary? _scriptLibrary;
-
-    // List of actions to be executed in order.
-    private PriorityQueue<BattleAction, int> _actions = new(Comparer<int>.Create((x, y) => y.CompareTo(x)));
-    private Stack<(BattleAction, int)> _queuedActions = [];
 
     private bool WonBattle => _formation.IsDefeated();
 
@@ -186,8 +187,8 @@ public sealed class BattleState : IGameState, IBattleMenu
     public void Update(float deltaTime)
     {
         _battleRenderer!.Update(_camera!.View, deltaTime);
-        _enemyRenderer!.Update(_camera.View, _targetSelector, _currentTargetIndex - _party.Size);
-        _partyBattleRenderer!.Update(_camera.View, _targetSelector, _currentTargetIndex);
+        _enemyRenderer!.Update(_camera.View, _targetSelector, _currentTargetIndex - _party.Size, deltaTime);
+        _partyBattleRenderer!.Update(_camera.View, _targetSelector, _currentTargetIndex, deltaTime);
 
         // Update the UI then render the UI.
         _view.Update(_currentCharacterIndex, _currentSelectionIndex);
@@ -408,9 +409,9 @@ public sealed class BattleState : IGameState, IBattleMenu
         gameWindow.SetView(_camera.View);
 
         // Renderers.
-        _battleRenderer = gameServices.BattleRendererFactory.Create(_formation.BackgroundArtName, _battleText);
-        _enemyRenderer = gameServices.EnemyRendererFactory.Create(_formation);
-        _partyBattleRenderer = gameServices.PartyBattleRendererFactory.Create(_party);
+        _battleRenderer = gameServices.BattleRendererFactory.Create(_formation.BackgroundArtName);
+        _enemyRenderer = gameServices.EnemyRendererFactory.Create(_formation, _enemyBattleText);
+        _partyBattleRenderer = gameServices.PartyBattleRendererFactory.Create(_party, _partyBattleText);
 
         // Battle script context and script library.
         var battleScriptContextBuilder = _battleScriptContextBuilderFactory.Create(_formation);
@@ -497,6 +498,8 @@ public sealed class BattleState : IGameState, IBattleMenu
     /// </summary>
     private void ExecuteActions()
     {
+        _partyBattleText.Clear();
+        _enemyBattleText.Clear();
         while (_actions.Count > 0)
         {
             BattleAction action = _actions.Dequeue();
@@ -634,18 +637,36 @@ public sealed class BattleState : IGameState, IBattleMenu
         var scriptExceution = new ScriptExecution(script);
         scriptExceution.RunToPauseOrFinish(_battleScriptContext, _stateContext);
 
-        // Load damage text.
         int afterHp = targetStats.CurrentHP;
         int damage = beforeHp - afterHp;
         if (damage > 0)
         {
-            // TODO: (DD-02) Correct placement here.
-            _battleText.Add(_battleTextFactory.Create(damage.ToString(), 0, 0, BattleTextType.Damage));
+            if (target.EntityType == EntityType.Character)
+            {
+                _partyBattleText.Add(target.Index, _battleTextFactory.Create(damage.ToString(), BattleTextType.Damage));
+            }
+            else
+            {
+                _enemyBattleText.Add(target.Index, _battleTextFactory.Create(damage.ToString(), BattleTextType.Damage));
+            }
         }
         else
         {
-            // TODO: (DD-02) Correct placement here.
-            _battleText.Add(_battleTextFactory.Create((damage * - 1).ToString(), 0, 0, BattleTextType.Heal));
+            if (target.EntityType == EntityType.Character)
+            {
+                _partyBattleText.Add(
+                    target.Index, 
+                    _battleTextFactory.Create((damage * - 1).ToString(), BattleTextType.Heal)
+                );
+            }
+            else
+            {
+                _enemyBattleText.Add(
+                    target.Index, 
+                    _battleTextFactory.Create((damage * - 1).ToString(), BattleTextType.Heal)
+                );
+            }
+            
         }
 
         // Check if target is enemy and died, if they died execute on kill script.

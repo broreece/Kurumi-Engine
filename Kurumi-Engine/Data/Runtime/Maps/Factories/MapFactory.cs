@@ -38,6 +38,9 @@ public sealed class MapFactory
     private readonly Registry<ActorInfo> _actorRegistry;
     private readonly Registry<Tile> _tileRegistry;
 
+    // The actor dictionary stored in save data.
+    private readonly IReadOnlyDictionary<string, IReadOnlyList<ActorModel>> _actorModels;
+
     // Actor factories.
     private readonly ActorFactory _actorFactory;
     private readonly DumbTrackingActorFactory _dumbActorFactory;
@@ -51,15 +54,16 @@ public sealed class MapFactory
     public MapFactory(
         FormationFactory formationFactory, 
         IReadOnlyDictionary<string, IReadOnlyList<int>> mapFormationsIndex, 
-        Dictionary<int, FormationModel> formationModels,
-        Registry<FormationDefinition> formationDefinitionRegistry,
-        Registry<ActorInfo> actorRegistry,
-        Registry<Tile> tileRegistry,
-        ActorFactory actorFactory,
-        DumbTrackingActorFactory dumbActorFactory,
-        PathedActorFactory pathedActorFactory,
-        RandomActorFactory randomActorFactory,
-        SmartTrackingActorFactory smartActorFactory,
+        Dictionary<int, FormationModel> formationModels, 
+        Registry<FormationDefinition> formationDefinitionRegistry, 
+        Registry<ActorInfo> actorRegistry, 
+        Registry<Tile> tileRegistry, 
+        IReadOnlyDictionary<string, IReadOnlyList<ActorModel>> actorModels, 
+        ActorFactory actorFactory, 
+        DumbTrackingActorFactory dumbActorFactory, 
+        PathedActorFactory pathedActorFactory, 
+        RandomActorFactory randomActorFactory, 
+        SmartTrackingActorFactory smartActorFactory, 
         IPositionProvider partyPosition
     )
     {
@@ -69,6 +73,7 @@ public sealed class MapFactory
         _formationDefinitionRegistry = formationDefinitionRegistry;
         _actorRegistry = actorRegistry;
         _tileRegistry = tileRegistry;
+        _actorModels = actorModels;
         _actorFactory = actorFactory;
         _dumbActorFactory = dumbActorFactory;
         _pathedActorFactory = pathedActorFactory;
@@ -90,7 +95,8 @@ public sealed class MapFactory
         var map = new Map(mapModel, tileDictionary);
 
         // After map is created set actors.
-        IReadOnlyList<ActorModel> actorModels = mapModel.Actors;
+        _actorModels.TryGetValue(mapModel.MachineName, out IReadOnlyList<ActorModel>? actorModels);
+        actorModels ??= [];
 
         var actors = new List<Actor>();
         var actorDictionary = new Dictionary<(int, int), List<Actor>>();

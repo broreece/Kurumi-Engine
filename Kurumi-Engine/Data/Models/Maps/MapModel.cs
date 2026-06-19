@@ -12,5 +12,4 @@ public sealed class MapModel
     public required int Height { get; set; }
     
     public required IReadOnlyList<TileModel> Tiles { get; set; } = [];
-    public required IReadOnlyList<ActorModel> Actors { get; set; } = [];
 }

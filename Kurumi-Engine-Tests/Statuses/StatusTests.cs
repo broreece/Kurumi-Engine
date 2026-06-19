@@ -12,7 +12,7 @@ using Engine.Systems.Statuses.Core;
 
 using Xunit;
 
-public class StatusTests 
+public sealed class StatusTests 
 {
     [Fact]
     public void StatusApplicationTest() 

@@ -1,6 +1,7 @@
 // Data.
 using Data.Models.Characters;
 using Data.Models.Formations;
+using Data.Models.Maps;
 using Data.Models.Party;
 using Data.Models.Variables;
 
@@ -19,4 +20,6 @@ public sealed class SaveData
     public required Dictionary<int, int> Inventory { get; set; }
     
     public required GameVariables GameVariables { get; set; }
+
+    public required Dictionary<string, IReadOnlyList<ActorModel>> Actors { get; set; }
 }

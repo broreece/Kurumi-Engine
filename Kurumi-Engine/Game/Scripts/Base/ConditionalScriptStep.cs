@@ -5,14 +5,9 @@ namespace Game.Scripts.Base;
 /// </summary>
 public abstract class ConditionalScriptStep : ScriptStep 
 {
-    private readonly string? _nextIfFalse;
+    public string? NextIfFalse { get; protected init; }
 
     protected abstract bool IsConditionMet();
-
-    protected ConditionalScriptStep(string? nextIfFalse)
-    {
-        _nextIfFalse = nextIfFalse;
-    }
 
     /// <summary>
     /// Overrides the default script step get next step for conditionals, check if condition was met to return
@@ -25,6 +20,6 @@ public abstract class ConditionalScriptStep : ScriptStep
         {
             return base.GetNextStep();
         }
-        return _nextIfFalse;
+        return NextIfFalse;
     }
 }

@@ -39,14 +39,55 @@ public sealed class ScriptDataConverter
                 return new ChangeHp(parameters["ReduceHP"].GetInt32() == 1, 
                     parameters["CanKO"].GetInt32() == 1, 
                     parameters["Formula"].GetString() ?? throw new ScriptStepException("Change HP 'formula' parameter " 
-                        + "not found.")) { NextStep = nextStep};
+                        + "not found.")) 
+                    { 
+                        NextStep = nextStep
+                    };
 
             // Map script steps:
+            case "ChangeActorPassability":
+                string actorPassabilityKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Change actor passability 'ActorKey' parameter not found.");
+                return new ChangeActorPassability(actorPassabilityKey, parameters["ActorPassability"].GetBoolean())
+                {
+                    NextStep = nextStep 
+                };
+
+            case "ChangeActorState":
+                string changeActorStateKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Change actor state 'ActorKey' parameter not found.");
+                return new ChangeActorState(changeActorStateKey, parameters["ActorState"].GetInt32())
+                {
+                    NextStep = nextStep 
+                };
+
             case "ChangeMap":
-                string mapName = parameters["MapName"].GetString()
+                string changeMapName = parameters["MapName"].GetString()
                     ?? throw new ScriptStepException("Change map 'MapName' parameter not found.");
-                return new ChangeMap(mapName, parameters["XLocation"].GetInt32(), parameters["YLocation"].GetInt32())
-                    { NextStep = nextStep};
+                return new ChangeMap(
+                    changeMapName, 
+                    parameters["XLocation"].GetInt32(), 
+                    parameters["YLocation"].GetInt32()
+                )
+                { 
+                    NextStep = nextStep
+                };
+
+            case "CheckActorState":
+                string? checkActorStateNextIfFalse = null;
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement checkActorStateValue))
+                {
+                    checkActorStateNextIfFalse = checkActorStateValue.GetString();
+                }
+                string checkActorStateKey = parameters["ActorKey"].GetString()
+                    ?? throw new ScriptStepException("Check actor state 'ActorKey' parameter not found.");
+                return new CheckActorState(
+                    checkActorStateKey, 
+                    parameters["ActorState"].GetInt32(), 
+                    checkActorStateNextIfFalse)
+                {
+                    NextStep = nextStep 
+                };
 
             case "ForceMoveActor":
                 bool forceMoveActorKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
@@ -65,7 +106,10 @@ public sealed class ScriptDataConverter
                     forceMoveActorInstant, 
                     forceMoveActorKey, 
                     forceMoveActorSteps
-                ) { NextStep = nextStep };
+                ) 
+                { 
+                    NextStep = nextStep 
+                };
 
             case "ForceMoveParty":
                 bool forceMovePartyKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
@@ -79,14 +123,18 @@ public sealed class ScriptDataConverter
                     forceMovePartyKeepDirection, 
                     forceMovePartyInstant, 
                     forceMovePartySteps
-                ) { NextStep = nextStep };
+                ) 
+                { 
+                    NextStep = nextStep 
+                };
 
             case "StartBattle":
-                return new StartBattle(
-                    parameters["EnemyFormationID"].GetInt32()
-                ) { NextStep = nextStep };
+                return new StartBattle(parameters["EnemyFormationID"].GetInt32()) { NextStep = nextStep };
 
             // Universal steps:
+            case "AddItemFromItemPool":
+                return new AddItemFromPool(parameters["ItemPoolID"].GetInt32()) { NextStep = nextStep };
+
             case "BasicTextWindow":
                 JsonElement basicTextWindowPagesElement = parameters["Pages"];
                 var basicTextWindowPages = new List<string>();
@@ -106,16 +154,38 @@ public sealed class ScriptDataConverter
                 foreach (var item in basicTextWindowWithNameboxPagesElement.EnumerateArray()) 
                 {
                     basicTextWindowWithNameboxPages.Add(item.GetString() 
-                        ?? throw new ScriptStepException("Basic text window with name box 'Pages' parameter not found."));
+                        ?? throw new ScriptStepException(
+                            "Basic text window with name box 'Pages' parameter not found."
+                        )
+                    );
                 }
                 return new BasicTextWindowWithNameBox(basicTextWindowWithNameboxPages, basicTextWindowWithNameBoxName) 
                 { 
                     NextStep = nextStep 
                 };
 
+            case "CheckItemInInventory":
+                string? checkItemInInventoryNextIfFalse = null;
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement checkItemInInventoryValue))
+                {
+                    checkItemInInventoryNextIfFalse = checkItemInInventoryValue.GetString();
+                }
+                return new CheckItemInInventory(
+                    parameters["ItemID"].GetInt32(), 
+                    parameters["Amount"].GetInt32(), 
+                    parameters["ComparisonOperator"].GetInt32(), 
+                    checkItemInInventoryNextIfFalse
+                ) 
+                { 
+                    NextStep = nextStep 
+                };
+
             case "ChoiceBoxWithText":
-                string choiceBoxWithTextNextIfFalse = parameters["NextIfFalse"].GetString()
-                    ?? throw new ScriptStepException("Choice box with text 'NextIfFalse' parameter not found.");
+                string? choiceBoxWithTextNextIfFalse = null;
+                if (parameters.TryGetValue("NextIfFalse", out JsonElement choiceBoxWithTextValue))
+                {
+                    choiceBoxWithTextNextIfFalse = choiceBoxWithTextValue.GetString();
+                }
 
                 string choiceBoxWithTextText = parameters["Text"].GetString()
                     ?? throw new ScriptStepException("Choice box with text 'Text' parameter not found.");
@@ -131,12 +201,23 @@ public sealed class ScriptDataConverter
                     choiceBoxWithTextChoices, 
                     choiceBoxWithTextText, 
                     choiceBoxWithTextNextIfFalse
-                ) { NextStep = nextStep };
+                ) 
+                { 
+                    NextStep = nextStep 
+                };
 
             case "DisplayGlobalMessage":
                 return new DisplayGlobalMessage(parameters["TimeLimit"].GetInt32(), parameters["Text"].GetString() 
                     ?? throw new ScriptStepException("Display Global Message 'Text' parameter not found."))
-                    { NextStep = nextStep};
+                    { 
+                        NextStep = nextStep
+                    };
+
+            case "RemoveItemFromInventory":
+                return new RemoveItemFromInventory(parameters["ItemID"].GetInt32(), parameters["Amount"].GetInt32()) 
+                { 
+                    NextStep = nextStep 
+                };
 
             default:
                 throw new ScriptStepException($"Script step: {scriptStepData.Type} does not exist");

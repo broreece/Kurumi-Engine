@@ -4,7 +4,7 @@ using Engine.Systems.Combat.Core;
 using Engine.Systems.Combat.Factories;
 using Xunit;
 
-public class FormulaTests 
+public sealed class FormulaTests 
 {
     [Fact]
     public void FormulaCalculationTest() 

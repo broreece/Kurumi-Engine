@@ -16,16 +16,19 @@ public sealed class BattleScriptContextBuilderFactory
 
     private readonly HpMpActionsFactory _hpMpActionsFactory;
 
+    private readonly ItemActionsFactory _itemActionsFactory;
     private readonly UIActionsFactory _uiActionsFactory;
 
     public BattleScriptContextBuilderFactory(
         ActiveBattleActionsFactory activeBattleActionsFactory,
         HpMpActionsFactory hpMpActionsFactory, 
+        ItemActionsFactory itemActionsFactory, 
         UIActionsFactory uiActionsFactory
     )
     {
         _activeBattleActionsFactory = activeBattleActionsFactory;
         _hpMpActionsFactory = hpMpActionsFactory;
+        _itemActionsFactory = itemActionsFactory;
         _uiActionsFactory = uiActionsFactory;
     }
 
@@ -34,6 +37,7 @@ public sealed class BattleScriptContextBuilderFactory
         return new BattleScriptContextBuilder(
             _activeBattleActionsFactory, 
             _hpMpActionsFactory, 
+            _itemActionsFactory, 
             _uiActionsFactory, 
             formation
         );

@@ -141,6 +141,11 @@ public static class Program
         var mapNavigationActionsFactory = new MapNavigationActionsFactory(gameObjects);
         var movementActionsFactory = new MovementActionsFactory(party);
         var gameStateActionsFactory = new GameStateActionsFactory(saveData.GameVariables);
+        var itemActionsFactory = new ItemActionsFactory(
+            saveData.Inventory, 
+            gameDatabase.ItemRegistry, 
+            gameDatabase.ItemPoolRegistry
+        );
         var partyStatusActionsFactory = new PartyStatusActionsFactory(party, gameDatabase.StatusRegistry);
         var uiActionsFactory = new UIActionsFactory(
             stateContext, 
@@ -159,12 +164,14 @@ public static class Program
             mapNavigationActionsFactory, 
             movementActionsFactory, 
             gameStateActionsFactory, 
+            itemActionsFactory, 
             partyStatusActionsFactory, 
             uiActionsFactory
         );
         var battleScriptContextBuilderFactory = new BattleScriptContextBuilderFactory(
             activeBattleActionsFactory, 
             hpMpActionsFactory, 
+            itemActionsFactory, 
             uiActionsFactory
         );
 
@@ -276,15 +283,16 @@ public static class Program
             new MapLoader(), 
 
             new MapFactory(
-                formationFactory,
-                database.MapFormationsIndex,
-                saveData.Formations,
-                database.FormationRegistry,
+                formationFactory, 
+                database.MapFormationsIndex, 
+                saveData.Formations, 
+                database.FormationRegistry, 
                 database.ActorInfoRegistry, 
                 tileRegistry, 
+                saveData.Actors, 
                 new ActorFactory(scriptLibrary), 
                 new DumbTrackingActorFactory(scriptLibrary), 
-                new PathedActorFactory(scriptLibrary),
+                new PathedActorFactory(scriptLibrary), 
                 new RandomActorFactory(scriptLibrary), 
                 new SmartTrackingActorFactory(scriptLibrary), 
                 party
@@ -339,18 +347,19 @@ public static class Program
         var battleRendererFactory = new BattleRendererFactory(
             assetRegistry, 
             renderSystem, 
-            configProvider.BattleTextConfig.BattleFontName, 
             configProvider.BattleBackgroundSpriteConfig,
             new Vector2u((uint) virtualWindowConfig.ViewWidth, (uint) virtualWindowConfig.ViewHeight)
         );
         var enemyRendererFactory = new EnemyRendererFactory(
             assetRegistry, 
             renderSystem, 
+            configProvider.BattleTextConfig, 
             configProvider.EnemyBattleSpriteConfig
         );
         var partyBattleRendererFactory = new PartyBattleRendererFactory(
             assetRegistry, 
-            renderSystem,
+            renderSystem, 
+            configProvider.BattleTextConfig, 
             configProvider.CharacterBattleSpriteConfig
         );
 
@@ -412,7 +421,7 @@ public static class Program
         while (window.IsOpen) 
         {
             // Process state changes if requested.
-            if (gameObjects.BattleStartRequest != null)
+            if (gameObjects.BattleStartRequest != null && stateManager.ReadyToChangeState())
             {
                 stateManager.ChangeState(battleStateFactory.Create(gameObjects.BattleStartRequest));
                 gameObjects.BattleStartRequest = null;

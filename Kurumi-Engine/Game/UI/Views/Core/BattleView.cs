@@ -40,6 +40,7 @@ public sealed class BattleView
     private readonly PartyChoicesConfig _partyChoicesConfig;
     private readonly int _maxChoicesPerPage;
     private readonly int _spacing;
+    private readonly int _selectionWindowXOffset, _selectionWindowYOffset;
 
     // Component factories.
     private readonly SpriteComponentFactory _spriteComponentFactory;
@@ -93,6 +94,8 @@ public sealed class BattleView
         var infoYLocation = battleWindowConfig.InfoWindowY;
         var infoWidth = battleWindowConfig.InfoWindowWidth;
         var infoHeight = battleWindowConfig.InfoWindowHeight;
+        var infoXOffset = battleWindowConfig.InfoWindowTextXOffset;
+        var infoYOffset = battleWindowConfig.InfoWindowTextYOffset;
 
         _spacing = battleWindowConfig.SelectionWindowSpacing;
 
@@ -115,7 +118,7 @@ public sealed class BattleView
                     Size = new Vector2f(1, 1)
                 },
 
-                LocalOffset = new Vector2f(0, 0),
+                LocalOffset = new Vector2f(infoXOffset, infoYOffset),
                 Children =  [],
 
                 RenderLayer = RenderLayer.UIText
@@ -143,6 +146,8 @@ public sealed class BattleView
         var selectionWindowYLocation = battleWindowConfig.SelectionWindowY;
         var selectionWindowWidth = battleWindowConfig.SelectionWindowWidth;
         var selectionWindowHeight = battleWindowConfig.SelectionWindowHeight;
+        _selectionWindowXOffset = battleWindowConfig.SelectionWindowTextXOffset;
+        _selectionWindowYOffset = battleWindowConfig.SelectionWindowTextYOffset;
 
         _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
 
@@ -226,7 +231,7 @@ public sealed class BattleView
             {
                 var character = _partyMembers[partyIndex];
                 _partyTextComponents[partyIndex].SetText($"{character.Name} HP: {character.CurrentHP} / " +
-                    $"{character.MaxHp}, MP: {character.CurrentMP}: {character.MaxMP}");
+                    $"{character.MaxHp}, MP: {character.CurrentMP} / {character.MaxMP}");
             }
         }
 
@@ -251,7 +256,7 @@ public sealed class BattleView
                     Size = new Vector2f(1, 1), 
                 },
 
-                LocalOffset = new Vector2f(0, _spacing * choiceIndex), 
+                LocalOffset = new Vector2f(_selectionWindowXOffset, (_spacing * choiceIndex) + _selectionWindowYOffset), 
                 Children = [], 
 
                 RenderLayer = RenderLayer.UIText 
@@ -274,7 +279,7 @@ public sealed class BattleView
                     Size = new Vector2f(1, 1), 
                 },
 
-                LocalOffset = new Vector2f(0, _spacing * choiceIndex), 
+                LocalOffset = new Vector2f(_selectionWindowXOffset, (_spacing * choiceIndex) + _selectionWindowYOffset), 
                 Children = [], 
 
                 RenderLayer = RenderLayer.UIText 
@@ -297,7 +302,7 @@ public sealed class BattleView
                     Size = new Vector2f(1, 1), 
                 },
 
-                LocalOffset = new Vector2f(0, _spacing * choiceIndex), 
+                LocalOffset = new Vector2f(_selectionWindowXOffset, (_spacing * choiceIndex) + _selectionWindowYOffset), 
                 Children = [], 
 
                 RenderLayer = RenderLayer.UIText 
@@ -319,7 +324,7 @@ public sealed class BattleView
                     Size = new Vector2f(1, 1), 
                 },
 
-                LocalOffset = new Vector2f(0, _spacing * choiceIndex), 
+                LocalOffset = new Vector2f(_selectionWindowXOffset, (_spacing * choiceIndex) + _selectionWindowYOffset), 
                 Children = [], 
 
                 RenderLayer = RenderLayer.UIText 

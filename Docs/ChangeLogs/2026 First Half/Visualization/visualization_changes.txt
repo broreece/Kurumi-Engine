@@ -1,0 +1,62 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Visualization
+Status: Finished.
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Refinement' release.
+
+'Visualization' focused on placing the engine into a presentable state, the main goal here was to make a demonstration
+    of the engine's capabilities up to this build.
+
+- Addition of item pools.
+- Addition of a lot of new script steps.
+- Reformatting of map files and actors.
+- Creation of a technical demonstration video up to this current point.
+
+---------------------------------------------------------------------
+
+BUG FIXES
+
+- Fixed an issue where actors or enemy sprites could move before their animation ended resulting in a 'jump'.
+- Fixed a bug where if UI opened on the map before a battle started the UI would persist.
+
+---------------------------------------------------------------------
+
+SCRIPTS
+
+- Scripts can now end on both possible branches for conditional script steps. Previously if the basic "Next" branch
+    ended the script couldn't continue even if a condition allowed "NextIfFalse"
+
+---------------------------------------------------------------------
+
+ITEMS
+
+- Item pools have been implemented allowing a random item from a pool to be added to the parties inventory.
+- Items can now be removed from the inventory via script steps.
+
+---------------------------------------------------------------------
+
+ACTORS
+
+- Script steps exist now to change an actors state, check an actors state or affect passability.
+- Actors are now stored seperately from maps meaning actors can be saved and now result in a map save.
+
+---------------------------------------------------------------------
+
+UI & CONFIG
+
+- Text appearing in UI can now have offsets assigned in config.
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+- In this release we added a lot of new script steps, each one became easier to implement really reflecting how
+    this engine has benefited from clean building.
+- Before our demo release we had to deal with quite a big issue with actors and persistance as reloading the maps
+    would reload actor states, the issue actually was not as severe as first imagined.
+
+---------------------------------------------------------------------

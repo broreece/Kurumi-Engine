@@ -19,6 +19,7 @@ public sealed class MapScriptContextBuilderFactory
     private readonly MovementActionsFactory _movementActionsFactory;    
 
     private readonly GameStateActionsFactory _gameStateActionsFactory;
+    private readonly ItemActionsFactory _itemActionsFactory;
     private readonly PartyStatusActionsFactory _partyStatusActionsFactory;
     private readonly UIActionsFactory _uiActionsFactory;
 
@@ -28,6 +29,7 @@ public sealed class MapScriptContextBuilderFactory
         MapNavigationActionsFactory mapNavigationActionsFactory, 
         MovementActionsFactory movementActionsFactory, 
         GameStateActionsFactory gameStateActionsFactory, 
+        ItemActionsFactory itemActionsFactory, 
         PartyStatusActionsFactory partyStatusActionsFactory, 
         UIActionsFactory uiActionsFactory
     )
@@ -39,6 +41,7 @@ public sealed class MapScriptContextBuilderFactory
         _movementActionsFactory = movementActionsFactory;
 
         _gameStateActionsFactory = gameStateActionsFactory;
+        _itemActionsFactory = itemActionsFactory;
         _partyStatusActionsFactory = partyStatusActionsFactory;
         _uiActionsFactory = uiActionsFactory;
     }
@@ -51,6 +54,7 @@ public sealed class MapScriptContextBuilderFactory
             _mapNavigationActionsFactory, 
             _movementActionsFactory, 
             _gameStateActionsFactory, 
+            _itemActionsFactory, 
             _partyStatusActionsFactory, 
             _uiActionsFactory
         );

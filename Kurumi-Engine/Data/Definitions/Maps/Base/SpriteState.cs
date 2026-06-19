@@ -9,5 +9,8 @@ public enum SpriteState
     East = 1,
     South = 2,
     West = 3,
-    Dead = 4
+    Dead = 4,
+
+    Closed = North,
+    Open = East
 }

@@ -12,8 +12,9 @@ public sealed class CheckFlag : ConditionalScriptStep
 
     private bool _conditionMet;
 
-    public CheckFlag(string flagKey, bool value, string? nextIfFalse) : base(nextIfFalse) 
+    public CheckFlag(string flagKey, bool value, string? nextIfFalse) : base() 
     {
+        NextIfFalse = nextIfFalse;
         _flagKey = flagKey;
         _value = value;
     }
