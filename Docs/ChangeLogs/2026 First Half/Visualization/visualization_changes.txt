@@ -1,6 +1,6 @@
 KURUMI ENGINE – BUILD CHANGE DOCUMENT
 Build: Visualization
-Status: In-progress
+Status: Finished.
 
 ---------------------------------------------------------------------
 
@@ -14,6 +14,7 @@ This document outlines the architectural and system-level changes made since the
 - Addition of item pools.
 - Addition of a lot of new script steps.
 - Reformatting of map files and actors.
+- Creation of a technical demonstration video up to this current point.
 
 ---------------------------------------------------------------------
 
@@ -56,6 +57,6 @@ KEY TAKEAWAYS
 - In this release we added a lot of new script steps, each one became easier to implement really reflecting how
     this engine has benefited from clean building.
 - Before our demo release we had to deal with quite a big issue with actors and persistance as reloading the maps
-    would reload actor states.
+    would reload actor states, the issue actually was not as severe as first imagined.
 
 ---------------------------------------------------------------------

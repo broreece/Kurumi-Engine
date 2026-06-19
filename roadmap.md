@@ -48,10 +48,12 @@ Tickets will also display a brief description, a set of planned steps for comple
 
 ---
 
-## Milestone: Visualization
+## Milestone: Sharpen
 **Focus areas:**
 
 - Re-implementation of the game's menu.
+- Refractoring code removing any tech debt in particular in the script system.
+- Expanding test cases.
 
 ---
 
@@ -69,10 +71,6 @@ see paryt member information and items.
 
 ---
 
-## Visualization milestone reached.
-
----
-
 ## (SR-01) Script reformating. ##
 ### Complexity: 3 ###
 ### Independent: 3 ###
@@ -84,55 +82,6 @@ During this build the script system fought back a lot and It's gotten a bit mess
 
 **Steps:**
 - Go through the code checking where we can make improvements.
-
----
-
-## (IR-01) Inventory reformatting. ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:**
-Inventory currently sits as a dictionary<int, int> but this can be made into a custom class.
-
-**Steps:**
-- Create a new inventory class containing the old dictionary.
-- Change the deseralizer from save file to dictionary to the new class.
-- Change existing usages of inventory into new class.
-
----
-
-## Sharpen milestone reached.
-
----
-
-## (SAVE-01) Validate saving ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Because menu has been removed we haven't tested persistance in a while validate this works.
-
----
-
-## (SAVE-03) Update map converter tool to no longer upload actors. ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Update map converter tool to no longer upload actors. We can just entirely redo the tool as it'll
-    remove a lot of extra code.
-
-**Steps:**
-- Update converter tool to only do tiles no longer use objects or actors.
-- We currently store the actor class this can be removed or kept just for keeping track of data.
-
----
-
-## Persistance milestone reached.
 
 ---
 
