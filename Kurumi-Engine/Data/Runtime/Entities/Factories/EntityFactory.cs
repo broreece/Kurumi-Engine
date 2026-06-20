@@ -1,7 +1,7 @@
 // Data.
 using Data.Definitions.Entities.Core;
 
-using Data.Models.Formations;
+using Data.Models.Formations.Core;
 
 using Data.Runtime.Entities.Core;
 

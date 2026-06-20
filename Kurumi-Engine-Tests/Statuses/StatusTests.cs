@@ -3,7 +3,7 @@ namespace Tests.Statuses;
 using Data.Definitions.Entities.Factories;
 using Data.Definitions.Entities.Statuses.Base;
 using Data.Definitions.Entities.Statuses.Factories;
-using Data.Models.Formations;
+using Data.Models.Formations.Core;
 using Data.Runtime.Entities.Factories;
 using Data.Runtime.Entities.Statuses.Core;
 using Data.Runtime.Entities.Statuses.Factories;

@@ -143,7 +143,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         var gameData = _gameContext.GameData;
         var gameServices = _gameContext.GameServices;
         var database = gameData.GameDatabase;
-        var configProvider = gameContext.GameData.ConfigProvider;
+        var configProvider = gameData.ConfigProvider;
 
         _abilityRegistry = database.AbilityRegistry;
 
@@ -167,9 +167,11 @@ public sealed class BattleState : IGameState, IBattleMenu
         else
         {
             var formationRegistry = database.FormationRegistry;
-            var saveData = gameContext.GameObjects.SaveData;
+            var gameObjects = gameContext.GameObjects;
+            var saveData = gameObjects.SaveData;
+            var formationCollection = saveData.FormationCollection;
 
-            var formationModel = saveData.Formations[battle.EnemyFormationId!];
+            var formationModel = formationCollection.Get(battle.EnemyFormationId);
             var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
 
             _formation = gameServices.FormationFactory.Create(formationDefinition, formationModel, null);

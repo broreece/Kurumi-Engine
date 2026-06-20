@@ -1,5 +1,6 @@
 // Data.
 using Data.Models.Party;
+using Data.Models.Inventory;
 
 using Data.Runtime.Maps.Base.Controllers.Core;
 using Data.Runtime.Entities.Core;
@@ -13,7 +14,7 @@ public sealed class Party : IMutablePositionProvider, IFacingPositionProvider, I
 
     public required PartyModel PartyModel { get; init; }
     
-    public required Dictionary<int, int> Inventory { get; init; }
+    public required Inventory Inventory { get; init; }
 
     public required float MovementSpeed { get; init; }
 

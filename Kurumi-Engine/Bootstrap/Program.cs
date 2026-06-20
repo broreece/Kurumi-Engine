@@ -78,7 +78,7 @@ public static class Program
         var saveService = new SaveService();
         var saveData = saveService.LoadNewSaveData();
         var partyFactory = new PartyFactory(
-            saveData.Characters, 
+            saveData.CharacterCollection, 
             gameData.GameDatabase.CharacterRegistry, 
             gameConfig.MaxPartySize,
             gameConfig.AgilityStatIndex
@@ -285,11 +285,11 @@ public static class Program
             new MapFactory(
                 formationFactory, 
                 database.MapFormationsIndex, 
-                saveData.Formations, 
+                saveData.FormationCollection, 
                 database.FormationRegistry, 
                 database.ActorInfoRegistry, 
                 tileRegistry, 
-                saveData.Actors, 
+                saveData.ActorCollection, 
                 new ActorFactory(scriptLibrary), 
                 new DumbTrackingActorFactory(scriptLibrary), 
                 new PathedActorFactory(scriptLibrary), 

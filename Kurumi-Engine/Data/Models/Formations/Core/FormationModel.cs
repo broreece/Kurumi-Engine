@@ -1,4 +1,4 @@
-namespace Data.Models.Formations;
+namespace Data.Models.Formations.Core;
 
 public sealed class FormationModel 
 {
