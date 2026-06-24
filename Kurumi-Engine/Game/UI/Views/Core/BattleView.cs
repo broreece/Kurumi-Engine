@@ -38,9 +38,7 @@ public sealed class BattleView
 
     // Cached config.
     private readonly PartyChoicesConfig _partyChoicesConfig;
-    private readonly int _maxChoicesPerPage;
-    private readonly int _spacing;
-    private readonly int _selectionWindowXOffset, _selectionWindowYOffset;
+    private readonly int _maxChoicesPerPage, _spacing, _selectionWindowXOffset, _selectionWindowYOffset;
 
     // Component factories.
     private readonly SpriteComponentFactory _spriteComponentFactory;
@@ -50,9 +48,8 @@ public sealed class BattleView
     private readonly TextStyle _textStyle;
 
     // Components and children elements.
-    private readonly UIElement _selectionWindowElement;
-    private readonly UIElement _selectionElement;
     private readonly List<TextComponent> _partyTextComponents = [];
+    private UIElement? _selectionWindowElement, _selectionElement;
 
     // Choice selection location variables.
     private int _currentChoice = 0;
@@ -71,85 +68,170 @@ public sealed class BattleView
     {
         _abilityRegistry = abilityRegistry;
         _abilitySetRegistry = abilitySetRegistry;
+
+        _partyChoicesConfig = partyChoicesConfig;
+        _spacing = battleWindowConfig.SelectionWindowSpacing;
+        _selectionWindowXOffset = battleWindowConfig.SelectionWindowTextXOffset;
+        _selectionWindowYOffset = battleWindowConfig.SelectionWindowTextYOffset;
+        _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
+
         _partyMembers = partyMembers;
 
-        // Style config.
-        var battleWindowName = battleWindowConfig.WindowArtName;
-        var selectionName = battleWindowConfig.ChoiceBoxArtName;
-        var fontSize = (uint) battleWindowConfig.FontSize;
-        var fontArt = battleWindowConfig.FontName;
+        var windowStyle = new SpriteStyle() { SpriteArt = battleWindowConfig.WindowArtName };
+        _textStyle = new TextStyle() 
+        { 
+            FontSize = (uint) battleWindowConfig.FontSize, 
+            FontArt = battleWindowConfig.FontName 
+        };
 
-        var windowStyle = new SpriteStyle() { SpriteArt = battleWindowName };
-        var selectionStyle = new SpriteStyle() { SpriteArt = selectionName };
-        _textStyle = new TextStyle() { FontSize = fontSize, FontArt = fontArt };
-
-        // Component factories.
         _spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
         _textComponentFactory = new TextComponentFactory(assetRegistry);
 
-        // Info window variables.
-        // Config.
-        _partyChoicesConfig = partyChoicesConfig;
-        var infoXLocation = battleWindowConfig.InfoWindowX;
-        var infoYLocation = battleWindowConfig.InfoWindowY;
-        var infoWidth = battleWindowConfig.InfoWindowWidth;
-        var infoHeight = battleWindowConfig.InfoWindowHeight;
-        var infoXOffset = battleWindowConfig.InfoWindowTextXOffset;
-        var infoYOffset = battleWindowConfig.InfoWindowTextYOffset;
+        var infoWindowElement = CreateInfoWindowElement(battleWindowConfig, windowStyle);
+        CreateSelectionWindowElement(battleWindowConfig, windowStyle);
 
-        _spacing = battleWindowConfig.SelectionWindowSpacing;
-
-        // Info window text.
-        var infoChildrenElements = new List<UIElement>();
-        for (int partyIndex = 0; partyIndex < _partyMembers.Length; partyIndex ++)
+        UIElement = new UIElement()
         {
-            // Create and store components in array to be updated later.
-            var infoTextData = new TextData() { Text = "" };
-            var component = _textComponentFactory.Create(infoTextData, _textStyle);
-            _partyTextComponents.Add(component);
-
-            // Place UI element children.
-            infoChildrenElements.Add(new UIElement()
-            {
-                UIComponent = component,
-                Layout = new UILayout() 
-                {
-                    Position = new Vector2f(0, partyIndex * _spacing), 
-                    Size = new Vector2f(1, 1)
-                },
-
-                LocalOffset = new Vector2f(infoXOffset, infoYOffset),
-                Children =  [],
-
-                RenderLayer = RenderLayer.UIText
-            });
-        }
-
-        var infoWindowElement = new UIElement()
-        {
-            UIComponent = _spriteComponentFactory.Create(AssetType.Windows, windowStyle),
+            UIComponent = new EmptyComponent(),
             Layout = new UILayout() 
             { 
-                Position = new Vector2f(infoXLocation, infoYLocation), 
-                Size = new Vector2f(infoWidth, infoHeight) 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(1, 1) 
             },
             
             LocalOffset = new Vector2f(0, 0),
-            Children = infoChildrenElements,
+            Children =
+            [
+                infoWindowElement, 
+                _selectionWindowElement!
+            ],
 
             RenderLayer = RenderLayer.UIWindow
         };
+    }
 
-        // Selection window variables.
-        // Config.
-        var selectionWindowXLocation = battleWindowConfig.SelectionWindowX;
-        var selectionWindowYLocation = battleWindowConfig.SelectionWindowY;
+    public void Update(int currentCharacterIndex, int currentSelectionIndex)
+    {
+        UpdateBattleChoices(currentCharacterIndex);
+        UpdateSelection(currentSelectionIndex);
+        UpdatePartyInformation();
+    }
+    
+    private void UpdateSelection(int currentSelectionIndex)
+    {
+        var oldChoice = _currentChoice;
+        _currentChoice = currentSelectionIndex;
+
+        var choiceChange = _currentChoice - oldChoice;
+
+        var position = _selectionElement!.Layout.Position;
+
+        _selectionElement.Layout = new UILayout()
+        {
+            Position = new Vector2f(
+                position.X, 
+                position.Y + (choiceChange * _spacing)
+            ),
+            Size = _selectionElement.Layout.Size
+        };
+    }
+
+    private void UpdatePartyInformation()
+    {
+        for (int partyIndex = 0; partyIndex < _partyMembers.Length; partyIndex++)
+        {
+            var character = _partyMembers[partyIndex];
+
+            if (character != null)
+            {
+                _partyTextComponents[partyIndex].SetText(
+                    $"{character.Name} HP: {character.CurrentHP} / {character.MaxHp}, " +
+                    $"MP: {character.CurrentMP} / {character.MaxMP}"
+                );
+            }
+        }
+    }
+
+    private void UpdateBattleChoices(int currentCharacterIndex)
+    {
+        var choiceTextElements = new List<UIElement>();
+        var currentCharacter = _partyMembers[currentCharacterIndex];
+
+        AddAbilityChoices(choiceTextElements, currentCharacter);
+        AddAbilitySetChoices(choiceTextElements, currentCharacter);
+        AddAdditionalChoices(choiceTextElements);
+
+        // Assign the choice text elements as children of the selection element.
+        _selectionWindowElement!.Children = [.. choiceTextElements, _selectionElement!];
+    }
+
+    private void AddAbilityChoices(List<UIElement> choiceTextElements, Character currentCharacter)
+    {
+        foreach (var id in currentCharacter.AbilityIDs)
+        {
+            choiceTextElements.Add(CreateChoiceElement(_abilityRegistry.Get(id).Name, choiceTextElements.Count));
+        }
+    }
+
+    private void AddAbilitySetChoices(List<UIElement> choiceTextElements, Character currentCharacter)
+    {
+        foreach (var keyValuePair in currentCharacter.AbilitySetIDs)
+        {
+            var abilitySetId = keyValuePair.Key;
+            choiceTextElements.Add(
+                CreateChoiceElement(
+                    _abilitySetRegistry.Get(abilitySetId).Name, 
+                    choiceTextElements.Count
+                )
+            );
+        }
+    }
+
+    private void AddAdditionalChoices(List<UIElement> choiceTextElements)
+    {
+        if (_partyChoicesConfig.ItemsEnabled)
+        {
+            choiceTextElements.Add(CreateChoiceElement(_partyChoicesConfig.ItemsText, choiceTextElements.Count));
+        }
+
+        if (_partyChoicesConfig.RunAwayEnabled)
+        {
+            choiceTextElements.Add(CreateChoiceElement(_partyChoicesConfig.RunAwayText, choiceTextElements.Count));
+        }
+    }
+
+    private UIElement CreateChoiceElement(string text, int index)
+    {
+        var textComponent = _textComponentFactory.Create(new TextData() { Text = text }, _textStyle);
+
+        return new UIElement()
+        {
+            UIComponent = textComponent,
+
+            Layout = new UILayout()
+            {
+                Position = new Vector2f(0,0),
+                Size = new Vector2f(1,1)
+            },
+
+            LocalOffset = new Vector2f(
+                _selectionWindowXOffset,
+                (_spacing * index) + _selectionWindowYOffset
+            ),
+
+            Children = [],
+
+            RenderLayer = RenderLayer.UIText
+        };
+    }
+
+    private void CreateSelectionWindowElement(BattleWindowConfig battleWindowConfig, SpriteStyle windowStyle)
+    {
+        var selectionStyle = new SpriteStyle() { SpriteArt = battleWindowConfig.ChoiceBoxArtName };
+
+        // Reused selection window config.
         var selectionWindowWidth = battleWindowConfig.SelectionWindowWidth;
         var selectionWindowHeight = battleWindowConfig.SelectionWindowHeight;
-        _selectionWindowXOffset = battleWindowConfig.SelectionWindowTextXOffset;
-        _selectionWindowYOffset = battleWindowConfig.SelectionWindowTextYOffset;
-
-        _maxChoicesPerPage = battleWindowConfig.MaxChoicesPerPage;
 
         var selectionWindowComponent = _spriteComponentFactory.Create(AssetType.Windows, windowStyle);
         var selectionComponent = _spriteComponentFactory.Create(AssetType.ChoiceSelectionArt, selectionStyle);
@@ -168,12 +250,13 @@ public sealed class BattleView
 
             RenderLayer = RenderLayer.UISelectionBox
         };
+
         _selectionWindowElement = new UIElement() 
         { 
             UIComponent = selectionWindowComponent, 
             Layout = new UILayout() 
             { 
-                Position = new Vector2f(selectionWindowXLocation, selectionWindowYLocation), 
+                Position = new Vector2f(battleWindowConfig.SelectionWindowX, battleWindowConfig.SelectionWindowY), 
                 Size = new Vector2f(selectionWindowWidth, selectionWindowHeight) 
             },
 
@@ -182,158 +265,51 @@ public sealed class BattleView
 
             RenderLayer = RenderLayer.UIWindow
         };
+    }
 
-        UIElement = new UIElement()
+    private UIElement CreateInfoWindowElement(BattleWindowConfig battleWindowConfig, SpriteStyle windowStyle) {
+        var infoChildrenElements = new List<UIElement>();
+
+        for (int partyIndex = 0; partyIndex < _partyMembers.Length; partyIndex ++)
         {
-            UIComponent = new EmptyComponent(),
+            // Create and store components in array to be updated later.
+            var infoTextData = new TextData() { Text = "" };
+            var component = _textComponentFactory.Create(infoTextData, _textStyle);
+            _partyTextComponents.Add(component);
+
+            // Place UI element children.
+            infoChildrenElements.Add(new UIElement()
+            {
+                UIComponent = component,
+                Layout = new UILayout() 
+                {
+                    Position = new Vector2f(0, partyIndex * _spacing), 
+                    Size = new Vector2f(1, 1)
+                },
+
+                LocalOffset = new Vector2f(
+                    battleWindowConfig.InfoWindowTextXOffset, 
+                    battleWindowConfig.InfoWindowTextYOffset
+                ),
+                Children =  [],
+
+                RenderLayer = RenderLayer.UIText
+            });
+        }
+
+        return new UIElement()
+        {
+            UIComponent = _spriteComponentFactory.Create(AssetType.Windows, windowStyle),
             Layout = new UILayout() 
             { 
-                Position = new Vector2f(0, 0), 
-                Size = new Vector2f(1, 1) 
+                Position = new Vector2f(battleWindowConfig.InfoWindowX, battleWindowConfig.InfoWindowY), 
+                Size = new Vector2f(battleWindowConfig.InfoWindowWidth, battleWindowConfig.InfoWindowHeight) 
             },
             
             LocalOffset = new Vector2f(0, 0),
-            Children =
-            [
-                infoWindowElement, 
-                _selectionWindowElement
-            ],
+            Children = infoChildrenElements,
 
             RenderLayer = RenderLayer.UIWindow
         };
-    }
-
-    /// <summary>
-    /// Updates the battle UI view based on the state of the party members.
-    /// </summary>
-    /// <param name="currentCharacterIndex">The index of the current character.</param>
-    /// <param name="currentSelectionIndex">The index of the currently selected option.</param>
-    public void Update(int currentCharacterIndex, int currentSelectionIndex)
-    {
-        // Update selection element location.
-        var oldChoice = _currentChoice;
-        _currentChoice = currentSelectionIndex;
-        var choiceChange = (_currentChoice + 1) - (oldChoice + 1);
-
-        var xLocation = _selectionElement.Layout.Position.X;
-        var yLocation = _selectionElement.Layout.Position.Y;
-
-        _selectionElement.Layout = new UILayout()
-        {
-            Position = new Vector2f(xLocation, yLocation + (choiceChange * _spacing)), 
-            Size = _selectionElement.Layout.Size
-        };
-
-        // Party information.
-        for (int partyIndex = 0; partyIndex < _partyMembers.Length; partyIndex ++)
-        {
-            if (_partyMembers[partyIndex] != null)
-            {
-                var character = _partyMembers[partyIndex];
-                _partyTextComponents[partyIndex].SetText($"{character.Name} HP: {character.CurrentHP} / " +
-                    $"{character.MaxHp}, MP: {character.CurrentMP} / {character.MaxMP}");
-            }
-        }
-
-        // Choices.
-        var choiceTextElements = new List<UIElement>();
-        var currentCharacter = _partyMembers[currentCharacterIndex];
-
-        // Current choice index.
-        var choiceIndex = 0;
-
-        // Base abilities.
-        foreach (var id in currentCharacter.AbilityIDs)
-        {
-            TextData textData = new() { Text = _abilityRegistry.Get(id).Name };
-            var textComponent = _textComponentFactory.Create(textData, _textStyle);
-            choiceTextElements.Add(new UIElement()
-            {
-                UIComponent = textComponent,
-                Layout = new UILayout()
-                {
-                    Position = new Vector2f(0, 0), 
-                    Size = new Vector2f(1, 1), 
-                },
-
-                LocalOffset = new Vector2f(_selectionWindowXOffset, (_spacing * choiceIndex) + _selectionWindowYOffset), 
-                Children = [], 
-
-                RenderLayer = RenderLayer.UIText 
-            });
-            choiceIndex ++;
-        }
-
-        // Ability sets.
-        foreach (var keyValuePair in currentCharacter.AbilitySetIDs)
-        {
-            var abilitySetId = keyValuePair.Key;
-            TextData textData = new() { Text = _abilitySetRegistry.Get(abilitySetId).Name };
-            var textComponent = _textComponentFactory.Create(textData, _textStyle);
-            choiceTextElements.Add(new UIElement()
-            {
-                UIComponent = textComponent, 
-                Layout = new UILayout()
-                {
-                    Position = new Vector2f(0, 0), 
-                    Size = new Vector2f(1, 1), 
-                },
-
-                LocalOffset = new Vector2f(_selectionWindowXOffset, (_spacing * choiceIndex) + _selectionWindowYOffset), 
-                Children = [], 
-
-                RenderLayer = RenderLayer.UIText 
-            });
-            
-            choiceIndex ++;
-        }
-
-        // Additional battle options.
-        if (_partyChoicesConfig.ItemsEnabled)
-        {
-            TextData textData = new() { Text = _partyChoicesConfig.ItemsText };
-            var textComponent = _textComponentFactory.Create(textData, _textStyle);
-            choiceTextElements.Add(new UIElement()
-            {
-                UIComponent = textComponent, 
-                Layout = new UILayout()
-                {
-                    Position = new Vector2f(0, 0), 
-                    Size = new Vector2f(1, 1), 
-                },
-
-                LocalOffset = new Vector2f(_selectionWindowXOffset, (_spacing * choiceIndex) + _selectionWindowYOffset), 
-                Children = [], 
-
-                RenderLayer = RenderLayer.UIText 
-            });
-
-            choiceIndex ++;
-        }
-
-        if (_partyChoicesConfig.RunAwayEnabled)
-        {
-            TextData textData = new() { Text = _partyChoicesConfig.RunAwayText };
-            var textComponent = _textComponentFactory.Create(textData, _textStyle);
-            choiceTextElements.Add(new UIElement()
-            {
-                UIComponent = textComponent, 
-                Layout = new UILayout()
-                {
-                    Position = new Vector2f(0, 0), 
-                    Size = new Vector2f(1, 1), 
-                },
-
-                LocalOffset = new Vector2f(_selectionWindowXOffset, (_spacing * choiceIndex) + _selectionWindowYOffset), 
-                Children = [], 
-
-                RenderLayer = RenderLayer.UIText 
-            });
-
-            choiceIndex ++;
-        }
-
-        // Assign the choice text elements as children of the selection element.
-        _selectionWindowElement.Children = [.. choiceTextElements, _selectionElement];
     }
 }

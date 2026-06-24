@@ -27,7 +27,7 @@ namespace Game.UI.Overlays.Core;
 public sealed class DialogueWithNameBoxOverlay : IUIOverlay
 {
     // Components.
-    private readonly TextComponent _textComponent;
+    private TextComponent? _textComponent;
 
     // Elements.
     private readonly UIElement _uiElement;
@@ -51,107 +51,23 @@ public sealed class DialogueWithNameBoxOverlay : IUIOverlay
         string name
     ) 
     {
-        // Component factories.
+        _pages = pages;
+
         var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
         var textComponentFactory = new TextComponentFactory(assetRegistry);
 
-        // Text styles.
-        var windowTextStyle = new TextStyle()
-        {
-            FontSize = (uint) textWindowDefaults.FontSize, 
-            FontArt = textWindowDefaults.FontName 
-        };
-        _textComponent = textComponentFactory.Create(new TextData() { Text = pages[0] }, windowTextStyle);
-
-        var nameTextStyle = new TextStyle()
-        {
-            FontSize = (uint) nameBoxDefaults.FontSize, 
-            FontArt = nameBoxDefaults.FontName 
-        };
-        var nameTextComponent = textComponentFactory.Create(new TextData() { Text = name }, nameTextStyle);
-
-        _pages = pages;
-
-        var windowComponent = spriteComponentFactory.Create(
-            AssetType.Windows,
-            new SpriteStyle() { SpriteArt = textWindowDefaults.WindowName }
+        var textWindowElement = CreateTextElement(
+            spriteComponentFactory, 
+            textComponentFactory, 
+            textWindowDefaults, 
+            pages
         );
-        var nameWindowComponent = spriteComponentFactory.Create(
-            AssetType.Windows,
-            new SpriteStyle() { SpriteArt = nameBoxDefaults.WindowName }
+        var nameWindowElement = CreateNameElement(
+            spriteComponentFactory, 
+            textComponentFactory, 
+            nameBoxDefaults, 
+            name
         );
-
-        var width = textWindowDefaults.Width;
-        var height = textWindowDefaults.Height;
-        var xLocation = textWindowDefaults.X;
-        var yLocation = textWindowDefaults.Y;
-        var textXOffset = textWindowDefaults.TextXOffset;
-        var textYOffset = textWindowDefaults.TextYOffset;
-
-        var nameWidth = nameBoxDefaults.Width;
-        var nameHeight = nameBoxDefaults.Height;
-        var nameXLocation = nameBoxDefaults.X;
-        var nameYLocation = nameBoxDefaults.Y;
-        var nameTextXOffset = nameBoxDefaults.TextXOffset;
-        var nameTextYOffset = nameBoxDefaults.TextYOffset;
-
-        // Create Elements.
-        var textUIElement = new UIElement()
-        {
-            UIComponent = _textComponent,
-            Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
-            
-            LocalOffset = new Vector2f(textXOffset, textYOffset),
-            Children = [],
-
-            RenderLayer = RenderLayer.UIText
-        };
-        var nameTextUIElement = new UIElement()
-        {
-            UIComponent = nameTextComponent,
-            Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
-            
-            LocalOffset = new Vector2f(nameTextXOffset, nameTextYOffset),
-            Children = [],
-
-            RenderLayer = RenderLayer.UIText
-        };
-
-        var textWindowElement = new UIElement()
-        {
-            UIComponent = windowComponent,
-            Layout = new UILayout() 
-            { 
-                Position = new Vector2f(xLocation, yLocation), 
-                Size = new Vector2f(width, height) 
-            },
-            
-            LocalOffset = new Vector2f(0, 0),
-            Children =
-            [
-                textUIElement
-            ],
-
-            RenderLayer = RenderLayer.UIWindow
-        };
-
-        var nameWindowElement = new UIElement()
-        {
-            UIComponent = nameWindowComponent,
-            Layout = new UILayout() 
-            { 
-                Position = new Vector2f(nameXLocation, nameYLocation), 
-                Size = new Vector2f(nameWidth, nameHeight) 
-            },
-            
-            LocalOffset = new Vector2f(0, 0),
-            Children =
-            [
-                nameTextUIElement
-            ],
-
-            RenderLayer = RenderLayer.UIWindow
-        };
 
         // The parent UI element of the name window and text window.
         _uiElement = new UIElement()
@@ -190,7 +106,7 @@ public sealed class DialogueWithNameBoxOverlay : IUIOverlay
         if (_currentPage < _pages.Count - 1) 
         {
             _currentPage ++;
-            _textComponent.SetText(_pages[_currentPage]);
+            _textComponent!.SetText(_pages[_currentPage]);
         }
         else 
         {
@@ -199,4 +115,106 @@ public sealed class DialogueWithNameBoxOverlay : IUIOverlay
     }
 
     public bool IsFinished() => _isFinished;
+
+    private UIElement CreateNameElement(
+        SpriteComponentFactory spriteComponentFactory, 
+        TextComponentFactory textComponentFactory, 
+        NameBoxDefaults nameBoxDefaults, 
+        string name
+    )
+    {
+        var nameTextStyle = new TextStyle()
+        {
+            FontSize = (uint) nameBoxDefaults.FontSize, 
+            FontArt = nameBoxDefaults.FontName 
+        };
+        var nameTextComponent = textComponentFactory.Create(new TextData() { Text = name }, nameTextStyle);
+
+        var nameWindowComponent = spriteComponentFactory.Create(
+            AssetType.Windows,
+            new SpriteStyle() { SpriteArt = nameBoxDefaults.WindowName }
+        );
+
+        var nameTextUIElement = new UIElement()
+        {
+            UIComponent = nameTextComponent,
+            Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
+            
+            LocalOffset = new Vector2f(nameBoxDefaults.TextXOffset, nameBoxDefaults.TextYOffset),
+            Children = [],
+
+            RenderLayer = RenderLayer.UIText
+        };
+
+        var nameWindowElement = new UIElement()
+        {
+            UIComponent = nameWindowComponent,
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(nameBoxDefaults.X, nameBoxDefaults.Y), 
+                Size = new Vector2f(nameBoxDefaults.Width, nameBoxDefaults.Height) 
+            },
+            
+            LocalOffset = new Vector2f(0, 0),
+            Children =
+            [
+                nameTextUIElement
+            ],
+
+            RenderLayer = RenderLayer.UIWindow
+        };
+
+        return nameWindowElement;
+    }
+
+    private UIElement CreateTextElement(
+        SpriteComponentFactory spriteComponentFactory, 
+        TextComponentFactory textComponentFactory, 
+        TextWindowDefaults textWindowDefaults, 
+        IReadOnlyList<string> pages
+    )
+    {
+        var windowTextStyle = new TextStyle()
+        {
+            FontSize = (uint) textWindowDefaults.FontSize, 
+            FontArt = textWindowDefaults.FontName 
+        };
+        _textComponent = textComponentFactory.Create(new TextData() { Text = pages[0] }, windowTextStyle);
+
+        var windowComponent = spriteComponentFactory.Create(
+            AssetType.Windows,
+            new SpriteStyle() { SpriteArt = textWindowDefaults.WindowName }
+        );
+
+        var textUIElement = new UIElement()
+        {
+            UIComponent = _textComponent,
+            Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
+            
+            LocalOffset = new Vector2f(textWindowDefaults.TextXOffset, textWindowDefaults.TextYOffset),
+            Children = [],
+
+            RenderLayer = RenderLayer.UIText
+        };
+
+        var textWindowElement = new UIElement()
+        {
+            UIComponent = windowComponent,
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(textWindowDefaults.X, textWindowDefaults.Y), 
+                Size = new Vector2f(textWindowDefaults.Width, textWindowDefaults.Height) 
+            },
+            
+            LocalOffset = new Vector2f(0, 0),
+            Children =
+            [
+                textUIElement
+            ],
+
+            RenderLayer = RenderLayer.UIWindow
+        };
+
+        return textWindowElement;
+    }
 }

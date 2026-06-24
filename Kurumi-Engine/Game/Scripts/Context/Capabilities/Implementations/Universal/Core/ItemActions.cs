@@ -42,23 +42,11 @@ public sealed class ItemActions : IItemActions
         return _itemRegistry.Get(itemId).Name;
     }
 
-    public bool ContainsMoreThenOfItem(int itemId, int compareAmount)
-    {
-        return _inventory.GetAmountOf(itemId) > compareAmount;
-    }
+    public bool ContainsMoreThenOfItem(int itemId, int compareAmount) => _inventory.GetAmountOf(itemId) > compareAmount;
 
-    public bool ContainsLessThenOfItem(int itemId, int compareAmount)
-    {
-        return _inventory.GetAmountOf(itemId) < compareAmount;
-    }
+    public bool ContainsLessThenOfItem(int itemId, int compareAmount) => _inventory.GetAmountOf(itemId) < compareAmount;
 
-    public bool ContainsSameAmountOfItem(int itemId, int compareAmount)
-    {
-        return _inventory.GetAmountOf(itemId) == compareAmount;
-    }
+    public bool ContainsSameAmountOfItem(int itemId, int compareAmount) => _inventory.GetAmountOf(itemId) == compareAmount;
 
-    public void RemoveItemFromInventory(int itemId, int amount)
-    {
-        _inventory.RemoveAmountOfItem(itemId, amount);
-    }
+    public void RemoveItemFromInventory(int itemId, int amount) => _inventory.RemoveAmountOfItem(itemId, amount);
 }

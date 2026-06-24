@@ -1,19 +1,24 @@
-namespace Tests.Formulas;
-
-using Engine.Systems.Combat.Core;
+// Engine.
 using Engine.Systems.Combat.Factories;
+
+// Infrastructure.
+using Infrastructure.Database.Base;
+
+// External libraries.
 using Xunit;
+
+namespace Tests.Formulas;
 
 public sealed class FormulaTests 
 {
     [Fact]
     public void FormulaCalculationTest() 
     {
-        var statShortNameIndex = new Dictionary<string, int>
+        var statShortNameIndex = new Index<int>(new Dictionary<string, int> 
         {
             ["atk"] = 0,
             ["def"] = 1
-        };
+        });
 
         var damageCalculatorFactory = new DamageCalculatorFactory(statShortNameIndex);
         var damageCalculator = damageCalculatorFactory.Create();
