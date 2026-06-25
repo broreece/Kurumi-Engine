@@ -26,6 +26,7 @@ public sealed class StatusResolver
                 statuseableObject.ClearStatuses();
                 statuseableObject.AddStatus(newStatus);
             }
+            
             else 
             {
                 statuseableObject.AddStatus(newStatus);

@@ -79,6 +79,7 @@ public static class Handler
                     break;
             }
         }
+        
         else 
         {
             var message = $@"{exception.Message}";

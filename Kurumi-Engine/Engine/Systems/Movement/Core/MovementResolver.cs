@@ -56,6 +56,7 @@ public sealed class MovementResolver
                     direction = actor.SpriteState;
                 }
             }
+
             // Start the mutable position providers walk animation and update formation grid.
             else if (mutablePositionProvider is Formation formation)
             {
@@ -63,6 +64,7 @@ public sealed class MovementResolver
                 _map.AddFormationTo(formation, newX, newY);
             }
         }
+        
         mutablePositionProvider.SpriteState = direction;
     } 
 }

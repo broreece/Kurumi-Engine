@@ -1,7 +1,7 @@
 namespace Engine.State.States.Battle.Base;
 
 /// <summary>
-/// Used to determine the target of random attacks. 
+/// Used to determine the target of attacks that do not have a fixed target. 
 /// </summary>
 public enum BattleTargets 
 {

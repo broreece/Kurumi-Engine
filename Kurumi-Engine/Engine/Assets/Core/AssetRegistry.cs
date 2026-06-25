@@ -84,15 +84,26 @@ public sealed class AssetRegistry
         }
     }
 
-    /// <summary>
-    /// Getter for a specific asset texture using the asset type and the name of the asset.
-    /// </summary>
-    /// <param name="assetType">The type of asset.</param>
-    /// <param name="assetName">The name of the asset.</param>
-    /// <returns>The asset texture of a provided asset type and name.</returns>
-    public Texture GetTexture(AssetType assetType, string assetName) => _assets[assetType][assetName];
+    public Texture GetTexture(AssetType assetType, string assetName)
+    {
+        if (_assets.TryGetValue(assetType, out var textures))
+        {
+            if (textures.TryGetValue(assetName, out var asset)) 
+            {
+                return asset;
+            }
+        }
+        throw new AssetNotFoundException($"Asset: {assetName} of type: {assetType} was not found");
+    } 
 
-    public Font GetFont(string fontName) => _fonts[fontName];
+    public Font GetFont(string fontName)
+    {
+        if (_fonts.TryGetValue(fontName, out var font)) 
+        {
+            return font;
+        }
+        throw new AssetNotFoundException($"Font: {fontName} was not found");
+    }
 
     /// <summary>
     /// Function used to convert a string into an asset type.

@@ -1,13 +1,16 @@
 // Engine.
 using Engine.Systems.Combat.Core;
 
+// Infrastructure.
+using Infrastructure.Database.Base;
+
 namespace Engine.Systems.Combat.Factories;
 
 public sealed class DamageCalculatorFactory 
 {
-    private readonly IReadOnlyDictionary<string, int> _statShortNameIndex;
+    private readonly Index<int> _statShortNameIndex;
 
-    public DamageCalculatorFactory(IReadOnlyDictionary<string, int> statShortNameIndex) 
+    public DamageCalculatorFactory(Index<int> statShortNameIndex) 
     {
         _statShortNameIndex = statShortNameIndex;
     }

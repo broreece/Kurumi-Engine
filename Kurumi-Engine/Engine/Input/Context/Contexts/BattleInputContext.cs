@@ -26,22 +26,27 @@ public sealed class BattleInputContext : IGameplayInputContext
         {
             _battleMenu.MoveUp();
         }
+
         if (input.IsPressed(InputAction.MoveRight)) 
         {
             _battleMenu.MoveRight();
         }
+
         if (input.IsPressed(InputAction.MoveDown)) 
         {
             _battleMenu.MoveDown();
         }
+
         if (input.IsPressed(InputAction.MoveLeft)) 
         {
             _battleMenu.MoveLeft();
         }
+
         if (input.IsPressed(InputAction.Confirm))
         {
             _battleMenu.Confirm();
         }
+        
         if (input.IsPressed(InputAction.Cancel))
         {
             _battleMenu.Cancel();

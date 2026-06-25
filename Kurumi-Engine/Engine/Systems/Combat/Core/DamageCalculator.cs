@@ -1,6 +1,10 @@
 // Engine.
 using Engine.Assets.Exceptions;
 
+// Infrastructure.
+using Infrastructure.Database.Base;
+using Infrastructure.Database.Exceptions;
+
 namespace Engine.Systems.Combat.Core;
 
 /// <summary>
@@ -8,13 +12,9 @@ namespace Engine.Systems.Combat.Core;
 /// </summary>
 public sealed class DamageCalculator 
 {
-    private readonly IReadOnlyDictionary<string, int> _statShortNameIndex;
+    private readonly Index<int> _statShortNameIndex;
 
-    /// <summary>
-    /// Takes the stat short name index provided in the database.
-    /// </summary>
-    /// <param name="statShortNameIndex">The stat short name index.</param>
-    internal DamageCalculator(IReadOnlyDictionary<string, int> statShortNameIndex) 
+    internal DamageCalculator(Index<int> statShortNameIndex) 
     {
         _statShortNameIndex = statShortNameIndex;
     }
@@ -132,14 +132,16 @@ public sealed class DamageCalculator
         var entity = parts[0];
         var statName = parts[1].ToLowerInvariant();
 
-        if (!_statShortNameIndex.TryGetValue(statName, out int statIndex)) 
+        try
+        {
+            var statIndex = _statShortNameIndex.Get(statName); 
+            var stats = entity == "a" ? userStats : targetStats;
+            return stats[statIndex];
+        }
+        catch (IndexKeyNotFoundException) 
         {
             throw new DamageCalculatorException($"Unknown stat: {statName}");
         }
-
-        var stats = entity == "a" ? userStats : targetStats;
-
-        return stats[statIndex];
     }
 
     /// <summary>

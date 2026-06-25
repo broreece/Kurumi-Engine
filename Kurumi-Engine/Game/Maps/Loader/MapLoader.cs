@@ -2,7 +2,7 @@
 using System.Text.Json;
 
 // Data.
-using Data.Models.Maps;
+using Data.Models.Maps.Core;
 
 // Game.
 using Game.Maps.Exceptions;

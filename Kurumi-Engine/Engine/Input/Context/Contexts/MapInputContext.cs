@@ -35,22 +35,27 @@ public sealed class MapInputContext : IGameplayInputContext
             {
                 _party.PathedController = null;
             }
+
             if (input.IsHeld(InputAction.MoveUp) && !_party.IsMoving) 
             {
                 _movementResolver.TryMove(_party, direction: 0);
             }
+
             if (input.IsHeld(InputAction.MoveRight) && !_party.IsMoving) 
             {
                 _movementResolver.TryMove(_party, direction: 1);
             }
+
             if (input.IsHeld(InputAction.MoveDown) && !_party.IsMoving) 
             {
                 _movementResolver.TryMove(_party, direction: 2);
             }
+
             if (input.IsHeld(InputAction.MoveLeft) && !_party.IsMoving) 
             {
                 _movementResolver.TryMove(_party, direction: 3);
             }
+            
             // If confirm is pressed, handle action at next possible moment.
             InteractRequested = input.IsPressed(InputAction.Confirm);
         } 

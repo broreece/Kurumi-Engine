@@ -9,7 +9,7 @@ namespace Infrastructure.Database.Base;
 /// <typeparam name="T">The type of data the registry stores.</typeparam>
 public sealed class Registry<T> 
 {
-    private readonly Dictionary<int, T> _data;
+    private readonly IReadOnlyDictionary<int, T> _data;
 
     public Registry(IReadOnlyList<T> objects, Func<T, int> idSelector) 
     {
@@ -18,11 +18,10 @@ public sealed class Registry<T>
 
     public T Get(int id)
     {
-        if (!_data.TryGetValue(id, out var value))
+        if (_data.TryGetValue(id, out var value))
         {
-            throw new RegistryIDNotFoundException($"No {typeof(T).Name} found in registry with ID {id}.");
+            return value;
         }
-
-        return value;
+        throw new RegistryIDNotFoundException($"No {typeof(T).Name} found in registry with ID {id}.");
     }
 }

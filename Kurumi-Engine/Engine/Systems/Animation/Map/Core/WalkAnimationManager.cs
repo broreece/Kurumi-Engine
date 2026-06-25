@@ -60,10 +60,12 @@ public sealed class WalkAnimationManager
                     walkableEntity.WalkAnimationFrame = 0;
                     walkableEntity.IsMoving = false;
                 }
+                
                 else 
                 {
                     walkableEntity.WalkAnimationFrame ++;
                 }
+                
                 walkableEntity.AnimationTimer -= frameDuration;;
             }
         }

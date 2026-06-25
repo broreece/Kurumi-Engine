@@ -71,20 +71,6 @@ see paryt member information and items.
 
 ---
 
-## (SR-01) Script reformating. ##
-### Complexity: 3 ###
-### Independent: 3 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:**
-During this build the script system fought back a lot and It's gotten a bit messy yets fix this.
-
-**Steps:**
-- Go through the code checking where we can make improvements.
-
----
-
 ## (ASE-01) Additional script enhancements ##
 ### Complexity: 2 ###
 ### Independent: 1 ###

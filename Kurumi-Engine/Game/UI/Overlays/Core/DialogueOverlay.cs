@@ -68,20 +68,13 @@ public sealed class DialogueOverlay : IUIOverlay
             new SpriteStyle() { SpriteArt = textWindowDefaults.WindowName }
         );
 
-        var width = textWindowDefaults.Width;
-        var height = textWindowDefaults.Height;
-        var xLocation = textWindowDefaults.X;
-        var yLocation = textWindowDefaults.Y;
-        var textWindowXOffset = textWindowDefaults.TextXOffset;
-        var textWindowYOffset = textWindowDefaults.TextYOffset;
-
         // Create Element.
         var textUIElement = new UIElement()
         {
             UIComponent = _textComponent,
             Layout = new UILayout { Position = new Vector2f(0, 0), Size = new Vector2f(1, 1) },
             
-            LocalOffset = new Vector2f(textWindowXOffset, textWindowYOffset),
+            LocalOffset = new Vector2f(textWindowDefaults.TextXOffset, textWindowDefaults.TextYOffset),
             Children = [],
 
             RenderLayer = RenderLayer.UIText
@@ -92,8 +85,8 @@ public sealed class DialogueOverlay : IUIOverlay
             UIComponent = windowComponent,
             Layout = new UILayout() 
             { 
-                Position = new Vector2f(xLocation, yLocation), 
-                Size = new Vector2f(width, height) 
+                Position = new Vector2f(textWindowDefaults.X, textWindowDefaults.Y), 
+                Size = new Vector2f(textWindowDefaults.Width, textWindowDefaults.Height) 
             },
             
             LocalOffset = new Vector2f(0, 0),

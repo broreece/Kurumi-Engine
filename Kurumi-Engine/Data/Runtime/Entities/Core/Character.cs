@@ -1,7 +1,7 @@
 // Data.
 using Data.Definitions.Entities.Core;
 
-using Data.Models.Characters;
+using Data.Models.Characters.Core;
 
 using Data.Runtime.Entities.Base;
 using Data.Runtime.Entities.Statuses.Core;

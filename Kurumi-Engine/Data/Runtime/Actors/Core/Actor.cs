@@ -1,6 +1,6 @@
 // Data.
 using Data.Definitions.Actors.Core;
-using Data.Models.Maps;
+using Data.Models.Maps.Core;
 using Data.Runtime.Spatials;
 using Data.Runtime.Maps.Base.Controllers.Base;
 

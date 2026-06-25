@@ -2,7 +2,7 @@
 using Data.Definitions.Actors.Core;
 using Data.Definitions.Formations.Core;
 
-using Data.Models.Formations;
+using Data.Models.Formations.Core;
 
 using Data.Runtime.Entities.Core;
 using Data.Runtime.Formations.Base;
