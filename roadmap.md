@@ -52,7 +52,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - Re-implementation of the game's menu.
-- Refractoring code removing any tech debt in particular in the script system.
 - Expanding test cases.
 
 ---
@@ -68,20 +67,6 @@ see paryt member information and items.
 
 **Steps:**
 - It might be worth checking our previous menu work to create this again.
-
----
-
-## (ASE-01) Additional script enhancements ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 1 ###
-### Impact: 1 ###
-
-**Description:** Allow dynamic speed in the force move party script step.
-
-**Steps:**
-- The force move party currently uses the parties base speed, we can change this to a custom one:
-    - Add a new parameter in "ForceMoveParty" in the map script context and pass it into the map state function.
 
 ---
 

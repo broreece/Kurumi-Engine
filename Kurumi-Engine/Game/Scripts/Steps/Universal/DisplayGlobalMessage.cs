@@ -7,10 +7,10 @@ namespace Game.Scripts.Steps.Universal;
 
 public sealed class DisplayGlobalMessage : ScriptStep 
 {
-    private readonly int _timeLimit;
+    private readonly float _timeLimit;
     private readonly string _text;
 
-    public DisplayGlobalMessage(int timeLimit, string text) : base() 
+    public DisplayGlobalMessage(float timeLimit, string text) : base() 
     {
         _timeLimit = timeLimit;
         _text = text;

@@ -14,7 +14,7 @@ public interface IUIActions : ICapability
 
     public IFinishable OpenTextWindowWithNameBox(IReadOnlyList<string> pages, string name);
 
-    public void OpenGlobalMessage(int timeLimit, string text);
+    public void OpenGlobalMessage(float timeLimit, string text);
 
     public ChoiceBoxWithDialogueOverlay OpenTextWindowWithChoice(IReadOnlyList<string> choices, string text);
 }
