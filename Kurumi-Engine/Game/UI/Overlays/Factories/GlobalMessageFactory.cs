@@ -20,7 +20,7 @@ public sealed class GlobalMessageFactory
         _globalMessageDefaults = globalMessageDefaults;
     }
 
-    public GlobalMessage Create(int timeLimit, string message)
+    public GlobalMessage Create(float timeLimit, string message)
     {
         return new GlobalMessage(_assetRegistry, _globalMessageDefaults, timeLimit, message);
     }

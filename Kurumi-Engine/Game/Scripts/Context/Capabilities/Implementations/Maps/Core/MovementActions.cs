@@ -42,7 +42,7 @@ public sealed class MovementActions : IMovementActions
         return controller;
     }
 
-    public IFinishable ForceMoveParty(bool keepDirection, bool instant, IReadOnlyList<int> path) 
+    public IFinishable ForceMoveParty(bool keepDirection, bool instant, float movementSpeed, IReadOnlyList<int> path) 
     {
         if (instant)
         {
@@ -78,8 +78,7 @@ public sealed class MovementActions : IMovementActions
         }
         else
         {
-            // TODO: (ASE-01) - Change interval here to be equal to the set speed of the movement.
-            var controller = new PathedController(canFinish: true, path) { Interval = 1 };
+            var controller = new PathedController(canFinish: true, path) { Interval = movementSpeed };
             _party.PathedController = controller;
             return controller;
         }

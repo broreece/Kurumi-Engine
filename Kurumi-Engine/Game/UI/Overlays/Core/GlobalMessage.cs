@@ -39,7 +39,7 @@ public sealed class GlobalMessage : IUIOverlay
     internal GlobalMessage(
         AssetRegistry assetRegistry, 
         GlobalMessageDefaults globalMessageDefaults, 
-        int timeLimit, 
+        float timeLimit, 
         string message
     )
     {

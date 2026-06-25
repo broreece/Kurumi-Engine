@@ -63,9 +63,7 @@ public sealed class MapInputContext : IGameplayInputContext
         else
         {
             var controller = _party.PathedController;
-            // TODO: (ASE-01) - Change this to use the controller.CanMove(), update controller in map state using
-            // time passed.
-            if (!_party.IsMoving)
+            if (controller.CanMove)
             {
                 _movementResolver.TryMove(_party, controller.GetMove(_party));
                 controller.ExecuteMove();
