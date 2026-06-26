@@ -40,7 +40,7 @@ public sealed class CheckItemInInventory : ConditionalScriptStep
                 break;
 
             case IntegerComparison.NotEqualTo:
-                _conditionMet = itemActions.ContainsDifferentAmountOfItem(_itemId, _amount);
+                _conditionMet = !itemActions.ContainsSameAmountOfItem(_itemId, _amount);
                 break;
 
             default:

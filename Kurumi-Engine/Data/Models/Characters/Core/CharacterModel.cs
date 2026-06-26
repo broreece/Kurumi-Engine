@@ -1,4 +1,4 @@
-namespace Data.Models.Characters;
+namespace Data.Models.Characters.Core;
 
 public sealed class CharacterModel 
 {

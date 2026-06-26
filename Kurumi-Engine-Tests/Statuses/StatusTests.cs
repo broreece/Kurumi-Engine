@@ -1,16 +1,21 @@
-namespace Tests.Statuses;
-
+// Data.
 using Data.Definitions.Entities.Factories;
 using Data.Definitions.Entities.Statuses.Base;
 using Data.Definitions.Entities.Statuses.Factories;
-using Data.Models.Formations;
+
+using Data.Models.Formations.Core;
+
 using Data.Runtime.Entities.Factories;
 using Data.Runtime.Entities.Statuses.Core;
 using Data.Runtime.Entities.Statuses.Factories;
 
+// Engine.
 using Engine.Systems.Statuses.Core;
 
+// External libraries.
 using Xunit;
+
+namespace Tests.Statuses;
 
 public sealed class StatusTests 
 {
@@ -43,16 +48,16 @@ public sealed class StatusTests
         var entityDefinition = entityDefinitionFactory.Create(1, 10, "test", "test", "test", [], [], [],
             []);
 
-        var entityFactory = new EntityFactory();
+        var entityFactory = new EntityFactory(agilityIndex: 0);
         var entity = entityFactory.Create(entityDefinition, enemyModel, 10);
 
         statusResolver.TryApplyStatus(entity, statuses[0]);
-        Assert.Single(entity.GetStatuses());
-        Assert.Contains(statuses[0], entity.GetStatuses());
+        Assert.Single(entity.Statuses);
+        Assert.Contains(statuses[0], entity.Statuses);
 
         statusResolver.TryApplyStatus(entity, statuses[2]);
-        Assert.Single(entity.GetStatuses());
-        Assert.DoesNotContain(statuses[0], entity.GetStatuses());
-        Assert.Contains(statuses[2], entity.GetStatuses());
+        Assert.Single(entity.Statuses);
+        Assert.DoesNotContain(statuses[0], entity.Statuses);
+        Assert.Contains(statuses[2], entity.Statuses);
     }
 }

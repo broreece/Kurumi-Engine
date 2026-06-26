@@ -64,8 +64,8 @@ public sealed class GameDatabase
     public Registry<Tile> TileRegistry { get; }
 
     // Lookup indexes.
-    public IReadOnlyDictionary<string, IReadOnlyList<int>> MapFormationsIndex { get; }
-    public IReadOnlyDictionary<string, int> StatShortNameIndex { get; }
+    public Index<IReadOnlyList<int>> MapFormationsIndex { get; }
+    public Index<int> StatShortNameIndex { get; }
 
     public GameDatabase() 
     {
@@ -273,7 +273,7 @@ public sealed class GameDatabase
         );
 
         // Load lookup indexes.
-        StatShortNameIndex = statNameLoader.LoadStatShortNameIndex();
-        MapFormationsIndex = formationDefinitionLoader.LoadMapFormationsIndex();
+        MapFormationsIndex = new Index<IReadOnlyList<int>>(formationDefinitionLoader.LoadMapFormationsIndex());
+        StatShortNameIndex = new Index<int>(statNameLoader.LoadStatShortNameIndex());
     }
 }

@@ -1,5 +1,5 @@
 // Data.
-using Data.Models.Maps;
+using Data.Models.Maps.Core;
 using Data.Runtime.Actors.Core;
 using Data.Runtime.Formations.Core;
 using Data.Runtime.Maps.Exceptions;

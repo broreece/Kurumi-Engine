@@ -117,6 +117,9 @@ public sealed class MapState : IGameState
     {
         // Check if game is paused.
         if (!_stateContext.IsPaused()) {
+            // Update parties pathed controller if one exists.
+            _party.PathedController?.Update(deltaTime);
+
             // Handle on touch and on find scripts.
             var isCurrentlyMoving = _party.MovementProgress < 1f;
             var movementJustFinished = !isCurrentlyMoving && _party.MovingLastFrame;

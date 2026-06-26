@@ -28,7 +28,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
 {
     // Elements.
     private readonly UIElement _uiElement;
-    private UIElement _selectionElement;
+    private UIElement? _selectionElement;
 
     // Number of choices.
     private readonly int _numberOfChoices;
@@ -55,147 +55,24 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
         string text
     )
     {
-        // Component factories.
+        _numberOfChoices = choices.Count;
+        _spacing = choiceBoxDefaults.Spacing;
+
         var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
         var textComponentFactory = new TextComponentFactory(assetRegistry);
 
-        // Text style.
-        var choiceTextStyle = new TextStyle() 
-        { 
-            FontSize = (uint) choiceBoxDefaults.FontSize, 
-            FontArt = choiceBoxDefaults.FontName 
-        };
-        var windowTextStyle = new TextStyle()
-        {
-            FontSize = (uint) textWindowDefaults.FontSize, 
-            FontArt = textWindowDefaults.FontName 
-        };
-
-        var textComponent = textComponentFactory.Create(new TextData() { Text = text }, windowTextStyle);
-
-        var choiceTextComponents = new List<TextComponent>();
-        foreach (var choice in choices)
-        {
-            choiceTextComponents.Add(textComponentFactory.Create(new TextData() { Text = choice }, choiceTextStyle));
-        }
-
-        _numberOfChoices = choices.Count;
-
-        var windowComponent = spriteComponentFactory.Create(
-            AssetType.Windows,
-            new SpriteStyle() { SpriteArt = textWindowDefaults.WindowName }
+        var textWindowElement = CreateTextElement(
+            spriteComponentFactory, 
+            textComponentFactory, 
+            textWindowDefaults, 
+            text
         );
-        var choiceWindowComponent = spriteComponentFactory.Create(
-            AssetType.Windows, 
-            new SpriteStyle() { SpriteArt = choiceBoxDefaults.WindowName }
+        var choiceWindowElement = CreateChoiceElement(
+            spriteComponentFactory, 
+            textComponentFactory, 
+            choiceBoxDefaults, 
+            choices
         );
-        var selectionComponent = spriteComponentFactory.Create(
-            AssetType.ChoiceSelectionArt,
-            new SpriteStyle() { SpriteArt = choiceBoxDefaults.ChoiceBoxName }
-        );
-
-        var textWindowWidth = textWindowDefaults.Width;
-        var textWindowHeight = textWindowDefaults.Height;
-        var textWindowXLocation = textWindowDefaults.X;
-        var textWindowYLocation = textWindowDefaults.Y;
-        var textWindowXOffset = textWindowDefaults.TextXOffset;
-        var textWindowYOffset = textWindowDefaults.TextYOffset;
-        
-        var choiceWindowWidth = choiceBoxDefaults.Width;
-        var choiceWindowHeight = choiceBoxDefaults.Height;
-        var selectionHeight = choiceBoxDefaults.Height / _numberOfChoices;
-        var choiceWindowXLocation = choiceBoxDefaults.X;
-        var choiceWindowYLocation = choiceBoxDefaults.Y;
-        var choiceWindowXOffset = choiceBoxDefaults.TextXOffset;
-        var choiceWindowYOffset = choiceBoxDefaults.TextYOffset;
-        _spacing = choiceBoxDefaults.Spacing;
-
-        // Create Elements.
-        // Text window.
-        var textUIElement = new UIElement()
-        {
-            UIComponent = textComponent,
-            Layout = new UILayout() 
-            { 
-                Position = new Vector2f(0, 0), 
-                Size = new Vector2f(1, 1) 
-            },
-            
-            LocalOffset = new Vector2f(textWindowXOffset, textWindowYOffset),
-            Children = [],
-
-            RenderLayer = RenderLayer.UIText
-        };
-
-        var textWindowElement = new UIElement()
-        {
-            UIComponent = windowComponent,
-            Layout = new UILayout() 
-            { 
-                Position = new Vector2f(textWindowXLocation, textWindowYLocation), 
-                Size = new Vector2f(textWindowWidth, textWindowHeight) 
-            },
-            
-            LocalOffset = new Vector2f(0, 0),
-            Children =
-            [
-                textUIElement,
-            ],
-
-            RenderLayer = RenderLayer.UIWindow
-        };
-
-        // Choice box window.
-        var choiceTextElements = new List<UIElement>();
-        var choiceIndex = 0;
-        foreach (TextComponent choiceTextComponent in choiceTextComponents)
-        {
-            choiceTextElements.Add(new UIElement()
-            {
-                UIComponent = choiceTextComponent,
-                Layout = new UILayout() 
-            { 
-                Position = new Vector2f(0, 0), 
-                Size = new Vector2f(1, 1) 
-            },
-            
-            LocalOffset = new Vector2f(choiceWindowXOffset, (_spacing * choiceIndex) + choiceWindowYOffset),
-            Children = [],
-
-            RenderLayer = RenderLayer.UISelectionBox
-            });
-            choiceIndex ++;
-        }
-
-        _selectionElement = new UIElement()
-        {
-            UIComponent = selectionComponent,
-            Layout = new UILayout() 
-            { 
-                Position = new Vector2f(0, 0), 
-                Size = new Vector2f(choiceWindowWidth, selectionHeight) 
-            },
-            
-            LocalOffset = new Vector2f(0, 0),
-            Children = [],
-
-            RenderLayer = RenderLayer.UISelectionBox
-        };
-        
-        var choiceWindowElement = new UIElement()
-        {
-            UIComponent = choiceWindowComponent,
-            Layout = new UILayout() 
-            { 
-                Position = new Vector2f(choiceWindowXLocation, choiceWindowYLocation), 
-                Size = new Vector2f(choiceWindowWidth, choiceWindowHeight) 
-            },
-            
-            LocalOffset = new Vector2f(0, 0),
-            Children = [.. choiceTextElements, _selectionElement],
-
-            RenderLayer = RenderLayer.UIWindow
-        };
 
         // The parent UI element of the choice window and text window.
         _uiElement = new UIElement()
@@ -221,7 +98,7 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
     public void Update(float deltaTime)
     {
         // Update the position of the selection element based on the new current choice.
-        var width = _selectionElement.Layout.Size.X;
+        var width = _selectionElement!.Layout.Size.X;
         var height = _selectionElement.Layout.Size.Y;
         var xLocation = _selectionElement.Layout.Position.X;
         var yLocation = _selectionElement.Layout.Position.Y;
@@ -265,4 +142,150 @@ public sealed class ChoiceBoxWithDialogueOverlay : IUIOverlay
     }
 
     public bool IsFinished() => _isFinished;
+
+    private UIElement CreateTextElement(
+        SpriteComponentFactory spriteComponentFactory, 
+        TextComponentFactory textComponentFactory, 
+        TextWindowDefaults textWindowDefaults, 
+        string text
+    )
+    {
+        var windowComponent = spriteComponentFactory.Create(
+            AssetType.Windows,
+            new SpriteStyle() { SpriteArt = textWindowDefaults.WindowName }
+        );
+
+        var windowTextStyle = new TextStyle()
+        {
+            FontSize = (uint) textWindowDefaults.FontSize, 
+            FontArt = textWindowDefaults.FontName 
+        };
+
+        var textComponent = textComponentFactory.Create(new TextData() { Text = text }, windowTextStyle);
+
+        var textUIElement = new UIElement()
+        {
+            UIComponent = textComponent,
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(1, 1) 
+            },
+            
+            LocalOffset = new Vector2f(textWindowDefaults.TextXOffset, textWindowDefaults.TextYOffset),
+            Children = [],
+
+            RenderLayer = RenderLayer.UIText
+        };
+
+        var textWindowElement = new UIElement()
+        {
+            UIComponent = windowComponent,
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(textWindowDefaults.X, textWindowDefaults.Y), 
+                Size = new Vector2f(textWindowDefaults.Width, textWindowDefaults.Height) 
+            },
+            
+            LocalOffset = new Vector2f(0, 0),
+            Children =
+            [
+                textUIElement,
+            ],
+
+            RenderLayer = RenderLayer.UIWindow
+        };
+
+        return textWindowElement;
+    }
+
+    private UIElement CreateChoiceElement(
+        SpriteComponentFactory spriteComponentFactory, 
+        TextComponentFactory textComponentFactory, 
+        ChoiceBoxDefaults choiceBoxDefaults, 
+        IReadOnlyList<string> choices
+    )
+    {
+        var choiceTextStyle = new TextStyle() 
+        { 
+            FontSize = (uint) choiceBoxDefaults.FontSize, 
+            FontArt = choiceBoxDefaults.FontName 
+        };
+
+        var choiceWindowComponent = spriteComponentFactory.Create(
+            AssetType.Windows, 
+            new SpriteStyle() { SpriteArt = choiceBoxDefaults.WindowName }
+        );
+        var selectionComponent = spriteComponentFactory.Create(
+            AssetType.ChoiceSelectionArt,
+            new SpriteStyle() { SpriteArt = choiceBoxDefaults.ChoiceBoxName }
+        );
+
+        var choiceTextComponents = new List<TextComponent>();
+        foreach (var choice in choices)
+        {
+            choiceTextComponents.Add(textComponentFactory.Create(new TextData() { Text = choice }, choiceTextStyle));
+        }
+
+        // Reused element variables.
+        var choiceWindowWidth = choiceBoxDefaults.Width;
+        var selectionHeight = choiceBoxDefaults.Height / _numberOfChoices;
+
+        var choiceTextElements = new List<UIElement>();
+        var choiceIndex = 0;
+
+        foreach (TextComponent choiceTextComponent in choiceTextComponents)
+        {
+            choiceTextElements.Add(new UIElement()
+            {
+                UIComponent = choiceTextComponent,
+                Layout = new UILayout() 
+            { 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(1, 1) 
+            },
+            
+            LocalOffset = new Vector2f(
+                choiceBoxDefaults.TextXOffset, 
+                (_spacing * choiceIndex) + choiceBoxDefaults.TextYOffset
+            ),
+            Children = [],
+
+            RenderLayer = RenderLayer.UISelectionBox
+            });
+            choiceIndex ++;
+        }
+
+        _selectionElement = new UIElement()
+        {
+            UIComponent = selectionComponent,
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(0, 0), 
+                Size = new Vector2f(choiceWindowWidth, selectionHeight) 
+            },
+            
+            LocalOffset = new Vector2f(0, 0),
+            Children = [],
+
+            RenderLayer = RenderLayer.UISelectionBox
+        };
+        
+        var choiceWindowElement = new UIElement()
+        {
+            UIComponent = choiceWindowComponent,
+            Layout = new UILayout() 
+            { 
+                Position = new Vector2f(choiceBoxDefaults.X, choiceBoxDefaults.Y), 
+                Size = new Vector2f(choiceWindowWidth, choiceBoxDefaults.Height) 
+            },
+            
+            LocalOffset = new Vector2f(0, 0),
+            Children = [.. choiceTextElements, _selectionElement],
+
+            RenderLayer = RenderLayer.UIWindow
+        };
+
+        return choiceWindowElement;
+    }
 }

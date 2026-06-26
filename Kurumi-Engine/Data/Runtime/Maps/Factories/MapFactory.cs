@@ -4,8 +4,10 @@ using Data.Definitions.Actors.Core;
 using Data.Definitions.Formations.Core;
 using Data.Definitions.Maps.Core;
 
-using Data.Models.Formations;
-using Data.Models.Maps;
+using Data.Models.Formations.Collections;
+using Data.Models.Formations.Exceptions;
+using Data.Models.Maps.Collections;
+using Data.Models.Maps.Core;
 
 using Data.Runtime.Actors.Core;
 using Data.Runtime.Actors.Factories;
@@ -19,6 +21,7 @@ using Engine.Systems.Navigation.Factories;
 
 // Infrastructure.
 using Infrastructure.Database.Base;
+using Infrastructure.Database.Exceptions;
 
 namespace Data.Runtime.Maps.Factories;
 
@@ -28,18 +31,18 @@ public sealed class MapFactory
     private readonly FormationFactory _formationFactory;
 
     // Formation lookup index for loading formations per map.
-    private readonly IReadOnlyDictionary<string, IReadOnlyList<int>> _mapFormationsIndex;
+    private readonly Index<IReadOnlyList<int>> _mapFormationsIndex;
 
     // Cached formations models from save file and formation definition registry for building formations.
-    private readonly Dictionary<int, FormationModel> _formationModels;
+    private readonly FormationModelCollection _formationModelCollection;
     private readonly Registry<FormationDefinition> _formationDefinitionRegistry;
 
     // Registries.
     private readonly Registry<ActorInfo> _actorRegistry;
     private readonly Registry<Tile> _tileRegistry;
 
-    // The actor dictionary stored in save data.
-    private readonly IReadOnlyDictionary<string, IReadOnlyList<ActorModel>> _actorModels;
+    // The collection of actor models.
+    private readonly ActorModelCollection _actorModelCollection;
 
     // Actor factories.
     private readonly ActorFactory _actorFactory;
@@ -53,12 +56,12 @@ public sealed class MapFactory
 
     public MapFactory(
         FormationFactory formationFactory, 
-        IReadOnlyDictionary<string, IReadOnlyList<int>> mapFormationsIndex, 
-        Dictionary<int, FormationModel> formationModels, 
+        Index<IReadOnlyList<int>> mapFormationsIndex, 
+        FormationModelCollection formationModelCollection, 
         Registry<FormationDefinition> formationDefinitionRegistry, 
         Registry<ActorInfo> actorRegistry, 
         Registry<Tile> tileRegistry, 
-        IReadOnlyDictionary<string, IReadOnlyList<ActorModel>> actorModels, 
+        ActorModelCollection actorModelCollection, 
         ActorFactory actorFactory, 
         DumbTrackingActorFactory dumbActorFactory, 
         PathedActorFactory pathedActorFactory, 
@@ -69,11 +72,11 @@ public sealed class MapFactory
     {
         _formationFactory = formationFactory;
         _mapFormationsIndex = mapFormationsIndex;
-        _formationModels = formationModels;
+        _formationModelCollection = formationModelCollection;
         _formationDefinitionRegistry = formationDefinitionRegistry;
         _actorRegistry = actorRegistry;
         _tileRegistry = tileRegistry;
-        _actorModels = actorModels;
+        _actorModelCollection = actorModelCollection;
         _actorFactory = actorFactory;
         _dumbActorFactory = dumbActorFactory;
         _pathedActorFactory = pathedActorFactory;
@@ -95,8 +98,7 @@ public sealed class MapFactory
         var map = new Map(mapModel, tileDictionary);
 
         // After map is created set actors.
-        _actorModels.TryGetValue(mapModel.MachineName, out IReadOnlyList<ActorModel>? actorModels);
-        actorModels ??= [];
+        var actorModels = _actorModelCollection.GetActorsOnMap(mapModel.MachineName);
 
         var actors = new List<Actor>();
         var actorDictionary = new Dictionary<(int, int), List<Actor>>();
@@ -153,13 +155,13 @@ public sealed class MapFactory
         var formations = new List<Formation>();
         var formationIdDictionary = new Dictionary<int, Formation>();
         var formationLocationDictionary = new Dictionary<(int, int), Formation>();
-        if (_mapFormationsIndex.TryGetValue(mapModel.MachineName, out var mapFormationsIds)) 
-        {
+        try {
+            var mapFormationsIds = _mapFormationsIndex.Get(mapModel.MachineName);
             foreach(var mapFormationId in mapFormationsIds)
             {
-                if (_formationModels.TryGetValue(mapFormationId, out var formationModel)) 
+                try 
                 {
-
+                    var formationModel = _formationModelCollection.Get(mapFormationId);
                     var formation = _formationFactory.Create( 
                         _formationDefinitionRegistry.Get(mapFormationId),
                         formationModel, 
@@ -170,8 +172,10 @@ public sealed class MapFactory
                     formationLocationDictionary[(formationModel.XLocation, formationModel.YLocation)] = formation;
                     formationIdDictionary[mapFormationId] = formation;
                 }
+                catch (FormationNotFoundException) {}
             }
         }
+        catch (IndexKeyNotFoundException) {}
         map.SetFormations(formations, formationLocationDictionary, formationIdDictionary);
 
         return map;

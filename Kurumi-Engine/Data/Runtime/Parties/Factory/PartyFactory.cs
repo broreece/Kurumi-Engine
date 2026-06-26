@@ -1,7 +1,8 @@
 // Data.
 using Data.Definitions.Entities.Core;
 
-using Data.Models.Characters;
+using Data.Models.Characters.Collections;
+using Data.Models.Inventory;
 using Data.Models.Party;
 
 using Data.Runtime.Entities.Core;
@@ -15,7 +16,7 @@ namespace Data.Runtime.Parties.Factory;
 
 public sealed class PartyFactory 
 {
-    private readonly Dictionary<int, CharacterModel> _characterModels;
+    private readonly CharacterModelCollection _characterModelCollection;
     private readonly Registry<CharacterDefinition> _characterRegistry;
 
     private readonly CharacterFactory _characterFactory;
@@ -23,20 +24,20 @@ public sealed class PartyFactory
     private readonly int _maxPartySize;
 
     public PartyFactory(
-        Dictionary<int, CharacterModel> characterModels, 
+        CharacterModelCollection characterModelCollection, 
         Registry<CharacterDefinition> characterRegistry, 
         int maxPartySize,
         int agilityIndex
     )
     {
-        _characterModels = characterModels;
+        _characterModelCollection = characterModelCollection;
         _characterRegistry = characterRegistry;
         _maxPartySize = maxPartySize;
 
         _characterFactory = new CharacterFactory(agilityIndex);
     }
 
-    public Party Create(PartyModel partyModel, Dictionary<int, int> inventory, float movementSpeed) 
+    public Party Create(PartyModel partyModel, Inventory inventory, float movementSpeed) 
     {
         // Load the character models from the save data's character dictionary.
         var characters = new Character[_maxPartySize];
@@ -46,7 +47,7 @@ public sealed class PartyFactory
             var characterId = characterIds[index];
             characters[index] = _characterFactory.Create(
                 _characterRegistry.Get(characterId), 
-                _characterModels[characterId]
+                _characterModelCollection.Get(characterId)
             );
         }
         return new Party() { 

@@ -58,6 +58,8 @@ public sealed class EnemyRenderer
     public void Update(View view, bool targetSelector, int selectedEnemyIndex, float deltaTime)
     {
         var currentEnemyIndex = 0;
+
+        // Render enemies.
         foreach (var enemyRenderData in _enemyRenderData)
         {
             if (_formation.GetEntityAt(currentEnemyIndex).CurrentHP > 0)
@@ -106,6 +108,7 @@ public sealed class EnemyRenderer
             currentEnemyIndex ++;
         }
 
+        // Render enemy battle text.
         foreach (KeyValuePair<int, BattleText> keyValuePair in _enemyBattleText)
         {
             int enemyIndex = keyValuePair.Key;

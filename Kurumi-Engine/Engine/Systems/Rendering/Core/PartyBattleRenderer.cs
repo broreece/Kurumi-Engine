@@ -51,6 +51,7 @@ public sealed class PartyBattleRenderer
     
     public void Update(View view, bool targetSelector, int selectedCharacterIndex, float deltaTime)
     {
+        // Render party members.
         var currentCharacterIndex = 0;
         foreach (var partyMemberRender in _partyMemberBattleRenderData) 
         {
@@ -107,6 +108,7 @@ public sealed class PartyBattleRenderer
             }
         }
 
+        // Render party member battle text.
         foreach (KeyValuePair<int, BattleText> keyValuePair in _partyBattleText)
         {
             int characterIndex = keyValuePair.Key;

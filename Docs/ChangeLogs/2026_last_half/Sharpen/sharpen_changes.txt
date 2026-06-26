@@ -1,0 +1,33 @@
+KURUMI ENGINE – BUILD CHANGE DOCUMENT
+Build: Sharpen
+Status: In progress.
+
+---------------------------------------------------------------------
+
+PURPOSE
+
+This document outlines the architectural and system-level changes made since the 'Visualization' release.
+
+'Sharpen' focused on refractors such as changing stored data types previously kept in formats of dictionaries or lists
+    to use custom classes for easier understanding.
+
+---------------------------------------------------------------------
+
+CODE
+
+- Performed some refractoring mostly around UI views and overlays to ensure functions have singular purposes.
+
+---------------------------------------------------------------------
+
+SCRIPTS
+
+- Force move parties can now have dynamic movement speed assigned in the JSON data.
+
+---------------------------------------------------------------------
+
+KEY TAKEAWAYS
+
+- Refractoring the engine has become drastically easier as pieces are quicker to change and less dependent on one
+    another. Again this has been due to the work we did all the way back in 'forge'
+
+---------------------------------------------------------------------

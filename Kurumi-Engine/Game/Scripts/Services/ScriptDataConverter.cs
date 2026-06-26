@@ -114,14 +114,19 @@ public sealed class ScriptDataConverter
             case "ForceMoveParty":
                 bool forceMovePartyKeepDirection = parameters["KeepDirection"].GetInt32() == 1;
                 bool forceMovePartyInstant = parameters["Instant"].GetInt32() == 1;
+                float forceMovePartyMovementSpeed = parameters["MovementSpeed"].GetSingle();
+
                 JsonElement forceMovePartyStepsElement = parameters["Steps"];
+
                 var forceMovePartySteps = new List<int>();
                 foreach (var item in forceMovePartyStepsElement.EnumerateArray()) {
                     forceMovePartySteps.Add(item.GetInt32());
                 }
+                
                 return new ForceMoveParty(
                     forceMovePartyKeepDirection, 
                     forceMovePartyInstant, 
+                    forceMovePartyMovementSpeed, 
                     forceMovePartySteps
                 ) 
                 { 
@@ -207,7 +212,7 @@ public sealed class ScriptDataConverter
                 };
 
             case "DisplayGlobalMessage":
-                return new DisplayGlobalMessage(parameters["TimeLimit"].GetInt32(), parameters["Text"].GetString() 
+                return new DisplayGlobalMessage(parameters["TimeLimit"].GetSingle(), parameters["Text"].GetString() 
                     ?? throw new ScriptStepException("Display Global Message 'Text' parameter not found."))
                     { 
                         NextStep = nextStep

@@ -53,7 +53,7 @@ public sealed class UIActions : IUIActions
         return dialogueOverlay;
     }
 
-    public void OpenGlobalMessage(int timeLimit, string text) 
+    public void OpenGlobalMessage(float timeLimit, string text) 
     {
         var globalMessage = _globalMessageFactory.Create(timeLimit, text);
         _stateContext.PushUIOverlay(globalMessage);

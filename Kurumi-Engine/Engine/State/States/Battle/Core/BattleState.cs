@@ -143,7 +143,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         var gameData = _gameContext.GameData;
         var gameServices = _gameContext.GameServices;
         var database = gameData.GameDatabase;
-        var configProvider = gameContext.GameData.ConfigProvider;
+        var configProvider = gameData.ConfigProvider;
 
         _abilityRegistry = database.AbilityRegistry;
 
@@ -167,9 +167,11 @@ public sealed class BattleState : IGameState, IBattleMenu
         else
         {
             var formationRegistry = database.FormationRegistry;
-            var saveData = gameContext.GameObjects.SaveData;
+            var gameObjects = gameContext.GameObjects;
+            var saveData = gameObjects.SaveData;
+            var formationCollection = saveData.FormationCollection;
 
-            var formationModel = saveData.Formations[battle.EnemyFormationId!];
+            var formationModel = formationCollection.Get(battle.EnemyFormationId);
             var formationDefinition = formationRegistry.Get(battle.EnemyFormationId);
 
             _formation = gameServices.FormationFactory.Create(formationDefinition, formationModel, null);
@@ -600,6 +602,7 @@ public sealed class BattleState : IGameState, IBattleMenu
         foreach (var targetIndex in targetIndexes)
         {
             IStats targetStats;
+            
             // If target is enemy.
             if (targetIndex >= _party.Size)
             {
@@ -619,6 +622,7 @@ public sealed class BattleState : IGameState, IBattleMenu
                 };
                 targetStats = _party.Characters[targetIndex];
             }
+
             ExecuteAction(user, target, action.ScriptName, targetStats);
         }
     }
@@ -639,6 +643,7 @@ public sealed class BattleState : IGameState, IBattleMenu
 
         int afterHp = targetStats.CurrentHP;
         int damage = beforeHp - afterHp;
+
         if (damage > 0)
         {
             if (target.EntityType == EntityType.Character)
@@ -666,7 +671,6 @@ public sealed class BattleState : IGameState, IBattleMenu
                     _battleTextFactory.Create((damage * - 1).ToString(), BattleTextType.Heal)
                 );
             }
-            
         }
 
         // Check if target is enemy and died, if they died execute on kill script.
@@ -718,19 +722,22 @@ public sealed class BattleState : IGameState, IBattleMenu
     {
         var currentCharacter = _party.Characters[_currentCharacterIndex];
         var numberOfOptions = currentCharacter.AbilityIDs.Count + currentCharacter.AbilitySetIDs.Count;
+
         if (_itemsEnabled)
         {
             numberOfOptions ++;
         }
+
         if (_runAwayEnabled)
         {
             numberOfOptions ++;
         }
+
         if (_maxChoicesPerPage > numberOfOptions)
         {
             return numberOfOptions - 1;
         }
-        return _maxChoicesPerPage - 1;
 
+        return _maxChoicesPerPage - 1;
     } 
 }

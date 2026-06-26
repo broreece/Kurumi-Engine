@@ -1,4 +1,4 @@
-namespace Data.Models.Maps;
+namespace Data.Models.Maps.Core;
 
 public sealed class ActorModel 
 {

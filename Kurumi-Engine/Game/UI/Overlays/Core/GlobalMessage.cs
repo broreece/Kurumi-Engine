@@ -28,10 +28,9 @@ public sealed class GlobalMessage : IUIOverlay
     // Elements.
     private readonly UIElement _uiElement;
 
-    // Default variables.
-    private bool _isFinished = false;
-
-    // TODO: (UI-01) - Implement timer here.
+    // Time based variables.
+    private readonly float _timeLimit;
+    private float _messageTimer;
 
     public bool TakesControl => false;
 
@@ -40,15 +39,15 @@ public sealed class GlobalMessage : IUIOverlay
     internal GlobalMessage(
         AssetRegistry assetRegistry, 
         GlobalMessageDefaults globalMessageDefaults, 
-        int timeLimit, 
+        float timeLimit, 
         string message
     )
     {
-        // Component factories.
+        _timeLimit = timeLimit;
+
         var spriteComponentFactory = new SpriteComponentFactory(assetRegistry);
         var textComponentFactory = new TextComponentFactory(assetRegistry);
 
-        // Text style.
         var textStyle = new TextStyle()
         {
             FontSize = (uint) globalMessageDefaults.FontSize, 
@@ -60,13 +59,6 @@ public sealed class GlobalMessage : IUIOverlay
             AssetType.Windows,
             new SpriteStyle() { SpriteArt = globalMessageDefaults.WindowName }
         );
-
-        var width = globalMessageDefaults.Width;
-        var height = globalMessageDefaults.Height;
-        var xLocation = globalMessageDefaults.X;
-        var yLocation = globalMessageDefaults.Y;
-        var xOffset = globalMessageDefaults.TextXOffset;
-        var yOffset = globalMessageDefaults.TextYOffset;
 
         // Create Element.
         var textUIElement = new UIElement()
@@ -85,11 +77,11 @@ public sealed class GlobalMessage : IUIOverlay
             UIComponent = windowComponent, 
             Layout = new UILayout() 
             { 
-                Position = new Vector2f(xLocation, yLocation), 
-                Size = new Vector2f(width, height) 
+                Position = new Vector2f(globalMessageDefaults.X, globalMessageDefaults.Y), 
+                Size = new Vector2f(globalMessageDefaults.Width, globalMessageDefaults.Height) 
             }, 
             
-            LocalOffset = new Vector2f(xOffset, yOffset), 
+            LocalOffset = new Vector2f(globalMessageDefaults.TextXOffset, globalMessageDefaults.TextYOffset), 
             Children =
             [
                 textUIElement,
@@ -99,10 +91,7 @@ public sealed class GlobalMessage : IUIOverlay
         };
     }
 
-    public void Update(float deltaTime)
-    {
-        // TODO: (UICA-01) - Implement timer and fading out here.
-    }
+    public void Update(float deltaTime) => _messageTimer += deltaTime;
 
     /// <summary>
     /// Unused interfaced function.
@@ -110,5 +99,5 @@ public sealed class GlobalMessage : IUIOverlay
     /// <param name="inputState">The current input state of the game.</param>
     public void HandleInput(InputState inputState) {}
 
-    public bool IsFinished() => _isFinished;
+    public bool IsFinished() => _messageTimer >= _timeLimit;
 }

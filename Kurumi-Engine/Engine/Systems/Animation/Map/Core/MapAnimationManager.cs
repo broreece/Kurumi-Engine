@@ -26,9 +26,10 @@ public sealed class MapAnimationManager : ITileFrameAccessor
     {
         _tileTimer += deltaTime;
 
-        while (_tileTimer >= _tileFrameDuration) {
+        while (_tileTimer >= _tileFrameDuration) 
+        {
             _tileTimer -= _tileFrameDuration;
-            _tileFrame++;
+            _tileFrame ++;
         }
     }
 

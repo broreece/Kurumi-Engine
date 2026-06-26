@@ -4,7 +4,7 @@ using Config.Runtime.Map;
 // Data.
 using Data.Definitions.Maps.Core;
 
-using Data.Models.Maps;
+using Data.Models.Maps.Core;
 
 // Engine.
 using Engine.Systems.Animation.Map.Base;
