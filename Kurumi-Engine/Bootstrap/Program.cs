@@ -51,6 +51,10 @@ using Game.UI.Views.Factories;
 // Infrastructure.
 using Infrastructure.Database.Database;
 
+using Infrastructure.Exceptions.Handler;
+
+using Infrastructure.Loging;
+
 using Infrastructure.Persistance.Base;
 using Infrastructure.Persistance.Services;
 
@@ -74,6 +78,10 @@ public static class Program
 
         var configProvider = gameData.ConfigProvider;
         var gameConfig = configProvider.GameConfig;
+        var loggerConfig = configProvider.LoggerConfig;
+
+        var logger = new Logger(loggerConfig);
+        var handler = new Handler(logger);
 
         var saveService = new SaveService();
         var saveData = saveService.LoadNewSaveData();
@@ -194,7 +202,7 @@ public static class Program
             displaySize
         );
 
-        RunGameLoop(window, input.System, stateManager, gameContext, mapStateFactory, battleStateFactory);
+        RunGameLoop(window, input.System, stateManager, gameContext, mapStateFactory, battleStateFactory, handler);
     }
 
     private static Paths BuildPaths() 
@@ -412,7 +420,8 @@ public static class Program
         StateManager stateManager, 
         GameContext gameContext, 
         MapStateFactory mapStateFactory, 
-        BattleStateFactory battleStateFactory
+        BattleStateFactory battleStateFactory,
+        Handler handler
     ) 
     {
         var clock = new Clock();
@@ -420,24 +429,30 @@ public static class Program
 
         while (window.IsOpen) 
         {
-            // Process state changes if requested.
-            if (gameObjects.BattleStartRequest != null && stateManager.ReadyToChangeState())
-            {
-                stateManager.ChangeState(battleStateFactory.Create(gameObjects.BattleStartRequest));
-                gameObjects.BattleStartRequest = null;
+            try {
+                // Process state changes if requested.
+                if (gameObjects.BattleStartRequest != null && stateManager.ReadyToChangeState())
+                {
+                    stateManager.ChangeState(battleStateFactory.Create(gameObjects.BattleStartRequest));
+                    gameObjects.BattleStartRequest = null;
+                }
+                else if (gameObjects.BattleEndRequest != null)
+                {
+                    stateManager.ChangeState(mapStateFactory.Create(gameObjects.BattleEndRequest.Script));
+                    gameObjects.BattleEndRequest = null;
+                }
+
+                window.DispatchEvents();
+
+                var deltaTime = clock.Restart().AsSeconds();
+
+                inputSystem.Update();
+                stateManager.Update(deltaTime);
             }
-            else if (gameObjects.BattleEndRequest != null)
+            catch (Exception exception)
             {
-                stateManager.ChangeState(mapStateFactory.Create(gameObjects.BattleEndRequest.Script));
-                gameObjects.BattleEndRequest = null;
+                handler.HandleException(exception);
             }
-
-            window.DispatchEvents();
-
-            var deltaTime = clock.Restart().AsSeconds();
-
-            inputSystem.Update();
-            stateManager.Update(deltaTime);
         }
     }
 
