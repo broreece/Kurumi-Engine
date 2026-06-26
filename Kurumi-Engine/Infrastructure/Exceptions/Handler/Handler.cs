@@ -13,66 +13,42 @@ namespace Infrastructure.Exceptions.Handler;
 /// <summary>
 /// Handles errors by logging them and correcting if possible.
 /// </summary>
-public static class Handler 
+public sealed class Handler 
 {
-    private static readonly Logger Logger = new();
+    private readonly Logger _logger;
 
-    /// <summary>
-    /// Handle config exceptions. In all cases these will be fatal and will result in a game crash.
-    /// </summary>
-    /// <param name="exception">The config exception thrown.</param>
-    public static void HandleConfigException(Exception exception) 
+    public Handler(Logger logger)
     {
-        var message = $"{exception.Message}, {exception.StackTrace}";
-        Logger.LogFatal(message);
-        DisplayErrorMessage(exception.Message);
+        _logger = logger;
     }
-
-    /// <summary>
-    /// Function used to ignore severity of an exception and just log it's information to the logger.
-    /// </summary>
-    /// <param name="exception">The info exception.</param>
-    public static void HandleInfoException(Exception exception) => Logger.LogInfo(exception.Message);
 
     /// <summary>
     /// Handler for game exceptions, these are exceptions that occur during the game after config is loaded.
     /// </summary>
-    /// <param name="exception">The game exception thrown.</param>
-    /// <param name="stack">The error's stack trace.</param>
-    public static void HandleGameException(Exception exception, string stack) 
+    public void HandleException(Exception exception) 
     {
         if (exception is EngineException engineException) 
         {
-            var message = $@"[{engineException.Severity}]
-                {stack}";
-            var stackText = $@"
-                Stack: {exception.StackTrace}";
+            var message = $@"[{engineException.Severity}] {exception.StackTrace}";
             switch (engineException.Severity) 
             {
                 case ExceptionSeverity.Fatal:
-                    // TODO: (LI-01) Close game window here.
-                    // TODO: (LI-01) Based on logging config output to console.
-                    // TODO: (LI-01) Close game window here.
-                    Logger.LogFatal($"{message}{stackText}");
+                    _logger.LogFatal(message);
                     DisplayErrorMessage(message);
+                    // TODO: (EMI-01) Close game window here.
                     break;
 
                 case ExceptionSeverity.Error:
-                    // TODO: (LI-01) Based on logging config output to console.
-                    // TODO: (LI-01) Based on logging open a window here.
-                    Logger.LogError($"{message}{stackText}");
+                    _logger.LogError(message);
+                    DisplayErrorMessage(message);
                     break;
 
                 case ExceptionSeverity.Warning:
-                    // TODO: (LI-01) Based on logging config output to console.
-                    // TODO: (LI-01) Based on logging open a window here.
-                    Logger.LogWarning($"{message}{stackText}");
+                    _logger.LogWarning(message);
                     break;
 
                 case ExceptionSeverity.Info:
-                    // TODO: (LI-01) Based on logging config output to console.
-                    // TODO: (LI-01) Based on logging open a window here.
-                    Logger.LogInfo($"{message}{stackText}");
+                    _logger.LogInfo(message);
                     break;
 
                 default:
@@ -82,11 +58,11 @@ public static class Handler
         
         else 
         {
-            var message = $@"{exception.Message}";
+            var message = exception.Message;
             var stackMessage = $@"Stack: {exception.StackTrace}";
-            Logger.LogFatal($"{message}{stackMessage}");
+            _logger.LogFatal($"{message} {stackMessage}");
             DisplayErrorMessage(message);
-            // TODO: (LI-01) Close game window here.
+            // TODO: (EMI-01) Close game window here.
         }
     }
 
@@ -94,7 +70,7 @@ public static class Handler
     /// Function that displays an error message for the user.
     /// </summary>
     /// <param name="message">The message text to be displayed.</param>
-    private static void DisplayErrorMessage(string message) 
+    private void DisplayErrorMessage(string message) 
     {
         var window = new RenderWindow(new VideoMode(500, 250), "Error");
 

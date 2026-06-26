@@ -1,3 +1,6 @@
+// Config.
+using Config.Runtime.External;
+
 namespace Infrastructure.Loging;
 
 /// <summary>
@@ -5,17 +8,24 @@ namespace Infrastructure.Loging;
 /// </summary>
 public sealed class Logger 
 {
-    // TODO: (LI-01) Move this to config.
-    private static readonly string logDirectory = "logs";
-    private static readonly string logFile = "logs/log.txt";
+    private readonly string _logFile;
 
-    public Logger() 
+    private readonly bool _consoleOutput;
+
+    public Logger(LoggerConfig loggerConfig) 
     {
         var logPath = Path.Combine(
             AppContext.BaseDirectory,
-            logDirectory
+            loggerConfig.LogDirectory
         );
         Directory.CreateDirectory(logPath);
+
+        _logFile = Path.Combine(
+            logPath,
+            loggerConfig.LogFileName
+        );
+
+        _consoleOutput = loggerConfig.ConsoleOutput;
     }
 
     public void LogInfo(string message) => Write("INFO", message);
@@ -35,20 +45,24 @@ public sealed class Logger
     {
         var entry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] [{level}] {message}";
 
-        // TODO: (LI-01) Check that the logger config has the console output enabled.
-        Console.WriteLine(entry);
+        if (_consoleOutput) {
+            Console.WriteLine(entry);
+        }
+
+        var logFilePath = Path.Combine(
+            AppContext.BaseDirectory,
+            _logFile
+        );
 
         try 
         {
-            var logFilePath = Path.Combine(
-                AppContext.BaseDirectory,
-                logFile
-            );
             File.AppendAllText(logFilePath, entry + Environment.NewLine);
         }
         catch (Exception) 
         {
-            // TODO: (LI-01) If console output enabled output that file could not be logged.
+            if (_consoleOutput) {
+                Console.WriteLine($"Could not successfully log message to: {logFilePath}");
+            }
         }
     }
 }

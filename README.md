@@ -18,7 +18,6 @@ and scalable.
 
 Sharpen build is currently in progress, it is focused on:
 - Re-implementation of the game's menu.
-- Expanding test cases.
 
 ---
 

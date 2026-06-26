@@ -4,6 +4,7 @@ using Config.Loader;
 using Config.Runtime.Battle;
 using Config.Runtime.Defaults;
 using Config.Runtime.Display;
+using Config.Runtime.External;
 using Config.Runtime.Game;
 using Config.Runtime.Map;
 using Config.Runtime.Menus;
@@ -31,6 +32,9 @@ public sealed class ConfigProvider
     public GlobalMessageDefaults GlobalMessageDefaults { get; }
     public NameBoxDefaults NameBoxDefaults { get; }
     public TextWindowDefaults TextWindowDefaults { get; }
+
+    // External
+    public LoggerConfig LoggerConfig { get; }
 
     // Game config.
     public GameConfig GameConfig { get; }
@@ -78,6 +82,9 @@ public sealed class ConfigProvider
         GlobalMessageDefaults = LoadConfig<GlobalMessageDefaults>("Defaults", "global_message_defaults.yaml");
         NameBoxDefaults = LoadConfig<NameBoxDefaults>("Defaults", "name_box_defaults.yaml");
         TextWindowDefaults = LoadConfig<TextWindowDefaults>("Defaults", "text_window_defaults.yaml");
+
+        // External.
+        LoggerConfig = LoadConfig<LoggerConfig>("External", "logger_config.yaml");
 
         // Game config.
         GameConfig = LoadConfig<GameConfig>("Game", "game_config.yaml");

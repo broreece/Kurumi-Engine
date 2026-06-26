@@ -52,7 +52,6 @@ Tickets will also display a brief description, a set of planned steps for comple
 **Focus areas:**
 
 - Re-implementation of the game's menu.
-- Expanding test cases.
 
 ---
 
@@ -67,25 +66,6 @@ see paryt member information and items.
 
 **Steps:**
 - It might be worth checking our previous menu work to create this again.
-
----
-
-## (LI-01) Log improvements and throw exceptions when failing to load config ##
-### Complexity: 2 ###
-### Independent: 1 ###
-### Momentum: 2 ###
-### Impact: 1 ###
-
-**Description:** Improve logger by making it not static and store config.
-
-**Steps:**
-- Make new config object/runtime and yaml file for logger:
-    - This should contain directory name and file name.
-- Make the logger non-static.
-- Pass config into constructor.
-- Build logger in bootstrap before any other config object.
-- In each config object we should find a way to try and catch if the config yaml is missing.
-- Surrond the load config objects witha try and catch in bootstrap, if an exception is thrown we can log and handle it.
 
 ---
 
@@ -111,8 +91,7 @@ see paryt member information and items.
 ### Momentum: 4 ###
 ### Impact: 2 ###
 
-**Description:** Create the ability for statuses to block movement in battle, and testing creation of new statuses in 
-the database.
+**Description:** Create the ability for statuses to block movement in battle.
 
 **Steps:**
 - Add a new enum for statuses "Behaviour":
@@ -223,25 +202,6 @@ the database.
     - Create an enum for vision type similar to behaviour.
     - Add this enum value to all actors.
     - In the map scene "InRangeActor" function check the actors vision type and change code accordingly.
-
----
-
-## Introduce save file unit testing ##
-### Complexity: 3 ###
-### Independent: 1 ###
-### Momentum: 4 ###
-### Impact: 1 ###
-
-**Description:** Create unit testing cases for the save and load system.
-
-**Steps:**
-- Make test cases for the following:
-    - Test save/load:
-        - Ensure status can be loaded onto playable characters.
-        - Ensure any stat changes made to playable characters save.
-        - Ensure equipment is saved.
-        - Ensure inventory is saved.
-        - Ensure information remains the same.
 
 ---
 
